@@ -71,6 +71,24 @@ namespace HikayeStudyo
                 case "tamir": return "fixing";
                 case "salla": case "el_salla": return "wave";
                 case "yemek": case "ye": return "eating";
+                case "agla": return "crying";
+                case "yat": case "uzan": return "lying_down";
+                case "uyu": return "sleeping_idle";
+                case "yatarak_uyu": return "laying_sleeping";
+                case "dusun": return "thinking";
+                case "kork": return "scared";
+                case "sasir": return "surprised";
+                case "sukret": case "tesekkur": return "thankful";
+                case "uzgun": case "uzgun_dur": return "sad_idle";
+                case "kalk": case "ayaga_kalk": return "getting_up";
+                case "diz_cok": return "kneeling_down";
+                case "goster": return "kneeling_pointing";
+                case "ilac": case "ilac_ic": return "taking_a_pill";
+                case "korna": return "honking_horn";
+                case "arabaya_bin": return "entering_car";
+                case "tepki": return "reacting";
+                case "konus2": return "talking";
+                case "serum": return "iv_pole_walking";
             }
             return n;
         }

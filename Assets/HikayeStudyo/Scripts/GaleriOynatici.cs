@@ -15,7 +15,8 @@ namespace HikayeStudyo
         static readonly string[] insanHareketleri =
         {
             "Idle_Talking_Loop", "Walk_Loop", "Dance_Loop", "Jog_Fwd_Loop", "Sitting_Talking_Loop",
-            "Interact", "Walk_Formal_Loop", "Spell_Simple_Idle_Loop", "Crouch_Idle_Loop", "Idle_Loop", "Driving_Loop"
+            "Interact", "Walk_Formal_Loop", "Spell_Simple_Idle_Loop", "Crouch_Idle_Loop", "Idle_Loop", "Driving_Loop",
+            "Crying", "Thinking", "Scared", "Surprised", "Thankful", "Talking", "Sad_Idle"
         };
         static readonly string[] digerHareketler = { "Idle", "Walk", "Dance", "Wave", "Cheer", "Run", "Eating", "Gallop" };
 
@@ -42,7 +43,7 @@ namespace HikayeStudyo
                     if (k != null)
                     {
                         k.startClip = "";
-                        bool insan = k.kategori == "Erkek" || k.kategori == "Kadin";
+                        bool insan = k.kategori == "Erkek" || k.kategori == "Kadin" || k.kategori == "Mixamo";
                         var liste = insan ? insanHareketleri : digerHareketler;
                         string h = liste[(hareket + i) % liste.Length];
                         StartCoroutine(PlayNextFrame(k, h, liste));

@@ -12,3 +12,12 @@
 .idea/
 *.wav
 *.mp4
+
+# Mixamo karakterleri: Adobe lisansi ham dosyalarin dagitilmasina izin vermez, repoya girmez
+Assets/HikayeStudyo/Karakterler/Mixamo/
+Assets/HikayeStudyo/Karakterler/Mixamo.meta
+Assets/HikayeStudyo/Karakterler/MixamoAnimasyon/
+Assets/HikayeStudyo/Karakterler/MixamoAnimasyon.meta
+# VRoid / VRM karakterleri lisansi karakter basina degisir
+Assets/HikayeStudyo/Karakterler/VRoid/
+Assets/HikayeStudyo/Karakterler/VRoid.meta

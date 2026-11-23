@@ -20,6 +20,8 @@ namespace HikayeStudyo
         public const string Hazir = Root + "/Hazir";
         public const string UalPath = Root + "/Animasyonlar/UAL1_Standard.fbx";
         public const string GaleriPath = "Assets/HikayeStudyo/KarakterGalerisi.unity";
+        public const string MixamoDir = Root + "/Mixamo";
+        public const string MixamoAnimDir = Root + "/MixamoAnimasyon";
         const string InstallKey = "HS_GltfKuruluyor";
         const string AskedKey = "HS_GaleriSoruldu";
         static bool scheduled;
@@ -84,7 +86,7 @@ namespace HikayeStudyo
         {
             return Files(Root + "/Insanlar/Erkek", ".glb").Length + Files(Root + "/Insanlar/Kadin", ".glb").Length +
                    Files(Root + "/Hayvanlar", ".glb").Length + Files(Root + "/Oyuncak", ".glb").Length +
-                   Files(Root + "/Oyuncak", ".fbx").Length;
+                   Files(Root + "/Oyuncak", ".fbx").Length + Files(MixamoDir, ".fbx").Length;
         }
 
         static int CountPrefabs() { return Files(Hazir, ".prefab").Length; }
@@ -117,6 +119,9 @@ namespace HikayeStudyo
             Folder(Hazir);
             var ual = Clips(UalPath);
             if (ual.Count == 0) Debug.LogWarning("[Hikaye Stüdyosu] Animasyon kütüphanesi okunamadı: " + UalPath);
+            // Mixamo'dan indirilen hikaye animasyonlari (aglama, yatma, uyuma, dusunme...) butun insanlara eklenir
+            foreach (var p in Files(MixamoAnimDir, ".fbx"))
+                foreach (var c in Clips(p)) if (c.name != "Take 001") ual.Add(c);
             int made = 0;
             try
             {
@@ -125,6 +130,7 @@ namespace HikayeStudyo
                 foreach (var p in Files(Root + "/Hayvanlar", ".glb")) if (Own(p, "Hayvan", rebuild)) made++;
                 foreach (var p in Files(Root + "/Oyuncak", ".glb")) if (Own(p, "Oyuncak", rebuild)) made++;
                 foreach (var p in Files(Root + "/Oyuncak", ".fbx")) if (Own(p, "Oyuncak", rebuild)) made++;
+                foreach (var p in Files(MixamoDir, ".fbx")) if (MixamoChar(p, ual, rebuild)) made++;
             }
             finally
             {
@@ -215,6 +221,39 @@ namespace HikayeStudyo
                 var k = go.AddComponent<Karakter3D>();
                 k.id = name; k.kategori = kat; k.clips = clips;
                 k.startClip = "Idle";
+                PrefabUtility.SaveAsPrefabAsset(go, prefabPath);
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("[Hikaye Stüdyosu] " + name + " hazırlanamadı: " + e.Message);
+                return false;
+            }
+            finally { Object.DestroyImmediate(go); }
+        }
+
+        // Mixamo karakteri: FBX zaten insan iskeletiyle ice aktarilir (Mixamo kemik adlarini Unity kendisi tanir)
+        static bool MixamoChar(string path, List<AnimationClip> clips, bool rebuild)
+        {
+            string name = "Mixamo_" + Path.GetFileNameWithoutExtension(path).Replace(' ', '_');
+            string prefabPath = Hazir + "/" + name + ".prefab";
+            if (!rebuild && File.Exists(prefabPath)) return false;
+            var src = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            if (src == null) return false;
+            Avatar avatar = null;
+            foreach (var o in AssetDatabase.LoadAllAssetsAtPath(path)) if (o is Avatar) avatar = (Avatar)o;
+            if (avatar == null || !avatar.isHuman) { Debug.LogWarning("[Hikaye Stüdyosu] " + name + ": insan iskeleti yok, atlandı."); return false; }
+            var go = (GameObject)Object.Instantiate(src);
+            go.name = name;
+            try
+            {
+                var an = go.GetComponent<Animator>();
+                if (an == null) an = go.AddComponent<Animator>();
+                an.avatar = avatar;
+                an.applyRootMotion = false;
+                an.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+                var k = go.AddComponent<Karakter3D>();
+                k.id = name; k.kategori = "Mixamo"; k.clips = clips; k.startClip = "Idle_Loop";
                 PrefabUtility.SaveAsPrefabAsset(go, prefabPath);
                 return true;
             }
@@ -375,7 +414,15 @@ namespace HikayeStudyo
     // Animasyon kutuphanesini insan iskeletiyle, oyuncak karakterleri kendi animasyonlariyla ice aktarir.
     public class Karakter3DIceAktarma : AssetPostprocessor
     {
-        bool Ual { get { return assetPath.Replace('\\', '/').Contains("/Karakterler/Animasyonlar/"); } }
+        bool Ual
+        {
+            get
+            {
+                var p = assetPath.Replace('\\', '/');
+                return p.Contains("/Karakterler/Animasyonlar/") || p.Contains("/Karakterler/Mixamo/") || p.Contains("/Karakterler/MixamoAnimasyon/");
+            }
+        }
+        bool MixAnim { get { return assetPath.Replace('\\', '/').Contains("/Karakterler/MixamoAnimasyon/"); } }
         bool Toy { get { var p = assetPath.Replace('\\', '/'); return p.Contains("/Karakterler/Oyuncak/") && p.ToLowerInvariant().EndsWith(".fbx"); } }
 
         void OnPreprocessModel()
@@ -392,10 +439,21 @@ namespace HikayeStudyo
             if (!Ual && !Toy) return;
             var imp = (ModelImporter)assetImporter;
             var clips = imp.defaultClipAnimations;
+            if (MixAnim)
+            {
+                // Mixamo her dosyada klibi "mixamo.com" diye adlandirir: dosya adini ver ("Sad Idle" -> "Sad_Idle")
+                var keep = new List<ModelImporterClipAnimation>();
+                foreach (var c in clips) if (c.name != "Take 001") keep.Add(c);
+                if (keep.Count == 0 && clips.Length > 0) keep.Add(clips[0]);
+                if (keep.Count > 0) keep[0].name = Path.GetFileNameWithoutExtension(assetPath).Replace(' ', '_').Replace("(", "").Replace(")", "");
+                clips = keep.ToArray();
+            }
             foreach (var c in clips)
             {
                 var n = c.name.ToLowerInvariant();
-                c.loopTime = n.Contains("loop") || n == "idle" || n == "walk" || n == "run" || n == "dance";
+                c.loopTime = n.Contains("loop") || n == "idle" || n == "walk" || n == "run" || n == "dance" ||
+                             (MixAnim && (n.Contains("idle") || n.StartsWith("walking") || n == "running" || n.Contains("talking") ||
+                                          n.Contains("sleeping") || n.Contains("crying") || n.Contains("driving") || n.Contains("pole")));
                 c.lockRootRotation = true;
                 c.lockRootHeightY = true;
                 c.lockRootPositionXZ = true;
