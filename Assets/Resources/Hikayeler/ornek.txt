@@ -1,0 +1,29 @@
+// HİKAYE STÜDYOSU – ÖRNEK BÖLÜM
+// Konuşma:  [Karakter|duygu|dis veya ic|hareket] Metin
+// Komutlar: mekan: kanca: geri: yazi: bekle: efekt: kamera: atmosfer: muzik: poz: far: flas: gorsel: cikar: temizle:
+
+// --- Kanca: ilk 2 saniye ---
+mekan: yol_gece
+efekt: korna
+far:
+efekt: carpma
+kanca: Öldüm.
+geri: 1 saat önce
+
+// --- Bölüm ---
+mekan: oda_gece
+poz: Arda yatiyor
+[Arda|sasirmis|ic] Burası neresi?
+gorsel: eller
+[Arda|korkmus|ic] Ellerim... Bu benim bedenim değil.
+gorsel: yok
+efekt: kapi
+[Anne|aglamakli|dis|kos] Oğlum! Gözlerini açtın!
+poz: Arda oturuyor
+[Arda|normal|dis] Ağlama anne... İyiyim ben.
+[Anne|sevgi|dis] Ateşin düştü... Şükürler olsun.
+[Arda|dusunceli|ic] Şimdilik bir çocuk gibi davranmalıyım.
+atmosfer: buyu
+efekt: buyu
+[Arda|sasirmis|ic] Bu dünyada... büyü gerçekten var.
+yazi: Devamı 2. Bölümde...
