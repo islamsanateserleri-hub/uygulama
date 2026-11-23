@@ -53,6 +53,7 @@ namespace HikayeStudyo
         float lineProgress;
         string lineEmotion = "normal";
         bool paused;
+        int startLine;
 
         const float W = 1080f, H = 1920f;
         const float BgPadX = 500f, BgPadY = 300f;
@@ -73,6 +74,10 @@ namespace HikayeStudyo
             var parsed = StoryParser.Parse(story.text);
             foreach (var w in parsed.Warnings) Debug.LogWarning("[Hikaye] " + w);
             PreloadVoices(parsed.Items);
+            // Studyo: "Bu satırdan oynat" ve "Güvenli alan" ayarlari (bir kerelik)
+            startLine = PlayerPrefs.GetInt("HS_StartLine", 0);
+            PlayerPrefs.DeleteKey("HS_StartLine");
+            if (PlayerPrefs.GetInt("HS_SafeArea", 0) == 1) BuildSafeArea();
             if (autoPlay) StartCoroutine(Run(parsed.Items));
         }
 
@@ -250,6 +255,28 @@ namespace HikayeStudyo
             for (int i = 0; i < items.Count; i++)
             {
                 var it = items[i];
+                if (startLine > 0 && it.Line < startLine)
+                {
+                    // secilen satira kadar sadece sahne durumunu kur (mekan, poz, atmosfer, muzik...), bekleme yok
+                    switch (it.Type)
+                    {
+                        case ItemType.Background: yield return SetBackground(it.Arg); faded = true; break;
+                        case ItemType.Pose:
+                            {
+                                var d0 = library.FindCharacter(it.Character);
+                                if (d0 != null && !library.IsNarrator(d0)) { var v0 = GetOrCreate(d0, ""); v0.SetPose(it.Arg, PosePosition(v0, it.Arg)); UpdateBlanket(v0); }
+                            }
+                            break;
+                        case ItemType.Atmosphere: fx.SetAtmosphere(Util.Norm(it.Arg) == "yok" ? "" : it.Arg); break;
+                        case ItemType.Music: SetMusic(it.Arg); break;
+                        case ItemType.Camera: CameraCommand(it.Arg); break;
+                        case ItemType.Insert: ShowInsert(it.Arg); break;
+                        case ItemType.Clear: ClearChars(); break;
+                        case ItemType.Remove: StartCoroutine(Exit(it.Character)); break;
+                    }
+                    continue;
+                }
+                if (startLine > 0 && !faded) { yield return Fade(1f, 0f, 0.2f); faded = true; }
                 switch (it.Type)
                 {
                     case ItemType.Background:
@@ -309,8 +336,16 @@ namespace HikayeStudyo
                         break;
                     case ItemType.Dialogue:
                         if (!faded) { yield return Fade(1f, 0f, 0.3f); faded = true; }
-                        yield return Say(it);
-                        yield return new WaitForSeconds(lineGap);
+                        {
+                            bool hardNext = NextHardEnd(items, i);
+                            yield return Say(it, hardNext ? 0.3f : 0f);
+                            if (!hardNext) yield return new WaitForSeconds(lineGap);
+                        }
+                        break;
+                    case ItemType.End:
+                        if (it.Arg == "sert") { yield return HardEnd(it.Text); yield break; }
+                        if (!faded) { yield return Fade(1f, 0f, 0.3f); faded = true; }
+                        if (it.Text.Length > 0) yield return Title(it.Text, true);
                         break;
                 }
             }
@@ -323,6 +358,59 @@ namespace HikayeStudyo
             if (Finished != null) Finished();
         }
 
+        // Siradaki anlamli komut "son: sert" mi? (konusma 0,3 sn erken kesilir)
+        static bool NextHardEnd(List<StoryItem> items, int i)
+        {
+            for (int k = i + 1; k < items.Count; k++)
+            {
+                var t = items[k].Type;
+                if (t == ItemType.End) return items[k].Arg == "sert";
+                if (t == ItemType.Sfx || t == ItemType.Camera || t == ItemType.Atmosphere || t == ItemType.Music) continue;
+                return false;
+            }
+            return false;
+        }
+
+        // Sert bolum sonu: ses ve goruntu bir anda kesilir, siyah ekran (+ istenirse yazi)
+        IEnumerator HardEnd(string text)
+        {
+            voiceSrc.Stop(); ambSrc.Stop(); sfxSrc.Stop(); rainSrc.Stop();
+            subtitle.text = "";
+            fade.color = Color.black;
+            if (!string.IsNullOrEmpty(text))
+            {
+                yield return new WaitForSeconds(0.35f);
+                SetBigCenter();
+                bigText.text = text; bigText.color = Color.white;
+                yield return new WaitForSeconds(1.6f);
+            }
+            else yield return new WaitForSeconds(0.8f);
+            bigText.text = "";
+            Running = false;
+            Debug.Log("[Hikaye] Bitti (sert son).");
+            if (Finished != null) Finished();
+        }
+
+        // TikTok arayuzunun kapattigi yerler (sadece onizlemede): ust sekmeler, sag dugmeler, alt aciklama
+        void BuildSafeArea()
+        {
+            var cv = fade.canvas != null ? fade.canvas.transform : transform;
+            var root2 = Gfx.Rect("GuvenliAlan", cv);
+            Gfx.Stretch(root2);
+            var col = new Color(1f, 0.15f, 0.15f, 0.22f);
+            Zone(root2, col, new Vector2(0f, 0.92f), new Vector2(1f, 1f));         // ust sekmeler
+            Zone(root2, col, new Vector2(0.85f, 0.30f), new Vector2(1f, 0.80f));   // sag dugmeler
+            Zone(root2, col, new Vector2(0f, 0f), new Vector2(1f, 0.20f));         // alt %20: aciklama, muzik
+            foreach (var g in root2.GetComponentsInChildren<Graphic>()) g.raycastTarget = false;
+        }
+
+        static void Zone(RectTransform parent, Color c, Vector2 min, Vector2 max)
+        {
+            var img = Gfx.Img("Bolge", parent, null, c, Vector2.zero, Vector2.zero);
+            var r = img.rectTransform;
+            r.anchorMin = min; r.anchorMax = max; r.offsetMin = r.offsetMax = Vector2.zero;
+        }
+
         static bool NextIsEnd(List<StoryItem> items, int i)
         {
             for (int k = i + 1; k < items.Count; k++)
@@ -331,7 +419,7 @@ namespace HikayeStudyo
         }
 
         // ---------- Konusma ----------
-        IEnumerator Say(StoryItem it)
+        IEnumerator Say(StoryItem it, float cutEarly = 0f)
         {
             var def = library.FindCharacter(it.Character);
             if (def == null) { Debug.LogWarning("[Hikaye] " + it.Line + ". satır: karakter yok: " + it.Character + " (anlatıcı sesiyle okunuyor)"); def = library.narrator; }
@@ -362,6 +450,7 @@ namespace HikayeStudyo
             voices.TryGetValue(it, out clip);
             float dur = clip != null ? clip.length : Mathf.Max(1.2f, it.Text.Length / charsPerSecond + 0.3f);
             if (clip != null) { voiceSrc.clip = clip; voiceSrc.volume = voiceVolume; voiceSrc.Play(); }
+            if (cutEarly > 0f) dur = Mathf.Max(0.4f, dur - cutEarly);
 
             bool talk = view != null && !it.Inner;
             talkingNow = true; lineEmotion = emo;

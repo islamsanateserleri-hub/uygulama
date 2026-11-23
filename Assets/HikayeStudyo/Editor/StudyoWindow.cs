@@ -19,6 +19,7 @@ namespace HikayeStudyo
         ParseResult parsed;
         bool showVoice = true, showHelp;
         GUIStyle editorStyle;
+        int cursorLine = 1;          // imlecin bulundugu satir (1'den)
 
         [MenuItem("Hikaye/Stüdyo %#h", priority = 0)]
         public static void Open()
@@ -147,7 +148,18 @@ namespace HikayeStudyo
 
             // --- yazma alani ---
             scroll = EditorGUILayout.BeginScrollView(scroll, GUILayout.ExpandHeight(true));
-            var nt = EditorGUILayout.TextArea(text, editorStyle, GUILayout.ExpandHeight(true));
+            // GUILayout.TextArea: imlec konumu TextEditor durumundan okunabilsin diye (EditorGUILayout'un editoru gizli)
+            var nt = GUILayout.TextArea(text, editorStyle, GUILayout.ExpandHeight(true));
+            if (GUIUtility.keyboardControl != 0)
+            {
+                var te = GUIUtility.GetStateObject(typeof(TextEditor), GUIUtility.keyboardControl) as TextEditor;
+                if (te != null && te.text == nt)
+                {
+                    int ci = Mathf.Clamp(te.cursorIndex, 0, nt.Length), ln = 1;
+                    for (int q = 0; q < ci; q++) if (nt[q] == '\n') ln++;
+                    if (ln != cursorLine) { cursorLine = ln; Repaint(); }
+                }
+            }
             EditorGUILayout.EndScrollView();
             if (nt != text) { text = nt; dirty = true; parsed = null; }
 
@@ -157,10 +169,13 @@ namespace HikayeStudyo
             string storyName = names[sel];
             if (lib != null)
                 foreach (var it in p.Items) if (it.Type == ItemType.Dialogue && GeminiSes.HasClip(storyName, lib, it)) ready++;
-            EditorGUILayout.LabelField("Konuşma satırı: " + p.DialogueCount + "   ·   Sesi hazır: " + ready + "/" + p.DialogueCount +
-                "   ·   Tahmini süre: " + EstimateSeconds(p) + " sn", EditorStyles.miniBoldLabel);
+            int secs = EstimateSeconds(p), words = WordCount(p);
+            EditorGUILayout.LabelField("Konuşma: " + p.DialogueCount + "  ·  Ses: " + ready + "/" + p.DialogueCount +
+                "  ·  Kelime: " + words + "  ·  Süre: ~" + (secs / 60) + ":" + (secs % 60).ToString("00") +
+                "  ·  İmleç: " + cursorLine + ". satır", EditorStyles.miniBoldLabel);
 
-            var warns = lib != null ? Check(lib) : p.Warnings;
+            var warns = lib != null ? Check(lib) : new List<string>(p.Warnings);
+            warns.AddRange(Checks(p, secs));
             if (warns.Count > 0)
             {
                 warnScroll = EditorGUILayout.BeginScrollView(warnScroll, GUILayout.MaxHeight(80));
@@ -171,15 +186,19 @@ namespace HikayeStudyo
             // --- oynat ---
             EditorGUILayout.BeginHorizontal();
             GUI.enabled = !EditorApplication.isPlaying;
-            if (GUILayout.Button("▶  Önizle", GUILayout.Height(32))) PlayStory(false);
+            if (GUILayout.Button("▶  Önizle", GUILayout.Height(32))) PlayStory(false, 0);
+            if (GUILayout.Button("▶ " + cursorLine + ". satırdan", GUILayout.Height(32), GUILayout.Width(110))) PlayStory(false, cursorLine);
             if (StudyoKayit.RecorderInstalled)
             {
-                if (GUILayout.Button("●  Videoya al (MP4)", GUILayout.Height(32))) PlayStory(true);
+                if (GUILayout.Button("●  Videoya al (MP4)", GUILayout.Height(32))) PlayStory(true, 0);
             }
             else if (GUILayout.Button("Video için Recorder'ı kur", GUILayout.Height(32))) StudyoKayit.InstallRecorder();
             GUI.enabled = true;
             if (EditorApplication.isPlaying && GUILayout.Button("■  Durdur", GUILayout.Height(32))) EditorApplication.isPlaying = false;
             EditorGUILayout.EndHorizontal();
+            bool safe = EditorPrefs.GetBool("HS_SafeArea", false);
+            bool ns2 = EditorGUILayout.ToggleLeft("Önizlemede TikTok güvenli alanını göster (videoya girmez)", safe);
+            if (ns2 != safe) EditorPrefs.SetBool("HS_SafeArea", ns2);
             if (!string.IsNullOrEmpty(StudyoKayit.LastVideo) && File.Exists(StudyoKayit.LastVideo))
             {
                 EditorGUILayout.BeginHorizontal();
@@ -196,9 +215,10 @@ namespace HikayeStudyo
                 var key = EditorPrefs.GetString(GeminiSes.KeyPref, "");
                 var nk = EditorGUILayout.PasswordField("API anahtarı", key);
                 if (nk != key) EditorPrefs.SetString(GeminiSes.KeyPref, nk);
-                var model = EditorPrefs.GetString(GeminiSes.ModelPref, GeminiSes.DefaultModel);
-                var nm = EditorGUILayout.TextField("Model", model);
-                if (nm != model) EditorPrefs.SetString(GeminiSes.ModelPref, nm);
+                var model = GeminiSes.Model;
+                int mi = System.Array.IndexOf(GeminiSes.Models, model);
+                int nmi = EditorGUILayout.Popup("Model", mi < 0 ? 0 : mi, GeminiSes.ModelLabels);
+                if (nmi != mi) GeminiSes.Model = GeminiSes.Models[nmi];
                 EditorGUI.indentLevel--;
 
                 int missing = p.DialogueCount - ready;
@@ -219,6 +239,22 @@ namespace HikayeStudyo
                 }
                 GUI.enabled = true;
                 EditorGUILayout.EndHorizontal();
+                var cur = LineItem(p, cursorLine);
+                if (cur != null && lib != null)
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    GUI.enabled = !GeminiSes.Busy && nk.Trim().Length > 0;
+                    if (GUILayout.Button("Bu satırı yeniden seslendir (" + cursorLine + ")"))
+                    {
+                        if (dirty) Save();
+                        GeminiSes.Regenerate(lib, storyName, LineItem(StoryParser.Parse(text), cursorLine));
+                    }
+                    GUI.enabled = !GeminiSes.Busy && GeminiSes.HasBackup(lib, storyName, cur);
+                    if (GUILayout.Button("Eski sesi geri al", GUILayout.Width(120)))
+                    { if (GeminiSes.RestoreBackup(lib, storyName, cur)) GeminiSes.Status = cursorLine + ". satırın eski sesi geri alındı."; }
+                    GUI.enabled = true;
+                    EditorGUILayout.EndHorizontal();
+                }
                 if (missing > 10)
                     EditorGUILayout.HelpBox("Ücretsiz kota günde ~10-11 satır: bu bölüm ~" + Mathf.CeilToInt(missing / 10f) +
                         " güne bölünür. Üretilen sesler saklanır; ertesi gün kalanlar üretilir.", MessageType.Info);
@@ -244,14 +280,55 @@ namespace HikayeStudyo
                     case ItemType.Wait: s += it.Seconds; break;
                     case ItemType.Background: s += 0.6f; break;
                     case ItemType.Headlights: s += 1.5f; break;
+                    case ItemType.End: s += it.Arg == "sert" ? 1.2f : 2.8f; break;
                 }
             }
             return Mathf.RoundToInt(s);
         }
 
-        void PlayStory(bool record)
+        static StoryItem LineItem(ParseResult p, int line)
+        {
+            foreach (var it in p.Items) if (it.Type == ItemType.Dialogue && it.Line == line) return it;
+            return null;
+        }
+
+        static int WordCount(ParseResult p)
+        {
+            int n = 0;
+            foreach (var it in p.Items)
+                if (it.Type == ItemType.Dialogue || it.Type == ItemType.Hook)
+                    n += it.Text.Split(new[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries).Length;
+            return n;
+        }
+
+        // Defterdeki kurallar: kanca ilk 1,5 sn'de, en az 1 dakika (Creator Rewards), bolum sonu
+        static List<string> Checks(ParseResult p, int secs)
+        {
+            var w = new List<string>();
+            float t = 0.35f; bool hookOk = false; bool any = false;
+            foreach (var it in p.Items)
+            {
+                if (it.Type == ItemType.Background || it.Type == ItemType.Music || it.Type == ItemType.Atmosphere ||
+                    it.Type == ItemType.Camera || it.Type == ItemType.Pose) { t += it.Type == ItemType.Background ? 0.3f : 0f; continue; }
+                any = true;
+                if (it.Type == ItemType.Hook || it.Type == ItemType.Dialogue || it.Type == ItemType.Sfx ||
+                    it.Type == ItemType.Headlights || it.Type == ItemType.Flash) hookOk = t <= 1.5f;
+                break;
+            }
+            if (any && !hookOk) w.Add("Kanca: ilk 1,5 saniyede ekranda yazı, ses ya da hareket yok. En başa 'kanca:' ya da çarpıcı bir replik koy.");
+            if (secs > 0 && secs < 60) w.Add("Süre ~" + secs + " sn: TikTok Creator Rewards en az 1 dakikalık videoya ödeme yapar.");
+            bool hasEnd = false;
+            foreach (var it in p.Items) if (it.Type == ItemType.End || it.Type == ItemType.Title) hasEnd = true;
+            if (p.DialogueCount > 3 && !hasEnd) w.Add("Bölüm sonu yok: 'son: yumusak Devamı yarın...' ya da gerilimde kesmek için 'son: sert' ekle.");
+            return w;
+        }
+
+        void PlayStory(bool record, int fromLine)
         {
             Save();
+            PlayerPrefs.SetInt("HS_StartLine", record ? 0 : fromLine);
+            PlayerPrefs.SetInt("HS_SafeArea", !record && EditorPrefs.GetBool("HS_SafeArea", false) ? 1 : 0);
+            PlayerPrefs.Save();
             var lib = Lib();
             if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
             OtomatikKurulum.Ensure();
@@ -293,6 +370,14 @@ kamera: yakin          otomatik / yakin / genis / salla
 muzik: yok             pad (varsayılan) / yok / kütüphanedeki müzik
 gorsel: eller          tam ekran görsel (eller = kendi gözünden eller) / yok
 bekle: 0.5   cikar: Anne   temizle:
+son: yumusak Devamı yarın...   merak bırakan yumuşak bitiş
+son: sert                      gerilimde bir anda kesilir (siyah ekran)
+
+SES ETİKETLERİ (altyazıda görünmez)
+(iç çek) (ağla) (hıçkır) (gül) (kıkırda) (nefes) (nefesi kesil) (fısılda) (öksür) (kısa ara) (uzun ara)
+ya da Gemini etiketleri: <sigh> <sob> <laugh> <gasp> <breath> <whispering> <short pause> <long pause>
+*kelime*  vurgu işareti (altyazıda yıldız görünmez)
+Örnek: [Anne|aglamakli|dis] Oğlum (hıçkır) gözlerini açtın!
 
 İPUCU: Duygusal satırlar ve iç ses otomatik yakın çekilir. Boşluk tuşu önizlemeyi duraklatır.";
     }

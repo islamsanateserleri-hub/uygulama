@@ -7,7 +7,7 @@ namespace HikayeStudyo
     public enum ItemType
     {
         Dialogue, Background, Hook, Rewind, Title, Wait, Sfx, Remove, Clear,
-        Camera, Atmosphere, Music, Pose, Headlights, Flash, Insert
+        Camera, Atmosphere, Music, Pose, Headlights, Flash, Insert, End
     }
 
     public class StoryItem
@@ -18,7 +18,8 @@ namespace HikayeStudyo
         public string Emotion = "normal";
         public bool Inner;               // ic ses: agiz oynamaz
         public string Motion = "";       // kos, yuru, saril, zipla, egil, sarsil, cik
-        public string Text = "";
+        public string Text = "";         // ekranda gorunen metin (ses etiketleri ve *vurgu* isaretleri temizlenmis)
+        public string Speech = "";       // seslendirmeye giden metin (<sigh>, <sob> gibi etiketlerle)
         public string Arg = "";
         public float Seconds;
         public int VoiceIndex;           // 1'den baslayan konusma sirasi
@@ -104,6 +105,79 @@ namespace HikayeStudyo
         }
     }
 
+    // Satir ici ses etiketleri: (iç çek) -> <sigh>, (ağla) -> <sob> ... Altyazida gorunmezler.
+    public static class SesEtiketleri
+    {
+        // Turkce kisa yazim -> Gemini etiketi (Gemini etiketleri Ingilizce ister)
+        public static readonly string[,] Kisayol =
+        {
+            { "iç çek", "sigh" }, { "ic cek", "sigh" }, { "of", "sigh" },
+            { "ağla", "sob" }, { "agla", "sob" }, { "hıçkır", "sob" }, { "hickir", "sob" },
+            { "gül", "laugh" }, { "gul", "laugh" }, { "kıkırda", "giggle" }, { "kikirda", "giggle" },
+            { "nefes", "breath" }, { "nefesi kesil", "gasp" }, { "irkil", "gasp" }, { "şaşır", "gasp" }, { "sasir", "gasp" },
+            { "fısılda", "whispering" }, { "fisilda", "whispering" }, { "öksür", "cough" }, { "oksur", "cough" },
+            { "kısa ara", "short pause" }, { "kisa ara", "short pause" }, { "duraklama", "short pause" },
+            { "uzun ara", "long pause" }, { "bekle", "long pause" },
+        };
+
+        static string Map(string inner)
+        {
+            var n = inner.Trim().ToLowerInvariant();
+            for (int i = 0; i < Kisayol.GetLength(0); i++)
+                if (n == Kisayol[i, 0]) return Kisayol[i, 1];
+            return null;
+        }
+
+        // (iç çek) ve <hickir> gibi Turkce etiketleri Gemini etiketine cevirir; *vurgu* isaretlerini atar
+        public static string ToSpeech(string s)
+        {
+            var sb = new StringBuilder(s.Length + 16);
+            int i = 0;
+            while (i < s.Length)
+            {
+                char c = s[i];
+                if (c == '(' || c == '<')
+                {
+                    int j = s.IndexOf(c == '(' ? ')' : '>', i + 1);
+                    if (j > i)
+                    {
+                        var inner = s.Substring(i + 1, j - i - 1);
+                        var m = Map(inner);
+                        if (m != null) { sb.Append('<').Append(m).Append('>'); i = j + 1; continue; }
+                        if (c == '<') { sb.Append('<').Append(inner.Trim()).Append('>'); i = j + 1; continue; }   // zaten Ingilizce etiket
+                    }
+                }
+                if (c == '*') { i++; continue; }
+                sb.Append(c); i++;
+            }
+            return Clean(sb.ToString());
+        }
+
+        // Altyazi: etiketler ve *isaretler* gider, cift bosluk temizlenir
+        public static string ToDisplay(string s)
+        {
+            var sb = new StringBuilder(s.Length);
+            int i = 0;
+            while (i < s.Length)
+            {
+                char c = s[i];
+                if (c == '<') { int j = s.IndexOf('>', i + 1); if (j > i) { i = j + 1; continue; } }
+                if (c == '(') { int j = s.IndexOf(')', i + 1); if (j > i && Map(s.Substring(i + 1, j - i - 1)) != null) { i = j + 1; continue; } }
+                if (c == '*') { i++; continue; }
+                sb.Append(c); i++;
+            }
+            return Clean(sb.ToString());
+        }
+
+        static string Clean(string s)
+        {
+            var t = s.Replace("  ", " ").Replace("  ", " ").Replace(" ,", ",").Replace(" .", ".").Replace(" !", "!").Replace(" ?", "?");
+            return t.Trim();
+        }
+
+        public static bool HasTags(string speech) { return speech.IndexOf('<') >= 0; }
+    }
+
     public static class StoryParser
     {
         public static ParseResult Parse(string text)
@@ -129,6 +203,8 @@ namespace HikayeStudyo
                         Emotion = parts.Length > 1 && parts[1].Trim().Length > 0 ? parts[1].Trim() : "normal",
                         Text = line.Substring(close + 1).Trim(),
                     };
+                    it.Speech = SesEtiketleri.ToSpeech(it.Text);
+                    it.Text = SesEtiketleri.ToDisplay(it.Text);
                     if (parts.Length > 2) it.Inner = Util.Norm(parts[2]).StartsWith("i");
                     if (parts.Length > 3) it.Motion = Util.Norm(parts[3]);
                     if (it.Text.Length == 0) { r.Warnings.Add(lineNo + ". satır: konuşma metni boş."); continue; }
@@ -160,6 +236,16 @@ namespace HikayeStudyo
                     case "far": item.Type = ItemType.Headlights; break;
                     case "flas": item.Type = ItemType.Flash; break;
                     case "gorsel": item.Type = ItemType.Insert; break;
+                    case "son":
+                        {
+                            // son: yumusak Metin  |  son: sert [Metin]
+                            item.Type = ItemType.End;
+                            var sp2 = val.Split(new[] { ' ' }, 2, System.StringSplitOptions.RemoveEmptyEntries);
+                            string mode = sp2.Length > 0 ? Util.Norm(sp2[0]) : "";
+                            if (mode == "sert" || mode == "yumusak") { item.Arg = mode; item.Text = sp2.Length > 1 ? sp2[1].Trim() : ""; }
+                            else { item.Arg = "yumusak"; item.Text = val; }
+                        }
+                        break;
                     case "poz":
                         item.Type = ItemType.Pose;
                         var sp = val.Split(new[] { ' ' }, 2, System.StringSplitOptions.RemoveEmptyEntries);

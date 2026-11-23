@@ -142,7 +142,7 @@ namespace HikayeStudyo
         // Ses dosyasinin adi: ses + ton + metin ozetinden. Satir eklemek digerlerini bozmaz.
         public string ClipKey(StoryItem it)
         {
-            return Util.Hash(VoiceFor(it) + "|" + Util.ToneFor(it) + "|" + it.Text);
+            return Util.Hash(VoiceFor(it) + "|" + Util.ToneFor(it) + "|" + (string.IsNullOrEmpty(it.Speech) ? it.Text : it.Speech));
         }
     }
 }

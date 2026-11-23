@@ -14,7 +14,23 @@ namespace HikayeStudyo
     {
         public const string KeyPref = "HS_GeminiKey";
         public const string ModelPref = "HS_GeminiModel";
-        public const string DefaultModel = "gemini-2.5-flash-preview-tts";
+        public const string DefaultModel = "gemini-3.8-flash-tts";
+        public const string OldModel = "gemini-2.5-flash-preview-tts";
+        public static readonly string[] Models = { "gemini-3.8-flash-tts", "gemini-3.8-flash-lite-tts", "gemini-2.5-flash-preview-tts" };
+        public static readonly string[] ModelLabels = { "Gemini 3.8 Flash TTS (en iyi)", "Gemini 3.8 Flash-Lite TTS (ucuz, hızlı)", "Gemini 2.5 (eski)" };
+
+        public static string Model
+        {
+            get
+            {
+                var m = EditorPrefs.GetString(ModelPref, DefaultModel).Trim();
+                if (m.Length == 0 || m == OldModel && !EditorPrefs.GetBool("HS_ModelSecildi", false)) m = DefaultModel;   // eski varsayilandan yeniye gec
+                return m;
+            }
+            set { EditorPrefs.SetString(ModelPref, value); EditorPrefs.SetBool("HS_ModelSecildi", true); }
+        }
+
+        static bool NewSchema(string model) { return !model.StartsWith("gemini-2"); }
 
         public static bool Busy { get; private set; }
         public static string Status = "";
@@ -45,11 +61,52 @@ namespace HikayeStudyo
         [System.Serializable] class Inline { public string mimeType; public string data; }
         [System.Serializable] class Err { public int code; public string message; public string status; }
 
+        // Tek satiri yeniden seslendir: eski ses _yedek klasorune tasinir, sonra yeniden uretilir
+        public static void Regenerate(StoryLibrary lib, string story, StoryItem it)
+        {
+            if (Busy || it == null || it.Type != ItemType.Dialogue) return;
+            string d = Dir(story) + "/";
+            string k = lib.ClipKey(it);
+            foreach (var ext in new[] { ".wav", ".mp3", ".ogg" })
+            {
+                string f = d + k + ext;
+                if (!File.Exists(f)) continue;
+                string bd = d + "_yedek";
+                if (!AssetDatabase.IsValidFolder(bd)) AssetDatabase.CreateFolder(Dir(story), "_yedek");
+                string dest = bd + "/" + k + "_" + System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + ext;
+                AssetDatabase.MoveAsset(f, dest);
+            }
+            Generate(lib, story, new List<StoryItem> { it });
+        }
+
+        // Son yedegi geri al
+        public static bool RestoreBackup(StoryLibrary lib, string story, StoryItem it)
+        {
+            if (it == null) return false;
+            string d = Dir(story) + "/", bd = d + "_yedek", k = lib.ClipKey(it);
+            if (!Directory.Exists(bd)) return false;
+            var list = new List<string>(Directory.GetFiles(bd, k + "_*"));
+            list.RemoveAll(f => f.EndsWith(".meta"));
+            if (list.Count == 0) return false;
+            list.Sort();
+            string last = list[list.Count - 1].Replace('\\', '/');
+            foreach (var ext in new[] { ".wav", ".mp3", ".ogg" }) if (File.Exists(d + k + ext)) AssetDatabase.DeleteAsset(d + k + ext);
+            AssetDatabase.MoveAsset(last, d + k + Path.GetExtension(last));
+            return true;
+        }
+
+        public static bool HasBackup(StoryLibrary lib, string story, StoryItem it)
+        {
+            if (it == null) return false;
+            string bd = Dir(story) + "/_yedek";
+            return Directory.Exists(bd) && Directory.GetFiles(bd, lib.ClipKey(it) + "_*.wav").Length > 0;
+        }
+
         public static async void Generate(StoryLibrary lib, string story, List<StoryItem> items)
         {
             if (Busy) return;
             string key = EditorPrefs.GetString(KeyPref, "").Trim();
-            string model = EditorPrefs.GetString(ModelPref, DefaultModel).Trim();
+            string model = Model;
             if (key.Length == 0) { Status = "Önce Gemini API anahtarını gir."; Notify(); return; }
 
             var todo = new List<StoryItem>();
@@ -73,11 +130,13 @@ namespace HikayeStudyo
                     {
                         Status = (done + 1) + "/" + todo.Count + "  " + it.Character + " (" + voice + "): " + Short(it.Text);
                         Notify();
-                        var r = await Request(key, model, voice, tone, it.Text);
+                        var r = await Request(key, model, voice, tone, string.IsNullOrEmpty(it.Speech) ? it.Text : it.Speech, false);
+                        if (!r.ok && r.code == 400 && NewSchema(model))
+                            r = await Request(key, model, voice, tone, string.IsNullOrEmpty(it.Speech) ? it.Text : it.Speech, true);
                         if (r.ok)
                         {
                             string path = Dir(story) + "/" + lib.ClipKey(it) + ".wav";
-                            File.WriteAllBytes(path, Wav(r.pcm, r.rate));
+                            File.WriteAllBytes(path, IsRiff(r.pcm) ? r.pcm : Wav(r.pcm, r.rate));
                             AssetDatabase.ImportAsset(path);
                             done++;
                             break;
@@ -116,13 +175,31 @@ namespace HikayeStudyo
 
         static string Short(string s) { return s.Length > 40 ? s.Substring(0, 40) + "…" : s; }
 
-        static async Task<Result> Request(string key, string model, string voice, string tone, string text)
+        static bool IsRiff(byte[] b) { return b != null && b.Length > 12 && b[0] == 'R' && b[1] == 'I' && b[2] == 'F' && b[3] == 'F'; }
+
+        // altVoice: yeni semada ses alanini eski bicimde (prebuiltVoiceConfig) gonder
+        static async Task<Result> Request(string key, string model, string voice, string tone, string text, bool altVoice)
         {
             var res = new Result();
-            string prompt = tone + " bir sesle Türkçe söyle: " + text;
-            string json = "{\"contents\":[{\"parts\":[{\"text\":\"" + Esc(prompt) + "\"}]}]," +
-                          "\"generationConfig\":{\"responseModalities\":[\"AUDIO\"]," +
-                          "\"speechConfig\":{\"voiceConfig\":{\"prebuiltVoiceConfig\":{\"voiceName\":\"" + Esc(voice) + "\"}}}}}";
+            string json;
+            if (NewSchema(model))
+            {
+                // Gemini 3.8: metin birebir okunur; ton kisa bir stil olarak speech_metadata.style icinde gider
+                string voiceJson = altVoice
+                    ? "{\"prebuiltVoiceConfig\":{\"voiceName\":\"" + Esc(voice) + "\"}}"
+                    : "{\"voice\":\"" + Esc(voice) + "\"}";
+                json = "{\"contents\":[{\"role\":\"user\",\"parts\":[{\"text\":\"" + Esc(text) + "\"," +
+                       "\"speech_metadata\":{\"style\":\"" + Esc(tone) + "\"}}]}]," +
+                       "\"generationConfig\":{\"responseModalities\":[\"AUDIO\"]," +
+                       "\"speechConfig\":{\"voiceConfig\":" + voiceJson + "}}}";
+            }
+            else
+            {
+                string prompt = tone + " bir sesle Türkçe söyle: " + text;
+                json = "{\"contents\":[{\"parts\":[{\"text\":\"" + Esc(prompt) + "\"}]}]," +
+                       "\"generationConfig\":{\"responseModalities\":[\"AUDIO\"]," +
+                       "\"speechConfig\":{\"voiceConfig\":{\"prebuiltVoiceConfig\":{\"voiceName\":\"" + Esc(voice) + "\"}}}}}";
+            }
             string url = "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent";
             using (var req = new UnityWebRequest(url, "POST"))
             {
