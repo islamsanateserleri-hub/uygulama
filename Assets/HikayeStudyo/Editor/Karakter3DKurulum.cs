@@ -254,6 +254,7 @@ namespace HikayeStudyo
                 an.cullingMode = AnimatorCullingMode.AlwaysAnimate;
                 var k = go.AddComponent<Karakter3D>();
                 k.id = name; k.kategori = "Mixamo"; k.clips = clips; k.startClip = "Idle_Loop";
+                MixamoMalzemeler(go, path);
                 PrefabUtility.SaveAsPrefabAsset(go, prefabPath);
                 return true;
             }
@@ -263,6 +264,59 @@ namespace HikayeStudyo
                 return false;
             }
             finally { Object.DestroyImmediate(go); }
+        }
+
+        // Mixamo FBX'teki gomulu dokular cogu zaman malzemeye baglanmiyor (beyaz karakter).
+        // Dokulari disari cikarir, her malzeme icin URP Lit malzeme yapip karaktere takar.
+        static void MixamoMalzemeler(GameObject go, string path)
+        {
+            var dir = Path.GetDirectoryName(path).Replace('\\', '/') + "/Dokular/" + Path.GetFileNameWithoutExtension(path);
+            if (!AssetDatabase.IsValidFolder(dir))
+            {
+                var imp = AssetImporter.GetAtPath(path) as ModelImporter;
+                Directory.CreateDirectory(dir);
+                if (imp != null) { try { imp.ExtractTextures(dir); } catch (System.Exception e) { Debug.LogWarning(e.Message); } }
+                AssetDatabase.Refresh();
+            }
+            if (!Directory.Exists(dir)) return;
+            var files = Directory.GetFiles(dir);
+            var lit = Shader.Find("Universal Render Pipeline/Lit");
+            if (lit == null) return;
+            foreach (var r in go.GetComponentsInChildren<Renderer>(true))
+            {
+                var mats = r.sharedMaterials;
+                for (int i = 0; i < mats.Length; i++)
+                {
+                    var src = mats[i];
+                    string mname = src != null ? src.name : r.name;
+                    string matPath = dir + "/" + mname.Replace(':', '_').Replace('/', '_') + "_URP.mat";
+                    var m = AssetDatabase.LoadAssetAtPath<Material>(matPath);
+                    if (m == null) { m = new Material(lit); AssetDatabase.CreateAsset(m, matPath); }
+                    m.shader = lit;
+                    string diff = Karakter3DIceAktarma.En(files, mname, "diffuse"), nrm = Karakter3DIceAktarma.En(files, mname, "normal");
+                    var tex = diff != null ? AssetDatabase.LoadAssetAtPath<Texture2D>(diff) : null;
+                    if (tex == null && src != null && src.HasProperty("_MainTex")) tex = src.GetTexture("_MainTex") as Texture2D;
+                    if (tex != null) { m.SetTexture("_BaseMap", tex); m.SetTexture("_MainTex", tex); }
+                    m.SetColor("_BaseColor", Color.white); m.SetColor("_Color", Color.white);
+                    m.SetFloat("_Smoothness", 0.25f); m.SetFloat("_Metallic", 0f);
+                    var low = (mname + " " + (diff ?? "")).ToLowerInvariant();
+                    bool cut = low.Contains("hair") || low.Contains("lash") || low.Contains("brow");
+                    m.SetFloat("_AlphaClip", cut ? 1f : 0f); m.SetFloat("_Cutoff", 0.5f);
+                    if (cut) m.EnableKeyword("_ALPHATEST_ON"); else m.DisableKeyword("_ALPHATEST_ON");
+                    m.SetFloat("_Cull", cut ? 0f : 2f);
+                    var nt = nrm != null ? AssetDatabase.LoadAssetAtPath<Texture2D>(nrm) : null;
+                    if (nt != null)
+                    {
+                        var ti = AssetImporter.GetAtPath(nrm) as TextureImporter;
+                        if (ti != null && ti.textureType != TextureImporterType.NormalMap) { ti.textureType = TextureImporterType.NormalMap; ti.SaveAndReimport(); nt = AssetDatabase.LoadAssetAtPath<Texture2D>(nrm); }
+                        m.SetTexture("_BumpMap", nt); m.EnableKeyword("_NORMALMAP");
+                    }
+                    EditorUtility.SetDirty(m);
+                    mats[i] = m;
+                }
+                r.sharedMaterials = mats;
+            }
+            AssetDatabase.SaveAssets();
         }
 
         // Quaternius insan iskeleti -> Unity insan kemikleri
@@ -289,9 +343,10 @@ namespace HikayeStudyo
         {
             var all = go.GetComponentsInChildren<Transform>(true);
             var byName = new Dictionary<string, Transform>();
+            int dup = 0;
             foreach (var t in all)
             {
-                if (byName.ContainsKey(t.name) && t != go.transform) t.name = t.name + "_" + t.GetInstanceID();   // ayni ad olmasin
+                if (byName.ContainsKey(t.name) && t != go.transform) t.name = t.name + "_" + (++dup);   // ayni ad olmasin
                 byName[t.name] = t;
             }
             var human = new List<HumanBone>();
@@ -432,6 +487,12 @@ namespace HikayeStudyo
             imp.importAnimation = true;
             imp.animationType = Ual ? ModelImporterAnimationType.Human : ModelImporterAnimationType.Generic;
             imp.avatarSetup = ModelImporterAvatarSetup.CreateFromThisModel;
+            if (assetPath.Replace('\\', '/').Contains("/Karakterler/Mixamo/"))
+            {
+                imp.materialImportMode = ModelImporterMaterialImportMode.ImportViaMaterialDescription;
+                imp.materialLocation = ModelImporterMaterialLocation.InPrefab;
+                imp.materialSearch = ModelImporterMaterialSearch.RecursiveUp;
+            }
         }
 
         void OnPreprocessAnimation()
@@ -464,9 +525,68 @@ namespace HikayeStudyo
             imp.clipAnimations = clips;
         }
 
+        // Malzeme adina en cok benzeyen dokuyu sec ("Ch28_body" -> "Ch28_1001_Diffuse.png")
+        public static string En(string[] files, string matName, string kind)
+        {
+            string best = null; int bestScore = -1;
+            var toks = matName.ToLowerInvariant().Replace(' ', '_').Replace('.', '_').Split('_');
+            foreach (var f in files)
+            {
+                var n = Path.GetFileName(f).ToLowerInvariant();
+                if (n.EndsWith(".meta") || !n.Contains(kind)) continue;
+                int sc = 0;
+                foreach (var t in toks) if (t.Length > 1 && n.Contains(t)) sc++;
+                if (sc > bestScore) { bestScore = sc; best = f.Replace('\\', '/'); }
+            }
+            return best;
+        }
+
+        static readonly List<string> DokuCikarSirasi = new List<string>();
+
+        [MenuItem("Hikaye/Mixamo Dokularını Düzelt")]
+        static void DokulariDuzeltMenu()
+        {
+            var dir = Karakter3DKurulum.MixamoDir;
+            if (!Directory.Exists(dir)) return;
+            foreach (var f in Directory.GetFiles(dir, "*.fbx")) DokuCikarSirasi.Add(f.Replace('\\', '/'));
+            DokulariCikar();
+            // malzemeleri yeniden bagla (prefablari bastan kur)
+            int n = Karakter3DKurulum.BuildAll(true);
+            Debug.Log("[Hikaye Stüdyosu] Mixamo malzemeleri yenilendi, " + n + " karakter hazır.");
+        }
+
+        static void DokulariCikar()
+        {
+            var list = new List<string>(DokuCikarSirasi);
+            DokuCikarSirasi.Clear();
+            var yeniden = new List<string>();
+            foreach (var path in list)
+            {
+                var imp = AssetImporter.GetAtPath(path) as ModelImporter;
+                if (imp == null) continue;
+                var dir = Path.GetDirectoryName(path).Replace('\\', '/') + "/Dokular/" + Path.GetFileNameWithoutExtension(path);
+                if (AssetDatabase.IsValidFolder(dir)) continue;   // daha once cikarildi
+                Directory.CreateDirectory(dir);
+                try { if (imp.ExtractTextures(dir)) yeniden.Add(path); }
+                catch (System.Exception e) { Debug.LogWarning("[Hikaye] " + path + " dokulari cikarilamadi: " + e.Message); }
+            }
+            if (yeniden.Count == 0) return;
+            AssetDatabase.Refresh();
+            foreach (var path in yeniden) AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+            Debug.Log("[Hikaye Stüdyosu] " + yeniden.Count + " Mixamo karakterinin dokulari cikarildi.");
+        }
+
         // Yeni .glb / .fbx karakter ice aktarilinca hazirligi tekrar dene
         static void OnPostprocessAllAssets(string[] imported, string[] deleted, string[] moved, string[] movedFrom)
         {
+            // Mixamo karakterlerinin dokulari FBX icine gomulu: disari cikar ki karakter beyaz gorunmesin
+            foreach (var p in imported)
+            {
+                var q = p.Replace('\\', '/');
+                if (q.Contains("/Karakterler/Mixamo/") && q.ToLowerInvariant().EndsWith(".fbx")) DokuCikarSirasi.Add(q);
+            }
+            if (DokuCikarSirasi.Count > 0) { EditorApplication.delayCall -= DokulariCikar; EditorApplication.delayCall += DokulariCikar; }
+
             foreach (var p in imported)
             {
                 var q = p.Replace('\\', '/');
