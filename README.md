@@ -52,6 +52,20 @@ Türkçe harfler serbest; isimler büyük/küçük harf ve ç/ş/ğ farkına bak
 - Ses: baştaki/sondaki sessizlik atılır, 0.5 sn'den uzun boşluklar kısaltılır, ses seviyesi eşitlenir; konuşurken müzik kısılır.
 - Film greni, kenar karartma, mum titremesi, ışık huzmesinde toz, yağmur, büyü ışıkları.
 
+## 3D karakterler (CC0)
+`Assets/HikayeStudyo/Karakterler` altında: 11 erkek + 10 kadın insan modeli (günlük, takım elbise, işçi, çiftçi, kral, cadı, asker...),
+12 hayvan, 9 oyuncak tarzı karakter, 45 insan animasyonu (Quaternius Universal Animation Library) ve ev, köy, sokak, doğa eşyaları.
+Hepsi CC0; kaynaklar `Karakterler/LISANSLAR.md` dosyasında.
+
+Unity'yi açınca kendiliğinden:
+1. `.glb` dosyaları için **glTFast** paketi kurulur (bir kez, internet gerekir).
+2. İnsan modellerine Unity insan iskeleti bağlanır, 45 animasyonun hepsi her insana uygulanır.
+3. Her karakter için hazır prefab yapılır: `Karakterler/Hazir`.
+4. **Karakter Galerisi** sahnesi kurulur; Play'e basınca karakterler üçer üçer çıkıp yürür, dans eder, konuşur.
+
+Menü: **Hikaye > 3D Karakterleri Hazırla**, **Hikaye > Karakter Galerisi**.
+Kodda: `karakter.GetComponent<Karakter3D>().Play("yuru")` (Türkçe takma adlar: dur, konus, yuru, kos, otur, dans, ol, zipla, egil, araba, buyu...).
+
 ## Kendi görsellerin
 Kütüphanede (`Hikaye Stüdyosu > Kütüphaneyi Aç`) her karakter için `sprites` listesine duygu başına görsel ekleyebilirsin
 (gözler açık + isteğe bağlı ağız açık ve gözler kapalı hali). Görsel yoksa karakter düz çizgi film tarzında kodla çizilir.
