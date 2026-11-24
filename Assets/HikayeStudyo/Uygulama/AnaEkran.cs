@@ -55,7 +55,7 @@ namespace HikayeStudyo
         class VideoBilgi { public string ad, yol; public long boyut; public DateTime zaman; }
 
         Bolum bolum = Bolum.Ana;
-        Vector2 kaydirma;
+        float kaydirma;  // liste kaydırma (kendi kaydırma çubuğumuz; GUI.BeginScrollView ölçekli matrisle tıklamayı bozuyordu)
         string mesaj = ""; bool mesajHata;
         bool oynuyor, bitti;
         string yeniAd = "";
@@ -221,6 +221,44 @@ namespace HikayeStudyo
             return v;
         }
 
+
+        // ---- kendi kaydırma alanımız ----
+        float listeIcerik;
+        void ListeBasla(Rect gorunum, float icerikYuksekligi)
+        {
+            listeIcerik = icerikYuksekligi;
+            var e = Event.current;
+            float azami = Mathf.Max(0f, icerikYuksekligi - gorunum.height);
+            if (e.type == EventType.ScrollWheel && gorunum.Contains(e.mousePosition)) { kaydirma += e.delta.y * 30f; e.Use(); }
+            kaydirma = Mathf.Clamp(kaydirma, 0f, azami);
+            GUI.BeginGroup(gorunum);
+            GUI.BeginGroup(new Rect(0, -kaydirma, gorunum.width, Mathf.Max(icerikYuksekligi, gorunum.height)));
+        }
+
+        void ListeBitir(Rect gorunum)
+        {
+            GUI.EndGroup();
+            GUI.EndGroup();
+            float azami = Mathf.Max(0f, listeIcerik - gorunum.height);
+            if (azami <= 0f) return;
+            var iz = new Rect(gorunum.xMax - 10, gorunum.y, 8, gorunum.height);
+            float oran = gorunum.height / listeIcerik;
+            float tutH = Mathf.Max(30f, iz.height * oran);
+            float tutY = iz.y + (iz.height - tutH) * (kaydirma / azami);
+            Kutu(iz, new Color32(30, 36, 52, 255));
+            Kutu(new Rect(iz.x, tutY, iz.width, tutH), new Color32(90, 100, 130, 255));
+            int id = GUIUtility.GetControlID(FocusType.Passive);
+            var e = Event.current;
+            var alan = new Rect(iz.x - 6, iz.y, iz.width + 12, iz.height);
+            if (e.type == EventType.MouseDown && alan.Contains(e.mousePosition)) { GUIUtility.hotControl = id; e.Use(); }
+            if (GUIUtility.hotControl == id && (e.type == EventType.MouseDown || e.type == EventType.MouseDrag))
+            {
+                float t = Mathf.Clamp01((e.mousePosition.y - iz.y - tutH * 0.5f) / Mathf.Max(1f, iz.height - tutH));
+                kaydirma = t * azami; e.Use();
+            }
+            if (e.type == EventType.MouseUp && GUIUtility.hotControl == id) { GUIUtility.hotControl = 0; e.Use(); }
+        }
+
         // ---------- ana çizim ----------
         void OnGUI()
         {
@@ -253,7 +291,7 @@ namespace HikayeStudyo
 
         void Git(Bolum b)
         {
-            bolum = b; kaydirma = Vector2.zero; mesaj = ""; sifirlaOnay = false;
+            bolum = b; kaydirma = 0f; mesaj = ""; sifirlaOnay = false;
             if (b == Bolum.Hikayelerim) HikayeleriYukle();
             if (b == Bolum.Projeler) VideolariYukle();
         }
@@ -391,7 +429,7 @@ namespace HikayeStudyo
             if (Dugme(new Rect(ic.xMax - 170, ic.y + 4, 170, 38), "Klasörü aç", new Color32(60, 66, 88, 255), 14)) Ac("explorer.exe", "\"" + HikayeKlasoru + "\"");
             var gorunum = new Rect(ic.x, ic.y + 80, ic.width, ic.height - 130);
             const float sat = 64;
-            kaydirma = GUI.BeginScrollView(gorunum, kaydirma, new Rect(0, 0, gorunum.width - 18, Mathf.Max(gorunum.height, hikayeler.Count * (sat + 8))));
+            ListeBasla(gorunum, Mathf.Max(gorunum.height, hikayeler.Count * (sat + 8)));
             for (int i = 0; i < hikayeler.Count; i++)
             {
                 var h = hikayeler[i];
@@ -403,7 +441,7 @@ namespace HikayeStudyo
                 if (!h.yerlesik && Dugme(new Rect(r.xMax - 330, r.y + 12, 120, 40), "Düzenle", new Color32(60, 66, 88, 255), 14)) Ac("notepad.exe", "\"" + h.yol + "\"");
                 if (Dugme(new Rect(r.xMax - 196, r.y + 12, 180, 40), "Oyna", Vurgu, 16)) Oyna(h);
             }
-            GUI.EndScrollView();
+            ListeBitir(gorunum);
             MesajCiz(new Rect(ic.x, ic.yMax - 44, ic.width, 40));
         }
 
@@ -412,8 +450,8 @@ namespace HikayeStudyo
             int n3d = katalog != null ? katalog.karakterler.Count : 0;
             int n2d = kutuphane != null ? kutuphane.characters.Count : 0;
             Baslik(ic, "Karakterlerim", "Hikâyende kullanabileceğin karakterler");
-            if (Dugme(new Rect(ic.x, ic.y + 76, 190, 38), "3D karakterler (" + n3d + ")", karakterSekme == 0 ? Vurgu : new Color32(60, 66, 88, 255), 14)) { karakterSekme = 0; kaydirma = Vector2.zero; }
-            if (Dugme(new Rect(ic.x + 200, ic.y + 76, 200, 38), "Çizgi karakterler (" + n2d + ")", karakterSekme == 1 ? Vurgu : new Color32(60, 66, 88, 255), 14)) { karakterSekme = 1; kaydirma = Vector2.zero; }
+            if (Dugme(new Rect(ic.x, ic.y + 76, 190, 38), "3D karakterler (" + n3d + ")", karakterSekme == 0 ? Vurgu : new Color32(60, 66, 88, 255), 14)) { karakterSekme = 0; kaydirma = 0f; }
+            if (Dugme(new Rect(ic.x + 200, ic.y + 76, 200, 38), "Çizgi karakterler (" + n2d + ")", karakterSekme == 1 ? Vurgu : new Color32(60, 66, 88, 255), 14)) { karakterSekme = 1; kaydirma = 0f; }
             var alan = new Rect(ic.xMax - 280, ic.y + 76, 280, 38);
             Kutu(alan, Kart);
             var tf = new GUIStyle(YaziStil(15, TextAnchor.MiddleLeft, Yazi, false, false)) { padding = new RectOffset(12, 12, 0, 0) };
@@ -452,7 +490,7 @@ namespace HikayeStudyo
             const float aralik = 12;
             float w = (gorunum.width - 18 - aralik * (sutun - 1)) / sutun;
             int satir = (liste.Count + sutun - 1) / sutun;
-            kaydirma = GUI.BeginScrollView(gorunum, kaydirma, new Rect(0, 0, gorunum.width - 18, Mathf.Max(gorunum.height, satir * (yukseklik + aralik))));
+            ListeBasla(gorunum, Mathf.Max(gorunum.height, satir * (yukseklik + aralik)));
             for (int i = 0; i < liste.Count; i++)
             {
                 var r = new Rect((i % sutun) * (w + aralik), (i / sutun) * (yukseklik + aralik), w, yukseklik);
@@ -460,7 +498,7 @@ namespace HikayeStudyo
                 Yazdir(new Rect(r.x + 14, r.y + 8, r.width - 28, 28), liste[i][0], 16, Yazi, TextAnchor.MiddleLeft, true);
                 Yazdir(new Rect(r.x + 14, r.y + 36, r.width - 28, 20), liste[i][1], 12, Sönük);
             }
-            GUI.EndScrollView();
+            ListeBitir(gorunum);
         }
 
         void MekanlarCiz(Rect ic)
@@ -554,7 +592,7 @@ namespace HikayeStudyo
                 return;
             }
             const float sat = 64;
-            kaydirma = GUI.BeginScrollView(gorunum, kaydirma, new Rect(0, 0, gorunum.width - 18, Mathf.Max(gorunum.height, videolar.Count * (sat + 8))));
+            ListeBasla(gorunum, Mathf.Max(gorunum.height, videolar.Count * (sat + 8)));
             for (int i = 0; i < videolar.Count; i++)
             {
                 var v = videolar[i];
@@ -565,7 +603,7 @@ namespace HikayeStudyo
                 if (Dugme(new Rect(r.xMax - 360, r.y + 12, 170, 40), "Klasörde göster", new Color32(60, 66, 88, 255), 14)) Ac("explorer.exe", "/select,\"" + v.yol + "\"");
                 if (Dugme(new Rect(r.xMax - 180, r.y + 12, 164, 40), "Videoyu aç", Vurgu, 15)) Ac(v.yol, "");
             }
-            GUI.EndScrollView();
+            ListeBitir(gorunum);
         }
 
         void AyarlarCiz(Rect ic)
@@ -611,8 +649,14 @@ namespace HikayeStudyo
         }
 
         // ---------- hikâye oynatma ----------
+        static void Gunluk(string m)
+        {
+            try { File.AppendAllText(Path.Combine(Directory.GetCurrentDirectory(), "arayuz_log.txt"), DateTime.Now.ToString("HH:mm:ss") + " " + m + "\r\n"); } catch { }
+        }
+
         void Oyna(HikayeBilgi h)
         {
+            Gunluk("Oyna: " + h.ad + " olcek=" + olcek.ToString("0.00") + " pencere=" + Screen.width + "x" + Screen.height);
             try
             {
                 PlayerPrefs.SetInt("HS_SafeArea", PlayerPrefs.GetInt("HS_SafeArea", 0));
@@ -630,10 +674,10 @@ namespace HikayeStudyo
                 bitti = false; oynuyor = true;
                 StoryPlayer.Finished -= Bitis; StoryPlayer.Finished += Bitis;
             }
-            catch (Exception e) { mesaj = "Hikâye başlatılamadı: " + e.Message; mesajHata = true; oynuyor = false; }
+            catch (Exception e) { Gunluk("Oyna HATA: " + e); mesaj = "Hikâye başlatılamadı: " + e.Message; mesajHata = true; oynuyor = false; }
         }
 
-        void Bitis() { bitti = true; }
+        void Bitis() { bitti = true; Gunluk("Hikaye bitti"); }
 
         void OynarkenCiz()
         {
