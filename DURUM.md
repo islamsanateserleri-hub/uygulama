@@ -56,5 +56,13 @@ Yeni: `Scripts/DisSes.cs` (kalıcı ses klasörü Documents\HikayeStudyosu\Ses\<
 - Unity arka plandayken derlemez: Hub'dan "My project" (530,293), 45 sn bekle, Assets (89,40) → Refresh (120,486); derleme `Library/ScriptAssemblies/Hikaye.App.dll` içinde metinle doğrulanır. Çıkış: File (16,40) → Exit (44,354). Exe: Gezgin → Masaüstü (70,134) → kısayol (240,291) → Giriş (80,35) → Aç (722,62); iki Gezgin penceresi olabilir.
 - C# 9: renk üçlü ifadelerinde Color32/Color karışımı hedef türüyle çalışır; GUI grup/kaydırma arasında `return` yapma.
 
+## PLAN SIRASI (PDF: Docs/Hikaye_Studyo_Gelistirme_Plani.pdf — sıra DEĞİŞMEZ, onaysız sonraki aşamaya geçme)
+Kurallar: bozma, yedek, derleme kontrolü, test edilmeyen "tamam" değil, aşama sonu rapor + DURUM.md + Doc + GitHub.
+- B1 Bağımsız uygulama: 0–3 tamam | 4 Gemini ses (yazıldı, kısmen test) | 5 Video düzenleme+dışa aktarma (sahne sırası/süresi, kamera, altyazı, müzik, ses efekti, geçiş, vfx, kapak, önizleme; 1080x1920/30FPS/MP4/H.264/AAC; yayın paketi: video+kapak+başlık+açıklama+etiket) | 6 Yapay zekâ yardımcıları (sahneye ayırma, karakter/mekân/duygu/kamera önerme, tutarlılık, yazım; internetsiz de çalışmalı) | 7 Kurulum (tek kurulum dosyası, kısayol, FFmpeg, ayar/anahtar saklama, güncelleme, hata raporu, TEMİZ PC testi)
+- B2 Kalite: 8 Karakter kimlik kartı | 9 VRoid/UniVRM/VRM1.0 yüz animasyonu + ölçülü ağız senkronu | 10 Hareketler/etkileşim (sarılma, el tutma, yürüme, oturma, kapı…) | 11 Sahne yönetmeni (otomatik kamera, 180° kuralı) | 12 3D mekân+atmosfer | 13 Sinematik efektler
+- B3 İçerik: 14 Hikâye devamlılığı/çelişki denetimi | 15 Seri+etkileşimli hikâye | 16 Gelişmiş yapay zekâ üretimi (sonraki sürüm; maliyet/lisans önce değerlendirilir)
+- B4 Kalite güvencesi (hep): komut listesi 24 Kas 2026 (efekt=ses efekti, vfx, sesfiltre, filtre, atmosfer, isik, gecis, kamera, odak, poz, yuru/gir/cikar; aynı komut iki anlamda olmaz); IVideoKaydedici ortak arayüz; tek FFmpeg konumu; tek ses karıştırma; test edilmiş altyazı zamanlaması; sabit kare hızı; Türkçe karakter karşılaştırma; lisans kontrolü. Her video sonrası otomatik kontrol: siyah ekran, donmuş kare, eksik ses, ses seviyesi, altyazı taşması, kadraj, ağız senkronu, bozuk dosya → kullanıcıya rapor.
+Ayrıntılı sürüm: Doc "DURUM.dm" → "TAM GELİŞTİRME PLANI".
+
 ## Sonraki adım
 1) Dinle düzeltmesi + düğme yerleşimi, yeniden derle/dene. 2) Kullanıcı API anahtarını girerse 1 satır gerçek Gemini testi. 3) Aşama 4 raporu, onay beklenir; Aşama 5'e onaysız geçme. Her adımda DURUM.md ve "DURUM.dm" Doc'u (Claude Docs, claude.ai/artifact/1RntmDHcKyA7NvjmKDoybk) birlikte güncelle.
