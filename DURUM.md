@@ -11,6 +11,10 @@ Eski defterler/notlar `_Arsiv/` altında, okunmaz. Plan: `Hikaye_Studyo_Gelistir
 5. Her aşama sonu raporu: yapılanlar, değişen dosyalar, eklenenler, düzeltilen hatalar, derleme sonucu, gerçek test, açık sorunlar, commit, sonraki aşama.
 6. Hedef: Unity bilmeyen kullanıcı hikâyeyi yazıp karakter seçerek tek tuşla 1080x1920 sesli, animasyonlu film üretsin (bağımsız Windows uygulaması).
 
+## YENİ SOHBET NASIL BAŞLATILIR
+1. Bilgisayardaki Claude masaüstü uygulamasında yeni sohbet aç, + menüsünden **Klasör ekle** ile `C:\Users\Teknodc\My project` klasörünü bağla (bağlanmazsa Claude cihaz dosyalarını göremez ve DURUM.md'yi okuyamaz).
+2. İlk mesaj: "DURUM.md dosyasını oku ve oradaki kurallara göre devam et. Aşama 1'e başla." (Klasör bağlanamazsa: aynı DURUM.md GitHub'da, islamsanateserleri-hub/uygulama, dal claude/hikaye-studyosu, kök dizin.)
+
 ## ÇALIŞMA ORTAMI (yeni sohbet için)
 - Proje: `C:\Users\Teknodc\My project` (Unity 6000.6.9f1, URP). Bilgisayar DESKTOP-49TN47M. Claude'un konsolu yok (device_bash yok).
 - Dosya aktarımı: `device_stage_files` (cihaz → /mnt/user-data/uploads/My project/...), `device_commit_files` (/mnt/user-data/outputs/My project/... → cihaz, force:true).
@@ -48,3 +52,4 @@ Başarı: Unity'siz video, exe tek başına, senkron, 1080x1920 30 FPS, anlaşı
 - 24 Kas 21:41: Plan PDF'i okundu, eski notlar `_Arsiv/`'e alındı, DURUM.md yazıldı. Aşama 1 başlamadı.
 - 24 Kas 21:50: Kullanıcı sormadan GitHub'a göndermemi istedi. Klon alındı, cihazdaki kod/sahne/Resources dosyaları repoya eşitlendi.
 - 24 Kas 21:55: GitHub push tamam: commit 22ebf5c (dal claude/hikaye-studyosu): 110 yeni, 11 değişen dosya. Sonraki: kullanıcı "başla" deyince Aşama 1 madde 1.
+- 24 Kas 21:58: Telefondaki yeni sohbet DURUM.md'yi okuyamadı (klasör bağlı değildi). "Yeni sohbet nasıl başlatılır" bölümü eklendi.
