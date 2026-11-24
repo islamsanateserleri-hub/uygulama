@@ -1,0 +1,11 @@
+// SEÇİM KARTI + YAYIN KLASÖRÜ DENEMESİ
+seri: Sessiz Değişim
+bolum: 2
+baslik: Babam her şeyi duydu
+sonuc: %69 A
+mekan: oda_gece
+[Arda|korkmus|ic] Babam kapının arkasındaymış... (nefesi kesil)
+[Anne|aglamakli|dis] Oğlum, *sakla* bunu. Kimse bilmesin.
+[Arda|dusunceli|ic] Ama babam artık biliyor.
+secim: A) Babasına anlatsın / B) Sır saklasın
+son: sert

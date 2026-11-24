@@ -13,6 +13,7 @@ namespace HikayeStudyo
         public const string LibPath = "Assets/Resources/StoryLibrary.asset";
         public const string ScenePath = "Assets/HikayeStudyo/HikayeSahnesi.unity";
         public const string StoryFolder = "Assets/Resources/Hikayeler";
+        public const string TelaffuzPath = "Assets/Resources/telaffuz.txt";
         const string DoneKey = "HS_KurulumKontrol";
 
         [InitializeOnLoadMethod]
@@ -62,6 +63,11 @@ namespace HikayeStudyo
                 created = true;
             }
             if (AssetDatabase.LoadAssetAtPath<SceneAsset>(ScenePath) == null) { CreateScene(); created = true; }
+            if (!File.Exists(TelaffuzPath))
+            {
+                File.WriteAllText(TelaffuzPath, TelaffuzOrnek, new System.Text.UTF8Encoding(false));
+                AssetDatabase.ImportAsset(TelaffuzPath);
+            }
             return created;
         }
 
@@ -159,6 +165,16 @@ namespace HikayeStudyo
             EditorSceneManager.CloseScene(scene, true);
             Debug.Log("[Hikaye Stüdyosu] Sahne oluşturuldu: " + ScenePath);
         }
+
+        // Telaffuz sozlugu: yazilis=okunus (satir basina //, # yorum). Seslendirmeden once uygulanir; altyazi degismez.
+        public const string TelaffuzOrnek =
+@"// TELAFFUZ SÖZLÜĞÜ  —  yazilis=okunus
+// Gemini'nin yanlış okuduğu kelimeleri burada düzelt. Büyük/küçük harf fark etmez; tam kelime eşleşir.
+// Not: Bir satırın okunuşunu değiştirmek o satırın ses dosyasını yeniden üretmeyi gerektirir.
+WhatsApp=vatsap
+Wi-Fi=vayfay
+TikTok=tik tok
+";
 
         public const string OrnekHikaye =
 @"// HİKAYE STÜDYOSU – ÖRNEK BÖLÜM

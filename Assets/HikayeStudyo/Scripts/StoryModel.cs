@@ -6,8 +6,10 @@ namespace HikayeStudyo
 {
     public enum ItemType
     {
+        Bak, Dinle, AltyaziStil,   // bak: / dinle: / altyazi: komutlari (YuzSahne.cs, KaraokeAltyazi.cs)
         Dialogue, Background, Hook, Rewind, Title, Wait, Sfx, Remove, Clear,
-        Camera, Atmosphere, Music, Pose, Headlights, Flash, Insert, End, Cast, Choice, Result
+        Camera, Atmosphere, Music, Pose, Headlights, Flash, Insert, End, Cast, Choice, Result,
+        Direct   // yonetmen komutlari: mekan3d, yer, gir, cikar (kapi), figuran, atmosfer (huzun...), ani, zaman, gecis, sessizlik, isik
     }
 
     public class StoryItem
@@ -20,6 +22,7 @@ namespace HikayeStudyo
         public string Motion = "";       // kos, yuru, saril, zipla, egil, sarsil, cik
         public string Text = "";         // ekranda gorunen metin (ses etiketleri ve *vurgu* isaretleri temizlenmis)
         public string Speech = "";       // seslendirmeye giden metin (<sigh>, <sob> gibi etiketlerle)
+        public string Vurgulu = "";      // altyazi metni, *vurgu* isaretleri korunmus (karaoke altyazi icin)
         public string Arg = "";
         public float Seconds;
         public int VoiceIndex;           // 1'den baslayan konusma sirasi
@@ -182,6 +185,23 @@ namespace HikayeStudyo
 
     public static class StoryParser
     {
+        // 'Direct' (yonetmen) komutlari: Character = komut adi, Arg = geri kalan metin.
+        // Baska komutlar da eklenecekse (bak, dinle, altyazi ...) adini bu listeye yazmak yeterlidir.
+        public static readonly string[] DirectKeys =
+            { "mekan3d", "yer", "gir", "figuran", "ani", "zaman", "gecis", "sessizlik", "isik" };
+
+        static bool IsDirectKey(string key)
+        {
+            foreach (var k in DirectKeys) if (k == key) return true;
+            return false;
+        }
+
+        static void WarnArg(ParseResult r, int lineNo, string key, string val, string[] ok)
+        {
+            if (!Util.In(val, ok))
+                r.Warnings.Add(lineNo + ". satır: '" + key + ": " + val + "' bilinmiyor (" + string.Join(", ", ok) + ").");
+        }
+
         public static ParseResult Parse(string text)
         {
             var r = new ParseResult();
@@ -206,6 +226,7 @@ namespace HikayeStudyo
                         Text = line.Substring(close + 1).Trim(),
                     };
                     it.Speech = SesEtiketleri.ToSpeech(it.Text);
+                    it.Vurgulu = KaraokeAltyazi.VurguluMetin(it.Text);
                     it.Text = SesEtiketleri.ToDisplay(it.Text);
                     if (parts.Length > 2) it.Inner = Util.Norm(parts[2]).StartsWith("i");
                     if (parts.Length > 3) it.Motion = Util.Norm(parts[3]);
@@ -230,14 +251,51 @@ namespace HikayeStudyo
                     case "yazi": item.Type = ItemType.Title; break;
                     case "bekle": item.Type = ItemType.Wait; item.Seconds = Util.ParseFloat(val, 0.5f); break;
                     case "efekt": item.Type = ItemType.Sfx; break;
-                    case "cikar": item.Type = ItemType.Remove; item.Character = val; break;
+                    case "cikar":
+                        {
+                            // cikar: Anne          -> eskisi gibi (yana yuruyerek / kenardan)
+                            // cikar: Anne kapi     -> kapidan cikar (3D mekan)
+                            var cp = val.Split(new[] { ' ' }, 2, System.StringSplitOptions.RemoveEmptyEntries);
+                            if (cp.Length == 2 && YonetmenTablo.KapiMi(cp[1]))
+                            {
+                                item.Type = ItemType.Direct; item.Character = "cikar"; item.Arg = val;
+                            }
+                            else { item.Type = ItemType.Remove; item.Character = val; }
+                        }
+                        break;
                     case "temizle": item.Type = ItemType.Clear; break;
-                    case "kamera": item.Type = ItemType.Camera; break;
-                    case "atmosfer": item.Type = ItemType.Atmosphere; break;
+                    case "kamera":
+                        item.Type = ItemType.Camera;
+                        if (!YonetmenTablo.KameraGecerli(val))
+                            r.Warnings.Add(lineNo + ". satır: 'kamera: " + val + "' bilinmiyor (" + string.Join(", ", YonetmenTablo.Kameralar) + ").");
+                        break;
+                    case "atmosfer":
+                        {
+                            // eski: atmosfer: mum, toz, yagmur, buyu, gunes, yok   (2D efekt katmani)
+                            // yeni: atmosfer: huzun | sicak_ani | kabus            (renk ayari; eskilerle birlikte yazilabilir)
+                            var oldTokens = new List<string>();
+                            var newTokens = new List<string>();
+                            foreach (var tk in val.Split(new[] { ',', ' ' }, System.StringSplitOptions.RemoveEmptyEntries))
+                            {
+                                if (Util.In(tk, YonetmenTablo.Atmosferler)) newTokens.Add(Util.Norm(tk));
+                                else oldTokens.Add(tk);
+                            }
+                            if (newTokens.Count > 0)
+                            {
+                                r.Items.Add(new StoryItem { Line = lineNo, Type = ItemType.Direct, Character = "atmosfer", Arg = string.Join(",", newTokens.ToArray()), Text = val });
+                                if (oldTokens.Count == 0) continue;
+                                item.Text = string.Join(", ", oldTokens.ToArray()); item.Arg = item.Text;
+                            }
+                            item.Type = ItemType.Atmosphere;
+                        }
+                        break;
                     case "muzik": item.Type = ItemType.Music; break;
                     case "far": item.Type = ItemType.Headlights; break;
                     case "flas": item.Type = ItemType.Flash; break;
                     case "gorsel": item.Type = ItemType.Insert; break;
+                    case "bak": item.Type = ItemType.Bak; if (!YuzSahne.KomutCoz(key, item, r.Warnings, lineNo)) continue; break;
+                    case "dinle": item.Type = ItemType.Dinle; if (!YuzSahne.KomutCoz(key, item, r.Warnings, lineNo)) continue; break;
+                    case "altyazi": item.Type = ItemType.AltyaziStil; if (!YuzSahne.KomutCoz(key, item, r.Warnings, lineNo)) continue; break;
                     case "seri": r.Seri = val; continue;
                     case "baslik": r.Baslik = val; continue;
                     case "bolum":
@@ -285,6 +343,13 @@ namespace HikayeStudyo
                         if (!Util.In(item.Arg, Util.Poses)) r.Warnings.Add(lineNo + ". satır: '" + item.Arg + "' pozu bilinmiyor (ayakta, yatiyor, oturuyor).");
                         break;
                     default:
+                        if (IsDirectKey(key))
+                        {
+                            item.Type = ItemType.Direct; item.Character = key; item.Arg = val;
+                            string bad = YonetmenTablo.Dogrula(key, val);
+                            if (bad != null) r.Warnings.Add(lineNo + ". satır: " + bad);
+                            break;
+                        }
                         r.Warnings.Add(lineNo + ". satır: '" + key + ":' komutu bilinmiyor.");
                         continue;
                 }

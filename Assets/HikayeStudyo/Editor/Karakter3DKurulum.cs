@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -30,9 +31,8 @@ namespace HikayeStudyo
         {
             get
             {
-                foreach (var a in System.AppDomain.CurrentDomain.GetAssemblies())
-                    if (a.GetType("GLTFast.GltfImport", false) != null) return true;
-                return false;
+                // AppDomain.GetAssemblies() yerine AsmYardim (CompilationPipeline tabanli, UAC0005 uyarisi cikmaz)
+                return AsmYardim.TipVar("GLTFast.GltfImport");
             }
         }
 
@@ -172,7 +172,11 @@ namespace HikayeStudyo
             try
             {
                 var avatar = BuildAvatar(go);
-                if (avatar == null) return false;
+                if (avatar == null)
+                {
+                    RigRapor(name + ": Humanoid avatar kurulamadı, prefab OLUŞTURULMADI (ayrıntı yukarıdaki satırlarda / HikayeKomut/rig_raporu.txt).", true);
+                    return false;
+                }
                 avatar.name = name + "_Avatar";
                 string avPath = Hazir + "/" + name + "_Avatar.asset";
                 AssetDatabase.DeleteAsset(avPath);
@@ -242,7 +246,12 @@ namespace HikayeStudyo
             if (src == null) return false;
             Avatar avatar = null;
             foreach (var o in AssetDatabase.LoadAllAssetsAtPath(path)) if (o is Avatar) avatar = (Avatar)o;
-            if (avatar == null || !avatar.isHuman) { Debug.LogWarning("[Hikaye Stüdyosu] " + name + ": insan iskeleti yok, atlandı."); return false; }
+            if (avatar == null || !avatar.isHuman)
+            {
+                RigRapor(name + ": FBX içe aktarımında Humanoid avatar yok (" + (avatar == null ? "Avatar nesnesi hiç oluşmamış" : "Avatar.isHuman=false, isValid=" + avatar.isValid) +
+                         "). " + path + " dosyasının Import Settings > Rig > Animation Type = Humanoid olmalı ve Configure'da kemikler yeşil olmalı. Prefab atlandı.", true);
+                return false;
+            }
             var go = (GameObject)Object.Instantiate(src);
             go.name = name;
             try
@@ -339,6 +348,402 @@ namespace HikayeStudyo
             "UpperLeg.R", "LowerLeg.R", "Foot.R",
         };
 
+        // ---------- Insan iskeleti (Humanoid avatar) ----------
+        // Unity'nin Humanoid avatar icin zorunlu kildigi 15 kemik
+        static readonly HumanBodyBones[] Gerekli =
+        {
+            HumanBodyBones.Hips, HumanBodyBones.Spine, HumanBodyBones.Head,
+            HumanBodyBones.LeftUpperLeg, HumanBodyBones.LeftLowerLeg, HumanBodyBones.LeftFoot,
+            HumanBodyBones.RightUpperLeg, HumanBodyBones.RightLowerLeg, HumanBodyBones.RightFoot,
+            HumanBodyBones.LeftUpperArm, HumanBodyBones.LeftLowerArm, HumanBodyBones.LeftHand,
+            HumanBodyBones.RightUpperArm, HumanBodyBones.RightLowerArm, HumanBodyBones.RightHand,
+        };
+
+        // Konsola ve HikayeKomut/rig_raporu.txt dosyasina yazar (yapay zeka da okuyabilsin)
+        public static void RigRapor(string mesaj, bool uyari)
+        {
+            if (uyari) Debug.LogWarning("[Hikaye Stüdyosu] " + mesaj); else Debug.Log("[Hikaye Stüdyosu] " + mesaj);
+            try
+            {
+                Directory.CreateDirectory(UzaktanKomut.Dir);
+                File.AppendAllText(Path.Combine(UzaktanKomut.Dir, "rig_raporu.txt"),
+                    System.DateTime.Now.ToString("HH:mm:ss") + " " + mesaj + "\n", new UTF8Encoding(false));
+            }
+            catch { }
+        }
+
+        // Kemik adini karsilastirma icin sadelestirir: "mixamorig:LeftUpLeg" -> "leftupleg", "UpperArm.L" -> "upperarml"
+        static string Nr(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return "";
+            int i = Mathf.Max(name.LastIndexOf(':'), name.LastIndexOf('|'));
+            if (i >= 0) name = name.Substring(i + 1);
+            var sb = new StringBuilder(name.Length);
+            foreach (char ch in name) if (char.IsLetterOrDigit(ch)) sb.Append(char.ToLowerInvariant(ch));
+            string s = sb.ToString();
+            string[] onekler = { "mixamorig", "bip001", "bip01", "ccbase", "armature" };
+            foreach (var pre in onekler)
+                if (s.StartsWith(pre) && s.Length > pre.Length + 1) { s = s.Substring(pre.Length); break; }
+            return s;
+        }
+
+        static List<string> Yanli(string[] bazlar, bool sol)
+        {
+            var l = new List<string>();
+            string[] w = sol ? new[] { "left", "l" } : new[] { "right", "r" };
+            foreach (var x in bazlar)
+                foreach (var yan in w) { l.Add(yan + x); l.Add(x + yan); }
+            return l;
+        }
+
+        static readonly string[] BUstKol = { "upperarm", "arm", "uparm", "armupper" };
+        static readonly string[] BAltKol = { "lowerarm", "forearm", "armlower", "loarm" };
+        static readonly string[] BEl = { "hand", "wrist" };
+        static readonly string[] BUstBacak = { "upperleg", "upleg", "thigh", "legupper" };
+        static readonly string[] BAltBacak = { "lowerleg", "calf", "shin", "leglower", "leg" };
+        static readonly string[] BAyak = { "foot", "ankle" };
+        static readonly string[] BParmak = { "toes", "toe", "toebase", "ball" };
+        static readonly string[] BOmuz = { "shoulder", "clavicle", "collar" };
+
+        static List<string> Adaylar(HumanBodyBones b)
+        {
+            switch (b)
+            {
+                case HumanBodyBones.Hips: return new List<string> { "hips", "pelvis", "hip", "bippelvis", "cog" };
+                case HumanBodyBones.Spine: return new List<string> { "spine", "spine0", "spine00", "spine1", "spine01", "abdomen", "spinelower", "lowerspine", "spinebase" };
+                case HumanBodyBones.Chest: return new List<string> { "chest", "spine2", "spine02", "torso", "spinemid", "middlespine" };
+                case HumanBodyBones.UpperChest: return new List<string> { "upperchest", "spine3", "spine03", "chest2", "spineupper", "upperspine" };
+                case HumanBodyBones.Neck: return new List<string> { "neck", "neck1", "neck01", "necklower" };
+                case HumanBodyBones.Head: return new List<string> { "head" };
+                case HumanBodyBones.LeftShoulder: return Yanli(BOmuz, true);
+                case HumanBodyBones.RightShoulder: return Yanli(BOmuz, false);
+                case HumanBodyBones.LeftUpperArm: return Yanli(BUstKol, true);
+                case HumanBodyBones.RightUpperArm: return Yanli(BUstKol, false);
+                case HumanBodyBones.LeftLowerArm: return Yanli(BAltKol, true);
+                case HumanBodyBones.RightLowerArm: return Yanli(BAltKol, false);
+                case HumanBodyBones.LeftHand: return Yanli(BEl, true);
+                case HumanBodyBones.RightHand: return Yanli(BEl, false);
+                case HumanBodyBones.LeftUpperLeg: return Yanli(BUstBacak, true);
+                case HumanBodyBones.RightUpperLeg: return Yanli(BUstBacak, false);
+                case HumanBodyBones.LeftLowerLeg: return Yanli(BAltBacak, true);
+                case HumanBodyBones.RightLowerLeg: return Yanli(BAltBacak, false);
+                case HumanBodyBones.LeftFoot: return Yanli(BAyak, true);
+                case HumanBodyBones.RightFoot: return Yanli(BAyak, false);
+                case HumanBodyBones.LeftToes: return Yanli(BParmak, true);
+                case HumanBodyBones.RightToes: return Yanli(BParmak, false);
+            }
+            return new List<string>();
+        }
+
+        static void Ata(Dictionary<HumanBodyBones, Transform> map, Dictionary<HumanBodyBones, string> how, HumanBodyBones b, Transform t, string yontem)
+        {
+            if (t == null || map.ContainsKey(b)) return;
+            foreach (var v in map.Values) if (v == t) return;   // ayni kemik iki role verilmesin
+            map[b] = t;
+            how[b] = yontem;
+        }
+
+        static List<HumanBodyBones> EksikGerekli(Dictionary<HumanBodyBones, Transform> map)
+        {
+            var l = new List<HumanBodyBones>();
+            foreach (var b in Gerekli) if (!map.ContainsKey(b)) l.Add(b);
+            return l;
+        }
+
+        static string Adlar(List<HumanBodyBones> l)
+        {
+            var parts = new List<string>();
+            foreach (var b in l) parts.Add(b.ToString());
+            return string.Join(", ", parts.ToArray());
+        }
+
+        // 2. asama: Mixamo / Unreal / Blender gibi yaygin adlandirmalar
+        static void SinonimleTamamla(Transform[] all, Dictionary<HumanBodyBones, Transform> map, Dictionary<HumanBodyBones, string> how)
+        {
+            var norm = new Dictionary<string, Transform>();
+            foreach (var t in all)
+            {
+                string n = Nr(t.name);
+                if (n.Length > 0 && !norm.ContainsKey(n)) norm[n] = t;
+            }
+            for (int i = 0; i < (int)HumanBodyBones.LastBone; i++)
+            {
+                var b = (HumanBodyBones)i;
+                if (map.ContainsKey(b)) continue;
+                foreach (var cand in Adaylar(b))
+                {
+                    Transform t;
+                    if (norm.TryGetValue(cand, out t))
+                    {
+                        Ata(map, how, b, t, "isim:" + t.name);
+                        if (map.ContainsKey(b)) break;
+                    }
+                }
+            }
+        }
+
+        // 3. asama: isimden bulunamayanlari iskelet hiyerarsisinden (Hips -> bacaklar/omurga -> kollar/boyun) cikar
+        static int Alt(Transform t, HashSet<Transform> tum)
+        {
+            int n = 0;
+            for (int i = 0; i < t.childCount; i++)
+            {
+                var c = t.GetChild(i);
+                if (!tum.Contains(c)) continue;
+                n += 1 + Alt(c, tum);
+            }
+            return n;
+        }
+
+        static int Derinlik(Transform t, HashSet<Transform> tum)
+        {
+            int d = 0;
+            for (int i = 0; i < t.childCount; i++)
+            {
+                var c = t.GetChild(i);
+                if (!tum.Contains(c)) continue;
+                d = Mathf.Max(d, 1 + Derinlik(c, tum));
+            }
+            return d;
+        }
+
+        static List<Transform> KemikCocuklari(Transform t, HashSet<Transform> tum)
+        {
+            var l = new List<Transform>();
+            for (int i = 0; i < t.childCount; i++) if (tum.Contains(t.GetChild(i))) l.Add(t.GetChild(i));
+            return l;
+        }
+
+        static Transform EnBuyuk(List<Transform> l, HashSet<Transform> tum)
+        {
+            Transform best = null; int bc = -1;
+            foreach (var c in l) { int n = Alt(c, tum); if (n > bc) { bc = n; best = c; } }
+            return best;
+        }
+
+        // Adindan sol/sag ipucu: -1 sol, +1 sag, 0 belirsiz
+        static int YanIpucu(Transform t)
+        {
+            string r = t.name.ToLowerInvariant();
+            if (r.Contains("left")) return -1;
+            if (r.Contains("right")) return 1;
+            if (r.EndsWith(".l") || r.EndsWith("_l") || r.Contains("_l_") || r.Contains(".l.") || r.StartsWith("l_") || r.StartsWith("l.")) return -1;
+            if (r.EndsWith(".r") || r.EndsWith("_r") || r.Contains("_r_") || r.Contains(".r.") || r.StartsWith("r_") || r.StartsWith("r.")) return 1;
+            return 0;
+        }
+
+        // Iki dalin (sol, sag) siralamasi: once adlardaki ipucu, yoksa konum (karakter +Z'ye bakar: sol = -X)
+        static void SolSag(List<Transform> dallar, out Transform sol, out Transform sag, List<string> log, string ne)
+        {
+            dallar.Sort((a, b) => a.position.x.CompareTo(b.position.x));
+            sol = dallar[0];
+            sag = dallar[dallar.Count - 1];
+            int hs = YanIpucu(sol), hg = YanIpucu(sag);
+            if (hs > 0 || hg < 0)
+            {
+                var tmp = sol; sol = sag; sag = tmp;
+                log.Add(ne + ": sol/sağ adlardan belirlendi");
+            }
+            else if (hs == 0 && hg == 0) log.Add(ne + ": sol/sağ KONUMDAN tahmin edildi (ad ipucu yok) — animasyonlar aynalı çıkarsa Rig'i elle kontrol et");
+        }
+
+        static void HiyerarsiTamamla(GameObject go, Dictionary<HumanBodyBones, Transform> map, Dictionary<HumanBodyBones, string> how, List<string> log)
+        {
+            var kemik = new HashSet<Transform>();
+            foreach (var smr in go.GetComponentsInChildren<SkinnedMeshRenderer>(true))
+            {
+                var bs = smr.bones;
+                if (bs == null) continue;
+                foreach (var b in bs) if (b != null) kemik.Add(b);
+            }
+            if (kemik.Count < 15) { log.Add("hiyerarşi: SkinnedMeshRenderer kemik sayısı yetersiz (" + kemik.Count + "): iskelet çıkarılamadı"); return; }
+            var tum = new HashSet<Transform>(kemik);
+            foreach (var b in kemik) for (var t = b.parent; t != null && t != go.transform; t = t.parent) tum.Add(t);
+
+            // Hips: kemik agacinin ilk dallanma noktasi (omurga + iki bacak)
+            Transform hips;
+            if (!map.TryGetValue(HumanBodyBones.Hips, out hips))
+            {
+                Transform kok = null; int kc = -1;
+                foreach (var t in tum)
+                    if (t.parent == null || !tum.Contains(t.parent)) { int n = Alt(t, tum); if (n > kc) { kc = n; kok = t; } }
+                hips = kok;
+                for (int g = 0; g < 20 && hips != null; g++)
+                {
+                    var k = KemikCocuklari(hips, tum);
+                    if (k.Count >= 3 || k.Count == 0) break;
+                    hips = k.Count == 1 ? k[0] : EnBuyuk(k, tum);
+                }
+                if (hips == null) { log.Add("hiyerarşi: Hips bulunamadı"); return; }
+                Ata(map, how, HumanBodyBones.Hips, hips, "hiyerarşi:" + hips.name);
+            }
+
+            // bacaklar: Hips'in altinda kalan derin dallar
+            var cocuk = KemikCocuklari(hips, tum);
+            var bacaklar = new List<Transform>();
+            var ustler = new List<Transform>();
+            foreach (var c in cocuk)
+            {
+                if (c.position.y < hips.position.y - 1e-4f && Derinlik(c, tum) >= 2) bacaklar.Add(c); else ustler.Add(c);
+            }
+            if (bacaklar.Count >= 2)
+            {
+                Transform sol, sag;
+                SolSag(bacaklar, out sol, out sag, log, "bacaklar");
+                BacakZinciri(map, how, tum, sol, true);
+                BacakZinciri(map, how, tum, sag, false);
+            }
+            else log.Add("hiyerarşi: Hips altında iki bacak dalı bulunamadı (" + bacaklar.Count + ")");
+
+            // omurga: en yuksek dal; dallanma noktasina (boyun + omuzlar) kadar tek zincir
+            Transform omurga = null;
+            foreach (var c in ustler) if (omurga == null || c.position.y > omurga.position.y) omurga = c;
+            if (omurga == null) { log.Add("hiyerarşi: Hips üstünde omurga dalı yok"); return; }
+            Ata(map, how, HumanBodyBones.Spine, omurga, "hiyerarşi:" + omurga.name);
+            var zincir = new List<Transform> { omurga };
+            var cur = omurga;
+            for (int g = 0; g < 8; g++)
+            {
+                var k = KemikCocuklari(cur, tum);
+                if (k.Count != 1) break;
+                cur = k[0];
+                zincir.Add(cur);
+            }
+            if (zincir.Count >= 3)
+            {
+                Ata(map, how, HumanBodyBones.Chest, zincir[1], "hiyerarşi:" + zincir[1].name);
+                Ata(map, how, HumanBodyBones.UpperChest, zincir[zincir.Count - 1], "hiyerarşi:" + zincir[zincir.Count - 1].name);
+            }
+            else if (zincir.Count == 2) Ata(map, how, HumanBodyBones.Chest, zincir[1], "hiyerarşi:" + zincir[1].name);
+
+            var dallar = KemikCocuklari(cur, tum);
+            if (dallar.Count < 3) { log.Add("hiyerarşi: omurga ucunda boyun + iki omuz dalı bulunamadı (" + dallar.Count + " dal)"); return; }
+            // boyun: merkez cizgisine en yakin dal; kollar: kalan dallarin en uctakileri
+            Transform boyun = null; float bd = float.MaxValue;
+            foreach (var d in dallar)
+            {
+                float dx = Mathf.Abs(d.position.x - hips.position.x);
+                if (dx < bd) { bd = dx; boyun = d; }
+            }
+            var kollar = new List<Transform>();
+            foreach (var d in dallar) if (d != boyun) kollar.Add(d);
+            if (boyun != null) BoyunZinciri(map, how, tum, boyun);
+            if (kollar.Count >= 2)
+            {
+                Transform sol, sag;
+                SolSag(kollar, out sol, out sag, log, "kollar");
+                KolZinciri(map, how, tum, sol, true, log);
+                KolZinciri(map, how, tum, sag, false, log);
+            }
+        }
+
+        static void BacakZinciri(Dictionary<HumanBodyBones, Transform> map, Dictionary<HumanBodyBones, string> how, HashSet<Transform> tum, Transform ust, bool sol)
+        {
+            var ub = sol ? HumanBodyBones.LeftUpperLeg : HumanBodyBones.RightUpperLeg;
+            var lb = sol ? HumanBodyBones.LeftLowerLeg : HumanBodyBones.RightLowerLeg;
+            var fb = sol ? HumanBodyBones.LeftFoot : HumanBodyBones.RightFoot;
+            Ata(map, how, ub, ust, "hiyerarşi:" + ust.name);
+            Transform u;
+            if (!map.TryGetValue(ub, out u)) return;
+            var k1 = KemikCocuklari(u, tum);
+            if (k1.Count == 0) return;
+            var alt = EnBuyuk(k1, tum);
+            Ata(map, how, lb, alt, "hiyerarşi:" + alt.name);
+            Transform a;
+            if (!map.TryGetValue(lb, out a)) return;
+            var k2 = KemikCocuklari(a, tum);
+            if (k2.Count == 0) return;
+            var ayak = EnBuyuk(k2, tum);
+            Ata(map, how, fb, ayak, "hiyerarşi:" + ayak.name);
+        }
+
+        static void BoyunZinciri(Dictionary<HumanBodyBones, Transform> map, Dictionary<HumanBodyBones, string> how, HashSet<Transform> tum, Transform bas)
+        {
+            var z = new List<Transform> { bas };
+            var cur = bas;
+            for (int g = 0; g < 4; g++)
+            {
+                var k = KemikCocuklari(cur, tum);
+                if (k.Count != 1) break;
+                cur = k[0];
+                z.Add(cur);
+            }
+            if (Nr(bas.name).Contains("head")) { Ata(map, how, HumanBodyBones.Head, bas, "hiyerarşi:" + bas.name); return; }
+            if (z.Count >= 2)
+            {
+                Ata(map, how, HumanBodyBones.Neck, z[0], "hiyerarşi:" + z[0].name);
+                Ata(map, how, HumanBodyBones.Head, z[z.Count - 1], "hiyerarşi:" + z[z.Count - 1].name);
+            }
+            else Ata(map, how, HumanBodyBones.Head, z[0], "hiyerarşi:" + z[0].name);
+        }
+
+        static void KolZinciri(Dictionary<HumanBodyBones, Transform> map, Dictionary<HumanBodyBones, string> how, HashSet<Transform> tum, Transform bas, bool sol, List<string> log)
+        {
+            var z = new List<Transform> { bas };
+            var cur = bas;
+            for (int g = 0; g < 10; g++)
+            {
+                var k = KemikCocuklari(cur, tum);
+                if (k.Count != 1) break;
+                cur = k[0];
+                z.Add(cur);
+            }
+            // adinda el/bilek gecen ilk kemikte kes
+            for (int i = 0; i < z.Count; i++)
+            {
+                string n = Nr(z[i].name);
+                if ((n.Contains("hand") || n.Contains("wrist")) && !n.Contains("finger") && !n.Contains("index") && !n.Contains("thumb")) { z.RemoveRange(i + 1, z.Count - i - 1); break; }
+            }
+            var sb = sol ? HumanBodyBones.LeftShoulder : HumanBodyBones.RightShoulder;
+            var ub = sol ? HumanBodyBones.LeftUpperArm : HumanBodyBones.RightUpperArm;
+            var lb = sol ? HumanBodyBones.LeftLowerArm : HumanBodyBones.RightLowerArm;
+            var hb = sol ? HumanBodyBones.LeftHand : HumanBodyBones.RightHand;
+            int c = z.Count;
+            if (c >= 4)
+            {
+                Ata(map, how, sb, z[0], "hiyerarşi:" + z[0].name);
+                Ata(map, how, ub, z[1], "hiyerarşi:" + z[1].name);
+                Ata(map, how, lb, z[c - 2], "hiyerarşi:" + z[c - 2].name);
+                Ata(map, how, hb, z[c - 1], "hiyerarşi:" + z[c - 1].name);
+            }
+            else if (c == 3)
+            {
+                Ata(map, how, ub, z[0], "hiyerarşi:" + z[0].name);
+                Ata(map, how, lb, z[1], "hiyerarşi:" + z[1].name);
+                Ata(map, how, hb, z[2], "hiyerarşi:" + z[2].name);
+            }
+            else log.Add("hiyerarşi: " + (sol ? "sol" : "sağ") + " kol zinciri çok kısa (" + c + " kemik)");
+        }
+
+        // Verilen eslemeyle avatar kurar; 'cikar' icindeki (istege bagli) kemikler dahil edilmez
+        static Avatar Kur(GameObject go, Transform[] all, Dictionary<HumanBodyBones, Transform> map, HashSet<HumanBodyBones> cikar)
+        {
+            var human = new List<HumanBone>();
+            foreach (var kv in map)
+            {
+                if (cikar != null && cikar.Contains(kv.Key)) continue;
+                var lim = new HumanLimit();
+                lim.useDefaultValues = true;
+                var hb = new HumanBone();
+                hb.humanName = HumanTrait.BoneName[(int)kv.Key];
+                hb.boneName = kv.Value.name;
+                hb.limit = lim;
+                human.Add(hb);
+            }
+            var skel = new SkeletonBone[all.Length];
+            for (int i = 0; i < all.Length; i++)
+                skel[i] = new SkeletonBone { name = all[i].name, position = all[i].localPosition, rotation = all[i].localRotation, scale = all[i].localScale };
+            var desc = new HumanDescription
+            {
+                human = human.ToArray(), skeleton = skel,
+                upperArmTwist = 0.5f, lowerArmTwist = 0.5f, upperLegTwist = 0.5f, lowerLegTwist = 0.5f,
+                armStretch = 0.05f, legStretch = 0.05f, feetSpacing = 0f, hasTranslationDoF = false
+            };
+            return AvatarBuilder.BuildHumanAvatar(go, desc);
+        }
+
+        // Humanoid avatar: 1) Quaternius adlari 2) yaygin adlandirmalar (Mixamo, Unreal, Blender) 3) iskelet hiyerarsisi.
+        // Kurulamazsa hangi kemiklerin eksik oldugunu tek tek raporlar (sessizce atlamaz, calismayi bozmaz).
         static Avatar BuildAvatar(GameObject go)
         {
             var all = go.GetComponentsInChildren<Transform>(true);
@@ -349,37 +754,92 @@ namespace HikayeStudyo
                 if (byName.ContainsKey(t.name) && t != go.transform) t.name = t.name + "_" + (++dup);   // ayni ad olmasin
                 byName[t.name] = t;
             }
-            var human = new List<HumanBone>();
-            for (int i = 0; i < HB.Length; i++)
+            var map = new Dictionary<HumanBodyBones, Transform>();
+            var how = new Dictionary<HumanBodyBones, string>();
+            var log = new List<string>();
+            try
             {
-                if (!byName.ContainsKey(QB[i])) continue;
-                var lim = new HumanLimit();
-                lim.useDefaultValues = true;
-                var hb = new HumanBone();
-                hb.humanName = HumanTrait.BoneName[(int)HB[i]];
-                hb.boneName = QB[i];
-                hb.limit = lim;
-                human.Add(hb);
-            }
-            if (human.Count < 15) { Debug.LogWarning("[Hikaye Stüdyosu] " + go.name + ": insan iskeleti bulunamadı (" + human.Count + " kemik)."); return null; }
+                // 1) Quaternius adlari
+                for (int i = 0; i < HB.Length; i++)
+                {
+                    Transform t;
+                    if (byName.TryGetValue(QB[i], out t)) Ata(map, how, HB[i], t, "quaternius");
+                }
+                var eksik = EksikGerekli(map);
+                string ilkEksik = Adlar(eksik);
+                // 2) yaygin adlar
+                if (eksik.Count > 0) { SinonimleTamamla(all, map, how); eksik = EksikGerekli(map); }
+                // 3) hiyerarsi
+                if (eksik.Count > 0)
+                {
+                    try { HiyerarsiTamamla(go, map, how, log); }
+                    catch (System.Exception e) { log.Add("hiyerarşi hatası: " + e.Message); }
+                    eksik = EksikGerekli(map);
+                }
+                if (eksik.Count > 0)
+                {
+                    var hepsi = new List<string>();
+                    foreach (var kv in map) hepsi.Add(kv.Key + "=" + kv.Value.name);
+                    RigRapor(go.name + ": Humanoid için ZORUNLU kemikler bulunamadı: [" + Adlar(eksik) + "]. Bulunanlar (" + map.Count + "): " + string.Join(", ", hepsi.ToArray()) +
+                             (log.Count > 0 ? " | notlar: " + string.Join("; ", log.ToArray()) : "") +
+                             " | Çözüm: modelin kemik adlarını Quaternius/Mixamo adlarına çevir ya da FBX olarak içe aktarıp Rig > Humanoid > Configure ile eşle.", true);
+                    return null;
+                }
 
-            var skel = new SkeletonBone[all.Length];
-            for (int i = 0; i < all.Length; i++)
-                skel[i] = new SkeletonBone { name = all[i].name, position = all[i].localPosition, rotation = all[i].localRotation, scale = all[i].localScale };
+                // hiyerarsi tutarliligi: istege bagli kemikler Spine'in altinda olmali (degilse cikar)
+                var istege = new List<HumanBodyBones>
+                {
+                    HumanBodyBones.UpperChest, HumanBodyBones.Chest, HumanBodyBones.Neck, HumanBodyBones.LeftShoulder, HumanBodyBones.RightShoulder,
+                    HumanBodyBones.LeftToes, HumanBodyBones.RightToes
+                };
+                Transform spine = map[HumanBodyBones.Spine];
+                foreach (var b in istege)
+                {
+                    Transform t;
+                    if (map.TryGetValue(b, out t) && t != spine && !t.IsChildOf(spine) && b != HumanBodyBones.LeftToes && b != HumanBodyBones.RightToes)
+                    {
+                        log.Add(b + " (" + t.name + ") Spine'in altında değil, çıkarıldı");
+                        map.Remove(b);
+                    }
+                }
 
-            var desc = new HumanDescription
-            {
-                human = human.ToArray(), skeleton = skel,
-                upperArmTwist = 0.5f, lowerArmTwist = 0.5f, upperLegTwist = 0.5f, lowerLegTwist = 0.5f,
-                armStretch = 0.05f, legStretch = 0.05f, feetSpacing = 0f, hasTranslationDoF = false
-            };
-            var avatar = AvatarBuilder.BuildHumanAvatar(go, desc);
-            if (avatar == null || !avatar.isValid || !avatar.isHuman)
-            {
-                Debug.LogWarning("[Hikaye Stüdyosu] " + go.name + ": insan iskeleti kurulamadı.");
+                // denemeler: once hepsi, sonra istege bagli kemikleri azaltarak
+                var denemeler = new List<HashSet<HumanBodyBones>>
+                {
+                    null,
+                    new HashSet<HumanBodyBones> { HumanBodyBones.UpperChest },
+                    new HashSet<HumanBodyBones> { HumanBodyBones.UpperChest, HumanBodyBones.Chest },
+                    new HashSet<HumanBodyBones> { HumanBodyBones.UpperChest, HumanBodyBones.Chest, HumanBodyBones.LeftShoulder, HumanBodyBones.RightShoulder },
+                    new HashSet<HumanBodyBones> { HumanBodyBones.UpperChest, HumanBodyBones.Chest, HumanBodyBones.LeftShoulder, HumanBodyBones.RightShoulder, HumanBodyBones.Neck,
+                                                  HumanBodyBones.LeftToes, HumanBodyBones.RightToes },
+                };
+                for (int d = 0; d < denemeler.Count; d++)
+                {
+                    var av = Kur(go, all, map, denemeler[d]);
+                    if (av != null && av.isValid && av.isHuman)
+                    {
+                        bool fallback = ilkEksik.Length > 0 || d > 0 || log.Count > 0;
+                        if (fallback)
+                        {
+                            var kaynak = new List<string>();
+                            foreach (var kv in how) if (kv.Value != "quaternius") kaynak.Add(kv.Key + "<-" + kv.Value);
+                            RigRapor(go.name + ": Humanoid avatar fallback ile kuruldu (" + (d == 0 ? "tüm kemiklerle" : d + ". deneme, isteğe bağlı kemikler çıkarıldı") + ")." +
+                                     (kaynak.Count > 0 ? " Eşlenenler: " + string.Join(", ", kaynak.ToArray()) + "." : "") +
+                                     (log.Count > 0 ? " Notlar: " + string.Join("; ", log.ToArray()) : ""), false);
+                        }
+                        return av;
+                    }
+                    if (av != null) Object.DestroyImmediate(av);
+                }
+                RigRapor(go.name + ": 15 zorunlu kemik bulundu (" + map.Count + " kemik eşlendi) ama AvatarBuilder geçerli Humanoid avatar üretmedi (isValid/isHuman=false) — " +
+                         "T-pose dışı duruş, hiyerarşide kemik atlaması ya da yanlış sol/sağ olabilir." + (log.Count > 0 ? " Notlar: " + string.Join("; ", log.ToArray()) : ""), true);
                 return null;
             }
-            return avatar;
+            catch (System.Exception e)
+            {
+                RigRapor(go.name + ": avatar kurulurken beklenmeyen hata: " + e.GetType().Name + ": " + e.Message, true);
+                return null;
+            }
         }
 
         // ---------- Galeri sahnesi ----------

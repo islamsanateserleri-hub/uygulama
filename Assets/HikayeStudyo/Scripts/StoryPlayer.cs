@@ -68,6 +68,8 @@ namespace HikayeStudyo
         readonly Dictionary<string, GameObject> cast = new Dictionary<string, GameObject>();
         readonly Dictionary<string, string> pose3D = new Dictionary<string, string>();
         string cam3D;
+        string altyaziStil = KaraokeAltyazi.Klasik;   // altyazi: komutu ile degisir
+        KaraokeAltyazi karaoke;
 
         const float W = 1080f, H = 1920f;
         const float BgPadX = 500f, BgPadY = 300f;
@@ -102,7 +104,18 @@ namespace HikayeStudyo
             startLine = PlayerPrefs.GetInt("HS_StartLine", 0);
             PlayerPrefs.DeleteKey("HS_StartLine");
             if (PlayerPrefs.GetInt("HS_SafeArea", 0) == 1) BuildSafeArea();
-            if (autoPlay) StartCoroutine(Run(parsed.Items));
+            parsedItems = parsed.Items;
+            if (autoPlay) { calistiBir = true; StartCoroutine(Run(parsed.Items)); }
+        }
+
+        // Uygulama/kayıt katmanı: autoPlay kapalıysa hikâyeyi elle başlatır (kayıt önce hazırlanır)
+        List<StoryItem> parsedItems;
+        bool calistiBir;
+        public void Baslat()
+        {
+            if (calistiBir || parsedItems == null) return;
+            calistiBir = true;
+            StartCoroutine(Run(parsedItems));
         }
 
         static Font MakeFont(string[] names)
@@ -183,6 +196,7 @@ namespace HikayeStudyo
             subtitle.resizeTextForBestFit = true; subtitle.resizeTextMinSize = 34; subtitle.resizeTextMaxSize = 58;
             subtitle.lineSpacing = 0.95f;
             AddTextEffects(subtitle, 4);
+            karaoke = KaraokeAltyazi.Create((RectTransform)subtitle.transform.parent, font, fontBlack);
 
             voiceSrc = gameObject.AddComponent<AudioSource>();
             sfxSrc = gameObject.AddComponent<AudioSource>();
@@ -298,9 +312,11 @@ namespace HikayeStudyo
                         case ItemType.Atmosphere: fx.SetAtmosphere(Util.Norm(it.Arg) == "yok" ? "" : it.Arg); break;
                         case ItemType.Music: SetMusic(it.Arg); break;
                         case ItemType.Camera: CameraCommand(it.Arg); break;
+                        case ItemType.Direct: if (s3d != null) Yonetmen3D.Hizli(s3d, it); break;
                         case ItemType.Insert: ShowInsert(it.Arg); break;
                         case ItemType.Clear: ClearChars(); break;
                         case ItemType.Remove: StartCoroutine(Exit(it.Character)); break;
+                        case ItemType.AltyaziStil: altyaziStil = it.Arg; break;
                     }
                     continue;
                 }
@@ -339,9 +355,14 @@ namespace HikayeStudyo
                         break;
                     case ItemType.Atmosphere:
                         fx.SetAtmosphere(Util.Norm(it.Arg) == "yok" ? "" : it.Arg);
+                        if (s3d != null && Util.Norm(it.Arg) == "yok") s3d.AtmosferAyarla("normal");
                         break;
                     case ItemType.Music:
                         SetMusic(it.Arg);
+                        break;
+                    case ItemType.Direct:
+                        if (s3d != null) yield return Yonetmen3D.Uygula(s3d, it);
+                        else Debug.LogWarning("[Hikaye] " + it.Line + ". satır: '" + it.Character + ":' için 3D sahne yok (hikayede 3D karakter kadrosu gerekir).");
                         break;
                     case ItemType.Pose:
                         {
@@ -363,6 +384,15 @@ namespace HikayeStudyo
                         break;
                     case ItemType.Insert:
                         ShowInsert(it.Arg);
+                        break;
+                    case ItemType.Bak:
+                        YuzSahne.Bak(it.Character, it.Arg);
+                        break;
+                    case ItemType.Dinle:
+                        YuzSahne.Dinle(it.Character, it.Arg);
+                        break;
+                    case ItemType.AltyaziStil:
+                        altyaziStil = it.Arg;
                         break;
                     case ItemType.Dialogue:
                         if (!faded) { yield return Fade(1f, 0f, 0.3f); faded = true; }
@@ -570,7 +600,7 @@ namespace HikayeStudyo
                 if (pf == null) { Debug.LogWarning("[Hikaye] " + it.Line + ". satır: '" + it.Arg + "' adında 3D karakter yok (Karakterler/Hazir)."); continue; }
                 cast[key] = pf;
             }
-            if (cast.Count > 0)
+            if (cast.Count > 0 || Sahne3D.HikayeGerektirir(items))
             {
                 var map = new Dictionary<string, string[]>(Sahne3D.Varsayilan);
                 foreach (var e in library.animEsleme)
@@ -578,7 +608,18 @@ namespace HikayeStudyo
                         map[Util.Norm(e.etiket)] = e.animasyon.Split(new[] { ',', ';' }, System.StringSplitOptions.RemoveEmptyEntries);
                 s3d = Sahne3D.Create(charRoot, floorY);
                 s3d.Harita = map;
+                s3d.OyuncuYarat = YaratOyuncu;
+                s3d.FiguranPrefablari = oyuncular;
             }
+        }
+
+        // yer:/gir: komutlari henuz konusmamis bir karakteri sahneye sokarken Sahne3D bunu cagirir
+        bool YaratOyuncu(string cid)
+        {
+            var def = library.FindCharacter(cid);
+            if (def == null || s3d == null || Actor3D(def) == null) return false;
+            Ensure3D(def, "");
+            return s3d.Has(def.id);
         }
 
         GameObject FindActor(string name)
@@ -696,17 +737,30 @@ namespace HikayeStudyo
             else foreach (var kv in onScreen) kv.Value.SetFocus(true);
 
             fx.Dim(it.Inner && emo == "dusunceli" ? 0.22f : (it.Inner ? 0.1f : 0f));
-            if (is3D) ChooseCamera3D(it, def.id); else { cam3D = null; ChooseCamera(it, view); }
-
-            subtitle.text = it.Text;
-            subtitle.color = def.subtitleColor;
-            StartCoroutine(PopText(subtitle.rectTransform, 0.92f));
+            if (is3D)
+            {
+                ChooseCamera3D(it, def.id);
+                if (s3d.KameraSatiri(def.id, it.Emotion, it.Inner)) { cam3D = null; camScaleT = 1f; camPosT = Vector2.zero; }
+            }
+            else { cam3D = null; ChooseCamera(it, view); }
 
             AudioClip clip;
             voices.TryGetValue(it, out clip);
             float dur = clip != null ? clip.length : Mathf.Max(1.2f, it.Text.Length / charsPerSecond + 0.3f);
             if (clip != null) { voiceSrc.clip = clip; voiceSrc.volume = voiceVolume; voiceSrc.Play(); }
             if (cutEarly > 0f) dur = Mathf.Max(0.4f, dur - cutEarly);
+
+            string vurgulu = string.IsNullOrEmpty(it.Vurgulu) ? it.Text : it.Vurgulu;
+            bool karaokeAcik = karaoke != null && altyaziStil != KaraokeAltyazi.Klasik &&
+                               karaoke.Baslat(vurgulu, clip, dur, altyaziStil, def.subtitleColor);
+            if (karaokeAcik) subtitle.text = "";
+            else
+            {
+                subtitle.text = KaraokeAltyazi.KlasikMetin(vurgulu, new Color(1f, 0.85f, 0.25f));
+                subtitle.color = def.subtitleColor;
+                StartCoroutine(PopText(subtitle.rectTransform, 0.92f));
+            }
+            YuzSahne.Konus(def.id, clip, dur, it.Emotion, it.Inner);   // 3D agiz hareketi + dinleyici tepkileri
 
             bool talk = view != null && !it.Inner;
             talkingNow = true; lineEmotion = emo;
@@ -730,6 +784,8 @@ namespace HikayeStudyo
             talkingNow = false; lineProgress = 0;
             fx.Dim(0f);
             subtitle.text = "";
+            if (karaoke != null) karaoke.Durdur();
+            YuzSahne.Sustur();
         }
 
         IEnumerator PopText(RectTransform r, float from)
@@ -849,6 +905,12 @@ namespace HikayeStudyo
         // ---------- Kamera ----------
         void CameraCommand(string a)
         {
+            if (s3d != null)
+            {
+                string eski;
+                if (KameraYonetmen.Komut(s3d, a, out eski)) return;   // 3D yonetmen tamamen isledi
+                if (eski != null) a = eski;                           // yaklas/uzaklas -> eski yakin/genis (2D yakinlastirma)
+            }
             var n = Util.Norm(a);
             if (n == "salla") { shake = 1f; return; }
             if (n == "yakin" || n == "genis" || n == "otomatik") camMode = n;
@@ -909,6 +971,7 @@ namespace HikayeStudyo
         {
             if (fade.color.a < 0.99f) yield return Fade(fade.color.a, 1f, 0.25f);
             ClearChars();
+            if (s3d != null) s3d.MekanKapat();
             ShowInsert("yok");
             var b = library.FindBackground(id);
             if (b == null) Debug.LogWarning("[Hikaye] Mekan yok: " + id + " (Kütüphaneye ekle)");
@@ -1214,6 +1277,7 @@ namespace HikayeStudyo
             bool emotional = lineEmotion == "aglamakli" || lineEmotion == "sevgi" || lineEmotion == "uzgun";
             float amb = talkingNow ? ambientVolume * 0.45f : ambientVolume * (emotional ? 1.5f : 1f);
             if (talkingNow && emotional) amb = ambientVolume * 0.8f;
+            amb *= AtmosferVolume.MuzikCarpani;
             ambSrc.volume = Mathf.MoveTowards(ambSrc.volume, amb, dt * 0.25f);
 
             float rv = fx.Raining ? 0.3f : 0f;

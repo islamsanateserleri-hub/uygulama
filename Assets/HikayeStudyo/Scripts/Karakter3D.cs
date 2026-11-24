@@ -14,6 +14,8 @@ namespace HikayeStudyo
         public string kategori = "";          // Erkek, Kadin, Hayvan, Oyuncak
         public string startClip = "Idle_Loop";
         public List<AnimationClip> clips = new List<AnimationClip>();
+        [Tooltip("Otomatik canlilik (goz kirpma, nefes, bakis, agiz hareketi). Kapatmak icin isareti kaldir.")]
+        public bool canliLik = true;
 
         public string CurrentClip { get; private set; }
 
@@ -30,6 +32,16 @@ namespace HikayeStudyo
             if (animator == null) animator = GetComponentInChildren<Animator>();
             legacy = GetComponentInChildren<Animation>();
             if (!string.IsNullOrEmpty(startClip) && string.IsNullOrEmpty(CurrentClip)) Play(startClip, 0f);
+            CanliLikEkle();
+        }
+
+        // Yuz/govde canliligi (YuzCanlilik.cs). Eklenemezse sessizce atlanir.
+        void CanliLikEkle()
+        {
+            if (!canliLik) return;
+            if (GetComponent<YuzCanlilik>() != null) return;
+            try { gameObject.AddComponent<YuzCanlilik>(); }
+            catch (System.Exception e) { Debug.LogWarning("[Hikaye] " + id + ": canlılık eklenemedi: " + e.Message); }
         }
 
         // Ada gore klip bul: tam ad, sonra icerdigi ad ("walk" -> "Walk_Loop"), Turkce takma adlar da olur

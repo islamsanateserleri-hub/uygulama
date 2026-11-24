@@ -1,0 +1,19 @@
+// YENI OZELLIK DENEMESI: karaoke, bak/dinle, 3D oda, atmosfer, kamera tepki
+oyuncu: Arda = Timmy
+oyuncu: Anne = Martha
+mekan3d: oda
+zaman: gece
+atmosfer: huzun
+altyazi: karaoke
+kanca: Annem beni tanımadı.
+gir: Anne kapi
+[Arda|sasirmis|dis] Anne? Benim, *Arda*!
+bak: Arda > Anne
+[Anne|korkmus|dis] Sen de kimsin? Evimde ne arıyorsun?
+kamera: tepki Arda
+[Arda|aglamakli|dis] Anne lütfen... bana bak.
+sessizlik: 1
+dinle: Anne | supheli
+[Anne|uzgun|dis] Benim oğlum üç yıl önce kayboldu.
+gecis: karar
+son: sert
