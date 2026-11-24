@@ -7,7 +7,7 @@ using UnityEngine;
 namespace HikayeStudyo
 {
     // Aşama 0 denemesi: bağımsız Windows derlemesi alınabiliyor mu? Sonuç Build/derleme_sonuc.txt'ye yazılır.
-    // surum: arayuz-1
+    // surum: arayuz-2
     public static class UygulamaDerle
     {
         [MenuItem("Hikaye/Windows Derlemesi (Deneme)")]
@@ -15,6 +15,7 @@ namespace HikayeStudyo
         {
             OncekileriKapat();
             OyuncuListesiYaz();
+            UygulamaKimligi();
             string klasor = "Build/HikayeStudyo";
             Directory.CreateDirectory(klasor);
             string rapor = "Build/derleme_sonuc.txt";
@@ -68,6 +69,69 @@ namespace HikayeStudyo
             }
             File.WriteAllText("HikayeKomut/kodlayici_raporu.txt", sb.ToString());
             Debug.Log("[Hikaye Stüdyosu] Kodlayıcı raporu yazıldı");
+        }
+
+        // Aşama 2: uygulama kimliği (pencere başlığı, simge, pencere boyutu). Exe Unity Editör'e bağlı değildir.
+        static void UygulamaKimligi()
+        {
+            PlayerSettings.companyName = "HikayeStudyosu";
+            PlayerSettings.productName = "Hikâye Stüdyosu";
+            PlayerSettings.defaultScreenWidth = 1280;
+            PlayerSettings.defaultScreenHeight = 720;
+            PlayerSettings.fullScreenMode = FullScreenMode.Windowed;
+            PlayerSettings.resizableWindow = true;
+            PlayerSettings.runInBackground = true;
+            PlayerSettings.visibleInBackground = true;
+            try
+            {
+                var tex = SimgeUret(256);
+                PlayerSettings.SetIcons(UnityEditor.Build.NamedBuildTarget.Standalone, new[] { tex }, UnityEditor.IconKind.Application);
+            }
+            catch (System.Exception e) { Debug.LogWarning("[Hikaye] Simge ayarlanamadı: " + e.Message); }
+        }
+
+        // Mavi yuvarlatılmış kare + beyaz "oynat" üçgeni
+        static Texture2D SimgeUret(int n)
+        {
+            var t = new Texture2D(n, n, TextureFormat.RGBA32, false);
+            var px = new Color[n * n];
+            float r = n * 0.22f;
+            var mavi = new Color(0.35f, 0.55f, 1f, 1f);
+            for (int y = 0; y < n; y++)
+                for (int x = 0; x < n; x++)
+                {
+                    float dx = Mathf.Max(r - (x + 0.5f), (x + 0.5f) - (n - r), 0f);
+                    float dy = Mathf.Max(r - (y + 0.5f), (y + 0.5f) - (n - r), 0f);
+                    float d = Mathf.Sqrt(dx * dx + dy * dy) - r;
+                    float a = Mathf.Clamp01(0.5f - d);
+                    Color c = new Color(mavi.r, mavi.g, mavi.b, a);
+                    // üçgen: x 0.38..0.72, merkez y 0.5
+                    float u = (x + 0.5f) / n, v = (y + 0.5f) / n;
+                    if (u > 0.38f && u < 0.72f && Mathf.Abs(v - 0.5f) < (0.72f - u) * 0.75f) c = new Color(1, 1, 1, a);
+                    px[y * n + x] = c;
+                }
+            t.SetPixels(px); t.Apply();
+            return t;
+        }
+
+        // Masaüstüne "Hikâye Stüdyosu" kısayolu koyar (Unity açmadan exe'yi çift tıklayarak başlatmak için)
+        [MenuItem("Hikaye/Masaüstü Kısayolu Oluştur")]
+        public static void MasaustuKisayolu()
+        {
+            string exe = Path.GetFullPath("Build/HikayeStudyo/HikayeStudyo.exe");
+            string lnk = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.DesktopDirectory), "Hikaye Studyosu.lnk");
+            string ps = "$s=(New-Object -ComObject WScript.Shell).CreateShortcut('" + lnk.Replace("'", "''") + "');" +
+                        "$s.TargetPath='" + exe.Replace("'", "''") + "';$s.WorkingDirectory='" + Path.GetDirectoryName(exe).Replace("'", "''") + "';$s.Save()";
+            var psi = new System.Diagnostics.ProcessStartInfo("powershell.exe", "-NoProfile -Command \"" + ps.Replace("\"", "\\\"") + "\"")
+            { UseShellExecute = false, CreateNoWindow = true };
+            string sonuc = "Build/kisayol_sonuc.txt";
+            try
+            {
+                var p = System.Diagnostics.Process.Start(psi);
+                p.WaitForExit(20000);
+                File.WriteAllText(sonuc, System.DateTime.Now.ToString("HH:mm:ss") + " cikis=" + p.ExitCode + " kisayol=" + (File.Exists(lnk) ? "VAR" : "YOK") + " " + lnk + "\n");
+            }
+            catch (System.Exception e) { File.WriteAllText(sonuc, "HATA: " + e.Message); }
         }
 
         // Önceki testten kalan (takılı) EXE ve ffmpeg süreçlerini kapatır (derleme dosyaları kilitli kalmasın)
