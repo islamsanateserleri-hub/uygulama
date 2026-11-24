@@ -47,3 +47,4 @@ Başarı: Unity'siz video, exe tek başına, senkron, 1080x1920 30 FPS, anlaşı
 ## KAYIT (yeni giriş en alta)
 - 24 Kas 21:41: Plan PDF'i okundu, eski notlar `_Arsiv/`'e alındı, DURUM.md yazıldı. Aşama 1 başlamadı.
 - 24 Kas 21:50: Kullanıcı sormadan GitHub'a göndermemi istedi. Klon alındı, cihazdaki kod/sahne/Resources dosyaları repoya eşitlendi.
+- 24 Kas 21:55: GitHub push tamam: commit 22ebf5c (dal claude/hikaye-studyosu): 110 yeni, 11 değişen dosya. Sonraki: kullanıcı "başla" deyince Aşama 1 madde 1.
