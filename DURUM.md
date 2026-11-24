@@ -27,16 +27,16 @@ Eski defterler/notlar `_Arsiv/` altında, okunmaz. Plan: `Hikaye_Studyo_Gelistir
 | Aşama | Durum |
 |---|---|
 | 0 Hazırlık | TAMAM, denendi |
-| 1 Unity'siz video kaydı | Kod yazıldı, doğrulanmadı. "Başla" bekleniyor |
+| 1 Unity'siz video kaydı | **TAMAM, kullanıcı onayı bekleniyor** (12/12 madde denendi; Aşama 2'ye onaysız geçme) |
 | 2–7 | Başlanmadı |
 | 8–16 | Başlanmadı (bkz. plan dışı önceden yazılanlar) |
 
 ### Aşama 0 (tamam)
 Dört derleme birimi, arayüzler IVarlikKatalogu/IVideoKaydedici, KarakterKatalogu (68 karakter), "Hikaye/Windows Derlemesi (Deneme)". Test: 0 hata, örnek hikâye oynadı, Windows derlemesi başarılı (529 MB, 3 dk 17 sn, 5 uyarı); exe şimdilik arayüzsüz.
 
-### Aşama 1 (kod var, test yok)
+### Aşama 1 (tamam: Editörde ve EXE'de doğrulandı)
 Yazılanlar: `Uygulama/FfmpegPipeRecorder.cs` (HikayeCanvas ScreenSpaceCamera, 1080x1920 RenderTexture, AsyncGPUReadback ile ffmpeg borusu, 6 karelik kuyruk, captureDeltaTime=1/fps, ses AudioRenderer→WAV→ffmpeg aac 192k, kodlayıcı sırası h264_nvenc, h264_mf, libx264), `Uygulama/KayitBootstrap.cs` (`-kayit <mp4> -hikaye <ad> -klaket` veya `ffkayit.txt`, sonuç `ffkayit_sonuc.txt`), `Editor/FfmpegIndir.cs` (menü "Hikaye/ffmpeg İndir", BtbN LGPL → StreamingAssets/ffmpeg), `StoryPlayer.Baslat()`.
-Plan sırası (hepsi yapılacak): 1 derleme raporu (`HikayeKomut/derleme.txt`; son bilinen 2 hata Camera nearClip/farClip, düzeltildi, doğrulanmadı) · 2 FfmpegPipeRecorder derle · 3 ffmpeg/ffprobe indir · 4 lisans dosyaları · 5 KayitBootstrap çalıştır · 6 deneme_3d kaydet · 7 1080x1920, 30 FPS, MP4 doğrula · 8 ses aktarımı · 9 klaket (30. karede beyaz flaş + 1 kHz bip) · 10 aynı test Windows exe'de · 11 ağız senkronu · 12 kodlayıcı alternatifleri.
+Plan sırası (hepsi yapılacak): 1 derleme raporu (0 hata, doğrulandı) · 2 FfmpegPipeRecorder derle · 3 ffmpeg/ffprobe indir · 4 lisans dosyaları · 5 KayitBootstrap çalıştır · 6 deneme_3d kaydet · 7 1080x1920, 30 FPS, MP4 doğrula · 8 ses aktarımı · 9 klaket (30. karede beyaz flaş + 1 kHz bip) · 10 aynı test Windows exe'de · 11 ağız senkronu · 12 kodlayıcı alternatifleri.
 Başarı: Unity'siz video, exe tek başına, senkron, 1080x1920 30 FPS, anlaşılır kayıt hatası. Bitmeden Aşama 2'ye geçme.
 
 ## Plan dışı önceden yazılanlar (test edilmemiş = tamam sayılmaz)
@@ -49,7 +49,13 @@ Başarı: Unity'siz video, exe tek başına, senkron, 1080x1920 30 FPS, anlaşı
 - Derleme uyarıları: AppDomain.GetAssemblies (StudyoKayit, HikayeKuyrugu, AtmosferVolume), FindObjectsByType (YuzSahne), Sahne3D.Harita.
 
 ## KAYIT (yeni giriş en alta)
-- 24 Kas 21:41: Plan PDF'i okundu, eski notlar `_Arsiv/`'e alındı, DURUM.md yazıldı. Aşama 1 başlamadı.
-- 24 Kas 21:50: Kullanıcı sormadan GitHub'a göndermemi istedi. Klon alındı, cihazdaki kod/sahne/Resources dosyaları repoya eşitlendi.
-- 24 Kas 21:55: GitHub push tamam: commit 22ebf5c (dal claude/hikaye-studyosu): 110 yeni, 11 değişen dosya. Sonraki: kullanıcı "başla" deyince Aşama 1 madde 1.
-- 24 Kas 21:58: Telefondaki yeni sohbet DURUM.md'yi okuyamadı (klasör bağlı değildi). "Yeni sohbet nasıl başlatılır" bölümü eklendi.
+- 21:41-21:58: PDF okundu, eski notlar `_Arsiv/`'e alındı, DURUM.md yazıldı; GitHub push 22ebf5c (bu commit hatalı nearClip sürümünü içeriyor, sonraki push düzeltir); yeni sohbet kılavuzu eklendi.
+- 22:20 AŞAMA 1 BAŞLADI. Madde 1-4: cihazdaki FfmpegPipeRecorder.cs'te `cam.nearClip/farClip` düzeltmesi hiç uygulanmamıştı → düzeltildi, derleme **0 hata**. ffmpeg.exe+ffprobe.exe (138 MB) + LICENSE.txt (LGPL v3) Assets/StreamingAssets/ffmpeg/ altına indi (menüden; köprü komutu Türkçe İ yüzünden çalışmadı). libx264 LGPL sürümde yok → kodlayıcı nvenc/mf; .exe'ler GitHub'a girmeyecek.
+- 22:28 Madde 5-9 (Editör Play, `ffkayit.txt` ile): deneme_3d.mp4 TAMAM: 488 kare, h264_mf, **1080x1920, 30 fps, MP4**, h264+AAC 48 kHz stereo, 16,23 sn video/16,26 sn ses, -14 LUFS. **Klaket TAMAM**: beyaz kare yalnız 30. karede (parlaklık 255), 1 kHz bip 0,98 sn'de; siyah kare yok; ses var. Bulunan/düzeltilen hatalar: (a) TikTok güvenli alan bantları videoya giriyordu → KayitIsleyici'de `HS_SafeArea=0`; (b) sahnedeki StoryPlayer(autoPlay) çakışıyordu → bootstrap kapatıyor; (c) render-graph "derinlik tamponu" uyarısı → RenderTexture derinlik 24.
+- 22:30 Madde 11 (ağız): ağız Arda yüzünde görünür açılıyor; ağız açıklığı ile ses zarfı korelasyonu 0,53 (en iyi gecikme: ağız sesten 2 kare ≈ 67 ms geride). Kabul edilebilir, 3D Mixamo'da ağız yok (açık sorun).
+- DERS: `device_commit_files` dosyanın BİR ÖNCEKİ halini yükleyebiliyor (yazdıktan hemen sonra commit edince eski içerik gidiyor; `sed -i`, Edit ve komut.txt'de görüldü). Yazdıktan sonra `sync; sleep 6` bekle, commit et, `device_stage_files` ile geri çekip boyutu kontrol et. Unity arka plandayken derlemeyi kendiliğinden başlatmaz: Assets > Refresh (menü (89,32) → Refresh (120,478)) ile derlet; derlemeden sonra Unity Hub penceresi öne gelip tıklamayı engelliyor → Hub'ı küçült (sağ üst (1155,37), Hub izni verildi), sonra köprü komutu yaz. Derleme gerçekten oldu mu: `Library/ScriptAssemblies/*.dll` mtime'ına bak.
+- 22:37-22:46 Madde 10 (EXE) ilk denemeler: (1) pencere gizlenince (ekran görüntüsü alınca) oynatıcı duruyor, ffmpeg birleştirme takıldı → `Application.runInBackground=true`; (2) EXE'de "'Timmy' 3D karakter yok" (build sahnesi GetStarted_Scene, oyuncu listesi sahnede) → `Scripts/OyuncuListesi.cs` + `UygulamaDerle.OyuncuListesiYaz()` ile `Resources/OyuncuListesi.asset`, KayitBootstrap okuyor; (3) takılı eski ffmpeg dosyayı kilitledi → `OncekileriKapat()` (HikayeStudyo+ffmpeg süreçlerini kapatır); yeni menüler: "Hikaye/Exe Kayıt Testi (derle + kaydet)" ve "(yalnız çalıştır)" (sonuç `Build/exe_test_sonuc.txt`, günlük `Build/exe_log.txt`).
+- 22:55 **Madde 10 TAMAM**: derlenen `HikayeStudyo.exe` (Unity Editör kapalı mantığıyla ayrı süreç, `-kayit <mp4> -hikaye deneme_3d -klaket`) 488 kare, 1080x1920, 30 fps, h264+AAC, 16,27 sn video üretti; beyaz flaş yalnız 30. karede, 1 kHz bip 0,98 sn, siyah kare yok, 3D karakterler + altyazı görünüyor (görsel kontrol edildi). 23:00 aynı test yeni kodlayıcı sırasıyla (h264_amf) tekrarlandı: aynı sonuç, 489 kare.
+- 23:00 **Madde 12 TAMAM** (`Hikaye/Kodlayıcı Raporu` → `HikayeKomut/kodlayici_raporu.txt`): bu bilgisayarda (AMD Radeon iGPU) ÇALIŞIYOR: h264_amf, h264_mf, libopenh264. ÇALIŞMIYOR: h264_nvenc (nvcuda.dll yok), h264_qsv (MFX oturumu yok), libx264 (LGPL sürümde yok). Kayıt sırası: nvenc → amf → qsv → mf → libx264 → libopenh264 (her biri 0,3 sn deneme kodlamasıyla seçilir; hiçbiri çalışmazsa anlaşılır hata yazılır).
+- Madde 11 (ağız senkronu) ve "98 birebir aynı kare": birebir aynı kareler siyah kanca/başlık kartında (sabit görüntü, beklenen); ağız ses zarfıyla 2 kare (≈67 ms) gecikmeli eşleşiyor, korelasyon 0,53; kabul, kayma yok.
+- Aşama 1 AÇIK/NOT: EXE derlemesi 793 MB (ffmpeg 276 MB + 68 karakter prefabı); build sahnesi `GetStarted_Scene` (HikayeSahnesi değil, bootstrap kendi StoryPlayer'ını kurar); EXE günlüğünde URP DoF/Panini shader "stripped" uyarısı (post-process geçişleri çalışmıyor, video etkilenmedi) ve "SesOlcer aynı GameObject'te birden çok AudioSource" uyarısı; EXE'nin arayüzü yok (Aşama 2). Sonraki aşama: **Aşama 2, yalnız kullanıcı onayıyla**.

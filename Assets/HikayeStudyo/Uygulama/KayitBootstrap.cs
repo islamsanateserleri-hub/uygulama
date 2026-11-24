@@ -39,7 +39,12 @@ namespace HikayeStudyo
                 catch (Exception ex) { Debug.LogWarning("[Kayıt] ffkayit.txt: " + ex.Message); }
             }
             if (string.IsNullOrEmpty(hikaye)) return;
+            // Pencere gizlenince/odak kaybolunca oynatıcı durmasın (kayıt ve ffmpeg birleştirme ana döngüye bağlı)
+            Application.runInBackground = true;
             if (string.IsNullOrEmpty(cikis)) cikis = Path.Combine(Directory.GetCurrentDirectory(), "Kayitlar", hikaye + ".mp4");
+            // Sahnedeki hazır StoryPlayer (autoPlay açık) kayıtla çakışmasın: Start() çalışmadan kapat
+            foreach (var eski in UnityEngine.Object.FindObjectsByType<StoryPlayer>(FindObjectsInactive.Include))
+                eski.gameObject.SetActive(false);
             var go = new GameObject("KayitIsleyici");
             UnityEngine.Object.DontDestroyOnLoad(go);
             var k2 = go.AddComponent<KayitIsleyici>();
@@ -57,10 +62,16 @@ namespace HikayeStudyo
             var ta = Resources.Load<TextAsset>("Hikayeler/" + hikaye);
             if (ta == null) { Yaz(false, "hikaye bulunamadı: Resources/Hikayeler/" + hikaye); yield break; }
 
+            // TikTok güvenli alan rehberi yalnız önizleme içindir, videoya girmesin (1. kayıt denemesinde kırmızı bantlar videoya girmişti)
+            PlayerPrefs.SetInt("HS_SafeArea", 0);
             // StoryPlayer Start() içinde arayüzü kurar; kayıt ondan sonra başlamalı
             var go = new GameObject("StoryPlayer");
             var sp = go.AddComponent<StoryPlayer>();
             sp.story = ta; sp.autoPlay = false;
+            // EXE'de sahnedeki oyuncu listesi yok: Windows derlemesinin yazdığı Resources/OyuncuListesi'ni kullan
+            var ol = Resources.Load<OyuncuListesi>("OyuncuListesi");
+            if (ol != null) { foreach (var pf in ol.prefablar) if (pf != null && !sp.oyuncular.Contains(pf)) sp.oyuncular.Add(pf); }
+            else Debug.LogWarning("[Kayıt] Resources/OyuncuListesi yok: 3D oyuncular bulunamaz");
             yield return null; yield return null;
 
             rec = go.AddComponent<FfmpegPipeRecorder>();

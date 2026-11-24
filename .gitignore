@@ -23,3 +23,10 @@ Assets/HikayeStudyo/Karakterler/VRoid/
 Assets/HikayeStudyo/Karakterler/VRoid.meta
 
 HikayeKomut/
+
+# Aşama 1: ffmpeg ikilileri 100 MB GitHub sınırını aşar; Hikaye/ffmpeg İndir menüsü ile indirilir (LICENSE.txt ve .meta dosyaları repoda)
+Assets/StreamingAssets/ffmpeg/*.exe
+# Test çıktıları
+Kayitlar/
+ffkayit.txt
+ffkayit_sonuc.txt

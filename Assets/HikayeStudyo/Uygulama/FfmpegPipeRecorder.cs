@@ -69,7 +69,7 @@ namespace HikayeStudyo
         public static string KodlayiciSec(string ffmpeg)
         {
             if (seciliKodlayici != null) return seciliKodlayici;
-            foreach (var enc in new[] { "h264_nvenc", "h264_mf", "libx264" })
+            foreach (var enc in new[] { "h264_nvenc", "h264_amf", "h264_qsv", "h264_mf", "libx264", "libopenh264" })
                 if (Dene(ffmpeg, enc)) { seciliKodlayici = enc; return enc; }
             return null;
         }
@@ -79,7 +79,10 @@ namespace HikayeStudyo
             switch (enc)
             {
                 case "h264_nvenc": return "-preset p5 -rc vbr -cq 21 -b:v 0";
+                case "h264_amf": return "-quality balanced -b:v 12M";
+                case "h264_qsv": return "-preset medium -b:v 12M";
                 case "h264_mf": return "-b:v 12M";
+                case "libopenh264": return "-b:v 12M";
                 default: return "-preset veryfast -crf 20";
             }
         }
@@ -135,14 +138,14 @@ namespace HikayeStudyo
             }
             catch (Exception e) { hata = "çıkış yolu: " + e.Message; return Basarisiz(hata); }
 
-            rt = new RenderTexture(Genislik, Yukseklik, 0, RenderTextureFormat.ARGB32) { name = "KayitRT", antiAliasing = 1 };
+            rt = new RenderTexture(Genislik, Yukseklik, 24, RenderTextureFormat.ARGB32) { name = "KayitRT", antiAliasing = 1 };
             rt.Create();
 
             // kanvas -> kayıt kamerası (uzak bir konumda, başka hiçbir şey görünmesin diye)
             kamGo = new GameObject("KayitKamerasi");
             kamGo.transform.position = new Vector3(0f, 3000f, 0f);
             var cam = kamGo.AddComponent<Camera>();
-            cam.orthographic = true; cam.orthographicSize = 5f; cam.nearClip = 0.1f; cam.farClip = 30f;
+            cam.orthographic = true; cam.orthographicSize = 5f; cam.nearClipPlane = 0.1f; cam.farClipPlane = 30f;
             cam.clearFlags = CameraClearFlags.SolidColor; cam.backgroundColor = Color.black;
             cam.allowHDR = false; cam.allowMSAA = false; cam.depth = 1000; cam.targetTexture = rt;
             eskiMod = canvas.renderMode; eskiKamera = canvas.worldCamera;
