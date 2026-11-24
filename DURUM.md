@@ -47,8 +47,8 @@ Açık: yazarak Ctrl+Z, Ctrl+Y/Ctrl+S, "Satır N'den oynat", Türkçe karakter y
 Yeni: `Scripts/DisSes.cs` (kalıcı ses klasörü Documents\HikayeStudyosu\Ses\<hikâye>\<anahtar>.wav, WAV okuyucu, karakter→ses ataması PlayerPrefs `HS_SesAta_*`, deneme sesi klasörü `_deneme`), `Uygulama/GeminiUygulama.cs` (Gemini TTS isteği, 400/429/kesik ses yeniden denemesi, kota ~10/gün, yedek `_yedek`), `Uygulama/AnaEkran.Ses.cs` (Ses ayarları sayfası + yazma ekranında "Ses" sekmesi). Değişen: `StoryLibrary.VoiceFor` (atamayı okur), `StoryPlayer.PreloadVoices` (Resources'ta yoksa kalıcı klasör), `AnaEkran.cs`/`AnaEkran.Yazma.cs`. Anahtar = ses+ton+metin → yalnız değişen satır yeniden üretilir. Mevcut miks (−14 LUFS, −1 dBFS sınırlayıcı, otomatik kazanç, konuşurken müzik kısma) AYNEN.
 - Derleme: DLL'ler 0 hata; EXE Succeeded (793 MB).
 - GERÇEK TEST (EXE, Editör kapalı): Ses ayarları açıldı, anahtar yokken "Anahtar yok" + üret düğmesi pasif; Arda Puck→Fenrir atandı, uygulama kapat-aç sonrası kaldı, Ses sekmesinde yalnız Arda'nın dış satırı Fenrir oldu; Ses sekmesi 8 satırı "Eksik" (0/8) listeledi; "Deneme sesi üret" 8 sentetik ses yazdı (Gemini sesi DEĞİL, kota harcamaz); deneme sesi açıkken Oyna sesli oynadı, rapor −17,1 LUFS (hedef −14), tepe −7,5 dBFS, kazanç +6,0 dB → ses→miks→ölçüm hattı çalışıyor. Deneme anahtarı testten sonra KAPATILDI.
-- TEST EDİLMEDİ: gerçek Gemini isteği (API anahtarı yok; anahtar kutusuna ben anahtar yazmam), kota sayacı, 429/400 yolları, yeniden üret+yedek+geri alma, kesik ses yeniden denemesi, Dinle düğmesi (deneme sesi kapalıyken deneme dosyası yüklenmiyor: düzeltilecek; ayrıca sesi duyamıyorum).
-- Bilinen kusur: dar pencerede Ses sekmesi üst düğmeleri üst üste biniyor (düzeltilecek). Aşama 5'te `kaydet` deneme sesi varken REDDETMELİ.
+- TEST EDİLMEDİ: gerçek Gemini isteği (API anahtarı yok; anahtar kutusuna ben anahtar yazmam), kota sayacı, 429/400 yolları, yeniden üret+yedek+geri alma, kesik ses yeniden denemesi, Dinle düğmesi (düzeltildi 00:40: deneme dosyasını da yüklüyor; EXE'de basınca hata çıkmadı ama sesi duyamıyorum, duyulduğu doğrulanmadı).
+- Dar pencerede Ses sekmesi düğmeleri üst üste biniyordu: DÜZELTİLDİ 00:40 (derleme 0 hata, EXE Succeeded, dar pencerede ekran görüntüsüyle doğrulandı). Aşama 5'te `kaydet` deneme sesi varken REDDETMELİ.
 - Test notu: Claude penceresi ekranın sağında açılınca oradaki tıklamaları yakalıyor; uygulamayı Win+Sol ile sola yapıştırıp denedim (Düzenle "çalışmıyor" gibi göründü, uygulama hatası değildi).
 
 ## DERSLER
@@ -65,4 +65,4 @@ Kurallar: bozma, yedek, derleme kontrolü, test edilmeyen "tamam" değil, aşama
 Ayrıntılı sürüm: Doc "DURUM.dm" → "TAM GELİŞTİRME PLANI".
 
 ## Sonraki adım
-1) Dinle düzeltmesi + düğme yerleşimi, yeniden derle/dene. 2) Kullanıcı API anahtarını girerse 1 satır gerçek Gemini testi. 3) Aşama 4 raporu, onay beklenir; Aşama 5'e onaysız geçme. Her adımda DURUM.md ve "DURUM.dm" Doc'u (Claude Docs, claude.ai/artifact/1RntmDHcKyA7NvjmKDoybk) birlikte güncelle.
+1) (YAPILDI 00:40) Dinle düzeltmesi + düğme yerleşimi. 2) Kullanıcı API anahtarını girerse 1 satır gerçek Gemini testi. 3) Aşama 4 raporu, onay beklenir; Aşama 5'e onaysız geçme. Her adımda DURUM.md ve "DURUM.dm" Doc'u (Claude Docs, claude.ai/artifact/1RntmDHcKyA7NvjmKDoybk) birlikte güncelle.

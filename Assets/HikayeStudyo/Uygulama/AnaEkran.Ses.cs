@@ -242,19 +242,19 @@ namespace HikayeStudyo
             bool mesgul = GeminiUyg.Busy;
             bool anahtarVar = GeminiUyg.Anahtar.Length > 0;
 
-            Yazdir(new Rect(a.x, a.y, 300, 32), hazir + " / " + toplam + " ses hazır", 16, eksik == 0 && toplam > 0 ? Basari : Yazi, TextAnchor.MiddleLeft, true);
+            Yazdir(new Rect(a.x, a.y, 150, 32), hazir + " / " + toplam + " hazır", 15, eksik == 0 && toplam > 0 ? Basari : Yazi, TextAnchor.MiddleLeft, true);
             if (!mesgul)
             {
-                if (Dugme(new Rect(a.x + 300, a.y, 230, 32), "Eksik sesleri üret (" + eksik + ")", Vurgu, 13, eksik > 0 && anahtarVar)) { sesMesaj = ""; GeminiUyg.EksikleriUret(yH.ad, kutuphane, ySesSatirlar); }
-                if (Dugme(new Rect(a.x + 540, a.y, 190, 32), "Deneme sesi üret", new Color32(60, 66, 88, 255), 13, eksik > 0))
+                if (Dugme(new Rect(a.x + 154, a.y, 190, 32), "Eksikleri üret (" + eksik + ")", Vurgu, 13, eksik > 0 && anahtarVar)) { sesMesaj = ""; GeminiUyg.EksikleriUret(yH.ad, kutuphane, ySesSatirlar); }
+                if (Dugme(new Rect(a.x + 348, a.y, 150, 32), "Deneme sesi üret", new Color32(60, 66, 88, 255), 13, eksik > 0))
                 {
                     int n = GeminiUyg.DenemeUret(yH.ad, kutuphane, ySesSatirlar);
                     sesMesaj = n + " deneme sesi yazıldı. Kullanmak için Ses ayarlarında 'Deneme sesi kullan'ı aç.";
                     ySesVerisiniZorla();
                 }
             }
-            else if (Dugme(new Rect(a.x + 300, a.y, 230, 32), "Durdur", Tehlike, 13)) GeminiUyg.Durdur();
-            if (Dugme(new Rect(a.xMax - 190, a.y, 190, 32), "Ses ayarları", new Color32(60, 66, 88, 255), 13)) sesGitIstek = true;
+            else if (Dugme(new Rect(a.x + 154, a.y, 190, 32), "Durdur", Tehlike, 13)) GeminiUyg.Durdur();
+            if (Dugme(new Rect(a.xMax - 120, a.y, 120, 32), "Ses ayarları", new Color32(60, 66, 88, 255), 13)) sesGitIstek = true;
 
             string durum = mesgul ? GeminiUyg.Status : (!string.IsNullOrEmpty(sesMesaj) ? sesMesaj : (!string.IsNullOrEmpty(GeminiUyg.Status) ? GeminiUyg.Status : ""));
             if (!anahtarVar && !mesgul) durum = "Gemini API anahtarı yok: sol menüde Ses > Gemini seslendirme bölümüne gir. " + durum;
@@ -312,7 +312,7 @@ namespace HikayeStudyo
         {
             try
             {
-                var clip = DisSes.Yukle(yH.ad, anahtar);
+                var clip = DisSes.Yukle(yH.ad, anahtar) ?? DisSes.YukleDeneme(yH.ad, anahtar);
                 if (clip == null) { sesMesaj = "Ses dosyası okunamadı."; return; }
                 if (dinleSrc == null) { dinleSrc = gameObject.AddComponent<AudioSource>(); dinleSrc.playOnAwake = false; }
                 dinleSrc.Stop();

@@ -88,6 +88,14 @@ namespace HikayeStudyo
             catch (Exception e) { Debug.LogWarning("[Hikaye] Ses dosyası okunamadı: " + yol + " (" + e.Message + ")"); return null; }
         }
 
+        // Yalnız "Dinle" düğmesi için: deneme (sentetik) dosyasını ayardan bağımsız yükler
+        public static AudioClip YukleDeneme(string hikaye, string anahtar)
+        {
+            string yol = DenemeDosya(hikaye, anahtar);
+            try { return File.Exists(yol) ? WavCoz(File.ReadAllBytes(yol), anahtar) : null; }
+            catch (Exception e) { Debug.LogWarning("[Hikaye] Deneme sesi okunamadı: " + yol + " (" + e.Message + ")"); return null; }
+        }
+
         // PCM16 / PCM float32 WAV -> AudioClip
         public static AudioClip WavCoz(byte[] b, string ad)
         {
