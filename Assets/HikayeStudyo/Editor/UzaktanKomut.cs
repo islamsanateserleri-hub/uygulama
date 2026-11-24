@@ -25,6 +25,8 @@ namespace HikayeStudyo
         public static readonly string Dir = Path.GetFullPath(Path.Combine(Application.dataPath, "..", "HikayeKomut"));
         static double next;
         static readonly List<string> compileLines = new List<string>();
+        static bool sesIzleniyor;
+        static string sonDurum = "";
 
         static UzaktanKomut()
         {
@@ -118,6 +120,19 @@ namespace HikayeStudyo
                         int ln = 0;
                         if (parts.Length > 1) int.TryParse(parts[1], out ln);
                         return StudyoWindow.PlayByName(parts[0], ln, cmd == "kaydet");
+                    }
+                case "seslendir":
+                    {
+                        // seslendir: deneme_3d  -> eksik sesleri Gemini ile uretir (anahtar Studyo'da kayitli olmali)
+                        string path = OtomatikKurulum.StoryFolder + "/" + arg + ".txt";
+                        if (!File.Exists(path)) return "hikaye yok: " + path;
+                        if (EditorPrefs.GetString(GeminiSes.KeyPref, "").Trim().Length == 0) return "Gemini anahtarı girilmemiş";
+                        if (GeminiSes.Busy) return "zaten seslendiriyor";
+                        var lib = AssetDatabase.LoadAssetAtPath<StoryLibrary>(OtomatikKurulum.LibPath);
+                        if (lib == null) return "kütüphane yok";
+                        if (!sesIzleniyor) { sesIzleniyor = true; GeminiSes.Changed += () => { if (GeminiSes.Status != sonDurum) { sonDurum = GeminiSes.Status; Append("sonuc.txt", Stamp() + " ses: " + sonDurum); } }; }
+                        GeminiSes.Generate(lib, arg, StoryParser.Parse(File.ReadAllText(path)).Items);
+                        return "başladı";
                     }
                 case "dur":
                     EditorApplication.isPlaying = false;

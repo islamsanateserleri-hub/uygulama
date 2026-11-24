@@ -32,10 +32,19 @@ namespace HikayeStudyo
 
         public bool Measuring = true;
 
+        // Otomatik ses seviyesi: son miksi kazancDb kadar yukseltir, tepe -1 dBFS'i asmasin diye sinirlayici (limiter) uygular.
+        // Her bitiste olculen degere gore kazanc guncellenir (PlayerPrefs "HS_Kazanc"), boylece sonraki kayit hedefe yaklasir.
+        public float kazancDb;
+        double gain = 1, gr = 1, release;
+        const double Esik = 0.891;   // -1 dBFS
+
         void Awake()
         {
             rate = AudioSettings.outputSampleRate;
             Setup(2);
+            kazancDb = PlayerPrefs.GetFloat("HS_Kazanc", 6f);
+            gain = System.Math.Pow(10.0, kazancDb / 20.0);
+            release = 1.0 - System.Math.Exp(-1.0 / (0.08 * rate));   // 80 ms birakma
         }
 
         void Setup(int ch)
@@ -82,6 +91,12 @@ namespace HikayeStudyo
                 int frames = data.Length / ch;
                 for (int f = 0; f < frames; f++)
                 {
+                    // kazanc + sinirlayici (aninda bastir, yavas birak)
+                    double mx = 0;
+                    for (int c = 0; c < ch; c++) { double v = data[f * ch + c] * gain; if (v < 0) v = -v; if (v > mx) mx = v; }
+                    double want = mx > Esik ? Esik / mx : 1.0;
+                    if (want < gr) gr = want; else gr += (1.0 - gr) * release;
+                    for (int c = 0; c < ch; c++) data[f * ch + c] = (float)(data[f * ch + c] * gain * gr);
                     for (int c = 0; c < ch; c++)
                     {
                         double x = data[f * ch + c];
@@ -124,17 +139,28 @@ namespace HikayeStudyo
             return Lufs(m2);
         }
 
+        // Olcume gore bir sonraki kayit icin kazanci ayarla
+        public void Ogren()
+        {
+            double pk;
+            double l = Integrated(out pk);
+            if (l < -100) return;
+            float yeni = Mathf.Clamp(kazancDb + (float)(Hedef - l), -6f, 18f);
+            PlayerPrefs.SetFloat("HS_Kazanc", yeni);
+            PlayerPrefs.Save();
+        }
+
         public string Rapor()
         {
             double pk;
             double l = Integrated(out pk);
             if (l < -100) return "Ses yüksekliği ölçülemedi (ses yok).";
+            string kz = " (otomatik kazanç " + kazancDb.ToString("+0.0;-0.0") + " dB";
             double fark = Hedef - l;
             string s = "Ses yüksekliği: " + l.ToString("0.0") + " LUFS (hedef " + Hedef.ToString("0") + "), tepe: " + pk.ToString("0.0") + " dBFS.";
-            if (System.Math.Abs(fark) <= 1.0) s += " Hedefte.";
-            else if (fark > 0) s += " " + fark.ToString("0.0") + " dB kısık: müziği/sesi biraz aç (StoryPlayer: voiceVolume, ambientVolume).";
-            else s += " " + (-fark).ToString("0.0") + " dB yüksek: sesi biraz kıs.";
-            if (pk > -1.0) s += " Tepe -1 dBFS üstünde: kırpılma olabilir.";
+            if (System.Math.Abs(fark) <= 1.0) s += " Hedefte." + kz + ").";
+            else s += (fark > 0 ? " " + fark.ToString("0.0") + " dB kısık" : " " + (-fark).ToString("0.0") + " dB yüksek") + kz +
+                      "; bir sonraki kayıtta kendiliğinden " + Mathf.Clamp(kazancDb + (float)fark, -6f, 18f).ToString("+0.0;-0.0") + " dB'e ayarlanacak).";
             return s;
         }
     }

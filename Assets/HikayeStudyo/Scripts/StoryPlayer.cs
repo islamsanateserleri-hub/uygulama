@@ -398,7 +398,7 @@ namespace HikayeStudyo
         IEnumerator Bitir()
         {
             Running = false;
-            if (olcer != null) { olcer.Measuring = false; SonSesRaporu = olcer.Rapor(); Debug.Log("[Hikaye] " + SonSesRaporu); }
+            if (olcer != null) { olcer.Measuring = false; SonSesRaporu = olcer.Rapor(); if (meta != null && voices.Count > 0) olcer.Ogren(); Debug.Log("[Hikaye] " + SonSesRaporu); }
             Debug.Log("[Hikaye] Bitti.");
             if (Finished != null) Finished();
             string dir = PlayerPrefs.GetString("HS_YayinKlasor", "");
