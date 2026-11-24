@@ -7,7 +7,7 @@ using UnityEngine;
 namespace HikayeStudyo
 {
     // Aşama 0 denemesi: bağımsız Windows derlemesi alınabiliyor mu? Sonuç Build/derleme_sonuc.txt'ye yazılır.
-    // surum: exe-testi-3
+    // surum: arayuz-1
     public static class UygulamaDerle
     {
         [MenuItem("Hikaye/Windows Derlemesi (Deneme)")]
@@ -97,6 +97,34 @@ namespace HikayeStudyo
             EditorUtility.SetDirty(liste);
             AssetDatabase.SaveAssets();
             Debug.Log("[Hikaye Stüdyosu] OyuncuListesi: " + liste.prefablar.Count + " prefab");
+        }
+
+        // Aşama 2: ana ekranı (argümansız EXE) test etmek için.
+        [MenuItem("Hikaye/Exe Arayüz Testi (derle + aç)")]
+        public static void ExeArayuzTesti()
+        {
+            Windows();
+            string rapor = "Build/derleme_sonuc.txt";
+            string d = File.Exists(rapor) ? File.ReadAllText(rapor) : "";
+            if (!d.Contains("Succeeded")) { File.WriteAllText("Build/exe_arayuz_sonuc.txt", "DERLEME BASARISIZ: " + d); return; }
+            ExeArayuzAc();
+        }
+
+        [MenuItem("Hikaye/Exe Arayüz Testi (yalnız aç)")]
+        public static void ExeArayuzAc()
+        {
+            OncekileriKapat();
+            string kok = Directory.GetCurrentDirectory();
+            string klasor = Path.Combine(kok, "Build", "HikayeStudyo");
+            string exe = Path.Combine(klasor, "HikayeStudyo.exe");
+            string log = Path.Combine(kok, "Build", "exe_arayuz_log.txt");
+            string sonucYol = Path.Combine(kok, "Build", "exe_arayuz_sonuc.txt");
+            if (!File.Exists(exe)) { File.WriteAllText(sonucYol, "HATA: exe yok: " + exe); return; }
+            var psi = new System.Diagnostics.ProcessStartInfo(exe,
+                "-screen-fullscreen 0 -screen-width 1280 -screen-height 720 -logFile \"" + log + "\"")
+            { WorkingDirectory = klasor, UseShellExecute = false };
+            try { System.Diagnostics.Process.Start(psi); File.WriteAllText(sonucYol, System.DateTime.Now.ToString("HH:mm:ss") + " EXE arayuz acildi\n"); }
+            catch (System.Exception e) { File.WriteAllText(sonucYol, "HATA: baslatilamadi: " + e.Message); }
         }
 
         // Aşama 1 madde 10: derlenen EXE'yi Unity Editör olmadan çalıştırıp klaketli video kaydeder.

@@ -77,7 +77,7 @@ namespace HikayeStudyo
             rec = go.AddComponent<FfmpegPipeRecorder>();
             rec.Klaket = klaket;
             string hata;
-            if (!rec.Baslat(cikis, 1080, 1920, 30, out hata)) { Yaz(false, hata); yield break; }
+            if (!rec.Baslat(cikis, 1080, 1920, (PlayerPrefs.GetInt("HS_Fps", 30) == 60 ? 60 : 30), out hata)) { Yaz(false, hata); yield break; }
             rec.Bitti += (ok, m) => { sonuc = ok; mesaj = m; bitti = true; };
             StoryPlayer.Finished += Bitis;
             sp.Baslat();
