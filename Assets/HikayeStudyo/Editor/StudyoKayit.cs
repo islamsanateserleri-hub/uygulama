@@ -160,7 +160,19 @@ namespace HikayeStudyo
                 var tPlayback = Type("UnityEditor.Recorder.FrameRatePlayback");
                 if (tPlayback != null) Set(settings, "FrameRatePlayback", System.Enum.Parse(tPlayback, "Constant"));
 
-                controller = System.Activator.CreateInstance(tCtrl, settings);
+                controller = null;
+                var ctors = tCtrl.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                foreach (var c in ctors)
+                {
+                    var ps = c.GetParameters();
+                    if (ps.Length == 1 && ps[0].ParameterType.IsAssignableFrom(tSettings)) { controller = c.Invoke(new object[] { settings }); break; }
+                }
+                if (controller == null)
+                {
+                    var sigs = new System.Text.StringBuilder();
+                    foreach (var c in ctors) { sigs.Append("("); foreach (var pr in c.GetParameters()) sigs.Append(pr.ParameterType.Name + " "); sigs.Append(") "); }
+                    throw new System.Exception("RecorderController kurucusu bulunamadı: " + sigs);
+                }
                 tCtrl.GetMethod("PrepareRecording").Invoke(controller, null);
                 var started = tCtrl.GetMethod("StartRecording").Invoke(controller, null);
                 stopMethod = tCtrl.GetMethod("StopRecording");
