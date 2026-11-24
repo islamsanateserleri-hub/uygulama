@@ -530,6 +530,31 @@ namespace HikayeStudyo
                         if (val.IndexOf('/') < 0)
                             Ekle(list, no, true, "SECIM_BICIM", "'secim: A) ... / B) ...' biçiminde iki seçenek yaz.", "", "");
                         break;
+                    case "vfx":
+                        {
+                            var vp = val.Split(new[] { ' ' }, 2, System.StringSplitOptions.RemoveEmptyEntries);
+                            string vk = vp.Length > 0 ? vp[0] : "";
+                            if (!Util.In(vk, StoryParser.VfxListesi))
+                                Ekle(list, no, true, "VFX_BILINMIYOR", "'vfx: " + val + "' bilinmiyor. Geçerli: " + string.Join(", ", StoryParser.VfxListesi) + " (ses için efekt:, geçiş için gecis:).", vk, EnYakin(vk, StoryParser.VfxListesi));
+                        }
+                        break;
+                    case "gecis":
+                        if (!Util.In(val, YonetmenTablo.Gecisler))
+                            Ekle(list, no, true, "GECIS_BILINMIYOR", "'gecis: " + val + "' bilinmiyor. Geçerli: " + string.Join(", ", YonetmenTablo.Gecisler) + ".", val, EnYakin(val, YonetmenTablo.Gecisler));
+                        break;
+                    case "kapak":
+                        {
+                            int ks = 0;
+                            if (val.Length > 0 && (!int.TryParse(val, out ks) || ks <= 0))
+                                Ekle(list, no, false, "KAPAK_SATIR", "'kapak:' satır numarası ister (örn. kapak: 24) ya da boş bırak (sonraki konuşma).", val, "");
+                            else if (val.Length > 0 && ks > lines.Length)
+                                Ekle(list, no, false, "KAPAK_SATIR", "'kapak: " + ks + "': hikâye " + lines.Length + " satır; kapak karesi otomatik seçilecek.", val, "");
+                        }
+                        break;
+                    case "etiket":
+                        if (val.Trim().TrimStart('#').Length == 0)
+                            Ekle(list, no, false, "ETIKET_BOS", "'etiket:' boş. Örnek: etiket: aile, dram, duygusal", "", "");
+                        break;
                 }
             }
 

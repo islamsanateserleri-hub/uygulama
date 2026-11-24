@@ -151,6 +151,8 @@ Biçim: `komut: değer`. Aşağıdaki liste `StoryParser`'ın bildiği komutlard
 | `seri` | metin | `seri: Sessiz Değişim` | Seri adı |
 | `bolum` | tam sayı | `bolum: 3` | Bölüm numarası (sayı değilse uyarı) |
 | `baslik` | metin | `baslik: Annem beni tanımadı` | Bölüm başlığı |
+| `kapak` | satır numarası ya da boş | `kapak: 24` / `kapak:` | Kapak karesi o satırdan (ya da sonraki ilk konuşmadan) alınır; boş bırakılırsa bu komuttan sonraki ilk konuşma. Yazılmazsa ilk güçlü duygulu satır seçilir. |
+| `etiket` | virgülle hashtag'ler | `etiket: aile, dram, duygusal` | Açıklamadaki hashtag satırına eklenir (`#` yazmak gerekmez, tekrar edenler atlanır). |
 
 ### Sahne ve görüntü
 
@@ -163,6 +165,8 @@ Biçim: `komut: değer`. Aşağıdaki liste `StoryParser`'ın bildiği komutlard
 | `bekle` | saniye | `bekle: 0.5` | Bekler (`0,5` da olur) |
 | `far` | — | `far:` | Kamyon farları + beyaz parlama + sarsıntı |
 | `flas` | — | `flas:` | Beyaz parlama |
+| `vfx` | `flas` `far` `vhs` (`geri`) [metin] | `vfx: flas` / `vfx: vhs 1 saat önce` | **Görsel efekt** komutu (B4 adlandırması: `efekt` = yalnız ses efekti, `vfx` = görsel efekt, `gecis` = yalnız sahne geçişi). `vfx: flas` = `flas:`, `vfx: far` = `far:`, `vfx: vhs metin` = `geri: metin`. Eski komutlar aynen çalışır. |
+| `gecis` | `karar` `capraz` `beyaz` | `gecis: karar` | Sahne geçişi: `karar` siyaha kararıp açılır, `capraz` önceki kareden çapraz geçiş, `beyaz` beyaz parlamayla geçiş. Geçişten hemen sonra `mekan:` yaz. **2D ve 3D sahnelerde çalışır.** |
 | `gorsel` | `eller` / `yok` / kütüphane görseli | `gorsel: eller` | Tam ekran görsel. `eller` = kendi gözünden eller. `gorsel: yok` kapatır. |
 | `atmosfer` | `mum` `toz` `yagmur` `buyu` `gunes` `yok` (virgülle çoklu) | `atmosfer: mum, toz` | Ortam efekti; `yok` kapatır |
 | `kamera` | `otomatik` `yakin` `genis` `salla` | `kamera: yakin` | Kamera modu; `salla` bir kez sarsar |
@@ -317,6 +321,8 @@ son: sert
 | `POZ_BILINMIYOR` / `POZ_EKSIK` | hata | Geçersiz/eksik poz |
 | `OYUNCU_YOK` | hata | 3D model bulunamadı |
 | `SECIM_BICIM` | hata | `secim:` iki seçenek içermiyor |
+| `VFX_BILINMIYOR` / `GECIS_BILINMIYOR` | hata | `vfx:` / `gecis:` değeri geçersiz |
+| `KAPAK_SATIR` / `ETIKET_BOS` | uyarı | `kapak:` satır numarası bozuk ya da hikâyeden uzun / `etiket:` boş |
 | `BEKLE_SAYI` / `SONUC_BICIM` | uyarı | Değer biçimi bozuk |
 | `MEKAN_ILK` | uyarı | İlk konuşmadan önce `mekan:` yok |
 | `KANCA_YOK` | uyarı | İlk 1,5 sn'de içerik yok |

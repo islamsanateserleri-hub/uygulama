@@ -30,6 +30,21 @@ namespace HikayeStudyo
 
         public static event System.Action Finished;
         public static event System.Action YayinHazir;    // kapak ve aciklama yazildi (kayittan sonra)
+        // EXE kayit modu (KayitIsleyici ayarlar): hikaye bitince Bitir() yayin klasorunu KENDISI yazmaz (kapak ekrani videoya
+        // girmesin); kayit durduktan sonra KayitIsleyici StartCoroutine(sp.YayinUret(dir)) cagirir. Kapak karesi HS_Kapak olmadan da alinir.
+        public static bool KayitModu;
+        // EXE kayit (KayitIsleyici ayarlar): ekran yerine 1080x1920 kayit RenderTexture'indan kare verir (kapak karesi, kapak.png,
+        // 2D capraz gecis). null ise ya da null donerse ScreenCapture (pencere boyutu) kullanilir: Editor/onizleme davranisi degismez.
+        public static System.Func<Texture2D> KareYakalayici;
+        static Texture2D KareAl()
+        {
+            if (KareYakalayici != null)
+            {
+                try { var t = KareYakalayici(); if (t != null) return t; }
+                catch (System.Exception e) { Debug.LogWarning("[Hikaye] KareYakalayici: " + e.Message); }
+            }
+            return ScreenCapture.CaptureScreenshotAsTexture();
+        }
         public static string SonSesRaporu = "";
         public static bool Running { get; private set; }
 
@@ -97,6 +112,15 @@ namespace HikayeStudyo
                 if (e == "aglamakli" || e == "korkmus" || e == "sasirmis" || e == "uzgun" || e == "kizgin") { kapakSatir = it.VoiceIndex; break; }
             }
             if (kapakSatir == 0) kapakSatir = Mathf.Max(1, parsed.DialogueCount / 2);
+            // kapak: <satir> komutu: o dosya satirindan (ya da sonraki ilk konusmadan) kare alinir
+            if (parsed.KapakSatir > 0)
+            {
+                int ks = 0;
+                foreach (var it in parsed.Items)
+                    if (it.Type == ItemType.Dialogue && it.Line >= parsed.KapakSatir) { ks = it.VoiceIndex; break; }
+                if (ks > 0) kapakSatir = ks;
+                else Debug.LogWarning("[Hikaye] kapak: " + parsed.KapakSatir + ". satırdan sonra konuşma yok; kapak karesi otomatik seçildi.");
+            }
             foreach (var w in parsed.Warnings) Debug.LogWarning("[Hikaye] " + w);
             PreloadVoices(parsed.Items);
             BuildCast(parsed.Items);
@@ -363,6 +387,7 @@ namespace HikayeStudyo
                         break;
                     case ItemType.Direct:
                         if (s3d != null) yield return Yonetmen3D.Uygula(s3d, it);
+                        else if (Util.Norm(it.Character) == "gecis") yield return Gecis2D(it.Arg);   // 3D katman yoksa 2D gecis
                         else Debug.LogWarning("[Hikaye] " + it.Line + ". satır: '" + it.Character + ":' için 3D sahne yok (hikayede 3D karakter kadrosu gerekir).");
                         break;
                     case ItemType.Pose:
@@ -432,13 +457,119 @@ namespace HikayeStudyo
             if (olcer != null) { olcer.Measuring = false; SonSesRaporu = olcer.Rapor(); if (meta != null && voices.Count > 0) olcer.Ogren(); Debug.Log("[Hikaye] " + SonSesRaporu); }
             Debug.Log("[Hikaye] Bitti.");
             if (Finished != null) Finished();
-            string dir = PlayerPrefs.GetString("HS_YayinKlasor", "");
+            // Kayit modunda yayin klasoru burada yazilmaz: KayitIsleyici kayit durduktan sonra YayinUret(dir) cagirir
+            string dir = KayitModu ? "" : PlayerPrefs.GetString("HS_YayinKlasor", "");
             if (dir.Length > 0)
             {
                 PlayerPrefs.DeleteKey("HS_YayinKlasor");
                 yield return Yayin(dir);
             }
+            if (!KayitModu && YayinHazir != null) YayinHazir();
+        }
+
+        // Kayit (EXE) icin: kayit DURDUKTAN sonra yayin klasorunu (kapak.png + aciklama.txt) yazar, sonra YayinHazir tetiklenir.
+        public IEnumerator YayinUret(string dir)
+        {
+            if (string.IsNullOrEmpty(dir)) yield break;
+            yield return Yayin(dir);
             if (YayinHazir != null) YayinHazir();
+        }
+
+        // Yayin paketi (P2) icin okunabilir bilgiler
+        public ParseResult Meta { get { return meta; } }
+        public IList<string> Secimler { get { return secimler; } }
+
+        // Aciklamadaki hashtag satiri: sabitler + seri + etiket: komutlari (tekrarsiz)
+        public string EtiketSatiri()
+        {
+            string seri = meta != null ? meta.Seri : "";
+            var l = new List<string> { "hikaye", "dizi", "duygusal", "keşfet" };
+            if (seri.Length > 0) l.Add(seri.Replace(" ", "").ToLowerInvariant());
+            if (meta != null)
+                foreach (var e in meta.Etiketler)
+                {
+                    string t = (e ?? "").Replace(" ", "");
+                    if (t.Length == 0) continue;
+                    bool varMi = false;
+                    foreach (var x in l) if (string.Equals(x, t, System.StringComparison.OrdinalIgnoreCase)) { varMi = true; break; }
+                    if (!varMi) l.Add(t);
+                }
+            return "#" + string.Join(" #", l.ToArray());
+        }
+
+        // ---------- 2D sahne gecisi (3D katman yokken gecis: karar | capraz | beyaz) ----------
+        Image gecis2DImg;
+        RawImage gecis2DRaw;
+
+        void Gecis2DKur()
+        {
+            if (gecis2DImg != null) return;
+            var root = fade.transform.parent;
+            var g = Gfx.Rect("Gecis2D", root);
+            Gfx.Stretch(g);
+            gecis2DImg = Gfx.Img("Duz", g, null, new Color(0, 0, 0, 0), Vector2.zero, Vector2.zero);
+            Gfx.Stretch(gecis2DImg.rectTransform);
+            gecis2DImg.raycastTarget = false;
+            gecis2DRaw = Gfx.Rect("Kare", g).gameObject.AddComponent<RawImage>();
+            Gfx.Stretch(gecis2DRaw.rectTransform);
+            gecis2DRaw.color = new Color(1, 1, 1, 0); gecis2DRaw.raycastTarget = false;
+            g.SetSiblingIndex(fade.transform.GetSiblingIndex() + 1);
+        }
+
+        // AtmosferVolume.Gecis ile ayni zamanlama: renkli gecis ekrani kapatir (bloklar), acilis arka planda olur
+        IEnumerator Gecis2D(string tur)
+        {
+            string k = Util.Norm(tur);
+            Gecis2DKur();
+            if (k == "capraz")
+            {
+                yield return new WaitForEndOfFrame();
+                Texture2D tex = null;
+                try { tex = KareAl(); }
+                catch (System.Exception) { tex = null; }
+                if (tex == null) yield break;
+                gecis2DRaw.texture = tex;
+                gecis2DRaw.color = Color.white;
+                StartCoroutine(Gecis2DCapraz(tex, 0.8f));
+                yield break;
+            }
+            Color c = k == "beyaz" ? Color.white : Color.black;
+            float girisSn = k == "beyaz" ? 0.15f : 0.3f;
+            float t = 0f;
+            while (t < girisSn)
+            {
+                t += Time.deltaTime;
+                gecis2DImg.color = new Color(c.r, c.g, c.b, Mathf.Clamp01(t / girisSn));
+                yield return null;
+            }
+            gecis2DImg.color = new Color(c.r, c.g, c.b, 1f);
+            StartCoroutine(Gecis2DCikis(c, 0.25f, k == "beyaz" ? 0.5f : 0.45f));
+        }
+
+        IEnumerator Gecis2DCikis(Color c, float bekle, float sure)
+        {
+            yield return new WaitForSeconds(bekle);
+            float t = 0f;
+            while (t < sure)
+            {
+                t += Time.deltaTime;
+                if (gecis2DImg != null) gecis2DImg.color = new Color(c.r, c.g, c.b, 1f - Mathf.Clamp01(t / sure));
+                yield return null;
+            }
+            if (gecis2DImg != null) gecis2DImg.color = new Color(c.r, c.g, c.b, 0f);
+        }
+
+        IEnumerator Gecis2DCapraz(Texture2D tex, float sure)
+        {
+            float t = 0f;
+            while (t < sure)
+            {
+                t += Time.deltaTime;
+                if (gecis2DRaw != null) gecis2DRaw.color = new Color(1f, 1f, 1f, 1f - Mathf.Clamp01(t / sure));
+                yield return null;
+            }
+            if (gecis2DRaw != null) { gecis2DRaw.color = new Color(1f, 1f, 1f, 0f); gecis2DRaw.texture = null; }
+            if (tex != null) Destroy(tex);
         }
 
         // ---------- Secim karti ----------
@@ -511,10 +642,10 @@ namespace HikayeStudyo
         // Duygusal yakin plandaki ilk satirdan bir kare alinir (videoya bir sey eklemez)
         IEnumerator KapakKaresi()
         {
-            if (kapakAlindi || PlayerPrefs.GetInt("HS_Kapak", 0) == 0) yield break;
+            if (kapakAlindi || (PlayerPrefs.GetInt("HS_Kapak", 0) == 0 && !KayitModu)) yield break;
             kapakAlindi = true;
             yield return new WaitForEndOfFrame();
-            try { kapakKare = ScreenCapture.CaptureScreenshotAsTexture(); } catch { kapakKare = null; }
+            try { kapakKare = KareAl(); } catch { kapakKare = null; }
         }
 
         IEnumerator Yayin(string dir)
@@ -556,7 +687,7 @@ namespace HikayeStudyo
             string kapak = System.IO.Path.Combine(dir, "kapak.png");
             try
             {
-                var tex = ScreenCapture.CaptureScreenshotAsTexture();
+                var tex = KareAl();
                 System.IO.File.WriteAllBytes(kapak, tex.EncodeToPNG());
                 Destroy(tex);
             }
@@ -575,7 +706,7 @@ namespace HikayeStudyo
             }
             else sb.AppendLine("Devamı gelsin mi? Yorumlara yaz 👇");
             sb.AppendLine();
-            sb.AppendLine("#hikaye #dizi #duygusal #keşfet" + (seri.Length > 0 ? " #" + seri.Replace(" ", "").ToLowerInvariant() : ""));
+            sb.AppendLine(EtiketSatiri());
             sb.AppendLine();
             sb.AppendLine("--- Notlar (paylaşırken silin) ---");
             sb.AppendLine("• Seslendirme yapay zekâ (Gemini) ile yapıldı: TikTok'ta 'Yapay zekâ ile oluşturuldu' etiketini aç.");

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -46,6 +47,42 @@ namespace HikayeStudyo
         public static bool Var(string hikaye, string anahtar)
         {
             try { return File.Exists(Dosya(hikaye, anahtar)); } catch { return false; }
+        }
+
+        // Videoya almadan önce (Aşama 5): GERÇEK sesi olmayan konuşma satırlarının dosya satır numaraları.
+        // StoryPlayer.PreloadVoices ile aynı sıra: Resources/Ses/<hikaye>/<anahtar> -> Resources/Ses/<hikaye>/<NN> -> kalıcı klasör.
+        // Deneme (sentetik) dosyası gerçek ses SAYILMAZ (HS_DenemeSes açık olsa bile); yalnız denemesi olanlar ayrıca listelenir.
+        public static List<int> EksikGercekSesler(string hikaye, IList<StoryItem> items, StoryLibrary lib, List<int> yalnizDeneme = null)
+        {
+            var eksik = new List<int>();
+            if (items == null || lib == null) return eksik;
+            var bilinen = new Dictionary<string, bool>();
+            foreach (var it in items)
+            {
+                if (it == null || it.Type != ItemType.Dialogue) continue;
+                string key = lib.ClipKey(it);
+                bool var_;
+                if (!bilinen.TryGetValue(key, out var_))
+                {
+                    var_ = ResourcesSesVar("Ses/" + hikaye + "/" + key)
+                        || ResourcesSesVar("Ses/" + hikaye + "/" + it.VoiceIndex.ToString("00"))
+                        || Var(hikaye, key);
+                    bilinen[key] = var_;
+                }
+                if (var_) continue;
+                eksik.Add(it.Line);
+                if (yalnizDeneme != null)
+                {
+                    try { if (File.Exists(DenemeDosya(hikaye, key))) yalnizDeneme.Add(it.Line); } catch { }
+                }
+            }
+            return eksik;
+        }
+
+        // Not: yüklenen klip boşaltılmaz (canlı önizleme aynı klibi çalıyor olabilir); kullanılmayanları Unity kendisi bırakır.
+        static bool ResourcesSesVar(string yol)
+        {
+            return Resources.Load<AudioClip>(yol) != null;
         }
 
         static string Temiz(string s)

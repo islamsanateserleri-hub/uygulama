@@ -35,6 +35,8 @@ namespace HikayeStudyo
         public int DialogueCount;
         public string Seri = "", Baslik = "";   // seri: / baslik: komutlari (kapak ve aciklama icin)
         public int Bolum;                        // bolum: 3
+        public int KapakSatir;                   // kapak: 24  (kapak karesi bu dosya satirindan/sonraki ilk konusmadan alinir; 0 = otomatik)
+        public readonly List<string> Etiketler = new List<string>();   // etiket: a, b, c  (aciklamaya #a #b #c olarak eklenir)
     }
 
     public static class Util
@@ -190,6 +192,10 @@ namespace HikayeStudyo
         public static readonly string[] DirectKeys =
             { "mekan3d", "yer", "gir", "figuran", "ani", "zaman", "gecis", "sessizlik", "isik" };
 
+        // vfx: gorsel efekt komutu (B4: efekt = yalniz ses efekti, vfx = gorsel efekt, gecis = yalniz sahne gecisi).
+        // Mevcut efektlere eslenir: flas -> Flash, far -> Headlights, vhs/geri -> Rewind (eski flas:/far:/geri: aynen calisir).
+        public static readonly string[] VfxListesi = { "flas", "far", "vhs", "geri" };
+
         static bool IsDirectKey(string key)
         {
             foreach (var k in DirectKeys) if (k == key) return true;
@@ -293,6 +299,36 @@ namespace HikayeStudyo
                     case "far": item.Type = ItemType.Headlights; break;
                     case "flas": item.Type = ItemType.Flash; break;
                     case "gorsel": item.Type = ItemType.Insert; break;
+                    case "vfx":
+                        {
+                            // vfx: flas | vfx: far | vfx: vhs 1 saat önce (geri: ile ayni)
+                            var vp = val.Split(new[] { ' ' }, 2, System.StringSplitOptions.RemoveEmptyEntries);
+                            string vk = vp.Length > 0 ? Util.Norm(vp[0]) : "";
+                            string vt = vp.Length > 1 ? vp[1].Trim() : "";
+                            item.Text = vt; item.Arg = vt;
+                            if (vk == "flas") item.Type = ItemType.Flash;
+                            else if (vk == "far") item.Type = ItemType.Headlights;
+                            else if (vk == "vhs" || vk == "geri") item.Type = ItemType.Rewind;
+                            else { r.Warnings.Add(lineNo + ". satır: 'vfx: " + val + "' bilinmiyor (" + string.Join(", ", VfxListesi) + ")."); continue; }
+                        }
+                        break;
+                    case "kapak":
+                        {
+                            // kapak: 24  -> 24. satirdan (ya da sonraki ilk konusmadan) kapak karesi; kapak: (bos) -> bu satirdan sonraki ilk konusma
+                            int ks;
+                            if (val.Length == 0) r.KapakSatir = lineNo;
+                            else if (int.TryParse(val, out ks) && ks > 0) r.KapakSatir = ks;
+                            else r.Warnings.Add(lineNo + ". satır: 'kapak:' satır numarası ister (örn. kapak: 24) ya da boş bırak (sonraki konuşma).");
+                        }
+                        continue;
+                    case "etiket":
+                        // etiket: aile, dram, #duygusal  -> aciklamada #aile #dram #duygusal
+                        foreach (var et in val.Split(new[] { ',', ' ', ';' }, System.StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            string tg = et.Trim().TrimStart('#');
+                            if (tg.Length > 0 && !r.Etiketler.Contains(tg)) r.Etiketler.Add(tg);
+                        }
+                        continue;
                     case "bak": item.Type = ItemType.Bak; if (!YuzSahne.KomutCoz(key, item, r.Warnings, lineNo)) continue; break;
                     case "dinle": item.Type = ItemType.Dinle; if (!YuzSahne.KomutCoz(key, item, r.Warnings, lineNo)) continue; break;
                     case "altyazi": item.Type = ItemType.AltyaziStil; if (!YuzSahne.KomutCoz(key, item, r.Warnings, lineNo)) continue; break;

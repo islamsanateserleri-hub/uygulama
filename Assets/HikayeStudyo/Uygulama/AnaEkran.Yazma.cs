@@ -408,7 +408,8 @@ namespace HikayeStudyo
 
             // ---- üst çubuk ----
             if (Dugme(new Rect(ic.x, ic.y, 150, 38), "Hikâyelerim", new Color32(60, 66, 88, 255), 14)) { Git(Bolum.Hikayelerim); GUI.enabled = true; return; }
-            Yazdir(new Rect(ic.x + 164, ic.y, ic.width - 520, 38), yH.ad, 22, Yazi, TextAnchor.MiddleLeft, true);
+            Yazdir(new Rect(ic.x + 164, ic.y, ic.width - 670, 38), yH.ad, 22, Yazi, TextAnchor.MiddleLeft, true);
+            VideoDugmesi(new Rect(ic.xMax - 496, ic.y, 140, 38), yH, 13);   // Aşama 5 (AnaEkran.Video.cs)
             bool kayitli = yMetin == yDiskte;
             Yazdir(new Rect(ic.xMax - 350, ic.y, 140, 38), yDurum, 12, kayitli ? Basari : new Color32(240, 190, 80, 255), TextAnchor.MiddleRight);
             if (Dugme(new Rect(ic.xMax - 200, ic.y, 98, 38), "Geri al", new Color32(60, 66, 88, 255), 13, yGeri.Count > 0)) GeriAl();
@@ -805,6 +806,9 @@ namespace HikayeStudyo
             int sutun = Mathf.Max(1, (int)((a.width - 14f + bosluk) / (kartG + bosluk)));
             int satirSayisi = (ySahneler.Count + sutun - 1) / sutun;
             var gorunum = new Rect(a.x, a.y + 36, a.width, a.height - 36 - 112);
+            if (yDuzenAcik) DuzenPanelCiz(gorunum);   // Aşama 5: sahne düzenleme paneli (AnaEkran.Duzen.cs)
+            else
+            {
             ListeAl(ref yPanoKaydirma, gorunum, Mathf.Max(gorunum.height, satirSayisi * (kartY + bosluk)));
             for (int i = 0; i < ySahneler.Count; i++)
             {
@@ -825,9 +829,11 @@ namespace HikayeStudyo
                 Yazdir(new Rect(r.x + 122, r.y + 70, r.width - 128, 56), s.kars.Count == 0 ? "-" : string.Join(", ", s.kars.ToArray()), 12, Yazi, TextAnchor.UpperLeft, false, true);
                 Yazdir(new Rect(r.x + 122, r.y + 128, r.width - 128, 72), s.ilk.Length > 0 ? "“" + s.ilk + "”" : "", 11, Sönük, TextAnchor.UpperLeft, false, true);
                 Yazdir(new Rect(r.x + 8, r.y + 204, r.width - 16, 20), "Satır " + (s.bas + 1) + "–" + s.son, 11, Sönük);
+                if (Dugme(new Rect(r.xMax - 82, r.y + 201, 74, 24), "Düzenle", Vurgu, 11)) { ySecSahne = i; DuzenAc(); }
                 if (GUI.Button(r, GUIContent.none, GUIStyle.none)) ySecSahne = i;
             }
             ListeVer(ref yPanoKaydirma, gorunum);
+            }
 
             // ---- seçili sahne işlemleri ----
             var pr = new Rect(a.x, a.yMax - 106, a.width, 106);

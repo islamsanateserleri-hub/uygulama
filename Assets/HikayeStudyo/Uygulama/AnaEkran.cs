@@ -272,6 +272,7 @@ namespace HikayeStudyo
 
             Kutu(new Rect(-4, -4, gw + 8, gh + 8), Zemin);
             KenarCubugu();
+            VideoKartCiz();   // Aşama 5: video kaydı ilerleme/sonuç kartı (AnaEkran.Video.cs)
             var icerik = new Rect(244, 20, gw - 244 - 24, gh - 40);
             Kutu(icerik, Panel);
             var ic = new Rect(icerik.x + 24, icerik.y + 20, icerik.width - 48, icerik.height - 40);
@@ -441,9 +442,10 @@ namespace HikayeStudyo
                 var h = hikayeler[i];
                 var r = new Rect(0, i * (sat + 8), gorunum.width - 18, sat);
                 Kutu(r, Kart);
-                Yazdir(new Rect(r.x + 18, r.y + 8, r.width - 360, 28), h.ad, 18, Yazi, TextAnchor.MiddleLeft, true);
+                Yazdir(new Rect(r.x + 18, r.y + 8, r.width - 490, 28), h.ad, 18, Yazi, TextAnchor.MiddleLeft, true);
                 string alt = (h.yerlesik ? "Örnek hikâye" : "Benim hikâyem") + (h.konusma >= 0 ? "  ·  " + h.konusma + " konuşma" : "");
-                Yazdir(new Rect(r.x + 18, r.y + 34, r.width - 360, 22), alt, 13, Sönük);
+                Yazdir(new Rect(r.x + 18, r.y + 34, r.width - 490, 22), alt, 13, Sönük);
+                VideoDugmesi(new Rect(r.xMax - 462, r.y + 12, 124, 40), h);
                 if (Dugme(new Rect(r.xMax - 330, r.y + 12, 120, 40), h.yerlesik ? "Kopyala+düzenle" : "Düzenle", new Color32(60, 66, 88, 255), h.yerlesik ? 12 : 14)) acilacak = h;
                 if (Dugme(new Rect(r.xMax - 196, r.y + 12, 180, 40), "Oyna", Vurgu, 16)) Oyna(h);
             }
@@ -577,22 +579,53 @@ namespace HikayeStudyo
 
         void ProjelerCiz(Rect ic)
         {
-            Baslik(ic, "Projeler", videolar.Count + " kayıtlı video");
-            if (Dugme(new Rect(ic.xMax - 330, ic.y + 4, 150, 38), "Yenile", new Color32(60, 66, 88, 255), 14)) VideolariYukle();
+            // Aşama 5 (P2): yayın klasörleri (video + kapak + başlık + açıklama + etiketler + kalite raporu) üstte, klasörsüz mp4'ler altta
+            if (yayinlar == null || Time.realtimeSinceStartup - yayinYukleme > 5f) YayinlariYukle();
+            Baslik(ic, "Projeler", yayinlar.Count + " yayın paketi  ·  " + videolar.Count + " ayrı video");
+            if (Dugme(new Rect(ic.xMax - 330, ic.y + 4, 150, 38), "Yenile", new Color32(60, 66, 88, 255), 14)) { VideolariYukle(); YayinlariYukle(); }
             if (Dugme(new Rect(ic.xMax - 170, ic.y + 4, 170, 38), "Klasörü aç", new Color32(60, 66, 88, 255), 14)) Ac("explorer.exe", "\"" + VideoKlasoru + "\"");
             var gorunum = new Rect(ic.x, ic.y + 80, ic.width, ic.height - 90);
-            if (videolar.Count == 0)
+            if (videolar.Count == 0 && yayinlar.Count == 0)
             {
                 Yazdir(new Rect(gorunum.x, gorunum.y + 10, gorunum.width, 60),
-                    "Henüz kaydedilmiş video yok. Videolar şu klasöre kaydedilir:\n" + VideoKlasoru, 15, Sönük, TextAnchor.UpperLeft, false, true);
+                    "Henüz kaydedilmiş video yok. Hikâyelerim'de \"Videoya al\" ile video üret. Videolar şu klasöre kaydedilir:\n" + VideoKlasoru, 15, Sönük, TextAnchor.UpperLeft, false, true);
                 return;
             }
-            const float sat = 64;
-            ListeBasla(gorunum, Mathf.Max(gorunum.height, videolar.Count * (sat + 8)));
+            const float ysat = 104, sat = 64, ara = 8;
+            float icerik = yayinlar.Count * (ysat + ara) + videolar.Count * (sat + ara);
+            ListeBasla(gorunum, Mathf.Max(gorunum.height, icerik));
+            float y = 0f;
+            for (int i = 0; i < yayinlar.Count; i++)
+            {
+                var v = yayinlar[i];
+                var r = new Rect(0, y, gorunum.width - 18, ysat);
+                y += ysat + ara;
+                // görünmeyen satırları atla (kapak yüklemesi yalnız görünenler için)
+                if (r.yMax < kaydirma || r.y > kaydirma + gorunum.height) continue;
+                Kutu(r, Kart);
+                var kr = new Rect(r.x + 12, r.y + 8, 50, 88);
+                var tex = KapakKucuk(v.kapak);
+                if (tex != null) GUI.DrawTexture(kr, tex, ScaleMode.ScaleAndCrop);
+                else { Kutu(kr, new Color32(34, 40, 58, 255)); Yazdir(kr, v.kapak == null ? "kapak\nyok" : "", 10, Sönük, TextAnchor.MiddleCenter, false, true); }
+                float mx = r.x + 74, mw = Mathf.Max(80f, r.width - 74 - 380);
+                Yazdir(new Rect(mx, r.y + 6, mw, 26), v.baslik, 16, Yazi, TextAnchor.MiddleLeft, true);
+                Yazdir(new Rect(mx, r.y + 34, mw, 20), v.zaman.ToString("dd.MM.yyyy HH:mm") + "  ·  " + v.ad, 12, Sönük);
+                Yazdir(new Rect(mx, r.y + 54, mw, 20), (v.sure > 0 ? v.sure.ToString("0") + " sn  ·  " : "") + (v.boyut / 1048576f).ToString("0.0") + " MB", 12, Sönük);
+                Yazdir(new Rect(mx, r.y + 74, mw, 20), v.kalite.Length > 0 ? v.kalite : "Kalite raporu yok", 12, v.kalite.Length > 0 ? v.kaliteRenk : Sönük, TextAnchor.MiddleLeft, v.kalite.Length > 0);
+                if (Dugme(new Rect(r.xMax - 360, r.y + 10, 170, 38), "Klasörü aç", new Color32(60, 66, 88, 255), 14)) Ac("explorer.exe", "\"" + v.klasor + "\"");
+                if (Dugme(new Rect(r.xMax - 180, r.y + 10, 164, 38), "Videoyu aç", Vurgu, 15)) Ac(v.video, "");
+                if (Dugme(new Rect(r.xMax - 360, r.y + 56, 344, 38), "Açıklamayı kopyala", new Color32(62, 130, 96, 255), 14))
+                {
+                    string metin = YayinPaketi.PaylasimMetni(v.klasor);
+                    if (metin.Length > 0) { GUIUtility.systemCopyBuffer = metin; mesaj = "Başlık, açıklama ve etiketler panoya kopyalandı: " + v.baslik; mesajHata = false; }
+                    else { mesaj = "Bu klasörde başlık/açıklama dosyası yok: " + v.klasor; mesajHata = true; }
+                }
+            }
             for (int i = 0; i < videolar.Count; i++)
             {
                 var v = videolar[i];
-                var r = new Rect(0, i * (sat + 8), gorunum.width - 18, sat);
+                var r = new Rect(0, y, gorunum.width - 18, sat);
+                y += sat + ara;
                 Kutu(r, Kart);
                 Yazdir(new Rect(r.x + 18, r.y + 8, r.width - 400, 28), v.ad, 17, Yazi, TextAnchor.MiddleLeft, true);
                 Yazdir(new Rect(r.x + 18, r.y + 34, r.width - 400, 22), (v.boyut / 1048576f).ToString("0.0") + " MB  ·  " + v.zaman.ToString("dd.MM.yyyy HH:mm"), 13, Sönük);
