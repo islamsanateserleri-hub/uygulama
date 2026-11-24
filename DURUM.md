@@ -5,7 +5,7 @@ Eski defterler/notlar `_Arsiv/` altında, okunmaz. Plan: `Hikaye_Studyo_Gelistir
 
 ## KULLANICI KURALLARI (sırayla uy)
 1. PDF planına harfiyen uy; sıra değişmez; aşamayı bitirmeden diğerine geçme; test edilmemişi "tamam" yazma.
-2. Aşama aşama ilerle; kullanıcı onayı olmadan sonraki aşamaya geçme. Takılırsan dur ve kullanıcıya bildir.
+2. Aşama aşama ilerle. 25 Kas 01:46 kullanıcı: "bundan sonra aşamalar için benden onay alma" → aşama bitince (rapor + DURUM + not defteri + GitHub) onay beklemeden sıradakine geç. Geri alınamaz kararlar ve kullanıcı gerektiren işler (API anahtarı, satın alma, hesap) için dur ve bildir.
 3. Kullanıcıya soru sorma. Her aşama sonunda GitHub'a gönder (dal claude/hikaye-studyosu), sonucu buraya yaz, kullanıcıya kısa özet ver.
 4. Çalışan özellikleri bozma; değişiklikten önce yedek; her değişiklikten sonra derlemeyi kontrol et; hataları gizleme.
 5. Her aşama sonu raporu: yapılanlar, değişen dosyalar, eklenenler, düzeltilen hatalar, derleme sonucu, gerçek test, açık sorunlar, commit, sonraki aşama.
@@ -21,7 +21,7 @@ Eski defterler/notlar `_Arsiv/` altında, okunmaz. Plan: `Hikaye_Studyo_Gelistir
 - Dosya aktarımı: `device_stage_files` (cihaz → /mnt/user-data/uploads/My project/...), `device_commit_files` (/mnt/user-data/outputs/My project/... → cihaz, force:true).
 - Unity'yi sürmek için `HikayeKomut/komut.txt`'ye tek satır komut yaz: `yenile`, `menu: <yol>`, `oynat: <hikâye>`, `kaydet:`, `seslendir:`, `dur`, `ekran`. Sonuçlar: `HikayeKomut/sonuc.txt`, `son_sonuc.json`, `konsol.txt`, `derleme.txt`. Unity arka plandayken 30–60 sn geç yanıtlar; komut tüketilince dosya silinir; "zaten oynuyor" = önce `dur`.
 - Bash'te paket kurulumu kapalı. Foreground `sleep` ≤100 sn.
-- GitHub: islamsanateserleri-hub/uygulama, dal claude/hikaye-studyosu (PR #1). Repo yalnızca `Assets/`, README, CLAUDE.md, GEMINI.md, Docs içerir; .gitignore Library/Temp/Build/*.wav/*.mp4 ve Mixamo klasörlerini dışlar. Push: klonla, cihazdan stage edilen dosyaları kopyala, commit, push.
+- GitHub: islamsanateserleri-hub/uygulama, dal claude/hikaye-studyosu (PR #1). Kullanıcı GitHub hesabını Claude'a bağladı (25 Kas); oturumda add_repo (push) sonra git push çalışıyor. Repo yalnızca `Assets/`, README, CLAUDE.md, GEMINI.md, Docs içerir; .gitignore Library/Temp/Build/*.wav/*.mp4 ve Mixamo klasörlerini dışlar. Push: klonla, cihazdan stage edilen dosyaları kopyala, commit, push.
 - Yedek: `Yedek_2026-11-24/`. Yapı: Hikaye.Core (Core/), Hikaye.Runtime (Scripts/), Hikaye.Editor (Editor/), Hikaye.App (Uygulama/).
 
 ## AŞAMALAR
@@ -31,8 +31,9 @@ Eski defterler/notlar `_Arsiv/` altında, okunmaz. Plan: `Hikaye_Studyo_Gelistir
 | 1 Unity'siz video kaydı | TAMAM, onaylandı (12/12 madde denendi) |
 | 2 Bağımsız uygulama arayüzü | TAMAM, onaylandı (commit d7e8e23) |
 | 3 Hikâye yazma ekranı + otomatik sahne | TAMAM, onaylandı (commit 9082643) |
-| 4 Gemini ses sistemi | **YAZILDI, derlendi (0 hata), EXE'de KISMEN test edildi; gerçek Gemini isteği denenmedi** (Aşama 5'e onaysız geçme) |
-| 5–16 | Başlanmadı (5 = video düzenleme/dışa aktarma) |
+| 4 Gemini ses sistemi | TAMAM (25 Kas 01:50; commit eed18dc + rapor). Gerçek Gemini: 6 istek, 6/8 satır üretildi, günlük 429 doğru yakalandı. Açık: Geri al, Durdur, ağ/400/kesik ses yolları gerçek testte tetiklenmedi |
+| 5 Video düzenleme + dışa aktarma | BAŞLADI (25 Kas 01:50; planlayıcı alt ajan) |
+| 6–16 | Başlanmadı |
 
 ## Özet: Aşama 0-2 (tamam)
 - Aşama 0: dört derleme birimi (Core/Runtime/Editor/App), KarakterKatalogu (68 karakter), menü "Hikaye/Windows Derlemesi (Deneme)".
@@ -50,6 +51,7 @@ Yeni: `Scripts/DisSes.cs` (kalıcı ses klasörü Documents\HikayeStudyosu\Ses\<
 - GERÇEK TEST (EXE, Editör kapalı): Ses ayarları açıldı, anahtar yokken "Anahtar yok" + üret düğmesi pasif; Arda Puck→Fenrir atandı, uygulama kapat-aç sonrası kaldı, Ses sekmesinde yalnız Arda'nın dış satırı Fenrir oldu; Ses sekmesi 8 satırı "Eksik" (0/8) listeledi; "Deneme sesi üret" 8 sentetik ses yazdı (Gemini sesi DEĞİL, kota harcamaz); deneme sesi açıkken Oyna sesli oynadı, rapor −17,1 LUFS (hedef −14), tepe −7,5 dBFS, kazanç +6,0 dB → ses→miks→ölçüm hattı çalışıyor. Deneme anahtarı testten sonra KAPATILDI.
 - TEST EDİLMEDİ: gerçek Gemini isteği (API anahtarı yok; anahtar kutusuna ben anahtar yazmam), kota sayacı, 429/400 yolları, yeniden üret+yedek+geri alma, kesik ses yeniden denemesi, Dinle düğmesi (düzeltildi 00:40: deneme dosyasını da yüklüyor; EXE'de basınca hata çıkmadı ama sesi duyamıyorum, duyulduğu doğrulanmadı).
 - Dar pencerede Ses sekmesi düğmeleri üst üste biniyordu: DÜZELTİLDİ 00:40 (derleme 0 hata, EXE Succeeded, dar pencerede ekran görüntüsüyle doğrulandı). Aşama 5'te `kaydet` deneme sesi varken REDDETMELİ.
+- DENETİM DÜZELTMELERİ (25 Kas 01:30, yerel commit eed18dc, PUSH BEKLİYOR): toplu üretimde satıra özgü hata → Rapor'a yaz, sonraki satıra geç (üst üste 2 hata → dur); yanıtta tüm parts aranıyor + finishReason/blockReason; KisaTekrar 3→1, kota ≤1 iken kesik ses denemesi yok; kota doluysa istek atılmıyor; Geri al düğmesi (yedeği olan satırda, mevcut ses önce _yedek'e taşınır); Durdur 1 sn içinde (req.Abort, 1 sn adımlı bekleme); ağ hatasında 1 yeniden deneme; yedek adı milisaniyeli, satır başına son 3 yedek; güvenli dosya yerleştirme. Gemini şeması resmi belgeyle doğrulandı. Derleme: DLL 0 hata, EXE Succeeded (01:30). GERÇEK TEST: dar pencerede Ses sekmesi düzgün, Geri al yedek yokken gizli, Dinle hatasız. TEST EDİLMEDİ: Geri al, satır atlama, Durdur, ağ yeniden deneme, yedek sınırı (gerçek anahtar ve gerçek ses gerekir).
 - Test notu: Claude penceresi ekranın sağında açılınca oradaki tıklamaları yakalıyor; uygulamayı Win+Sol ile sola yapıştırıp denedim (Düzenle "çalışmıyor" gibi göründü, uygulama hatası değildi).
 
 ## DERSLER
@@ -66,10 +68,14 @@ Kurallar: bozma, yedek, derleme kontrolü, test edilmeyen "tamam" değil, aşama
 Ayrıntılı sürüm: Doc "DURUM.dm" → "TAM GELİŞTİRME PLANI".
 
 ## Sonraki adım
-1) (YAPILDI 00:40) Dinle düzeltmesi + düğme yerleşimi. 2) Kullanıcı API anahtarını girerse 1 satır gerçek Gemini testi. 3) Aşama 4 raporu, onay beklenir; Aşama 5'e onaysız geçme. Her adımda DURUM.md ve "DURUM.md" not defterini (claude.ai/artifact/QfqgRcP5tUvdKXQ3JzP11x) birlikte güncelle. (Eski Doc "DURUM.dm": claude.ai/artifact/1RntmDHcKyA7NvjmKDoybk, yalnız tam plan için.)
+1) (YAPILDI 00:40) Dinle düzeltmesi + düğme yerleşimi. 1b) (YAPILDI 01:30) Denetim düzeltmeleri, derlendi, EXE'de yerleşim denendi. 1c) GitHub push: bu oturumda repo yazma yetkisi reddedildi; yerel commit eed18dc hazır, kullanıcı yetki verince gönderilecek. 2) Kullanıcı API anahtarını girerse 1 satır gerçek Gemini testi. 3) Aşama 4 raporu, onay beklenir; Aşama 5'e onaysız geçme. Her adımda DURUM.md ve "DURUM.md" not defterini (claude.ai/artifact/QfqgRcP5tUvdKXQ3JzP11x) birlikte güncelle. (Eski Doc "DURUM.dm": claude.ai/artifact/1RntmDHcKyA7NvjmKDoybk, yalnız tam plan için.)
 
 ## İŞLEM GÜNLÜĞÜ
 - 25 Kas 01:15 — "DURUM.md" not defteri oluşturuldu. Alt ajanlar başlatıldı: (1) Dinle düzeltmesi, (2) Aşama 4 kod denetimi, (3) GitHub karşılaştırması. Uygulama izinleri alındı (Unity Hub, Unity, Gezgin, Hikayestudyo.exe).
 - 25 Kas 01:20 — GitHub ajanı: Dinle düzeltmesi + düğme yerleşimi ZATEN YAPILMIŞ (commit 8bbb478, 00:40). Cihazdaki 12 .cs dosyası depoyla bayt bayt AYNI (YukleDeneme cihazda var). Cihazdaki DURUM.md 00:40 güncellemesini kaybetmişti (DERSLER'deki commit sorunu); depodaki sürümden geri yüklendi + kural 7 + bu günlük eklendi. (1) numaralı ajan gereksiz olduğu için durduruldu, cihaza hiçbir şey yazmadı. PR #1 durumu okunamadı (API 403); push için repo yetkisi gerekecek.
 - 25 Kas 01:22 — Denetçi ajan raporu (kritik yok; orta: tek satır hatası toplu üretimi kilitliyor, yalnız parts[0] okunuyor, kesik ses denemesi kotayı yiyor (KisaTekrar=3), Geri al arayüzde yok ve yeni sesi siliyor, Durdur 30–120 sn gecikiyor, anahtar düz metin (Aşama 7)). Gemini şeması resmi belgeyle DOĞRULANDI (gemini-3.8-flash-tts, speech_metadata.style, voiceConfig.voice; varsayılan çıktı 24 kHz mono 16-bit WAV; Türkçe destekli) → #5 değişiklik gerekmez. Kodlayıcı ajan #1,2,3,4,6,8,9,10,12,15'i düzeltiyor. Orijinaller yedeklendi: Yedek_2026-11-25_asama4/ (GeminiUygulama.cs, AnaEkran.Ses.cs, DisSes.cs).
 - 25 Kas 01:29 — Düzeltmeler cihaza yazıldı (GeminiUygulama.cs 27511 B, AnaEkran.Ses.cs 18486 B; stage ile bayt bayt doğrulandı). Unity Hub'dan proje açıldı, otomatik derlendi: Hikaye.App.dll (01:27:55) yeni metinleri içeriyor → C# derleme başarılı. Konsoldaki AvatarBuilder 'Hips' hataları Mixamo içe aktarma kaynaklı, kodla ilgisiz. EXE kapatıldı, `menu: Hikaye/Windows Derlemesi (Deneme)` komutu verildi.
+- 25 Kas 01:32 — EXE derlemesi Succeeded (0 hata), EXE DLL'inde yeni kod doğrulandı. EXE'de Ses sekmesi açıldı: dar pencere yerleşimi düzgün, Geri al yedek yokken gizli, Dinle hatasız. Yerel commit eed18dc; push için add_repo (push) bu oturumda reddedildi.
+- 25 Kas 01:46 — Kullanıcı: GitHub bağlandı, API anahtarı girildi (Ses ayarları: "Kayıtlı (53 karakter)"), aşamalar için onay ALINMAYACAK (kural 2 güncellendi). Push: eed18dc GitHub'a gönderildi.
+- 25 Kas 01:48 — GERÇEK GEMINI TESTİ (EXE, ornek_kopya, model Gemini 3.8 Flash TTS, deneme sesi kapalı): 12. satır Üret → "Hazır 1,3 sn", "Tamam: 1 ses üretildi", sayaç 1/10. Eksikleri üret (7) → 5 satır daha üretildi (1,5 / 4,4 / 3,8 / 2,7 / 2,9 sn), 6. istekte Google günlük 429 → "Günlük ücretsiz kota doldu; kalanları yarın ~11:00'den sonra" ve durdu (günlük kota yolu GERÇEK test edildi). 6/8 hazır; 27. ve 30. satır yarın. Bulgu: bu hesapta gerçek günlük sınır ~6 istek (uygulama 10 varsayıyor) → KotaLimit Aşama 5/7'de ayarlanabilir yapılmalı. Ses kulakla dinlenmedi (Claude duyamaz).
+- 25 Kas 01:50 — AŞAMA 4 RAPORU: Yapılanlar: kalıcı ses klasörü, karakter→ses ataması, Gemini TTS (resmi şemayla doğrulandı), kota/yedek/Geri al, Ses sekmesi + Ses ayarları, deneme sesi. Değişen: Scripts/DisSes.cs, Uygulama/GeminiUygulama.cs, Uygulama/AnaEkran.Ses.cs, StoryLibrary.VoiceFor, StoryPlayer.PreloadVoices, AnaEkran.cs, AnaEkran.Yazma.cs. Düzeltilen: Dinle deneme sesi, dar pencere düğmeleri, denetim #1-4,6,8-10,12,15. Derleme: 0 hata, EXE Succeeded. Gerçek test: yukarıda. Açık: Geri al/Durdur/ağ/400/kesik ses tetiklenmedi; anahtar düz metin (Aşama 7); günlük sınır ayarı. Commit: 0430a05, 8bbb478, eed18dc. Sonraki: Aşama 5.
