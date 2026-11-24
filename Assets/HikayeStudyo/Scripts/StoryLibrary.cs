@@ -36,6 +36,10 @@ namespace HikayeStudyo
         public HairStyle hairStyle = HairStyle.Kisa;
         public bool beard;
 
+        [Header("3D (istege bagli)")]
+        [Tooltip("Hazir klasorundeki 3D karakter (or. Mixamo_Timmy). Bos ise cizgi karakter kullanilir. Hikayede 'oyuncu: Arda = Timmy' de yazilabilir.")]
+        public GameObject model3D;
+
         [Header("Gorseller (istege bagli; duygu basina)")]
         public Vector2 spriteSize = new Vector2(700, 1000);
         public List<EmotionSprite> sprites = new List<EmotionSprite>();
@@ -80,6 +84,13 @@ namespace HikayeStudyo
     [System.Serializable] public class InsertDef { public string id = "gorsel"; public Sprite sprite; }
     [System.Serializable] public class MusicDef { public string id = "muzik"; public AudioClip clip; }
 
+    [System.Serializable]
+    public class AnimEsleme
+    {
+        public string etiket = "aglamakli";
+        public string animasyon = "agla, uzgun";
+    }
+
     [CreateAssetMenu(fileName = "StoryLibrary", menuName = "Hikaye Studyo/Kutuphane")]
     public class StoryLibrary : ScriptableObject
     {
@@ -92,6 +103,10 @@ namespace HikayeStudyo
         public List<SfxDef> sfx = new List<SfxDef>();
         public List<InsertDef> inserts = new List<InsertDef>();
         public List<MusicDef> music = new List<MusicDef>();
+
+        [Header("3D animasyon eşleme (duygu / hareket / poz -> animasyon)")]
+        [Tooltip("Boş bırakılan etiketler varsayılan eşlemeyi kullanır. Animasyon adları: agla, kork, sasir, dusun, uzgun, konus, dur, yuru, kos, otur, yat, uyu, tepki, sukret... ya da klip adı (Crying, Sad_Idle). Virgülle birden fazla yazılabilir: ilk bulunan oynar.")]
+        public List<AnimEsleme> animEsleme = new List<AnimEsleme>();
 
         public CharacterDef FindCharacter(string id)
         {

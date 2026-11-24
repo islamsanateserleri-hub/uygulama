@@ -518,7 +518,7 @@ namespace HikayeStudyo
                 c.lockRootRotation = true;
                 c.lockRootHeightY = true;
                 c.lockRootPositionXZ = true;
-                c.keepOriginalOrientation = true;
+                c.keepOriginalOrientation = !MixAnim;   // Mixamo kliplerinde gövde yönü sıfırlansın (yana dönük başlamasın)
                 c.keepOriginalPositionY = true;
                 c.keepOriginalPositionXZ = true;
             }
@@ -542,6 +542,18 @@ namespace HikayeStudyo
         }
 
         static readonly List<string> DokuCikarSirasi = new List<string>();
+
+        [MenuItem("Hikaye/Mixamo Animasyonlarını Yenile")]
+        static void AnimYenileMenu()
+        {
+            var dir = Karakter3DKurulum.MixamoAnimDir;
+            if (!Directory.Exists(dir)) return;
+            AssetDatabase.StartAssetEditing();
+            try { foreach (var f in Directory.GetFiles(dir, "*.fbx")) AssetDatabase.ImportAsset(f.Replace('\\', '/'), ImportAssetOptions.ForceUpdate); }
+            finally { AssetDatabase.StopAssetEditing(); }
+            int n = Karakter3DKurulum.BuildAll(true);
+            Debug.Log("[Hikaye Stüdyosu] Mixamo animasyonları yenilendi, " + n + " karakter hazır.");
+        }
 
         [MenuItem("Hikaye/Mixamo Dokularını Düzelt")]
         static void DokulariDuzeltMenu()

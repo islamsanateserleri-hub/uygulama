@@ -46,15 +46,37 @@ namespace HikayeStudyo
             {
                 SessionState.SetBool(Key, false);
                 if (StartRecording()) StoryPlayer.Finished += OnFinished;
+                else { PlayerPrefs.DeleteKey("HS_Kapak"); PlayerPrefs.DeleteKey("HS_YayinKlasor"); }
             }
             if (s == PlayModeStateChange.ExitingPlayMode) StopRecording();
         }
+
+        static double exitAt;
 
         static void OnFinished()
         {
             StoryPlayer.Finished -= OnFinished;
             StopRecording();
-            EditorApplication.delayCall += () => EditorApplication.isPlaying = false;
+            // kapak ve aciklama yazilana kadar bekle (en fazla 6 sn), sonra oynatmayi kapat
+            StoryPlayer.YayinHazir += OnYayin;
+            exitAt = EditorApplication.timeSinceStartup + 6.0;
+            EditorApplication.update += WaitExit;
+        }
+
+        static void OnYayin()
+        {
+            StoryPlayer.YayinHazir -= OnYayin;
+            exitAt = 0;
+        }
+
+        static void WaitExit()
+        {
+            if (EditorApplication.timeSinceStartup < exitAt) return;
+            EditorApplication.update -= WaitExit;
+            StoryPlayer.YayinHazir -= OnYayin;
+            EditorApplication.isPlaying = false;
+            var dir = Path.GetDirectoryName(LastVideo);
+            EditorApplication.delayCall += () => { if (Directory.Exists(dir)) EditorUtility.RevealInFinder(LastVideo); };
         }
 
         static void Set(object o, string name, object value)
@@ -120,9 +142,14 @@ namespace HikayeStudyo
                 if (audio != null) Set(audio, "PreserveAudio", true);
 
                 string story = SessionState.GetString(NameKey, "hikaye");
-                string dir = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyVideos), "Hikaye");
+                // Yayin klasoru: Videolar/Hikaye/<hikaye>_<tarih>/ icinde video.mp4, kapak.png, aciklama.txt
+                string dir = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyVideos), "Hikaye",
+                                          story + "_" + System.DateTime.Now.ToString("yyyyMMdd_HHmmss"));
                 Directory.CreateDirectory(dir);
-                string file = Path.Combine(dir, story + "_" + System.DateTime.Now.ToString("yyyyMMdd_HHmmss"));
+                string file = Path.Combine(dir, story);
+                PlayerPrefs.SetInt("HS_Kapak", 1);
+                PlayerPrefs.SetString("HS_YayinKlasor", dir);
+                PlayerPrefs.Save();
                 Set(movie, "OutputFile", file.Replace('\\', '/'));
                 EditorPrefs.SetString(LastKey, file + ".mp4");
 
@@ -157,8 +184,6 @@ namespace HikayeStudyo
             {
                 if (stopMethod != null) stopMethod.Invoke(controller, null);
                 Debug.Log("[Hikaye Stüdyosu] Video kaydedildi: " + LastVideo);
-                var path = LastVideo;
-                EditorApplication.delayCall += () => { if (File.Exists(path)) EditorUtility.RevealInFinder(path); };
             }
             catch (System.Exception e) { Debug.LogError("[Hikaye Stüdyosu] Kayıt durdurulamadı: " + e.Message); }
             controller = null;

@@ -29,7 +29,7 @@ namespace HikayeStudyo
             animator = GetComponent<Animator>();
             if (animator == null) animator = GetComponentInChildren<Animator>();
             legacy = GetComponentInChildren<Animation>();
-            if (!string.IsNullOrEmpty(startClip)) Play(startClip, 0f);
+            if (!string.IsNullOrEmpty(startClip) && string.IsNullOrEmpty(CurrentClip)) Play(startClip, 0f);
         }
 
         // Ada gore klip bul: tam ad, sonra icerdigi ad ("walk" -> "Walk_Loop"), Turkce takma adlar da olur
@@ -111,6 +111,7 @@ namespace HikayeStudyo
 
             if (clip.legacy)
             {
+                if (legacy == null) legacy = GetComponentInChildren<Animation>();
                 if (legacy == null) legacy = gameObject.AddComponent<Animation>();
                 if (legacy.GetClip(clip.name) == null) legacy.AddClip(clip, clip.name);
                 legacy[clip.name].wrapMode = IsLoop(clip) ? WrapMode.Loop : WrapMode.ClampForever;
@@ -118,6 +119,8 @@ namespace HikayeStudyo
                 return true;
             }
 
+            if (animator == null) animator = GetComponent<Animator>();
+            if (animator == null) animator = GetComponentInChildren<Animator>();
             if (animator == null) animator = gameObject.AddComponent<Animator>();
             if (!graph.IsValid())
             {

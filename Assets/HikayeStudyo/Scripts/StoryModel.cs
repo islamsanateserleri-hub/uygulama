@@ -7,7 +7,7 @@ namespace HikayeStudyo
     public enum ItemType
     {
         Dialogue, Background, Hook, Rewind, Title, Wait, Sfx, Remove, Clear,
-        Camera, Atmosphere, Music, Pose, Headlights, Flash, Insert, End
+        Camera, Atmosphere, Music, Pose, Headlights, Flash, Insert, End, Cast, Choice, Result
     }
 
     public class StoryItem
@@ -30,6 +30,8 @@ namespace HikayeStudyo
         public readonly List<StoryItem> Items = new List<StoryItem>();
         public readonly List<string> Warnings = new List<string>();
         public int DialogueCount;
+        public string Seri = "", Baslik = "";   // seri: / baslik: komutlari (kapak ve aciklama icin)
+        public int Bolum;                        // bolum: 3
     }
 
     public static class Util
@@ -236,6 +238,35 @@ namespace HikayeStudyo
                     case "far": item.Type = ItemType.Headlights; break;
                     case "flas": item.Type = ItemType.Flash; break;
                     case "gorsel": item.Type = ItemType.Insert; break;
+                    case "seri": r.Seri = val; continue;
+                    case "baslik": r.Baslik = val; continue;
+                    case "bolum":
+                        { int b; if (int.TryParse(val, out b)) r.Bolum = b; else r.Warnings.Add(lineNo + ". satır: bölüm numarası sayı olmalı."); }
+                        continue;
+                    case "secim":
+                        {
+                            // secim: A) Babasına söylesin / B) Sır saklasın
+                            item.Type = ItemType.Choice;
+                            var opts = val.Split('/');
+                            if (opts.Length < 2) { r.Warnings.Add(lineNo + ". satır: 'secim: A) ... / B) ...' biçiminde iki seçenek yaz."); continue; }
+                            item.Text = opts[0].Trim();
+                            item.Arg = opts[1].Trim();
+                        }
+                        break;
+                    case "sonuc":
+                        // sonuc: %69 A   (onceki bolumun oylama sonucu)
+                        item.Type = ItemType.Result;
+                        break;
+                    case "oyuncu":
+                        {
+                            // oyuncu: Arda = Timmy   (3D model; "yok" = cizgi karakter)
+                            item.Type = ItemType.Cast;
+                            int eq = val.IndexOf('=');
+                            if (eq < 0) { r.Warnings.Add(lineNo + ". satır: 'oyuncu: Arda = Timmy' biçiminde yaz."); continue; }
+                            item.Character = val.Substring(0, eq).Trim();
+                            item.Arg = val.Substring(eq + 1).Trim();
+                        }
+                        break;
                     case "son":
                         {
                             // son: yumusak Metin  |  son: sert [Metin]

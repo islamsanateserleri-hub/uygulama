@@ -20,6 +20,9 @@ namespace HikayeStudyo
         bool showVoice = true, showHelp;
         GUIStyle editorStyle;
         int cursorLine = 1;          // imlecin bulundugu satir (1'den)
+        int cursorIdx = -1;          // imlecin metindeki yeri
+        int qChar, qEmo, qMot, qCmd;
+        bool qInner;
 
         [MenuItem("Hikaye/Stüdyo %#h", priority = 0)]
         public static void Open()
@@ -75,7 +78,15 @@ namespace HikayeStudyo
             int n = 1;
             while (File.Exists(OtomatikKurulum.StoryFolder + "/bolum_" + n + ".txt")) n++;
             var p = OtomatikKurulum.StoryFolder + "/bolum_" + n + ".txt";
-            File.WriteAllText(p, "// Yeni bölüm\nmekan: oda_gece\n[Arda|normal|ic] ...\n", new System.Text.UTF8Encoding(false));
+            // onceki bolumun seri adini al, bolum numarasini bir artir
+            string seri = "";
+            if (names.Length > 0)
+            {
+                var prev = StoryParser.Parse(File.ReadAllText(PathOf(names.Length - 1)));
+                seri = prev.Seri;
+            }
+            File.WriteAllText(p, "// Yeni bölüm\n" + (seri.Length > 0 ? "seri: " + seri + "\n" : "seri: \n") + "bolum: " + n + "\nbaslik: \n" +
+                "mekan: oda_gece\nkanca: \n[Arda|normal|ic] ...\nson: yumusak Devamı yarın...\n", new System.Text.UTF8Encoding(false));
             AssetDatabase.ImportAsset(p);
             RefreshList();
             Load(System.Array.IndexOf(names, "bolum_" + n));
@@ -146,6 +157,9 @@ namespace HikayeStudyo
                 return;
             }
 
+            // --- hizli ekleme (otomatik tamamlama yerine: sec ve imlecin oldugu satirin altina ekle) ---
+            QuickBar(lib);
+
             // --- yazma alani ---
             scroll = EditorGUILayout.BeginScrollView(scroll, GUILayout.ExpandHeight(true));
             // GUILayout.TextArea: imlec konumu TextEditor durumundan okunabilsin diye (EditorGUILayout'un editoru gizli)
@@ -156,6 +170,7 @@ namespace HikayeStudyo
                 if (te != null && te.text == nt)
                 {
                     int ci = Mathf.Clamp(te.cursorIndex, 0, nt.Length), ln = 1;
+                    cursorIdx = ci;
                     for (int q = 0; q < ci; q++) if (nt[q] == '\n') ln++;
                     if (ln != cursorLine) { cursorLine = ln; Repaint(); }
                 }
@@ -281,9 +296,50 @@ namespace HikayeStudyo
                     case ItemType.Background: s += 0.6f; break;
                     case ItemType.Headlights: s += 1.5f; break;
                     case ItemType.End: s += it.Arg == "sert" ? 1.2f : 2.8f; break;
+                    case ItemType.Choice: s += 4f; break;
+                    case ItemType.Result: s += 2.2f; break;
                 }
             }
             return Mathf.RoundToInt(s);
+        }
+
+        static readonly string[] Komutlar =
+        {
+            "Komut ekle…", "mekan: oda_gece", "poz: Arda yatiyor", "kanca: ", "geri: 1 saat önce", "efekt: kapi", "atmosfer: mum",
+            "kamera: yakin", "muzik: pad", "bekle: 0.5", "cikar: ", "gorsel: eller", "yazi: ", "oyuncu: Arda = Timmy",
+            "secim: A) ... / B) ...", "sonuc: %60 A", "son: yumusak Devamı yarın...", "son: sert", "seri: ", "bolum: 1", "baslik: "
+        };
+
+        void QuickBar(StoryLibrary lib)
+        {
+            var chars = new List<string>();
+            if (lib != null) foreach (var c in lib.characters) if (c != null && !string.IsNullOrEmpty(c.id)) chars.Add(c.id);
+            if (chars.Count == 0) chars.Add("Arda");
+            var mots = new List<string> { "(hareket yok)" }; mots.AddRange(Util.Motions);
+            EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
+            qChar = EditorGUILayout.Popup(Mathf.Clamp(qChar, 0, chars.Count - 1), chars.ToArray(), EditorStyles.toolbarPopup, GUILayout.Width(80));
+            qEmo = EditorGUILayout.Popup(Mathf.Clamp(qEmo, 0, Util.Emotions.Length - 1), Util.Emotions, EditorStyles.toolbarPopup, GUILayout.Width(80));
+            qMot = EditorGUILayout.Popup(Mathf.Clamp(qMot, 0, mots.Count - 1), mots.ToArray(), EditorStyles.toolbarPopup, GUILayout.Width(90));
+            qInner = GUILayout.Toggle(qInner, "iç ses", EditorStyles.toolbarButton, GUILayout.Width(50));
+            if (GUILayout.Button("+ Konuşma", EditorStyles.toolbarButton))
+                InsertLine("[" + chars[qChar] + "|" + Util.Emotions[qEmo] + "|" + (qInner ? "ic" : "dis") + (qMot > 0 ? "|" + mots[qMot] : "") + "] ");
+            int c2 = EditorGUILayout.Popup(0, Komutlar, EditorStyles.toolbarPopup, GUILayout.Width(110));
+            if (c2 > 0) InsertLine(Komutlar[c2]);
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+        }
+
+        // Imlecin bulundugu satirin sonuna yeni satir ekler
+        void InsertLine(string line)
+        {
+            int at = cursorIdx < 0 || cursorIdx > text.Length ? text.Length : text.IndexOf('\n', cursorIdx);
+            if (at < 0) at = text.Length;
+            string prefix = text.Length == 0 ? "" : "\n";
+            text = text.Insert(at, prefix + line);
+            cursorIdx = at + prefix.Length + line.Length;
+            dirty = true; parsed = null;
+            GUI.FocusControl(null);
+            Repaint();
         }
 
         static StoryItem LineItem(ParseResult p, int line)
@@ -309,10 +365,10 @@ namespace HikayeStudyo
             foreach (var it in p.Items)
             {
                 if (it.Type == ItemType.Background || it.Type == ItemType.Music || it.Type == ItemType.Atmosphere ||
-                    it.Type == ItemType.Camera || it.Type == ItemType.Pose) { t += it.Type == ItemType.Background ? 0.3f : 0f; continue; }
+                    it.Type == ItemType.Camera || it.Type == ItemType.Pose || it.Type == ItemType.Cast) { t += it.Type == ItemType.Background ? 0.3f : 0f; continue; }
                 any = true;
                 if (it.Type == ItemType.Hook || it.Type == ItemType.Dialogue || it.Type == ItemType.Sfx ||
-                    it.Type == ItemType.Headlights || it.Type == ItemType.Flash) hookOk = t <= 1.5f;
+                    it.Type == ItemType.Headlights || it.Type == ItemType.Flash || it.Type == ItemType.Result) hookOk = t <= 1.5f;
                 break;
             }
             if (any && !hookOk) w.Add("Kanca: ilk 1,5 saniyede ekranda yazı, ses ya da hareket yok. En başa 'kanca:' ya da çarpıcı bir replik koy.");
@@ -326,24 +382,49 @@ namespace HikayeStudyo
         void PlayStory(bool record, int fromLine)
         {
             Save();
+            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+            Launch(loadedPath, names[sel], record, fromLine);
+        }
+
+        // Uzaktan komut icin: hikaye adiyla oynat
+        public static string PlayByName(string name, int fromLine, bool record)
+        {
+            if (EditorApplication.isPlaying) return "zaten oynuyor";
+            string path = OtomatikKurulum.StoryFolder + "/" + name + ".txt";
+            if (!File.Exists(path)) return "hikaye yok: " + path;
+            if (record && !StudyoKayit.RecorderInstalled) return "Recorder kurulu değil";
+            Launch(path, name, record, fromLine);
+            return record ? "kayıt başlıyor" : "oynatılıyor";
+        }
+
+        static void Launch(string storyPath, string storyName, bool record, int fromLine)
+        {
             PlayerPrefs.SetInt("HS_StartLine", record ? 0 : fromLine);
             PlayerPrefs.SetInt("HS_SafeArea", !record && EditorPrefs.GetBool("HS_SafeArea", false) ? 1 : 0);
             PlayerPrefs.Save();
-            var lib = Lib();
-            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+            var lib = AssetDatabase.LoadAssetAtPath<StoryLibrary>(OtomatikKurulum.LibPath);
+            if (lib == null) { OtomatikKurulum.Ensure(); lib = AssetDatabase.LoadAssetAtPath<StoryLibrary>(OtomatikKurulum.LibPath); }
             OtomatikKurulum.Ensure();
             if (SceneManager.GetActiveScene().path != OtomatikKurulum.ScenePath)
                 EditorSceneManager.OpenScene(OtomatikKurulum.ScenePath);
-            var player = FindAnyObjectByType<StoryPlayer>();
+            var player = Object.FindAnyObjectByType<StoryPlayer>();
             if (player == null) player = new GameObject("StoryPlayer").AddComponent<StoryPlayer>();
-            player.story = AssetDatabase.LoadAssetAtPath<TextAsset>(loadedPath);
+            player.story = AssetDatabase.LoadAssetAtPath<TextAsset>(storyPath);
             player.library = lib;
+            // 3D oyuncu listesi: Karakterler/Hazir klasorundeki butun prefablar
+            player.oyuncular = new List<GameObject>();
+            if (AssetDatabase.IsValidFolder(Karakter3DKurulum.Hazir))
+                foreach (var g in AssetDatabase.FindAssets("t:Prefab", new[] { Karakter3DKurulum.Hazir }))
+                {
+                    var go = AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(g));
+                    if (go != null && go.GetComponent<Karakter3D>() != null) player.oyuncular.Add(go);
+                }
             EditorUtility.SetDirty(player);
             EditorSceneManager.MarkSceneDirty(player.gameObject.scene);
             EditorSceneManager.SaveScene(player.gameObject.scene);
             GameViewUtil.Portrait();
             SessionState.SetBool(StudyoKayit.Key, record);
-            SessionState.SetString(StudyoKayit.NameKey, names[sel]);
+            SessionState.SetString(StudyoKayit.NameKey, storyName);
             EditorApplication.isPlaying = true;
         }
 
@@ -372,12 +453,20 @@ gorsel: eller          tam ekran görsel (eller = kendi gözünden eller) / yok
 bekle: 0.5   cikar: Anne   temizle:
 son: yumusak Devamı yarın...   merak bırakan yumuşak bitiş
 son: sert                      gerilimde bir anda kesilir (siyah ekran)
+secim: A) Söylesin / B) Saklasın   izleyici seçim kartı (açıklamaya da yazılır)
+sonuc: %69 A                   yeni bölüm başında oylama sonucu kartı
+seri: Sessiz Değişim   bolum: 3   baslik: Annem beni tanımadı   (kapak ve açıklama)
+oyuncu: Arda = Timmy           Arda'yı 3D karakterle oynat (Karakterler/Hazir; 'yok' = çizgi karakter)
+                               Duygu/hareket → 3D animasyon tablosu: Kütüphane > animEsleme
 
 SES ETİKETLERİ (altyazıda görünmez)
 (iç çek) (ağla) (hıçkır) (gül) (kıkırda) (nefes) (nefesi kesil) (fısılda) (öksür) (kısa ara) (uzun ara)
 ya da Gemini etiketleri: <sigh> <sob> <laugh> <gasp> <breath> <whispering> <short pause> <long pause>
 *kelime*  vurgu işareti (altyazıda yıldız görünmez)
 Örnek: [Anne|aglamakli|dis] Oğlum (hıçkır) gözlerini açtın!
+
+VİDEOYA AL: Videolar/Hikaye/<bölüm>_<tarih>/ klasörüne video, kapak.png ve aciklama.txt çıkar;
+kayıt sonunda ses yüksekliği (LUFS) ölçülür ve açıklamadaki notlara yazılır.
 
 İPUCU: Duygusal satırlar ve iç ses otomatik yakın çekilir. Boşluk tuşu önizlemeyi duraklatır.";
     }
