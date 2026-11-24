@@ -150,6 +150,9 @@ namespace HikayeStudyo
         public string VoiceFor(StoryItem it)
         {
             var d = FindCharacter(it.Character) ?? narrator;
+            // Uygulama (exe): kullanicinin karakter -> ses atamasi (bos ise karakterin kendi sesi)
+            string at = DisSes.Atama(d.id, it.Inner);
+            if (!string.IsNullOrEmpty(at)) return at;
             if (it.Inner && !string.IsNullOrEmpty(d.innerVoice)) return d.innerVoice;
             return d.voice;
         }

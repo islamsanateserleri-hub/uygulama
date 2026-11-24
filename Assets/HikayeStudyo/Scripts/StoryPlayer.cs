@@ -261,6 +261,7 @@ namespace HikayeStudyo
                 {
                     clip = Resources.Load<AudioClip>("Ses/" + storyName + "/" + key);
                     if (clip == null) clip = Resources.Load<AudioClip>("Ses/" + storyName + "/" + it.VoiceIndex.ToString("00"));
+                    if (clip == null) clip = DisSes.Yukle(storyName, key);
                     if (clip != null) clip = ProcAudio.Clean(clip);
                     byKey[key] = clip;
                 }

@@ -73,6 +73,7 @@ namespace HikayeStudyo
         // =====================================================================
         void YazmaAc(HikayeBilgi h)
         {
+            Gunluk("YazmaAc başladı: " + h.ad);
             try
             {
                 if (h.yerlesik || string.IsNullOrEmpty(h.yol))
@@ -97,7 +98,7 @@ namespace HikayeStudyo
             yKaydirma = ySorunKaydirma = yPanoKaydirma = 0f;
             yImlec = 0; yImlecIstek = 0; ySecimIstek = -1; yOncekiImlec = -1; yIstekSayaci = 0; yAtlaIdx = -1;
             yDenetimGerek = true; ySatirYGerek = true; ySahneGerek = true; ySecSahne = 0;
-            yPano = false; acikId = null; yUretiyor = false; yUretimMesaj = "";
+            yPano = false; ySes = false; acikId = null; yUretiyor = false; yUretimMesaj = "";
             foreach (var t in yKucukler.Values) if (t != null) Destroy(t);
             yKucukler.Clear();
             yDurum = "Açıldı";
@@ -108,7 +109,7 @@ namespace HikayeStudyo
             var ol = Resources.Load<OyuncuListesi>("OyuncuListesi");
             if (ol != null) foreach (var pf in ol.prefablar) if (pf != null) adlar.Add(pf.name);
             yOyuncuAdlari = adlar.ToArray();
-            yazmaAcik = true;
+            yazmaAcik = true; yIlkKareLog = true;
             Gunluk("YazmaAc: " + yH.ad + " (" + yMetin.Length + " karakter)");
         }
 
@@ -257,7 +258,7 @@ namespace HikayeStudyo
         void AtlaSatir(int satirNo)
         {
             if (satirNo <= 0) return;
-            yPano = false;
+            yPano = false; ySes = false;
             yAtlaIdx = SatirBaslangici(satirNo);
             yIstekSayaci = 0; yTakip = true;
         }
@@ -379,8 +380,10 @@ namespace HikayeStudyo
         // =====================================================================
         // Ana çizim
         // =====================================================================
+        bool yIlkKareLog = true;
         void YazmaOnGUI(Rect ic)
         {
+            if (yIlkKareLog) { yIlkKareLog = false; Gunluk("YazmaOnGUI ilk kare"); }
             var ev = Event.current;
             float now = Time.realtimeSinceStartup;
 
@@ -396,6 +399,7 @@ namespace HikayeStudyo
                 try { ySorunlar = HikayeDenetci.Denetle(yMetin, kutuphane, yOyuncuAdlari); }
                 catch (Exception e) { ySorunlar = new List<DenetimSorunu>(); Gunluk("Denetim HATA: " + e.Message); }
                 yDenetimGerek = false;
+                Gunluk("Denetim bitti: " + ySorunlar.Count);
             }
             if (yMetin != yDiskte && now - yDegisim > 1.5f && !yUretiyor) KaydetYazma(true);
             if (yMetin != yDiskte) yDurum = "Kaydedilmedi…";
@@ -412,18 +416,20 @@ namespace HikayeStudyo
 
             // ---- sekmeler ----
             float ty = ic.y + 44;
-            if (Dugme(new Rect(ic.x, ty, 150, 34), "Yaz", !yPano ? Vurgu : new Color32(60, 66, 88, 255), 14)) yPano = false;
-            if (Dugme(new Rect(ic.x + 158, ty, 170, 34), "Sahne panosu", yPano ? Vurgu : new Color32(60, 66, 88, 255), 14)) { yPano = true; ySahneGerek = true; }
+            if (Dugme(new Rect(ic.x, ty, 150, 34), "Yaz", !yPano && !ySes ? Vurgu : new Color32(60, 66, 88, 255), 14)) { yPano = false; ySes = false; }
+            if (Dugme(new Rect(ic.x + 158, ty, 170, 34), "Sahne panosu", yPano ? Vurgu : new Color32(60, 66, 88, 255), 14)) { yPano = true; ySes = false; ySahneGerek = true; }
+            if (Dugme(new Rect(ic.x + 336, ty, 110, 34), "Ses", ySes ? Vurgu : new Color32(60, 66, 88, 255), 14)) { ySes = true; yPano = false; SesVerisiniYenile(true); }
             int hata = HikayeDenetci.HataSayisi(ySorunlar);
             int uyari = ySorunlar.Count - hata;
             string ozet = hata == 0 && uyari == 0 ? "Sorun yok" : hata + " hata, " + uyari + " uyarı";
-            Yazdir(new Rect(ic.x + 340, ty, 260, 34), ozet, 13, hata > 0 ? new Color(1f, 0.59f, 0.59f) : (uyari > 0 ? new Color(0.94f, 0.75f, 0.31f) : Basari));
-            Yazdir(new Rect(ic.xMax - 330, ty, 330, 34), "İmleç: satır " + ImlecSatiri() + "   ·   Ctrl+Z geri al, Ctrl+Y yinele", 12, Sönük, TextAnchor.MiddleRight);
+            Yazdir(new Rect(ic.x + 460, ty, 200, 34), ozet, 13, hata > 0 ? new Color(1f, 0.59f, 0.59f) : (uyari > 0 ? new Color(0.94f, 0.75f, 0.31f) : Basari));
+            Yazdir(new Rect(ic.xMax - 300, ty, 300, 34), "İmleç: satır " + ImlecSatiri() + "   ·   Ctrl+Z geri al, Ctrl+Y yinele", 12, Sönük, TextAnchor.MiddleRight);
 
             var alan = new Rect(ic.x, ty + 40, ic.width, ic.yMax - (ty + 40));
-            if (yPano) PanoCiz(alan); else YazCiz(alan);
+            if (ySes) SesSekmesiCiz(alan); else if (yPano) PanoCiz(alan); else YazCiz(alan);
 
             GUI.enabled = true;
+            if (sesGitIstek) { sesGitIstek = false; Git(Bolum.Ses); return; }
             if (yUretiyor)
             {
                 var r = new Rect(ic.x + ic.width * 0.5f - 260, ic.y + ic.height * 0.5f - 40, 520, 80);

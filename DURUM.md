@@ -29,8 +29,9 @@ Eski defterler/notlar `_Arsiv/` altında, okunmaz. Plan: `Hikaye_Studyo_Gelistir
 | 0 Hazırlık | TAMAM |
 | 1 Unity'siz video kaydı | TAMAM, onaylandı (12/12 madde denendi) |
 | 2 Bağımsız uygulama arayüzü | TAMAM, onaylandı (commit d7e8e23) |
-| 3 Hikâye yazma ekranı + otomatik sahne | **TAMAM (EXE'de test edildi), kullanıcı onayı bekleniyor** (Aşama 4'e onaysız geçme) |
-| 4–16 | Başlanmadı (4 = Gemini ses, 5 = video düzenleme/dışa aktarma) |
+| 3 Hikâye yazma ekranı + otomatik sahne | TAMAM, onaylandı (commit 9082643) |
+| 4 Gemini ses sistemi | **YAZILDI, derlendi (0 hata), EXE'de KISMEN test edildi; gerçek Gemini isteği denenmedi** (Aşama 5'e onaysız geçme) |
+| 5–16 | Başlanmadı (5 = video düzenleme/dışa aktarma) |
 
 ## Özet: Aşama 0-2 (tamam)
 - Aşama 0: dört derleme birimi (Core/Runtime/Editor/App), KarakterKatalogu (68 karakter), menü "Hikaye/Windows Derlemesi (Deneme)".
@@ -38,15 +39,17 @@ Eski defterler/notlar `_Arsiv/` altında, okunmaz. Plan: `Hikaye_Studyo_Gelistir
 - Aşama 2: `Uygulama/AnaEkran.cs` (IMGUI; 8 bölüm: Yeni hikâye, Hikâyelerim, Karakterlerim, Mekânlar, Ses, Video, Projeler, Ayarlar), "Hikâye Stüdyosu" kimliği, masaüstü kısayolu; Unity Editör kapalıyken test edildi. GUI.BeginScrollView ölçek≠1'de tıklamayı bozduğu için kendi kaydırma alanı (ListeBasla/ListeBitir).
 - Plan dışı önceden yazılanlar (3D karakter/mekân/kamera/atmosfer, Stüdyo köprüsü, doğrulayıcı vb.) Editörde oynadı, ayrıca görsel doğrulanmadı.
 
-## Aşama 3: Hikâye yazma ekranı ve otomatik sahne
-Yeni/değişen dosyalar (`Assets/HikayeStudyo/Uygulama/`): `AnaEkran.Yazma.cs` (yazma ekranı + sahne panosu), `HikayeDenetci.cs` (Editör'süz doğrulayıcı), `CanliOnizleme.cs` (canlı önizleme), `AnaEkran.cs` (partial; Düzenle/Yeni hikâye yazma ekranını açar). Komut sistemi (StoryParser/KomutKayit) AYNEN korundu; kullanıcı komut yazabilir ya da menülerden seçebilir.
-- Yazma ekranı: satır numaralı metin alanı + imleç satırı vurgusu; hızlı ekleme çubuğu (konuşma: karakter/duygu/dış-iç/hareket menüleri; komut: tüm komutlar + değer menüleri: mekân, mekan3d, kamera, efekt, atmosfer, müzik, poz, oyuncu, bekle, son…); hata/uyarı paneli (satıra tıkla → atlar, "Düzelt" önerisi uygular, hatalar önce); Geri al/Yinele (düğme + Ctrl+Z/Y); otomatik kayıt (1,5 sn boşta, `Documents\HikayeStudyosu\Hikayeler\<ad>.txt`, ilk açılışta `Yedek\`e kopya); örnek hikâyeler "Kopyala+düzenle" ile kopyası açılır; yan panelde 9:16 canlı önizleme (RenderTexture; Baştan / imleç satırından oynat, Durdur → sahne yeniden yüklenir); sahne ekranda doğru oranda, kırpılmıyor.
-- Sahne panosu: `mekan:` satırlarında sahnelere böler (başlık satırları seri/bolum/baslik/kanca/oyuncu/geri ve sondaki son/secim/sonuc sabit kalır); kart: gerçek ekran görüntüsü, mekân, karakterler, konuşma sayısı, tahmini süre, ilk replik. İşlemler: küçük resmi yenile, eksikleri/tümünü üret, bu sahneyi oynat, yukarı/aşağı taşı, karakter değiştir (sahne içinde), kamera uygula. Küçük resim önbelleği `Documents\HikayeStudyosu\Onbellek\<hikâye>\<özet>.png`; özet = başlık + sahne metni (boş satır/yorum yok sayılır) → bir sahne değişince yalnız o sahne eskir.
-- Derleme: Hikaye.App.dll yenilendi, 0 hata (DLL'de metinler doğrulandı); EXE derlemesi Succeeded (iki kez, 793 MB). Unity Editör KAPALI iken test.
-- GERÇEK TEST (EXE, ekran görüntüleriyle): Hikâyelerim → ornek "Kopyala+düzenle" → ornek_kopya açıldı; "Satır ekle" satır ekledi, yazı yerine geçti, "Kaydedildi 23:50:05"; komut menüsü (kamera) → Ekle; hatalı "kamra: yakin" → hata paneli + "Düzelt" → "kamera: yakin"; Baştan oynat → önizleme 9:16 dikey ve doğru yönde (yağmur, "1 saat önce"); Durdur; Sahne panosu → 2 kart → "Eksikleri üret (2)" → 2 gerçek küçük resim; kamera=genis uygula → yalnız o sahne eskidi (diğeri kaldı) → "Eksikleri üret (1)" yalnız onu üretti; Aşağı/Yukarı taşıma metni değiştirdi, taşınan sahnelerin küçük resimleri kaldı (özet düzeltmesinden sonra yeniden doğrulandı); karakter değiştir Arda→Baba (7 satır), Ctrl+Z geri aldı; "Bu sahneyi oynat" sahneyi önizlemede oynattı; Yeni hikâye (ad yazıldı) → şablon + yazma ekranı açıldı; kapat-aç sonrası otomatik kayıt kalıcı (8 konuşma); pencere büyütme çalıştı. EXE günlüğünde hata yok.
-- Düzeltilen hatalar: sahne taşınınca küçük resim eskiyordu (özet boş satır/yorum içeriyordu → normalleştirildi); hata paneli uyarıları arasında kayboluyordu (hatalar öne alındı, panel büyütüldü).
-- Aşama 3 AÇIK / test EDİLMEDİ: yazarak geri alma (Ctrl+Z yalnız sahne işleminde denendi) ve Ctrl+Y/Ctrl+S; "Satır N'den oynat" düğmesi (aynı yol "Bu sahneyi oynat" ile denendi); önizlemede ses (Aşama 4'e kadar hikâye sesi yok); çok uzun hikâyede (200+ satır) satır numarası/performans; Türkçe karakter yazımı (Segoe UI; yalnız ASCII yazıldı); sahne içi karakter değiştirme `oyuncu:` satırlarına dokunmaz; sahne panosunda küçük resim üretimi sahne başına ~7 sn (her biri için sahne yeniden yüklenir); küçük resim 3,2 sn sonra alınır (ilk replikten önce olabilir); doğrulayıcı süre tahmini yaklaşık.
-- Eski açık sorunlar: Mixamo karakterlerde ağız hareketi yok (Aşama 9); doğrulayıcı/`Docs/HikayeSozdizimi.md` 3D mekân komutlarını tam içermiyor (uygulama içi doğrulayıcı mekan3d/kamera değerlerini biliyor); görev çubuğu simgesi doğrulanmadı; Aşama 2 listesindeki test edilmemişler (Klasörü aç/Not Defteri, ses kaydırgacı etkisi, 60 FPS kayıt, ayarları sıfırla).
+## Aşama 3 (tamam, onaylı; ayrıntı için git geçmişi 9082643)
+`AnaEkran.Yazma.cs` (yazma ekranı + sahne panosu), `HikayeDenetci.cs`, `CanliOnizleme.cs`. Satır numaralı editör, hızlı ekleme çubuğu, hata paneli + Düzelt, Geri al/Yinele, otomatik kayıt (Documents\HikayeStudyosu\Hikayeler), canlı 9:16 önizleme, sahne panosu (küçük resim önbelleği, taşı, karakter/kamera değiştir). EXE'de gerçek test edildi.
+Açık: yazarak Ctrl+Z, Ctrl+Y/Ctrl+S, "Satır N'den oynat", Türkçe karakter yazımı, 200+ satır performansı test EDİLMEDİ. Eski: Mixamo ağız hareketi yok (Aşama 9); görev çubuğu simgesi doğrulanmadı; Aşama 2 denenmeyenler (Klasörü aç, ses kaydırgacı etkisi, 60 FPS kayıt, ayarları sıfırla).
+
+## Aşama 4: Gemini ses sistemi (yazıldı, kısmen test)
+Yeni: `Scripts/DisSes.cs` (kalıcı ses klasörü Documents\HikayeStudyosu\Ses\<hikâye>\<anahtar>.wav, WAV okuyucu, karakter→ses ataması PlayerPrefs `HS_SesAta_*`, deneme sesi klasörü `_deneme`), `Uygulama/GeminiUygulama.cs` (Gemini TTS isteği, 400/429/kesik ses yeniden denemesi, kota ~10/gün, yedek `_yedek`), `Uygulama/AnaEkran.Ses.cs` (Ses ayarları sayfası + yazma ekranında "Ses" sekmesi). Değişen: `StoryLibrary.VoiceFor` (atamayı okur), `StoryPlayer.PreloadVoices` (Resources'ta yoksa kalıcı klasör), `AnaEkran.cs`/`AnaEkran.Yazma.cs`. Anahtar = ses+ton+metin → yalnız değişen satır yeniden üretilir. Mevcut miks (−14 LUFS, −1 dBFS sınırlayıcı, otomatik kazanç, konuşurken müzik kısma) AYNEN.
+- Derleme: DLL'ler 0 hata; EXE Succeeded (793 MB).
+- GERÇEK TEST (EXE, Editör kapalı): Ses ayarları açıldı, anahtar yokken "Anahtar yok" + üret düğmesi pasif; Arda Puck→Fenrir atandı, uygulama kapat-aç sonrası kaldı, Ses sekmesinde yalnız Arda'nın dış satırı Fenrir oldu; Ses sekmesi 8 satırı "Eksik" (0/8) listeledi; "Deneme sesi üret" 8 sentetik ses yazdı (Gemini sesi DEĞİL, kota harcamaz); deneme sesi açıkken Oyna sesli oynadı, rapor −17,1 LUFS (hedef −14), tepe −7,5 dBFS, kazanç +6,0 dB → ses→miks→ölçüm hattı çalışıyor. Deneme anahtarı testten sonra KAPATILDI.
+- TEST EDİLMEDİ: gerçek Gemini isteği (API anahtarı yok; anahtar kutusuna ben anahtar yazmam), kota sayacı, 429/400 yolları, yeniden üret+yedek+geri alma, kesik ses yeniden denemesi, Dinle düğmesi (deneme sesi kapalıyken deneme dosyası yüklenmiyor: düzeltilecek; ayrıca sesi duyamıyorum).
+- Bilinen kusur: dar pencerede Ses sekmesi üst düğmeleri üst üste biniyor (düzeltilecek). Aşama 5'te `kaydet` deneme sesi varken REDDETMELİ.
+- Test notu: Claude penceresi ekranın sağında açılınca oradaki tıklamaları yakalıyor; uygulamayı Win+Sol ile sola yapıştırıp denedim (Düzenle "çalışmıyor" gibi göründü, uygulama hatası değildi).
 
 ## DERSLER
 - `device_commit_files` önceki halini yükleyebilir: yaz, `sync; sleep 6`, commit, `device_stage_files` ile boyut doğrula.
@@ -54,4 +57,4 @@ Yeni/değişen dosyalar (`Assets/HikayeStudyo/Uygulama/`): `AnaEkran.Yazma.cs` (
 - C# 9: renk üçlü ifadelerinde Color32/Color karışımı hedef türüyle çalışır; GUI grup/kaydırma arasında `return` yapma.
 
 ## Sonraki adım
-Kullanıcı Aşama 3'ü onaylarsa Aşama 4 (Gemini ses). Onaysız başlama.
+1) Dinle düzeltmesi + düğme yerleşimi, yeniden derle/dene. 2) Kullanıcı API anahtarını girerse 1 satır gerçek Gemini testi. 3) Aşama 4 raporu, onay beklenir; Aşama 5'e onaysız geçme. Her adımda DURUM.md ve "DURUM.dm" Doc'u (Claude Docs, claude.ai/artifact/1RntmDHcKyA7NvjmKDoybk) birlikte güncelle.

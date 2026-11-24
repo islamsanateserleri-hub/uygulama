@@ -87,6 +87,7 @@ namespace HikayeStudyo
 
         void Awake()
         {
+            Application.logMessageReceived += (m, st, t) => { if (t == LogType.Error || t == LogType.Exception || t == LogType.Assert) Gunluk(t + ": " + m + " | " + (st ?? "").Replace("\n", " > ")); };
             try { Directory.CreateDirectory(HikayeKlasoru); Directory.CreateDirectory(VideoKlasoru); } catch (Exception e) { Debug.LogWarning("[AnaEkran] klasör: " + e.Message); }
             try { font = Font.CreateDynamicFontFromOSFont(new[] { "Segoe UI", "Arial", "Liberation Sans" }, 32); } catch { font = null; }
             if (font == null) font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
@@ -528,17 +529,6 @@ namespace HikayeStudyo
                 PlayerPrefs.SetFloat(anahtar, yeni);
                 if (genel) AudioListener.volume = yeni;
             }
-        }
-
-        void SesCiz(Rect ic)
-        {
-            Baslik(ic, "Ses ayarları", "Seviyeler otomatik kaydedilir ve hikâye oynarken uygulanır.");
-            SesSatiri(ic, ic.y + 100, "Genel ses", "HS_SesGenel", 1f, true);
-            SesSatiri(ic, ic.y + 156, "Konuşma sesi", "HS_SesKonusma", 1f, false);
-            SesSatiri(ic, ic.y + 212, "Müzik ve ortam sesi", "HS_SesMuzik", 0.09f, false);
-            SesSatiri(ic, ic.y + 268, "Efekt sesleri", "HS_SesEfekt", 0.85f, false);
-            Yazdir(new Rect(ic.x, ic.y + 340, ic.width, 50),
-                "Karakter sesleri ve Gemini seslendirme ayarları Aşama 4'te bu ekrana eklenecek.", 13, Sönük, TextAnchor.UpperLeft, false, true);
         }
 
         void VideoCiz(Rect ic)
