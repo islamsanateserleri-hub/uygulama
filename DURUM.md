@@ -10,6 +10,7 @@ Eski defterler/notlar `_Arsiv/` altında, okunmaz. Plan: `Hikaye_Studyo_Gelistir
 4. Çalışan özellikleri bozma; değişiklikten önce yedek; her değişiklikten sonra derlemeyi kontrol et; hataları gizleme.
 5. Her aşama sonu raporu: yapılanlar, değişen dosyalar, eklenenler, düzeltilen hatalar, derleme sonucu, gerçek test, açık sorunlar, commit, sonraki aşama.
 6. Hedef: Unity bilmeyen kullanıcı hikâyeyi yazıp karakter seçerek tek tuşla 1080x1920 sesli, animasyonlu film üretsin (bağımsız Windows uygulaması).
+7. Her işlemde hem bu dosyaya hem "DURUM.md" not defterine (Claude Docs, https://claude.ai/artifact/QfqgRcP5tUvdKXQ3JzP11x) aynı şekilde yaz (25 Kas 2026 kullanıcı isteği). Alt ajan kullanılabilir.
 
 ## YENİ SOHBET NASIL BAŞLATILIR
 1. Bilgisayardaki Claude masaüstü uygulamasında yeni sohbet aç, + menüsünden **Klasör ekle** ile `C:\Users\Teknodc\My project` klasörünü bağla (bağlanmazsa Claude cihaz dosyalarını göremez ve DURUM.md'yi okuyamaz).
@@ -65,4 +66,10 @@ Kurallar: bozma, yedek, derleme kontrolü, test edilmeyen "tamam" değil, aşama
 Ayrıntılı sürüm: Doc "DURUM.dm" → "TAM GELİŞTİRME PLANI".
 
 ## Sonraki adım
-1) (YAPILDI 00:40) Dinle düzeltmesi + düğme yerleşimi. 2) Kullanıcı API anahtarını girerse 1 satır gerçek Gemini testi. 3) Aşama 4 raporu, onay beklenir; Aşama 5'e onaysız geçme. Her adımda DURUM.md ve "DURUM.dm" Doc'u (Claude Docs, claude.ai/artifact/1RntmDHcKyA7NvjmKDoybk) birlikte güncelle.
+1) (YAPILDI 00:40) Dinle düzeltmesi + düğme yerleşimi. 2) Kullanıcı API anahtarını girerse 1 satır gerçek Gemini testi. 3) Aşama 4 raporu, onay beklenir; Aşama 5'e onaysız geçme. Her adımda DURUM.md ve "DURUM.md" not defterini (claude.ai/artifact/QfqgRcP5tUvdKXQ3JzP11x) birlikte güncelle. (Eski Doc "DURUM.dm": claude.ai/artifact/1RntmDHcKyA7NvjmKDoybk, yalnız tam plan için.)
+
+## İŞLEM GÜNLÜĞÜ
+- 25 Kas 01:15 — "DURUM.md" not defteri oluşturuldu. Alt ajanlar başlatıldı: (1) Dinle düzeltmesi, (2) Aşama 4 kod denetimi, (3) GitHub karşılaştırması. Uygulama izinleri alındı (Unity Hub, Unity, Gezgin, Hikayestudyo.exe).
+- 25 Kas 01:20 — GitHub ajanı: Dinle düzeltmesi + düğme yerleşimi ZATEN YAPILMIŞ (commit 8bbb478, 00:40). Cihazdaki 12 .cs dosyası depoyla bayt bayt AYNI (YukleDeneme cihazda var). Cihazdaki DURUM.md 00:40 güncellemesini kaybetmişti (DERSLER'deki commit sorunu); depodaki sürümden geri yüklendi + kural 7 + bu günlük eklendi. (1) numaralı ajan gereksiz olduğu için durduruldu, cihaza hiçbir şey yazmadı. PR #1 durumu okunamadı (API 403); push için repo yetkisi gerekecek.
+- 25 Kas 01:22 — Denetçi ajan raporu (kritik yok; orta: tek satır hatası toplu üretimi kilitliyor, yalnız parts[0] okunuyor, kesik ses denemesi kotayı yiyor (KisaTekrar=3), Geri al arayüzde yok ve yeni sesi siliyor, Durdur 30–120 sn gecikiyor, anahtar düz metin (Aşama 7)). Gemini şeması resmi belgeyle DOĞRULANDI (gemini-3.8-flash-tts, speech_metadata.style, voiceConfig.voice; varsayılan çıktı 24 kHz mono 16-bit WAV; Türkçe destekli) → #5 değişiklik gerekmez. Kodlayıcı ajan #1,2,3,4,6,8,9,10,12,15'i düzeltiyor. Orijinaller yedeklendi: Yedek_2026-11-25_asama4/ (GeminiUygulama.cs, AnaEkran.Ses.cs, DisSes.cs).
+- 25 Kas 01:29 — Düzeltmeler cihaza yazıldı (GeminiUygulama.cs 27511 B, AnaEkran.Ses.cs 18486 B; stage ile bayt bayt doğrulandı). Unity Hub'dan proje açıldı, otomatik derlendi: Hikaye.App.dll (01:27:55) yeni metinleri içeriyor → C# derleme başarılı. Konsoldaki AvatarBuilder 'Hips' hataları Mixamo içe aktarma kaynaklı, kodla ilgisiz. EXE kapatıldı, `menu: Hikaye/Windows Derlemesi (Deneme)` komutu verildi.

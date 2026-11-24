@@ -189,6 +189,7 @@ namespace HikayeStudyo
         float ySesYenile = -10f;
         readonly Dictionary<string, float> ySesDurum = new Dictionary<string, float>();
         readonly HashSet<string> ySesDeneme = new HashSet<string>();
+        HashSet<string> ySesYedek = new HashSet<string>();
         bool ySesOncekiMesgul;
 
         void SesVerisiniYenile(bool zorla)
@@ -210,6 +211,7 @@ namespace HikayeStudyo
             ySesOncekiMesgul = GeminiUyg.Busy;
             ySesYenile = now;
             ySesDurum.Clear(); ySesDeneme.Clear();
+            ySesYedek = GeminiUyg.YedekAnahtarlari(yH.ad);
             if (kutuphane == null) return;
             foreach (var it in ySesSatirlar)
             {
@@ -287,7 +289,16 @@ namespace HikayeStudyo
                 if (sure >= 0f) { etiket = "Hazır " + sure.ToString("0.0") + " sn"; renk = Basari; }
                 else if (sure <= -1.5f) { etiket = "Deneme sesi"; renk = new Color(0.94f, 0.75f, 0.31f); }
                 else { etiket = "Eksik"; renk = new Color(1f, 0.59f, 0.59f); }
-                Yazdir(new Rect(w - 322, r.y + 4, 110, 46), etiket, 13, renk, TextAnchor.MiddleLeft, true);
+                bool yedekli = ySesYedek.Contains(k);
+                Yazdir(new Rect(w - 322, r.y + 4, 110, yedekli ? 24 : 46), etiket, 13, renk, TextAnchor.MiddleLeft, true);
+                // Yedegi varsa etiketin altinda kucuk "Geri al" (genislik degismez, dar pencere yerlesimi korunur)
+                if (yedekli && Dugme(new Rect(w - 322, r.y + 29, 104, 22), "Geri al", new Color32(60, 66, 88, 255), 11, !mesgul))
+                {
+                    sesMesaj = GeminiUyg.YedegiGeriAl(yH.ad, kutuphane, it)
+                        ? it.Line + ". satır: önceki ses geri alındı (yeni ses yedeğe kondu; tekrar basarsan yer değiştirir)."
+                        : it.Line + ". satır: yedek geri alınamadı.";
+                    ySesVerisiniZorla();
+                }
                 bool dinlenir = sure >= 0f || sure <= -1.5f;
                 if (Dugme(new Rect(w - 206, r.y + 10, 62, 34), "Dinle", new Color32(60, 66, 88, 255), 12, dinlenir)) Dinle(k);
                 if (Dugme(new Rect(w - 138, r.y + 10, 128, 34), sure >= 0f ? "Yeniden üret" : "Üret", Vurgu, 12, !mesgul && anahtarVar))
