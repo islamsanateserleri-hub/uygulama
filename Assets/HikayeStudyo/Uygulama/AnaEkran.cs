@@ -13,7 +13,7 @@ namespace HikayeStudyo
     // Aşama 2: Unity Editör'den bağımsız uygulama ana ekranı (IMGUI, kodla çizilir).
     // Bölümler: Yeni hikâye, Hikâyelerim, Karakterlerim, Mekânlar, Ses ayarları, Video ayarları, Projeler, Ayarlar.
     // Yalnızca derlenmiş uygulamada (EXE) ve "-kayit/-hikaye" argümanı yokken açılır.
-    public class AnaEkran : MonoBehaviour
+    public partial class AnaEkran : MonoBehaviour
     {
         enum Bolum { Ana, YeniHikaye, Hikayelerim, Karakterlerim, Mekanlar, Ses, Video, Projeler, Ayarlar }
 
@@ -275,6 +275,8 @@ namespace HikayeStudyo
             Kutu(icerik, Panel);
             var ic = new Rect(icerik.x + 24, icerik.y + 20, icerik.width - 48, icerik.height - 40);
 
+            if (yazmaAcik) { YazmaOnGUI(ic); return; }
+
             switch (bolum)
             {
                 case Bolum.Ana: AnaCiz(ic); break;
@@ -291,6 +293,7 @@ namespace HikayeStudyo
 
         void Git(Bolum b)
         {
+            if (yazmaAcik) YazmaKapat();
             bolum = b; kaydirma = 0f; mesaj = ""; sifirlaOnay = false;
             if (b == Bolum.Hikayelerim) HikayeleriYukle();
             if (b == Bolum.Projeler) VideolariYukle();
@@ -397,7 +400,7 @@ namespace HikayeStudyo
                 if (Dugme(new Rect(ic.x + 256, by, 220, 42), "Hikâyelerim'e git", new Color32(60, 66, 88, 255), 15)) Git(Bolum.Hikayelerim);
             }
             Yazdir(new Rect(ic.x, ic.yMax - 60, ic.width, 50),
-                "Hikâyeni yazma ekranı bir sonraki aşamada (Aşama 3) gelecek; şimdilik oluşan dosyayı Not Defteri ile düzenleyebilirsin.", 13, Sönük, TextAnchor.UpperLeft, false, true);
+                "Oluşturunca hikâye yazma ekranı açılır: menülerden seçerek ya da doğrudan komut yazarak hikâyeni yaz.", 13, Sönük, TextAnchor.UpperLeft, false, true);
         }
 
         void YeniHikayeOlustur(string ad)
@@ -412,6 +415,7 @@ namespace HikayeStudyo
                 sonOlusturulan = yol; yeniAd = "";
                 mesaj = "Hikâye oluşturuldu: " + yol; mesajHata = false;
                 HikayeleriYukle();
+                foreach (var hh in hikayeler) if (!hh.yerlesik && hh.yol == yol) { YazmaAc(hh); break; }
             }
             catch (Exception e) { mesaj = "Hikâye oluşturulamadı: " + e.Message; mesajHata = true; }
         }
@@ -429,6 +433,7 @@ namespace HikayeStudyo
             if (Dugme(new Rect(ic.xMax - 170, ic.y + 4, 170, 38), "Klasörü aç", new Color32(60, 66, 88, 255), 14)) Ac("explorer.exe", "\"" + HikayeKlasoru + "\"");
             var gorunum = new Rect(ic.x, ic.y + 80, ic.width, ic.height - 130);
             const float sat = 64;
+            HikayeBilgi acilacak = null;
             ListeBasla(gorunum, Mathf.Max(gorunum.height, hikayeler.Count * (sat + 8)));
             for (int i = 0; i < hikayeler.Count; i++)
             {
@@ -438,10 +443,11 @@ namespace HikayeStudyo
                 Yazdir(new Rect(r.x + 18, r.y + 8, r.width - 360, 28), h.ad, 18, Yazi, TextAnchor.MiddleLeft, true);
                 string alt = (h.yerlesik ? "Örnek hikâye" : "Benim hikâyem") + (h.konusma >= 0 ? "  ·  " + h.konusma + " konuşma" : "");
                 Yazdir(new Rect(r.x + 18, r.y + 34, r.width - 360, 22), alt, 13, Sönük);
-                if (!h.yerlesik && Dugme(new Rect(r.xMax - 330, r.y + 12, 120, 40), "Düzenle", new Color32(60, 66, 88, 255), 14)) Ac("notepad.exe", "\"" + h.yol + "\"");
+                if (Dugme(new Rect(r.xMax - 330, r.y + 12, 120, 40), h.yerlesik ? "Kopyala+düzenle" : "Düzenle", new Color32(60, 66, 88, 255), h.yerlesik ? 12 : 14)) acilacak = h;
                 if (Dugme(new Rect(r.xMax - 196, r.y + 12, 180, 40), "Oyna", Vurgu, 16)) Oyna(h);
             }
             ListeBitir(gorunum);
+            if (acilacak != null) { YazmaAc(acilacak); return; }
             MesajCiz(new Rect(ic.x, ic.yMax - 44, ic.width, 40));
         }
 
