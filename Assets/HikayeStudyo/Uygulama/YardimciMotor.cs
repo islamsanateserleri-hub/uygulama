@@ -198,6 +198,13 @@ namespace HikayeStudyo
             return o;
         }
 
+        // "donmek" ile "donmak" harfler sadelesince karisiyor; "buzdolabi" da soguk hava degil
+        internal static bool SogukAnlatiliyor(string metin)
+        {
+            if (Say(Kelimeler(metin), new[] { "usudum", "usuyorum", "soguk", "=buz", "=buzlu", "=buzda", "=karda", "=ayaz" }) > 0) return true;
+            return Regex.IsMatch(metin ?? "", @"(?<!\p{L})([Dd]ondum|[Dd]onuyorum|DONDUM|DONUYORUM)(?!\p{L})");
+        }
+
         // duyguya / anlatilana gore sinematik efekt onerisi (her sahnede her turden en fazla bir kez)
         static void EfektOner(YardimAnaliz a, int satir, string ad, string duygu, string metin, bool uc, HashSet<string> var1, string[] l)
         {
@@ -205,7 +212,7 @@ namespace HikayeStudyo
             // gozyasi ve nefes yalniz 3D sahnede gorunur
             if (uc && ad.Length > 0 && duygu == "aglamakli" && var1.Add("gozyasi"))
                 Ekle(a, OneriTuru.Efekt, satir, ad + " ağlarken gözyaşı efekti", l, "gozyasi: " + ad, true);
-            if (uc && ad.Length > 0 && Say(kel, new[] { "usudum", "usuyorum", "soguk", "dondum", "buz", "=karda", "=ayaz" }) > 0 && var1.Add("nefes"))
+            if (uc && ad.Length > 0 && SogukAnlatiliyor(metin) && var1.Add("nefes"))
                 Ekle(a, OneriTuru.Efekt, satir, "Soğuk anlatılıyor: nefes buharı", l, "nefes: " + ad, true);
             if (uc && Say(kel, new[] { "hatirliyorum", "hatirladim", "cocukken", "cocuklugum", "=eskiden" }) > 0 && var1.Add("ani"))
                 Ekle(a, OneriTuru.Efekt, satir, "Geçmiş anlatılıyor: anı görünümü (bitince 'ani: bitir' ekle)", l, "ani: sepya", true);

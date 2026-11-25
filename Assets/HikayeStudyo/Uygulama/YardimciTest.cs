@@ -52,6 +52,11 @@ namespace HikayeStudyo
             Bekle("cevrilen metinde denetci hatasi yok (" + hata + ")", hata == 0);
             Bekle("etiketli metin degismez", YardimciMotor.DuzMetniCevir(cevrilen, kars, mekanlar) == cevrilen);
 
+            Bekle("soguk: usudum", YardimciMotor.SogukAnlatiliyor("Çok üşüdüm."));
+            Bekle("soguk: dondum", YardimciMotor.SogukAnlatiliyor("Dışarıda donuyorum, dondum!"));
+            Bekle("soguk degil: dondum (geri geldim)", !YardimciMotor.SogukAnlatiliyor("Eve döndüm anne."));
+            Bekle("soguk degil: buzdolabi", !YardimciMotor.SogukAnlatiliyor("Buzdolabında süt var."));
+
             // 2) analiz: karakter, mekân, duygu, kamera, tutarlılık, yazım
             string m = "[Arda|normal|dis] herkez nerede ?\n[Ane|normal|dis] Korkuyorum, imdat!\nmekan: oda_gece\npoz: Arda yatiyor\n[Arda|normal|dis|kos] Günaydın.\nmekan: yol_gec\n[Baba|uzgun|dis] Üzgünüm.";
             var a = YardimciMotor.Incele(m, kars, mekanlar);
