@@ -185,3 +185,4 @@ Ayrıntılı sürüm: Doc "DURUM.dm" → "TAM GELİŞTİRME PLANI".
 - 25 Kas 18:08 — AŞAMA 15: bölüm şablonları, sezon oluşturma, fragman (hazır sesleri kopyalar), alternatif son A/B, `devami:` kartı, `oylama:` sorusu, seriye özel rozet rengi. Yeni: SeriUretici.cs, Docs/test_seri.txt. Derleme 0 hata (18:07); Seri testi 35/35; Yardımcı testi 43/43; test_seri yazıldı. Yedek: Yedek_2026-11-25_asama15/. Seri sekmesi ekranda denenmedi.
 - 25 Kas 18:10 — AŞAMA 16: maliyet/lisans değerlendirmesi yazıldı (Docs/Asama16_Degerlendirme.md). Kod yazılmadı (plan "sonraki sürüm"; ücretli hesap gerekiyor).
 - 25 Kas 18:12 — Windows derlemesi (18:11) Succeeded, 0 hata, 9 uyarı; aşama 14–15 artık EXE içinde. EXE açılıp DENENMEDİ; kurulum dosyası yeniden üretilmedi. Aşama 15 ekran karelerinden 2 yeni HATALI maddesi yazıldı.
+- 25 Kas 18:18 — Aşama 12–16 GitHub'a gönderildi (commit 87e9ad4; cihaz dosyalarıyla bayt bayt aynı). Sıradaki: HATALI listesini düzeltmek.
