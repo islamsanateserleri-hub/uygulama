@@ -24,6 +24,7 @@ namespace HikayeStudyo
         public const string MixamoDir = Root + "/Mixamo";
         public const string MixamoAnimDir = Root + "/MixamoAnimasyon";
         public const string VrmDir = Root + "/VRM";
+        public const string RocketboxDir = Root + "/Rocketbox";
         const string InstallKey = "HS_GltfKuruluyor";
         const string AskedKey = "HS_GaleriSoruldu";
         static bool scheduled;
@@ -87,7 +88,7 @@ namespace HikayeStudyo
         {
             return Files(Root + "/Insanlar/Erkek", ".glb").Length + Files(Root + "/Insanlar/Kadin", ".glb").Length +
                    Files(Root + "/Hayvanlar", ".glb").Length + Files(Root + "/Oyuncak", ".glb").Length +
-                   Files(Root + "/Oyuncak", ".fbx").Length + Files(MixamoDir, ".fbx").Length + Files(VrmDir, ".vrm").Length;
+                   Files(Root + "/Oyuncak", ".fbx").Length + Files(MixamoDir, ".fbx").Length + Files(VrmDir, ".vrm").Length + RocketboxModelleri().Count;
         }
 
         static int CountPrefabs() { return Files(Hazir, ".prefab").Length; }
@@ -115,14 +116,31 @@ namespace HikayeStudyo
         }
 
         // ---------- Karakterler ----------
-        public static int BuildAll(bool rebuild)
+        static List<AnimationClip> OrtakKlipler()
         {
-            Folder(Hazir);
             var ual = Clips(UalPath);
             if (ual.Count == 0) Debug.LogWarning("[Hikaye Stüdyosu] Animasyon kütüphanesi okunamadı: " + UalPath);
             // Mixamo'dan indirilen hikaye animasyonlari (aglama, yatma, uyuma, dusunme...) butun insanlara eklenir
             foreach (var p in Files(MixamoAnimDir, ".fbx"))
                 foreach (var c in Clips(p)) if (c.name != "Take 001") ual.Add(c);
+            return ual;
+        }
+
+        // Yalnizca gercekci (Rocketbox) karakterleri kurar; ayni yola yazildigi icin prefab kimlikleri degismez
+        public static int GercekKur(bool rebuild)
+        {
+            Folder(Hazir);
+            var ual = OrtakKlipler();
+            int made = 0;
+            try { foreach (var p in RocketboxModelleri()) if (RocketboxChar(p, ual, rebuild)) made++; }
+            finally { AssetDatabase.SaveAssets(); AssetDatabase.Refresh(); }
+            return made;
+        }
+
+        public static int BuildAll(bool rebuild)
+        {
+            Folder(Hazir);
+            var ual = OrtakKlipler();
             int made = 0;
             try
             {
@@ -133,6 +151,7 @@ namespace HikayeStudyo
                 foreach (var p in Files(Root + "/Oyuncak", ".fbx")) if (Own(p, "Oyuncak", rebuild)) made++;
                 foreach (var p in Files(MixamoDir, ".fbx")) if (MixamoChar(p, ual, rebuild)) made++;
                 foreach (var p in Files(VrmDir, ".vrm")) if (VrmChar(p, ual, rebuild)) made++;
+                foreach (var p in RocketboxModelleri()) if (RocketboxChar(p, ual, rebuild)) made++;
             }
             finally
             {
@@ -360,6 +379,134 @@ namespace HikayeStudyo
                 return false;
             }
             finally { Object.DestroyImmediate(go); }
+        }
+
+        // ---------- Gercekci insanlar (Microsoft Rocketbox, MIT lisansi) ----------
+        // Her karakter Karakterler/Rocketbox/<ad>/ altinda: <ad>_facial.fbx + .tga dokular
+        public static List<string> RocketboxModelleri()
+        {
+            var l = new List<string>();
+            if (!Directory.Exists(RocketboxDir)) return l;
+            foreach (var d in Directory.GetDirectories(RocketboxDir))
+                l.AddRange(Files(d.Replace('\\', '/'), ".fbx"));
+            l.Sort();
+            return l;
+        }
+
+        // "Female_Adult_01" -> "Gercek_Kadin01", "Police_Male_02" -> "Gercek_PolisErkek02"
+        static readonly string[,] RocketboxTr =
+        {
+            { "Female_Adult_", "Kadin" }, { "Male_Adult_", "Erkek" }, { "Female_Child_", "KizCocuk" }, { "Male_Child_", "ErkekCocuk" },
+            { "Female_Party_", "PartiKadin" }, { "Business_", "IsInsani" }, { "Chef_", "Asci" }, { "Construction_", "Insaat" },
+            { "Delivery_", "Kurye" }, { "Fire_", "Itfaiye" }, { "Gardener_", "Bahcivan" }, { "Medical_", "Saglik" },
+            { "Military_", "Asker" }, { "Pilot_", "Pilot" }, { "Police_", "Polis" }, { "Security_", "Guvenlik" },
+            { "Sports_", "Sporcu" }, { "Wood_", "Oduncu" }, { "Female_", "Kadin" }, { "Male_", "Erkek" },
+        };
+
+        public static string RocketboxAdi(string klasorAdi)
+        {
+            var n = klasorAdi;
+            for (int i = 0; i < RocketboxTr.GetLength(0); i++) n = n.Replace(RocketboxTr[i, 0], RocketboxTr[i, 1]);
+            return "Gercek_" + n.Replace("_", "").Replace(' ', '_');
+        }
+
+        static bool RocketboxChar(string path, List<AnimationClip> clips, bool rebuild)
+        {
+            string klasor = Path.GetDirectoryName(path).Replace('\\', '/');
+            string name = RocketboxAdi(Path.GetFileName(klasor));
+            string prefabPath = Hazir + "/" + name + ".prefab";
+            if (!rebuild && File.Exists(prefabPath)) return false;
+            var src = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            if (src == null) return false;
+            Avatar avatar = null;
+            foreach (var o in AssetDatabase.LoadAllAssetsAtPath(path)) if (o is Avatar) avatar = (Avatar)o;
+            if (avatar == null || !avatar.isHuman || !avatar.isValid)
+            {
+                RigRapor(name + ": FBX içe aktarımında geçerli Humanoid avatar yok, prefab atlandı: " + path, true);
+                return false;
+            }
+            var go = (GameObject)Object.Instantiate(src);
+            go.name = name;
+            try
+            {
+                var an = go.GetComponent<Animator>();
+                if (an == null) an = go.AddComponent<Animator>();
+                an.avatar = avatar;
+                an.applyRootMotion = false;
+                an.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+                var k = go.AddComponent<Karakter3D>();
+                k.id = name; k.kategori = "Gercek"; k.clips = clips; k.startClip = "Idle_Loop";
+                RocketboxMalzemeler(go, klasor, name);
+                PrefabUtility.SaveAsPrefabAsset(go, prefabPath);
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("[Hikaye Stüdyosu] " + name + " hazırlanamadı: " + e.Message);
+                return false;
+            }
+            finally { Object.DestroyImmediate(go); }
+        }
+
+        // Doku adindan parcayi cikar: "f110_head_color_a" -> parca "head", tur "color", ek "_a"
+        static readonly System.Text.RegularExpressions.Regex RbDoku =
+            new System.Text.RegularExpressions.Regex(@"^(?:[a-z]+\d+_)?(?:(.*?)_)?(color|normal)((?:_[a-z]+)?)$");
+
+        // FBX malzeme adi ("f110_head") ile ayni parcanin dokulari. Eksiz dosya varsa o, yoksa ekli olan (_a, _acu, _blue).
+        static string RocketboxDokusu(string[] dokular, string parca, string tur)
+        {
+            string ekli = null, tek = null; int turSayisi = 0;
+            foreach (var d in dokular)
+            {
+                var e = RbDoku.Match(Path.GetFileNameWithoutExtension(d).ToLowerInvariant());
+                if (!e.Success || e.Groups[2].Value != tur) continue;
+                turSayisi++; tek = d;
+                if (e.Groups[1].Value != parca) continue;
+                if (e.Groups[3].Value.Length == 0) return d;
+                if (ekli == null) ekli = d;
+            }
+            return ekli != null ? ekli : turSayisi == 1 ? tek : null;
+        }
+
+        // FBX malzemeleri -> ayni adli dokularla URP Lit (govde, bas, sac/kirpik, kask, techizat ...)
+        static void RocketboxMalzemeler(GameObject go, string klasor, string name)
+        {
+            var lit = Shader.Find("Universal Render Pipeline/Lit");
+            if (lit == null) return;
+            var dokular = Files(klasor, ".tga");
+            foreach (var r in go.GetComponentsInChildren<Renderer>(true))
+            {
+                var mats = r.sharedMaterials;
+                for (int i = 0; i < mats.Length; i++)
+                {
+                    string mname = mats[i] != null ? mats[i].name : r.name;
+                    string parca = System.Text.RegularExpressions.Regex.Replace(mname.ToLowerInvariant().Trim(), @"^[a-z]+\d+(_|$)", "");
+                    parca = parca.Replace(' ', '_').Replace('/', '_').Replace(':', '_');
+                    string renk = RocketboxDokusu(dokular, parca, "color"), normal = RocketboxDokusu(dokular, parca, "normal");
+                    if (renk == null) { RigRapor(name + ": renk dokusu bulunamadı (malzeme " + mname + ")", true); continue; }
+                    string matPath = klasor + "/" + name + "_" + (parca.Length > 0 ? parca : "govde") + ".mat";
+                    var m = AssetDatabase.LoadAssetAtPath<Material>(matPath);
+                    if (m == null) { m = new Material(lit); AssetDatabase.CreateAsset(m, matPath); }
+                    var tex = AssetDatabase.LoadAssetAtPath<Texture2D>(renk);
+                    m.SetTexture("_BaseMap", tex); m.SetTexture("_MainTex", tex);
+                    m.SetColor("_BaseColor", Color.white); m.SetColor("_Color", Color.white);
+                    m.SetFloat("_Smoothness", 0.2f); m.SetFloat("_Metallic", 0f);
+                    if (normal != null)
+                    {
+                        var ti = AssetImporter.GetAtPath(normal) as TextureImporter;
+                        if (ti != null && ti.textureType != TextureImporterType.NormalMap) { ti.textureType = TextureImporterType.NormalMap; ti.SaveAndReimport(); }
+                        m.SetTexture("_BumpMap", AssetDatabase.LoadAssetAtPath<Texture2D>(normal)); m.EnableKeyword("_NORMALMAP");
+                    }
+                    bool cut = parca.Contains("opacity") || parca.Contains("hair") || parca.Contains("lash");   // saydam yerler kesilir, iki yuzlu
+                    m.SetFloat("_AlphaClip", cut ? 1f : 0f); m.SetFloat("_Cutoff", 0.35f);
+                    if (cut) m.EnableKeyword("_ALPHATEST_ON"); else m.DisableKeyword("_ALPHATEST_ON");
+                    m.SetFloat("_Cull", cut ? 0f : 2f);
+                    m.renderQueue = cut ? (int)RenderQueue.AlphaTest : -1;
+                    EditorUtility.SetDirty(m);
+                    mats[i] = m;
+                }
+                r.sharedMaterials = mats;
+            }
         }
 
         // Mixamo FBX'teki gomulu dokular cogu zaman malzemeye baglanmiyor (beyaz karakter).
@@ -1028,8 +1175,31 @@ namespace HikayeStudyo
         bool UalKutuphane { get { return assetPath.Replace('\\', '/').Contains("/Karakterler/Animasyonlar/"); } }
         bool Toy { get { var p = assetPath.Replace('\\', '/'); return p.Contains("/Karakterler/Oyuncak/") && p.ToLowerInvariant().EndsWith(".fbx"); } }
 
+        bool Rocketbox { get { return assetPath.Replace('\\', '/').Contains("/Karakterler/Rocketbox/"); } }
+
+        void OnPreprocessTexture()
+        {
+            if (!Rocketbox) return;
+            var ti = (TextureImporter)assetImporter;
+            var n = Path.GetFileNameWithoutExtension(assetPath).ToLowerInvariant();
+            if (n.Contains("_normal") || n == "normal") ti.textureType = TextureImporterType.NormalMap;
+            else if (n.Contains("opacity")) ti.alphaIsTransparency = true;
+            ti.maxTextureSize = 2048;
+        }
+
         void OnPreprocessModel()
         {
+            if (Rocketbox)
+            {
+                var rb = (ModelImporter)assetImporter;
+                rb.animationType = ModelImporterAnimationType.Human;
+                rb.avatarSetup = ModelImporterAvatarSetup.CreateFromThisModel;
+                rb.importAnimation = false;
+                rb.importBlendShapes = true;
+                rb.importCameras = false;
+                rb.importLights = false;
+                return;
+            }
             if (!Ual && !Toy) return;
             var imp = (ModelImporter)assetImporter;
             imp.importAnimation = true;

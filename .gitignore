@@ -35,3 +35,8 @@ ffkayit_sonuc.txt
 Assets/HikayeStudyo/Kutuphane/
 Assets/HikayeStudyo/Kutuphane.meta
 KutuphaneHam/
+
+# Rocketbox gercekci karakterler (buyuk dosyalar; Hikaye/Gercek Karakter Ekle ile yeniden kurulur)
+Assets/HikayeStudyo/Karakterler/Rocketbox/
+Assets/HikayeStudyo/Karakterler/Rocketbox.meta
+Assets/HikayeStudyo/Karakterler/Hazir/Gercek_*
