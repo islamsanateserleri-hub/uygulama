@@ -30,7 +30,7 @@ namespace HikayeStudyo
     {
         public readonly List<SeriBolum> Bolumler = new List<SeriBolum>();
         public readonly List<SeriCeliski> Celiskiler = new List<SeriCeliski>();
-        // Hedef bölümden ÖNCEKİ birikim
+        // Hedef bölümün SONUNDAKİ birikim (açık bölüme yazılanlar da görünür)
         public readonly List<SeriDurumKaydi> Durumlar = new List<SeriDurumKaydi>();
         public readonly List<string> Iliskiler = new List<string>();
         public readonly List<string> Olaylar = new List<string>();
@@ -100,7 +100,7 @@ namespace HikayeStudyo
 
             foreach (var b in r.Bolumler)
             {
-                if (!fotoAlindi && hedef > 0 && b.No >= hedef) { Foto(r, durum, iliskiYazi, sorular); fotoAlindi = true; }
+                if (!fotoAlindi && hedef > 0 && b.No > hedef) { Foto(r, durum, iliskiYazi, sorular); fotoAlindi = true; }
 
                 if (b.No <= 0) Ekle(r, b, 0, false, "'bolum:' numarası yok; sıraya doğru yerleşemez.");
                 else
@@ -131,7 +131,7 @@ namespace HikayeStudyo
                                 {
                                     string k = Util.Norm(n.Kim);
                                     Olum eski;
-                                    if (durum.TryGetValue(k, out eski) && eski.Durum == "olu" && n.Deger != "olu" && !olayVar && !ani && !geriDonus)
+                                    if (durum.TryGetValue(k, out eski) && eski.Durum == "olu" && n.Deger != "olu" && !olayVar && !ani)
                                         Ekle(r, b, n.Satir, true, n.Kim + " " + eski.Bolum + ". bölümde ölmüştü; açıklamasız '" + n.Deger + "' yapılıyor. Önce 'olay:' ile açıkla.");
                                     durum[k] = new Olum { Ad = n.Kim, Durum = n.Deger, Bolum = b.No };
                                     bildirilen.Remove(k);
@@ -189,7 +189,7 @@ namespace HikayeStudyo
                         string k = Util.Norm(ad);
                         adlar.Add(k);
                         Olum o;
-                        if (ani || geriDonus || bildirilen.Contains(k) || !durum.TryGetValue(k, out o)) continue;
+                        if (ani || bildirilen.Contains(k) || !durum.TryGetValue(k, out o)) continue;
                         string neZaman = o.Bolum == b.No ? "bu bölümde" : o.Bolum + ". bölümde";
                         string msg = null; bool agir = false;
                         if (o.Durum == "olu")
@@ -202,6 +202,8 @@ namespace HikayeStudyo
                         else if (o.Durum == "hastanede" && mekan.Length > 0 && !mekan.Contains("hastane"))
                             msg = ad + " 'hastanede' işaretli ama mekân hastane değil. Taburcu olduysa 'durum: " + ad + " = hayatta' yaz.";
                         if (msg == null) continue;
+                        // geri: / vfx: vhs'nin nerede bittiği belli değil: susturulmaz, hafif uyarıya indirilir
+                        if (geriDonus) { agir = false; msg += " (Geri sarmadan sonraki sahne geçmişteyse sorun yok.)"; }
                         bildirilen.Add(k);
                         Ekle(r, b, it.Line, agir, msg);
                     }
@@ -218,13 +220,13 @@ namespace HikayeStudyo
                 }
             }
             if (!fotoAlindi) Foto(r, durum, iliskiYazi, sorular);
-            // Olay ve geçmiş listeleri yalnız önceki bölümleri göstersin
+            // Olay ve geçmiş listeleri sonraki bölümleri göstermesin
             if (hedef > 0)
             {
                 r.Olaylar.Clear(); r.Gecmisler.Clear();
                 foreach (var b in r.Bolumler)
                 {
-                    if (b.No >= hedef) continue;
+                    if (b.No > hedef) continue;
                     foreach (var n in b.P.SeriNotlari)
                     {
                         if (n.Tur == "olay") r.Olaylar.Add(b.No + ". bölüm: " + n.Deger);

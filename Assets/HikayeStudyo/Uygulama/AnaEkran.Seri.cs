@@ -271,7 +271,7 @@ namespace HikayeStudyo
                 });
             satirlar.Add(SeriSatiri.Baslik("Önceki bölümün özeti" + (rap.OncekiNo > 0 ? " (" + rap.OncekiNo + ". bölüm)" : "")));
             satirlar.Add(new SeriSatiri { Metin = rap.OncekiOzet.Length > 0 ? rap.OncekiOzet : "Önceki bölüm yok ya da özeti boş." });
-            satirlar.Add(SeriSatiri.Baslik("Karakter durumu (önceki bölümlerin sonunda)"));
+            satirlar.Add(SeriSatiri.Baslik("Karakter durumu (bu bölümün sonunda)"));
             foreach (var d in rap.Durumlar) satirlar.Add(new SeriSatiri { Metin = d.Ad + ": " + d.Durum + "  (" + d.Bolum + ". bölümden beri)" });
             SeriListe(satirlar, "İlişkiler", rap.Iliskiler);
             SeriListe(satirlar, "Geçmiş olaylar", rap.Olaylar);

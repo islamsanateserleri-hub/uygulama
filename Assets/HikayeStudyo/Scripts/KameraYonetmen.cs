@@ -53,6 +53,7 @@ namespace HikayeStudyo
         Vector3 cPivot;
         float cDist, cYaw, cPitch, cFov;
         bool snap = true;
+        Plan sonEtkinPlan = Plan.Genis;
 
         float panik, seed;
         readonly List<Vector3> noktalar = new List<Vector3>();
@@ -273,9 +274,14 @@ namespace HikayeStudyo
             if (p == Plan.Iki && !hl) p = Plan.Orta;
             if (p != Plan.Genis && !hs) p = Plan.Genis;
             bool araba = owner.Mekan != null && owner.Mekan.Oturmali;
-            // omuz ustu: kamera on tarafta kaldigi icin dinleyen ancak yuzu de sigiyorsa kadraja alinir,
-            // yoksa (biri ayakta biri oturuyor, uzaklar, araba) konusana yakin plan yapilir
-            if (p == Plan.Omuz && (araba || !hl || Mathf.Abs(L.x - S.x) > 1.2f || Mathf.Abs(L.y - S.y) > 0.35f || Mathf.Abs(L.z - S.z) > 0.8f)) p = Plan.Yakin;
+            // omuz ustu: iki kisi yan yana, benzer boyda ve yakinsa kamera dinleyenin omzunun arkasina gecer;
+            // yoksa (biri ayakta biri oturuyor, uzaklar, ust uste, araba) konusana yakin plan yapilir
+            if (p == Plan.Omuz && (araba || !hl || Mathf.Abs(L.x - S.x) < 0.5f || Mathf.Abs(L.x - S.x) > 2.2f ||
+                                   Mathf.Abs(L.y - S.y) > 0.35f || Mathf.Abs(L.z - S.z) > 0.8f || owner.YatiyorMu(planS) || owner.YatiyorMu(planL) ||
+                                   owner.Yuruyor(planS) || owner.Yuruyor(planL))) p = Plan.Yakin;
+            // plan sahne degisince (or. yuruyen kisi yerine varinca) kamera savrulmaz, kesme yapar;
+            // yuruyen birine yakin plandayken de geride kalmaz
+            if (p != sonEtkinPlan || (p == Plan.Yakin && planS.Length > 0 && owner.Yuruyor(planS))) { snap = true; sonEtkinPlan = p; }
 
             fov = Sahne3D.CamFov;
             bool yatik = hs && owner.YatiyorMu(plan == Plan.Tepki ? planL : planS);
@@ -290,14 +296,14 @@ namespace HikayeStudyo
 
                 case Plan.Omuz:
                     {
-                        // iki yuz birlikte, konusan one cikacak sekilde (kamera dinleyenin tarafinda)
-                        float t = Mathf.Tan(Sahne3D.CamFov * 0.5f * Mathf.Deg2Rad);
-                        float yariEn = Mathf.Abs(L.x - S.x) * 0.5f + 0.24f;
-                        float yariBoy = (Mathf.Abs(L.y - S.y) + 0.9f) * 0.5f;
-                        d = Mathf.Max(yariEn / (t * Oran * 0.92f), yariBoy / (t * 0.74f));
-                        pivot = new Vector3((S.x + L.x) * 0.5f, (S.y + L.y) * 0.5f - 0.22f, (S.z + L.z) * 0.5f);
-                        dist = Mathf.Clamp(d, 2.4f, 6.2f); yaw = -Mathf.Sign(L.x - S.x) * 10f; pitch = 3f;
-                        minDist = 2.2f; maxDist = dist + 1f;
+                        // gercek omuz ustu: kamera dinleyenin arkasinda ve biraz onde (180 derece kurali),
+                        // dinleyenin basi/omzu on planda bulanik, konusanin yuzu karsida
+                        Vector3 yonL = S - L; yonL.y = 0f; yonL.Normalize();
+                        Vector3 kam = L - yonL * 0.6f + Vector3.back * 0.36f + Vector3.up * 0.1f;
+                        fov = YakinFov + 6f;
+                        pivot = S + Vector3.down * 0.1f + (L - S) * 0.08f;
+                        Yorunge(kam, pivot, out dist, out yaw, out pitch);
+                        minDist = dist - 0.15f; maxDist = dist + 0.6f;
                     }
                     break;
 
@@ -509,6 +515,9 @@ namespace HikayeStudyo
             if (oda) PlanKur(plan, planS, planL, planIc);
         }
 
+        const float ArabaKameraTavani = 0.89f;     // Mekan3D.Ek.cs KurAraba: konsol ust kenari 0,92
+        const float ArabaKameraOnu = -1.25f;       // konsolun on yuzu z=-0,78; kamera bundan en az 0,47 geride
+
         // ---------- Her kare ----------
         void LateUpdate()
         {
@@ -567,8 +576,25 @@ namespace HikayeStudyo
 
             Quaternion yor = Quaternion.Euler(cPitch, cYaw, 0f);
             Vector3 pos = cPivot + yor * new Vector3(0f, 0f, -cDist);
-            cam.transform.SetPositionAndRotation(pos, Quaternion.Euler(cPitch + hy, cYaw + hx, hr));
-            cam.fieldOfView = cFov;
+            float bakisPitch = cPitch, bakisYaw = cYaw;
+            float bakisFov = cFov;
+            // ARABA: kamera hep on konsolun ust kenarinin (0,92) hemen altinda durur. Boylece konsolun arkasinda
+            // bu yukseklikten asagidaki her sey (oturanlarin kucagi, bacaklari) plan, mesafe ve boy ne olursa
+            // olsun gorunmez. Konsola fazla yaklasirsa ya da altina inerse yuzler kayboldugu icin kamera geride
+            // tutulur; yakin plan hissi gorus acisi daraltilarak korunur.
+            if (owner != null && owner.Mekan != null && owner.Mekan.Oturmali)
+            {
+                float eskiMesafe = Vector3.Distance(pos, cPivot);
+                pos.y = Sahne3D.Origin.y + ArabaKameraTavani;
+                pos.z = Mathf.Min(pos.z, Sahne3D.Origin.z + ArabaKameraOnu);
+                float yeniMesafe = Vector3.Distance(pos, cPivot);
+                if (yeniMesafe > eskiMesafe && eskiMesafe > 0.01f)
+                    bakisFov = 2f * Mathf.Rad2Deg * Mathf.Atan(Mathf.Tan(cFov * 0.5f * Mathf.Deg2Rad) * eskiMesafe / yeniMesafe);
+                Vector3 e = Quaternion.LookRotation(cPivot - pos).eulerAngles;
+                bakisPitch = e.x; bakisYaw = e.y;
+            }
+            cam.transform.SetPositionAndRotation(pos, Quaternion.Euler(bakisPitch + hy, bakisYaw + hx, hr));
+            cam.fieldOfView = bakisFov;
 
             if (owner != null && owner.Atmosfer != null)
             {

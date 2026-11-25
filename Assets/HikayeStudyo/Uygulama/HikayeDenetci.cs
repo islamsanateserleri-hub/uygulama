@@ -174,6 +174,8 @@ namespace HikayeStudyo
                 int no = i + 1;
                 string line = lines[i].Trim();
                 if (line.Length == 0 || line.StartsWith("//") || line.StartsWith("#")) continue;
+                if (Util.SablonYerTutucu(line))
+                    Ekle(list, no, true, "SABLON_BOS", "Şablondan kalan boş yer: bu satıra kendi metnini yaz ya da satırı sil.", "", "");
 
                 if (line[0] == '[')
                 {

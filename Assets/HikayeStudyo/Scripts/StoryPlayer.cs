@@ -36,14 +36,22 @@ namespace HikayeStudyo
         // EXE kayit (KayitIsleyici ayarlar): ekran yerine 1080x1920 kayit RenderTexture'indan kare verir (kapak karesi, kapak.png,
         // 2D capraz gecis). null ise ya da null donerse ScreenCapture (pencere boyutu) kullanilir: Editor/onizleme davranisi degismez.
         public static System.Func<Texture2D> KareYakalayici;
-        static Texture2D KareAl()
+        internal static Texture2D KareAl()
         {
             if (KareYakalayici != null)
             {
                 try { var t = KareYakalayici(); if (t != null) return t; }
                 catch (System.Exception e) { Debug.LogWarning("[Hikaye] KareYakalayici: " + e.Message); }
             }
-            return ScreenCapture.CaptureScreenshotAsTexture();
+            // ekran goruntusu dokusu ekrana geri cizilince soluk/yikanmis cikiyordu (renk uzayi isareti);
+            // ayni baytlar normal (sRGB) bir dokuya kopyalanir
+            var ham = ScreenCapture.CaptureScreenshotAsTexture();
+            if (ham == null) return null;
+            var duz = new Texture2D(ham.width, ham.height, TextureFormat.RGBA32, false);
+            duz.SetPixels32(ham.GetPixels32());
+            duz.Apply();
+            Destroy(ham);
+            return duz;
         }
         public static string SonSesRaporu = "";
         public static bool Running { get; private set; }
@@ -56,6 +64,7 @@ namespace HikayeStudyo
         FxLayer fx;
         SinematikEfekt sinema;
         AudioSource voiceSrc, sfxSrc, ambSrc, rainSrc;
+        string yazarAtmosfer = "";     // son 'atmosfer:' komutu
         readonly Dictionary<string, CharacterView> onScreen = new Dictionary<string, CharacterView>();
         readonly Dictionary<StoryItem, AudioClip> voices = new Dictionary<StoryItem, AudioClip>();
         readonly float[] samples = new float[256];
@@ -344,7 +353,7 @@ namespace HikayeStudyo
                                 else if (d0 != null && !library.IsNarrator(d0)) { var v0 = GetOrCreate(d0, ""); v0.SetPose(it.Arg, PosePosition(v0, it.Arg)); UpdateBlanket(v0); }
                             }
                             break;
-                        case ItemType.Atmosphere: fx.SetAtmosphere(Util.Norm(it.Arg) == "yok" ? "" : it.Arg); break;
+                        case ItemType.Atmosphere: yazarAtmosfer = Util.Norm(it.Arg) == "yok" ? "" : it.Arg; fx.SetAtmosphere(yazarAtmosfer); break;
                         case ItemType.Music: SetMusic(it.Arg); break;
                         case ItemType.Camera: CameraCommand(it.Arg); break;
                         case ItemType.Direct:
@@ -394,7 +403,8 @@ namespace HikayeStudyo
                         CameraCommand(it.Arg);
                         break;
                     case ItemType.Atmosphere:
-                        fx.SetAtmosphere(Util.Norm(it.Arg) == "yok" ? "" : it.Arg);
+                        yazarAtmosfer = Util.Norm(it.Arg) == "yok" ? "" : it.Arg;
+                        fx.SetAtmosphere(yazarAtmosfer);
                         if (s3d != null && Util.Norm(it.Arg) == "yok") s3d.AtmosferAyarla("normal");
                         break;
                     case ItemType.Music:
@@ -459,10 +469,12 @@ namespace HikayeStudyo
                         if (!faded) { yield return Fade(1f, 0f, 0.3f); faded = true; }
                         secimler.Clear(); secimler.Add(it.Text); secimler.Add(it.Arg);
                         yield return ChoiceCard(it.Text, it.Arg, it.Soru);
+                        // ardindan gorunen bir sey (sahne, konusma, son yazisi, sert kesme...) geliyorsa kart onu ortmesin
+                        if (!SonGorunenOge(items, i)) SecimKartiKaldir();
                         break;
                     case ItemType.DevamKarti:
                         if (!faded) { yield return Fade(1f, 0f, 0.3f); faded = true; }
-                        yield return DevamKarti(it.Text, NextIsEnd(items, i));
+                        yield return DevamKarti(it.Text, SonGorunenOge(items, i));
                         break;
                     case ItemType.Result:
                         yield return ResultCard(it.Arg);
@@ -608,7 +620,11 @@ namespace HikayeStudyo
         {
             subtitle.text = "";
             var root = fade.transform.parent;
+            SecimKartiKaldir();
+            if (fade.color.a > 0.01f) yield return Fade(fade.color.a, 0f, 0.3f);
             var card = Gfx.Rect("SecimKarti", root);
+            card.SetSiblingIndex(fade.transform.GetSiblingIndex());   // karartma ve buyuk yazi kartin USTUNDE kalir
+            secimKarti = card;
             Gfx.Stretch(card);
             var bg = Gfx.Img("Karartma", card, null, new Color(0, 0, 0, 0.72f), Vector2.zero, Vector2.zero);
             Gfx.Stretch(bg.rectTransform);
@@ -650,13 +666,37 @@ namespace HikayeStudyo
             }
         }
 
+        RectTransform secimKarti;
+
+        void SecimKartiKaldir()
+        {
+            if (secimKarti != null) { secimKarti.gameObject.SetActive(false); Destroy(secimKarti.gameObject); }
+            secimKarti = null;
+        }
+
+        // Karttan sonra ekranda baska bir sey gosterilecek mi? (yazisiz yumusak son sayilmaz)
+        static bool SonGorunenOge(List<StoryItem> items, int i)
+        {
+            for (int k = i + 1; k < items.Count; k++)
+            {
+                var o = items[k];
+                if (o.Type == ItemType.Dialogue || o.Type == ItemType.Background || o.Type == ItemType.Choice || o.Type == ItemType.Title
+                    || o.Type == ItemType.Result || o.Type == ItemType.Hook || o.Type == ItemType.Rewind || o.Type == ItemType.DevamKarti) return false;
+                if (o.Type == ItemType.End && (!string.IsNullOrEmpty(o.Text) || o.Arg == "sert")) return false;
+            }
+            return true;
+        }
+
         // ---------- Devami karti (devami: metin) ----------
-        // Bolum sonundaysa ekranda kalir; ardindan konusma varsa kaldirilir.
+        // Son gorunen ogeyse ekranda kalir (kapanis karartmasi onu orter); degilse kaldirilir.
         IEnumerator DevamKarti(string metin, bool sonda)
         {
             subtitle.text = ""; bigText.text = "";
             var root = fade.transform.parent;
+            SecimKartiKaldir();
+            if (fade.color.a > 0.01f) yield return Fade(fade.color.a, 0f, 0.3f);
             var card = Gfx.Rect("DevamKarti", root);
+            card.SetSiblingIndex(fade.transform.GetSiblingIndex());   // karartma ve buyuk yazi kartin USTUNDE kalir
             Gfx.Stretch(card);
             var bg = Gfx.Img("Karartma", card, null, new Color(0.03f, 0.03f, 0.07f, 0.94f), Vector2.zero, Vector2.zero);
             Gfx.Stretch(bg.rectTransform);
@@ -678,7 +718,7 @@ namespace HikayeStudyo
             if (clip != null) sfxSrc.PlayOneShot(clip, sfxVolume * 0.7f);
             yield return PopText(kutu.rectTransform, 1.3f);
             yield return new WaitForSeconds(2.4f);
-            if (!sonda) Destroy(card.gameObject);
+            if (!sonda) { card.gameObject.SetActive(false); Destroy(card.gameObject); }
         }
 
         // Her serinin kendi rengi olur (seri adi ayniysa kapak ve devam karti ayni renkte)
@@ -1192,7 +1232,8 @@ namespace HikayeStudyo
         // 3D mekan acilinca cizgi mekanin ekran efektleri (gunes huzmesi, toz, mum) ustte kalmasin
         void Cizgi3DKapat(StoryItem it)
         {
-            if (s3d != null && s3d.OdaAktif && Util.Norm(it.Character) == "mekan3d") fx.SetAtmosphere("");
+            // yalniz cizgi mekanin kendi efekti silinir; hikayede 'atmosfer:' ile yazilan kalir
+            if (s3d != null && s3d.OdaAktif && Util.Norm(it.Character) == "mekan3d") fx.SetAtmosphere(yazarAtmosfer);
         }
 
         // ---------- Mekan ----------
@@ -1203,6 +1244,7 @@ namespace HikayeStudyo
             sinema.MekanDegisti();
             if (s3d != null) s3d.MekanKapat();
             ShowInsert("yok");
+            yazarAtmosfer = "";
             var b = library.FindBackground(id);
             if (b == null) Debug.LogWarning("[Hikaye] Mekan yok: " + id + " (Kütüphaneye ekle)");
             BuildBackground(b);
@@ -1510,7 +1552,7 @@ namespace HikayeStudyo
             amb *= AtmosferVolume.MuzikCarpani;
             ambSrc.volume = Mathf.MoveTowards(ambSrc.volume, amb, dt * 0.25f);
 
-            float rv = fx.Raining ? 0.3f : 0f;
+            float rv = fx.Raining || (s3d != null && s3d.YagmurVar) ? 0.3f : 0f;
             rainSrc.volume = Mathf.MoveTowards(rainSrc.volume, rv, dt * 0.4f);
             if (rainSrc.volume > 0.001f && !rainSrc.isPlaying) rainSrc.Play();
             if (rainSrc.volume <= 0.001f && rainSrc.isPlaying) rainSrc.Stop();

@@ -179,7 +179,12 @@ namespace HikayeStudyo
                 case "zemin": if (!RenkBul(v, out c)) return false; Zemin = v; return true;
                 case "vurgu": if (!RenkBul(v, out c)) return false; Vurgu = v; return true;
                 case "zaman": if (!Util.In(v, YonetmenTablo.Zamanlar)) return false; Zaman = v; return true;
-                case "hava": if (!Util.In(v, YonetmenTablo.Havalar)) return false; Hava = v; return true;
+                case "hava":
+                    // birden cok hava virgulle yazilabilir: hava=yagmur,sis
+                    var havalar = v.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (havalar.Length == 0) return false;
+                    foreach (var h in havalar) if (!Util.In(h, YonetmenTablo.Havalar)) return false;
+                    Hava = string.Join(",", havalar); return true;
                 case "isik": if (!Util.In(v, YonetmenTablo.Isiklar)) return false; Isik = v; return true;
             }
             return false;
@@ -193,15 +198,21 @@ namespace HikayeStudyo
             var ayarlar = new List<string>();
             // "duvar = mavi" yazimi da kabul edilir
             string s = (arg ?? "").Trim().Replace(" =", "=").Replace("= ", "=");
-            // virgul "hava=yagmur,sis" icinde degerin parcasidir
-            s = s.Replace(", ", ",").Replace(" ,", ",");
-            foreach (var p in s.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries))
+            // virgul ayirici sayilir ("mutfak, duvar=mavi"); yalniz "hava=yagmur, sis" icinde degerin parcasidir
+            foreach (var p in s.Split(new[] { ' ', '\t', ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
-                var parca = p.Trim(',');
-                if (parca.IndexOf('=') >= 0) ayarlar.Add(parca);
-                else adParcalari.AddRange(parca.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries));
+                if (p.IndexOf('=') >= 0) { ayarlar.Add(p); continue; }
+                int son = ayarlar.Count - 1;
+                if (son >= 0 && Util.Norm(ayarlar[son]).StartsWith("hava=") && Util.In(Util.Norm(p), YonetmenTablo.Havalar)) ayarlar[son] += "," + p;
+                else adParcalari.Add(p);
             }
             string ad = Util.Norm(string.Join("_", adParcalari.ToArray()));
+            if (ad.Length == 0 && ayarlar.Count > 0)
+            {
+                // eskiden 3D mekani sessizce kapatiyordu
+                hata = "Önce mekân adını yaz (örnek: mekan3d: mutfak duvar=mavi).";
+                return null;
+            }
             if (ad.Length == 0 || ad == "yok" || ad == "kapat") return new MekanTarifi { Tur = "yok" };
 
             MekanTarifi t;

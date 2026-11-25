@@ -383,16 +383,16 @@ namespace HikayeStudyo
             // konsol yuksek tutulur: oturanlarin kucagi ve bacaklari kadraja girmesin
             B("Konsol", 0f, 0.8f, -0.66f, 2.18f, 0.24f, 0.24f, ic, 0.25f);
             B("KonsolAlt", 0f, 0.34f, -0.74f, 2.18f, 0.7f, 0.06f, govde, 0.5f);
-            B("Gosterge", -0.52f, 0.93f, -0.64f, 0.3f, 0.07f, 0.12f, K(0.05f, 0.05f, 0.06f), 0.5f);
-            B("Ekran", 0.02f, 0.82f, -0.79f, 0.22f, 0.06f, 0.02f, K(0.2f, 0.5f, 0.7f), 0.5f, 0.8f);
+            B("Gosterge", -0.52f, 0.89f, -0.64f, 0.3f, 0.07f, 0.12f, K(0.05f, 0.05f, 0.06f), 0.5f);
+            // direksiyon ve gosterge konsolu en cok 2 cm asar: alcak kameradan surucunun agzini kapatmasin
             for (int i = 0; i < 16; i++)
             {
                 float a = i / 16f * Mathf.PI * 2f;
-                var p = B("Direksiyon", -0.52f + Mathf.Cos(a) * 0.17f, 0.85f + Mathf.Sin(a) * 0.15f, -0.46f + Mathf.Sin(a) * 0.05f,
+                var p = B("Direksiyon", -0.52f + Mathf.Cos(a) * 0.17f, 0.78f + Mathf.Sin(a) * 0.14f, -0.46f + Mathf.Sin(a) * 0.05f,
                           0.075f, 0.032f, 0.032f, K(0.06f, 0.06f, 0.07f), 0.4f);
                 p.transform.localRotation = Quaternion.Euler(0f, 0f, a * Mathf.Rad2Deg + 90f);
             }
-            B("DireksiyonKol", -0.52f, 0.85f, -0.46f, 0.32f, 0.035f, 0.03f, K(0.06f, 0.06f, 0.07f), 0.4f);
+            B("DireksiyonKol", -0.52f, 0.78f, -0.46f, 0.32f, 0.035f, 0.03f, K(0.06f, 0.06f, 0.07f), 0.4f);
 
             // koltuklar
             for (int s = -1; s <= 1; s += 2)

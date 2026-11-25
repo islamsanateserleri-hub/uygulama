@@ -1,0 +1,19 @@
+// OMUZ TESTI: omuz ustu planda dinleyenin basi/omzu on planda, konusanin yuzu karsida olmali.
+oyuncu: Anne = VRM_Anne
+oyuncu: Baba = VRM_Baba
+
+mekan: oda_gunduz
+mekan3d: oda
+[Anne|normal|dis] Burada ikimiz yan yana duruyoruz.
+kamera: omuz
+[Baba|normal|dis] Omuz planinda ben konusuyorum.
+[Anne|uzgun|dis] Simdi ben konusuyorum, omuz ustu.
+kamera: ters
+[Anne|normal|dis] Ters plan istendi.
+mekan3d: park
+kamera: omuz
+[Baba|sasirmis|dis] Parkta omuz plani.
+[Anne|mutlu|dis] Parkta ben de.
+kamera: otomatik
+[Baba|normal|dis] Otomatik kameraya dondum.
+son: yumusak Omuz testi bitti

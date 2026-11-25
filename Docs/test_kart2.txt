@@ -1,0 +1,5 @@
+# Kart testi 2: secim kartinin ardindan son yazisi gelirse kart kalkmali, yazi gorunmeli
+mekan: sofra
+[Anne|normal|dis] Karar senin.
+secim: A) Kalsin / B) Gitsin
+son: yumusak Hangisini secerdin?

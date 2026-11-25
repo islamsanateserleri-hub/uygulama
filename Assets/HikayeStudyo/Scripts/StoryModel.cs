@@ -92,6 +92,27 @@ namespace HikayeStudyo
         public static readonly string[] Poses = { "ayakta", "yatiyor", "oturuyor" };
 
         // "Ağlamaklı" -> "aglamakli". Isimler buyuk/kucuk harf ve Turkce harf farkina bakmaz.
+        // Seri sablonlarindaki "kendin yaz" yerleri; videoya gitmemeli
+        // Yalnizca sablonlarin yazdigi metinler birebir yakalanir; "numarani buraya yaz" gibi gercek replikler serbest.
+        static readonly string[] YerTutucular =
+        {
+            "Bu bölümde ne olduğunu bir cümleyle yaz", "Bu sonda neler olduğunu buraya yaz", "Buraya ilk cümleni yaz",
+            "Buraya anlatıcı metnini yaz", "Metni buraya yaz"
+        };
+
+        public static bool SablonYerTutucu(string satir)
+        {
+            var v = (satir ?? "").Trim();
+            int i = v.StartsWith("[") ? v.IndexOf(']') : v.IndexOf(':');
+            if (i >= 0) v = v.Substring(i + 1);
+            v = v.Trim().TrimEnd('.', '!', ' ');
+            if (v.Length == 0) return false;
+            var n = Norm(v);
+            if (char.IsDigit(v[0]) && n.EndsWith(Norm("bölümün başlığını yaz"))) return true;
+            foreach (var y in YerTutucular) if (n == Norm(y)) return true;
+            return false;
+        }
+
         public static string Norm(string s)
         {
             if (string.IsNullOrEmpty(s)) return "";

@@ -142,13 +142,51 @@ namespace HikayeStudyo
             var s = sahne();
             Karakter3D.Hiz = 0f;
             fx.Donuk = true;
-            fx.Flash(0.55f);
             if (ses != null) ses("flas");
             if (s != null && s.Atmosfer != null) s.Atmosfer.DondurGorunum(true);
-            yield return new WaitForSeconds(sure);
+
+            // Zaman gercekten dursun: o anki kare alinip ekranin ustune konur. Boylece kar, yagmur, goz kirpma,
+            // sac, gozyasi, buhar, kamera ve 2D karakterler de durmus gorunur.
+            yield return null;                     // dondurma gorunumu (solma, vinyet) once uygulansin
+            yield return new WaitForEndOfFrame();
+            // uygulama icindeki canli onizlemede ekran goruntusu butun pencereyi alir: orada kare konmaz
+            if (Application.isEditor || StoryPlayer.KareYakalayici != null)
+            {
+                try { donukKare = StoryPlayer.KareAl(); }
+                catch (System.Exception e) { Debug.LogWarning("[Hikaye] dondur: kare alinamadi: " + e.Message); donukKare = null; }
+            }
+            Image flas = null;
+            if (donukKare != null)
+            {
+                var g = Gfx.Rect("DonukKare", katman.parent);
+                Gfx.Stretch(g);
+                g.SetAsLastSibling();
+                var ortu = g.gameObject.AddComponent<UnityEngine.UI.RawImage>();
+                ortu.texture = donukKare; ortu.raycastTarget = false;
+                donukOrtu = g.gameObject;
+                flas = Gfx.Img("DonukFlas", g, null, new Color(1, 1, 1, 0.55f), Vector2.zero, Vector2.zero);
+                Gfx.Stretch(flas.rectTransform);
+                flas.raycastTarget = false;
+            }
+            else fx.Flash(0.55f);                  // flas kare alindiktan SONRA (yoksa donan goruntuye pisiyordu)
+            for (float t = 0f; t < sure; t += Time.deltaTime)
+            {
+                if (flas != null) flas.color = new Color(1, 1, 1, Mathf.Max(0f, 0.55f - t * 1.8f));
+                yield return null;
+            }
+            DondurOrtusunuKaldir();
             Karakter3D.Hiz = 1f;
             fx.Donuk = false;
             if (s != null && s.Atmosfer != null) s.Atmosfer.DondurGorunum(false);
+        }
+
+        GameObject donukOrtu;
+        Texture2D donukKare;
+
+        void DondurOrtusunuKaldir()
+        {
+            if (donukOrtu != null) { donukOrtu.SetActive(false); Destroy(donukOrtu); donukOrtu = null; }
+            if (donukKare != null) { Destroy(donukKare); donukKare = null; }
         }
 
         void YuzEfekti(Dictionary<string, Yuz> liste, string arg, int satir, int adet)
@@ -223,14 +261,21 @@ namespace HikayeStudyo
             Vector3 sol, sag, agiz, ileri, yukari;
             float boy;
             if (s == null || !s.YuzNoktalari(y.id, out sol, out sag, out agiz, out ileri, out yukari, out boy)) { Gizle(y); return; }
-            if (Vector3.Dot(ileri, (s.Cam.transform.position - sol).normalized) < 0.35f) { Gizle(y); return; }
+            // yalniz yuz kameraya buyuk olcude donukken (yandan ve arkadan sacin ustune ciziliyordu)
+            float onden = Vector3.Dot(ileri, (s.Cam.transform.position - (sol + sag) * 0.5f).normalized);
+            if (onden < 0.55f) { Gizle(y); return; }
+            Vector3 yan = (sag - sol).normalized;
+            // yuz belirgin donukse uzaktaki goz (burun/sac arkasinda) cizilmez
+            int uzakGoz = onden >= 0.75f ? -1 : ((sol - s.Cam.transform.position).sqrMagnitude > (sag - s.Cam.transform.position).sqrMagnitude ? 0 : 1);
             for (int g = 0; g < 2; g++)
             {
                 float t = Mathf.Repeat(Time.time - y.baslangic - g * 1.1f, 2.4f) / 1.8f;   // 0..1 akar, sonra bekler
-                bool var1 = Time.time - y.baslangic >= g * 1.1f && t <= 1f;
+                bool var1 = g != uzakGoz && Time.time - y.baslangic >= g * 1.1f && t <= 1f;
                 Vector3 goz = g == 0 ? sol : sag;
-                Vector3 bas = goz - yukari * 0.022f * boy;
-                Vector3 w = bas - yukari * (0.085f * boy * t * t);
+                // goz altindan baslar, yanagin uzerinde biraz disa dogru iner ve cene hizasindan once biter
+                Vector3 disa = yan * ((g == 0 ? -1f : 1f) * boy);
+                Vector3 bas = goz - yukari * 0.018f * boy + disa * 0.004f;
+                Vector3 w = bas - yukari * (0.052f * boy * t * t) + disa * (0.006f * t);
                 Vector2 p, p0; float o, o0;
                 var damla = y.parcalar[g * 3]; var parilti = y.parcalar[g * 3 + 1]; var iz = y.parcalar[g * 3 + 2];
                 if (!var1 || !Izdusum(s, w, out p, out o) || !Izdusum(s, bas, out p0, out o0))
@@ -239,7 +284,7 @@ namespace HikayeStudyo
                     continue;
                 }
                 float a = Mathf.Clamp01(t * 8f) * Mathf.Clamp01((1f - t) * 5f);
-                float en = 0.011f * boy * o;
+                float en = 0.008f * boy * o;
                 Koy(iz, (p + p0) * 0.5f, en * 0.35f, Vector2.Distance(p, p0), new Color(0.82f, 0.92f, 1f, 0.35f * a));
                 iz.rectTransform.localRotation = Quaternion.FromToRotation(Vector3.up, (Vector3)(p0 - p));
                 Koy(damla, p, en, en * 1.4f, new Color(0.75f, 0.88f, 1f, 0.85f * a));
@@ -253,20 +298,23 @@ namespace HikayeStudyo
             Vector3 sol, sag, agiz, ileri, yukari;
             float boy;
             if (s == null || !s.YuzNoktalari(y.id, out sol, out sag, out agiz, out ileri, out yukari, out boy)) { Gizle(y); return; }
+            if (Vector3.Dot(ileri, (s.Cam.transform.position - agiz).normalized) < 0.1f) { Gizle(y); return; }
+            // buhar yuze degil agzin altina ve onune: kameraya karsi dururken yuzu kapatmasin
+            Vector3 kaynak = agiz - yukari * 0.014f * boy;
             for (int i = 0; i < y.parcalar.Count; i++)
             {
                 float gecen = Time.time - y.baslangic - i * 0.09f;
                 float t = Mathf.Repeat(gecen, 2.6f) / 1.5f;
                 var img = y.parcalar[i];
-                Vector3 w = agiz + ileri * ((0.03f + 0.16f * t) * boy) + Vector3.up * (0.05f * t * boy)
-                          + s.Cam.transform.right * (((i % 3) - 1) * 0.02f * t * boy);
+                Vector3 w = kaynak + ileri * ((0.02f + 0.1f * t) * boy) - Vector3.up * (0.03f * t * boy)
+                          + s.Cam.transform.right * ((((i % 3) - 1) * 0.015f + 0.04f) * t * boy);
                 Vector2 p; float o;
                 if (gecen < 0f || t > 1f || !Izdusum(s, w, out p, out o)) { img.color = new Color(1, 1, 1, 0); continue; }
-                float cap = (0.05f + 0.13f * t) * boy * o;
-                Koy(img, p, cap, cap * 0.8f, new Color(0.95f, 0.97f, 1f, 0.5f * Mathf.Clamp01(t * 5f) * (1f - t)));
+                float cap = (0.018f + 0.055f * t) * boy * o;
+                Koy(img, p, cap, cap * 0.75f, new Color(0.95f, 0.97f, 1f, 0.34f * Mathf.Clamp01(t * 5f) * (1f - t)));
             }
         }
 
-        void OnDestroy() { Karakter3D.Hiz = 1f; }
+        void OnDestroy() { Karakter3D.Hiz = 1f; DondurOrtusunuKaldir(); }
     }
 }

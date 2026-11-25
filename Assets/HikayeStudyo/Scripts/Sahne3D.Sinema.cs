@@ -10,15 +10,18 @@ namespace HikayeStudyo
             solGoz = sagGoz = agiz = Vector3.zero;
             ileri = Vector3.back; yukari = Vector3.up; boy = 1f;
             Karakter3D a;
-            if (!actors.TryGetValue(Util.Norm(id), out a) || a == null) return false;
+            if (!actors.TryGetValue(Util.Norm(id), out a) || a == null || ArabadaGizli(a)) return false;
             var kafa = Kemik(a, HumanBodyBones.Head);
             if (kafa == null) return false;
-            var t = a.transform;
-            ileri = t.forward; yukari = t.up; boy = t.lossyScale.y;
+            boy = a.transform.lossyScale.y;
+            Quaternion yuz;
+            a.YuzDonusu(kafa, out yuz);   // bas egik/donukse gozler ve yanak da onunla doner
+            ileri = yuz * Vector3.forward; yukari = yuz * Vector3.up;
+            Vector3 yanEkseni = yuz * Vector3.right;
             var sol = Kemik(a, HumanBodyBones.LeftEye);
             var sag = Kemik(a, HumanBodyBones.RightEye);
-            solGoz = sol != null ? sol.position : kafa.position + yukari * 0.06f * boy - t.right * 0.032f * boy;
-            sagGoz = sag != null ? sag.position : kafa.position + yukari * 0.06f * boy + t.right * 0.032f * boy;
+            solGoz = sol != null ? sol.position : kafa.position + yukari * 0.06f * boy - yanEkseni * 0.032f * boy;
+            sagGoz = sag != null ? sag.position : kafa.position + yukari * 0.06f * boy + yanEkseni * 0.032f * boy;
             // goz kemigi kafanin icindedir; yuz yuzeyine tasinir
             solGoz += ileri * 0.045f * boy;
             sagGoz += ileri * 0.045f * boy;

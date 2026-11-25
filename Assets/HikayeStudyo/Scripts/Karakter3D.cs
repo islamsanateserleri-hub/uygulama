@@ -23,6 +23,27 @@ namespace HikayeStudyo
 
         public static float Hiz = 1f;   // yavas: / dondur: komutlari (animasyon ve yurume hizi)
 
+        // bas kemiginin dinlenme pozundaki ekseni: gozyasi/nefes govdenin degil yuzun yonunu kullanir
+        Quaternion kafaDuzeltme;
+        bool kafaKayitli;
+
+        public float KafaYuksekligi { get; private set; }     // ayakta, yaratilis aninda (cocuk/yetiskin ayrimi)
+
+        // Oyuncu yaratilir yaratilmaz (animasyon oynamadan once) cagrilir
+        public void KafaEkseniKaydet(Transform kafa)
+        {
+            if (kafaKayitli || kafa == null) return;
+            KafaYuksekligi = kafa.position.y - transform.position.y;
+            kafaDuzeltme = Quaternion.Inverse(kafa.rotation) * transform.rotation;
+            kafaKayitli = true;
+        }
+
+        public bool YuzDonusu(Transform kafa, out Quaternion donus)
+        {
+            donus = kafaKayitli && kafa != null ? kafa.rotation * kafaDuzeltme : transform.rotation;
+            return kafaKayitli && kafa != null;
+        }
+
         Animator animator;
         Animation legacy;
         PlayableGraph graph;
@@ -188,7 +209,9 @@ namespace HikayeStudyo
             }
             cur = next;
             graph.Connect(cur, 0, mixer, 0);
-            fadeTime = Mathf.Max(0f, fadeSeconds);
+            // ilk klipte yumusak gecis yapilmaz: karisacak onceki klip yok, karakter yarim saniye comelik gorunuyor
+            // ve kamera o alcak basa kilitlenip yuzu kadraj disinda birakiyordu
+            fadeTime = prev.IsValid() ? Mathf.Max(0f, fadeSeconds) : 0f;
             fade = fadeTime <= 0f ? 1f : 0f;
             ApplyWeights();
             return true;

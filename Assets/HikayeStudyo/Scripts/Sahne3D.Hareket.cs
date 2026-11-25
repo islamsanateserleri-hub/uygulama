@@ -480,7 +480,7 @@ namespace HikayeStudyo
         public void KafaKonumlari(List<Vector3> liste)
         {
             foreach (var kv in actors)
-                if (kv.Value != null && kv.Value.transform.position.y > Origin.y - 5f) liste.Add(HeadOf(kv.Value));
+                if (kv.Value != null && kv.Value.transform.position.y > Origin.y - 5f && !ArabadaGizli(kv.Value)) liste.Add(HeadOf(kv.Value));
         }
 
         // ---------- tepki ----------
@@ -782,6 +782,8 @@ namespace HikayeStudyo
                 float d = Mathf.Abs(kv.Value.transform.position.x - x);
                 if (d < enYakin) { enYakin = d; digerX = kv.Value.transform.position.x; }
             }
+            // cizgi mekanda ortada masa/koltuk yok: yandan degil hafif acili, yuzu gorunur
+            if (!OdaAktif) return digerX <= x ? 200f : 160f;
             return digerX <= x ? 250f : 110f;
         }
 
@@ -883,7 +885,7 @@ namespace HikayeStudyo
                 if (yataktaki.ContainsKey(kv.Key))
                 {
                     YatakBirak(kv.Key, kv.Value);
-                    Play(kv.Value, Hareket3D.KlipDur);
+                    AnindaDur(kv.Value);
                 }
                 walking.Remove(kv.Key);
                 if (!pozDurum.ContainsKey(kv.Key)) lockedFacing.Remove(kv.Key);

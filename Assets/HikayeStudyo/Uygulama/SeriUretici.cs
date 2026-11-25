@@ -20,7 +20,8 @@ namespace HikayeStudyo
             switch (tur)
             {
                 case 1:
-                    s.Append("sonuc: %60 A\n");
+                    // uydurma yuzde videoya girmesin: kullanici gercek sonucu kendisi acar
+                    s.Append("// sonuc: %?? A   (oylamanın gerçek sonucunu yaz ve baştaki // işaretini sil)\n");
                     s.Append("mekan: oda_gunduz\n");
                     s.Append("kanca: Kararını verdi ama bunu beklemiyordu.\n");
                     s.Append("[Anlatici|normal|dis] Arda sonunda seçimini yaptı.\n");

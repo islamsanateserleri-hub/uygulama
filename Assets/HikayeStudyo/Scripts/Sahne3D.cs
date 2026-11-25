@@ -37,6 +37,7 @@ namespace HikayeStudyo
         readonly HashSet<string> walking = new HashSet<string>();
         readonly HashSet<string> lockedFacing = new HashSet<string>();
         string konusan = "";     // son konusan karakter
+        bool konusanIcSes;       // son satir ic ses: yuzu kameraya daha cok doner
         readonly List<GameObject> extras = new List<GameObject>();
 
         // Duygu / hareket etiketi -> animasyon (Karakter3D takma adlari). Kutuphanedeki tablo bunu ezer.
@@ -142,6 +143,8 @@ namespace HikayeStudyo
         }
 
         public bool Has(string id) { return actors.ContainsKey(Util.Norm(id)); }
+        public bool Yuruyor(string id) { return walking.Contains(Util.Norm(id)); }
+
         public bool HasActor(string normId) { Karakter3D a; return actors.TryGetValue(normId, out a) && a != null; }
 
         float WorldX(float slotX2D)
@@ -200,6 +203,9 @@ namespace HikayeStudyo
                 if (!yawTarget.TryGetValue(kv.Key, out yt)) continue;
                 // konusan kameraya sirtini donmez (monitore, kapiya, pencereye bakiyor olsa da)
                 if (kv.Key == konusan && Mathf.Abs(Mathf.DeltaAngle(yt, 180f)) > 100f) yt = FacingYaw(kv.Key, a.transform.position.x - Origin.x);
+                // ic ses: kimseyle konusmuyor, yandan durmasin
+                if (kv.Key == konusan && konusanIcSes && !lockedFacing.Contains(kv.Key) && Mathf.Abs(Mathf.DeltaAngle(yt, 180f)) > 30f)
+                    yt = 180f + Mathf.Sign(Mathf.DeltaAngle(180f, yt)) * 25f;
                 a.transform.rotation = Quaternion.Slerp(a.transform.rotation, Quaternion.Euler(0f, yt, 0f), kk);
             }
         }
@@ -221,6 +227,7 @@ namespace HikayeStudyo
             go.transform.localScale = Vector3.one * Mathf.Max(0.3f, scale);
             float startX = enterFrom == 0 ? x : WorldX(enterFrom * 820f);
             go.transform.position = Origin + new Vector3(startX, 0f, 0f);
+            a.KafaEkseniKaydet(Kemik(a, HumanBodyBones.Head));
             actors[k] = a;
             yawTarget[k] = FacingYaw(k, x);
             go.transform.rotation = Quaternion.Euler(0f, yawTarget[k], 0f);
@@ -298,7 +305,9 @@ namespace HikayeStudyo
         {
             Karakter3D a;
             if (!actors.TryGetValue(Util.Norm(id), out a) || a == null) return;
-            if (talking) konusan = Util.Norm(id);
+            konusan = Util.Norm(id);     // ic ses satirinda da kameraya sirtini donmesin
+            konusanIcSes = !talking;
+            havaTaze = false;
             if (YatakKilidi(Util.Norm(id), a, talking)) return;
             if (motion == "zipla" || motion == "egil" || motion == "sarsil") { var m = Map(motion); if (m != null && Play(a, m)) return; }
             string e = Util.Norm(emotion);
@@ -359,6 +368,7 @@ namespace HikayeStudyo
             actors.Clear(); slots.Clear(); yawTarget.Clear(); walking.Clear(); lockedFacing.Clear();
             konusan = "";
             koltuklar.Clear();
+            arabadaGizlenen.Clear();
             HareketTemizle();
             foreach (var e in extras) if (e != null) Destroy(e);
             extras.Clear();
@@ -391,7 +401,7 @@ namespace HikayeStudyo
         {
             p = Vector3.zero;
             Karakter3D a;
-            if (!actors.TryGetValue(Util.Norm(id), out a) || a == null) return false;
+            if (!actors.TryGetValue(Util.Norm(id), out a) || a == null || ArabadaGizli(a)) return false;
             p = HeadOf(a);
             return true;
         }
@@ -406,7 +416,7 @@ namespace HikayeStudyo
             float bd = float.MaxValue;
             foreach (var kv in actors)
             {
-                if (kv.Key == k || kv.Value == null) continue;
+                if (kv.Key == k || kv.Value == null || ArabadaGizli(kv.Value)) continue;
                 float d = (kv.Value.transform.position - me.transform.position).sqrMagnitude;
                 if (d < bd) { bd = d; best = kv.Key; }
             }
@@ -424,12 +434,15 @@ namespace HikayeStudyo
         {
             string hata;
             var tarif = MekanTarifi.Coz(arg, out hata);
+            // hatali satir eldeki 3D mekani bozmaz
+            if (tarif == null) { if (hata != null) Debug.LogWarning("[Hikaye] " + hata); return; }
             if (Mekan != null && Mekan.Oturmali) ArabadanKaldir();
             if (Mekan != null) MekanDegisiyor();
-            havaYagmur = havaKar = havaSis = false;      // hava mekana aittir; yeni mekana tasinmaz
+            // hava mekana aittir; yeni mekana tasinmaz. Istisna: hemen once (konusma olmadan) yazilan 'hava:'
+            if (!havaTaze) havaYagmur = havaKar = havaSis = false;
+            havaTaze = false;
             if (Mekan != null) { Mekan.gameObject.SetActive(false); Destroy(Mekan.gameObject); Mekan = null; }
-            if (hata != null) Debug.LogWarning("[Hikaye] " + hata);
-            if (tarif == null || tarif.Tur == "yok") { OdaDegisti(); HavaKur(); return; }
+            if (tarif.Tur == "yok") { OdaDegisti(); HavaKur(); return; }
             var m = Mekan3D.Kur(transform, tarif.Tur, tarif);
             if (m == null) { OdaDegisti(); HavaKur(); return; }
             Mekan = m;
@@ -494,6 +507,7 @@ namespace HikayeStudyo
             if (!NoktaBul(nokta, out w, out yaw)) { NoktaUyarisi(nokta); return false; }
             string k = Util.Norm(id);
             HareketBirak(k, a);
+            if (konusan == k) konusan = "";
             a.transform.position = w;
             slots[k] = w.x - Origin.x;
             yawTarget[k] = yaw; lockedFacing.Add(k);

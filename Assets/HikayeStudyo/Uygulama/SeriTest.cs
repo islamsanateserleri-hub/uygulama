@@ -81,6 +81,18 @@ namespace HikayeStudyo
             var r5 = SeriMotoru.Incele(l, "Dördüncü Tabak", 5);
             Bekle("sonraki bolumde soru kapanmis", r5.AcikSorular.Count == 0);
             Bekle("sonraki bolumde Dede hayatta", r5.Durumlar.Exists(d => d.Ad == "Dede" && d.Durum == "hayatta"));
+            // acik bolume yazilan soru/cozuldu hemen listeye yansir
+            var tek = new List<SeriBolum> { SeriMotoru.Bolum("k1", "seri: K\nbolum: 1\nsoru: Kapida kim var\ndurum: Dede = olu\nson: sert") };
+            var once = new List<SeriBolum>(tek) { SeriMotoru.Bolum("k2", "seri: K\nbolum: 2\nmekan: sofra\nson: sert") };
+            Bekle("acik bolumde soru gorunur", SeriMotoru.Incele(once, "K", 2).AcikSorular.Count == 1);
+            once[1] = SeriMotoru.Bolum("k2", "seri: K\nbolum: 2\nmekan: sofra\ncozuldu: Kapida kim var\nolay: kapi acildi\nson: sert");
+            var rc = SeriMotoru.Incele(once, "K", 2);
+            Bekle("Cozuldu soruyu listeden kaldirir", rc.AcikSorular.Count == 0);
+            Bekle("acik bolumun olayi gorunur", rc.Olaylar.Count == 1);
+            once[1] = SeriMotoru.Bolum("k2", "seri: K\nbolum: 2\nmekan: sofra\ngeri: 1 saat once\n[Dede|normal|dis] Ben.\nson: sert");
+            var rg = SeriMotoru.Incele(once, "K", 2);
+            Bekle("geri: sonrasi olu karakter hafif uyari verir", Var(rg, 2, "öldü ama") && !rg.Celiskiler.Exists(c => c.Agir && c.Mesaj.Contains("öldü ama")));
+
             Bekle("seri adi bos -> bos rapor", SeriMotoru.Incele(l, "", 0).Bolumler.Count == 0);
 
             // ---- Asama 15 ----
@@ -89,8 +101,16 @@ namespace HikayeStudyo
             {
                 string m = SeriUretici.Sablon(i, "Deneme", 3, "mektup", "ozet metni");
                 var p = StoryParser.Parse(m);
-                int hata = HikayeDenetci.HataSayisi(HikayeDenetci.Denetle(m, lib, new string[0]));
-                Bekle("sablon " + i + " uyarisiz ve hatasiz (" + p.Warnings.Count + "/" + hata + ")", p.Warnings.Count == 0 && hata == 0 && p.Bolum == 3);
+                var sorunlar = HikayeDenetci.Denetle(m, lib, new string[0]);
+                int hata = sorunlar.FindAll(x => x.Hata && x.Kod != "SABLON_BOS").Count;
+                Bekle("sablon " + i + " uyarisiz, yer tutucu disinda hatasiz (" + p.Warnings.Count + "/" + hata + ")", p.Warnings.Count == 0 && hata == 0 && p.Bolum == 3);
+                Bekle("sablon " + i + " doldurulmadan videoya gidemez", sorunlar.Exists(x => x.Hata && x.Kod == "SABLON_BOS"));
+                if (i == 0)
+                {
+                    Bekle("gercek replik sablon sayilmaz", !Util.SablonYerTutucu("[Anne|normal|dis] Numaranı buraya yaz.") && !Util.SablonYerTutucu("kanca: İsmini buraya yazdım"));
+                    Bekle("uygulamanin ekledigi bos satirlar yakalanir", Util.SablonYerTutucu("kanca: Buraya ilk cümleni yaz.") && Util.SablonYerTutucu("[Arda|normal|dis] Metni buraya yaz"));
+                }
+                Bekle("sablon " + i + " uydurma oylama sonucu yok", !p.Items.Exists(x => x.Type == ItemType.Result));
             }
             var dk = StoryParser.Parse("devami: Yarin\noylama: Ne yapmali?\nsecim: A) x / B) y");
             Bekle("devami ve oylama okunur", dk.Warnings.Count == 0 && dk.Items.Count == 2 && dk.Items[0].Type == ItemType.DevamKarti && dk.Items[1].Soru == "Ne yapmali?");

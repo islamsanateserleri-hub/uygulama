@@ -1,0 +1,9 @@
+# Kart testi: secim karti -> devami karti -> son yazisi; kartlar birbirinin ustune binmemeli
+seri: Kart Deneme
+bolum: 1
+oyuncu: Anne = VRM_Anne
+mekan: sofra
+[Anne|normal|dis] Karar senin.
+secim: A) Kalsin / B) Gitsin
+devami: Yarin ayni saatte
+son: yumusak Hangisini secerdin?

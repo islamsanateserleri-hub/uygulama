@@ -3,10 +3,10 @@
 Tek kayıt dosyası. Her işlem, test sonucu ve hata yalnızca buraya eklenir (en fazla 1-2 sayfa; eskiyi kısalt). Yeni sohbet bu dosyayı okuyarak eksiksiz devam eder.
 Eski defterler/notlar `_Arsiv/` altında, okunmaz. Plan: `Hikaye_Studyo_Gelistirme_Plani.pdf` (kullanıcıdan alınır, sıra değişmez).
 
-## ÖZET (kullanıcı için, 25 Kas 18:15)
-**Neredeyiz:** Aşamaların hepsi geçildi. 12–15 yazıldı ama HATALI maddeleri var; 16 yalnız değerlendirildi (ücretli yapay zekâ için senin kararın gerekiyor). Şimdi sıra HATALI listesini tek tek düzeltmekte.
+## ÖZET (kullanıcı için, 25 Kas 22:15)
+**Neredeyiz:** Aşamaların hepsi geçildi. 12–15 yazıldı ama HATALI maddeleri var; 16 yalnız değerlendirildi (ücretli yapay zekâ için senin kararın gerekiyor). Şimdi HATALI listesi düzeltiliyor: AĞIR maddelerin çoğu bitti (yalnız Editör karelerinde ve mantık testinde; EXE'de DENENMEDİ). Kalan kaba tahmin: orta ~26 madde 3-4 saat, küçük + son kontrol 2-3 saat. 26 Kas 02:00 için "devam et" mesajı kurulu.
 **Yeni çalışma düzeni (kullanıcı, 17:38):** küçük hatalarda durma; "HATALI" yaz, aşamalara devam et; denetçi ajan her aşamayı denetlesin; uygulama bitince hatalar tek tek düzeltilecek.
-**Dikkat:** araba sahnesini TikTok'a koyma (denetimde kadın karakterin etek altı göründü; düzeltme yazıldı, denenmedi).
+**Dikkat:** araba sahnesindeki açık görüntü Editör karelerinde düzeldi; EXE videosunu kendin izlemeden TikTok'a koyma (EXE bugünkü düzeltmeleri İÇERMİYOR).
 **Alt ajanlar:** denetçi ajan her aşama sonunda çalıştırılıyor.
 **UniVRM:** paket kurulurken Unity "imza yok" uyarısı verdi (resmî GitHub sürümü). Kaldırmak için menü "Hikaye/UniVRM Kaldir".
 **Senden beklenenler:** yeni kurulum dosyasını üretip çalıştırma, temiz bilgisayar / kaldırma testi (eldeki kurulum dosyası bugünkü değişiklikleri İÇERMİYOR). Daha gerçekçi insan modeli istenirse (Microsoft Rocketbox, ücretsiz) indirme izni.
@@ -56,41 +56,47 @@ Eski defterler/notlar `_Arsiv/` altında, okunmaz. Plan: `Hikaye_Studyo_Gelistir
 
 ## HATALI – SONRA DÜZELTİLECEK
 **Aşama 10–12 (denetçi, 25 Kas ~17:35)**
-1. AĞIR (TikTok riski): araba yakın planında iç çamaşırı göründü (kare_21). Torpido yükseltildi, orta konsol eklendi; DENENMEDİ.
-2. AĞIR: son araba / konuşanın sırtı düzeltmeleri çalıştırılıp denenmedi; aşama 12 mekânlarının EXE videosu yok; Mekânlar sayfası ve kayıtlı mekân denenmedi; test_mekan yeniden çalıştırılmadı.
-3. AĞIR: omuz üstü plan fiilen kalktı ("ters" ile neredeyse aynı) (KameraYonetmen.cs ~276-301).
-4. ORTA: `mekan3d: mutfak, duvar=mavi` / `mekan3d: duvar=mavi` 3D'yi sessizce kapatıyor; `duvar=mavi, zemin=ahsap` ve `hava=yagmur,sis` reddediliyor.
-5. ORTA: arabada ilk konuşan sürücü oluyor. 6. ORTA: hastanede yatan karakterin başı yatak başlığının içinde; etek çadır gibi, bacaklar açık.
-7. ORTA: konuşanın sırtı dönük kalabiliyor; iç ses (|ic) satırında koruma yok. 8. ORTA: `yer:` konuşanı sıfırlamıyor.
-9. ORTA: her `mekan3d` havayı sıfırlıyor (önce yazılan `hava:` kayboluyor), zaman/ışık sıfırlanmıyor. 10. ORTA: `hava: yagmur` sessiz; mekândan önceki atmosfer siliniyor.
-11. ORTA: `poz: X oturuyor` 2D karakteri yana döndürüyor.
+1. AĞIR (TikTok riski): araba yakın planında iç çamaşırı göründü (kare_21). Torpido yükseltildi, orta konsol eklendi; DENENMEDİ. → DÜZELTİLDİ 25 Kas (Editör: test_araba, test_araba2).
+2. AĞIR: son araba / konuşanın sırtı düzeltmeleri çalıştırılıp denenmedi; aşama 12 mekânlarının EXE videosu yok; Mekânlar sayfası ve kayıtlı mekân denenmedi; test_mekan yeniden çalıştırılmadı. → KISMEN: araba denendi; test_mekan, Mekânlar sayfası, EXE videosu AÇIK.
+3. AĞIR: omuz üstü plan fiilen kalktı ("ters" ile neredeyse aynı) (KameraYonetmen.cs ~276-301). → KISMEN: dinleyen kenarda görünüyor (test_omuz); bazen omuz yerine saç parçası (3. denetim).
+4. ORTA: `mekan3d: mutfak, duvar=mavi` / `mekan3d: duvar=mavi` 3D'yi sessizce kapatıyor; `duvar=mavi, zemin=ahsap` ve `hava=yagmur,sis` reddediliyor. → DÜZELTİLDİ (test_orta1; `hava=yagmur,sis` yalnız kodda).
+5. ORTA: arabada ilk konuşan sürücü oluyor. → DÜZELTİLDİ: çocuk sürücü olmaz (test_orta1). 6. ORTA: hastanede yatan karakterin başı yatak başlığının içinde; etek çadır gibi, bacaklar açık.
+7. ORTA: konuşanın sırtı dönük kalabiliyor; iç ses (|ic) satırında koruma yok. → DÜZELTİLDİ: iç seste kameraya döner (test_orta1). 8. ORTA: `yer:` konuşanı sıfırlamıyor. → DÜZELTİLDİ (kod; ayrıca denenmedi).
+9. ORTA: her `mekan3d` havayı sıfırlıyor, zaman/ışık sıfırlanmıyor. → DÜZELTİLDİ: hemen önce yazılan `hava:` taşınır (test_orta1). zaman/ışık BİLEREK sürüyor (belgeye yazıldı).
+10. ORTA: `hava: yagmur` sessiz; mekândan önceki atmosfer siliniyor. → Kod düzeltildi; SES VE ATMOSFER DENENMEDİ.
+11. ORTA: `poz: X oturuyor` karakteri yana döndürüyor. → DÜZELTİLDİ (test_orta1; çizgi mekânda oturuş ayakta gibi görünüyor: KÜÇÜK).
 12. KÜÇÜK: arabada 5. kişi ayakta kalıyor, figüran girebiliyor, yanlış koltuk adı sessiz; yeni nokta adları belgesiz; pencere noktaları uzakta; park duvar= / köy vurgu= etkisiz; köprü doğrulayıcısında mekan3d/hava denetimi yok.
 **Aşama 13 (kendi testim + denetçi, 18:00)**
-1. AĞIR: `dondur` zamanı durdurmuyor (kar yağıyor, göz kırpılıyor, saç oynuyor, gözyaşı/buhar akıyor, 2D karakter hareket ediyor).
-2. AĞIR: gözyaşı yanakta değil, saçın üstünde iki mavi boncuk gibi; saç/el/diğer karakter arkasında kalmıyor.
-3. AĞIR: nefes buharı ağız yerine burun/göz hizasında, yüzü kapatıyor; arkası dönükken de çiziliyor; mekân sonrası yakın planda baş kesilebiliyor.
+1. AĞIR: `dondur` zamanı durdurmuyor (kar yağıyor, göz kırpılıyor, saç oynuyor, gözyaşı/buhar akıyor, 2D karakter hareket ediyor). → DÜZELTİLDİ (Editör: test_dondur). EXE ve canlı önizleme denenmedi (önizlemede eski davranış).
+2. AĞIR: gözyaşı yanakta değil, saçın üstünde iki mavi boncuk gibi; saç/el/diğer karakter arkasında kalmıyor. → DÜZELTİLDİ: baş dik ve eğikken yanakta (test_yas). Saç/el arkasında kalmama AÇIK.
+3. AĞIR: nefes buharı ağız yerine burun/göz hizasında, yüzü kapatıyor; arkası dönükken de çiziliyor; mekân sonrası yakın planda baş kesilebiliyor. → DÜZELTİLDİ: buhar ağzın altında/önünde (test_yas); ilk satırda baş artık kadrajda (test_ilk).
 4. ORTA: `yavas` kar/yağmur, kamera, 2D karakter ve bazı etkileşim kaymalarını yavaşlatmıyor. `dondur` süresi süre tahmininde yok.
 5. ORTA: 2D mekânda 3D karakterle `filtre` neredeyse etkisiz. 6. ORTA: Editör önizlemesi ile EXE renkleri uyuşmuyor (sıcak filtre editörde görünmüyor).
 7. ORTA: "geri sarma" gerçek geri sarma değil. 8. ORTA: otomatik efekt önerisi eksik; "döndüm"/"buzdolabı" yanlışlıkla nefes öneriyor; testte efekt önerisi sınanmıyor.
 9. ORTA: flaş, sarsıntı, anı, huzme, yağmur, geri sarma, satırdan başlatma, Efekt sekmesi DENENMEDİ.
 10. KÜÇÜK: satırdan başlatınca gözyaşı/buhar sonraki mekâna taşınıyor; yanlış karakter adı uyarısız; `nefes: yok` herkesi kapatıyor; 2D sis çok soluk; 2D mekânda 3D karakter ilk karede çömelmiş gibi; park başında baş kadraj dışında.
 **Aşama 15 ekran kareleri (kendi bakışım, 18:10; Editör önizlemesi, test_seri)**
-1. AĞIR: "devamı" kartı hâlâ ekranda duran seçim kartının üstüne biniyor ("Yarın aynı saatte" B düğmesinin üzerinde) — denetçinin 1. maddesi doğrulandı.
+1. AĞIR: "devamı" kartı hâlâ ekranda duran seçim kartının üstüne biniyor ("Yarın aynı saatte" B düğmesinin üzerinde) — denetçinin 1. maddesi doğrulandı. → DÜZELTİLDİ (Editör: test_kart).
 2. ORTA: 2D "sofra" mekânında 3D karakterlerle, Arda'nın "Dinliyorum!" satırında Arda görünmüyor (yalnız ayakları), Anne sol kenarda kesik.
 **Aşama 14 (denetçi, 18:10; kod okuması)**
-1. AĞIR: "Çözüldü" düğmesi soruyu listeden kaldırmıyor (liste açık bölümden önceki durumu gösteriyor); bu bölüme eklenen soru/olay/durum da görünmüyor.
-2. AĞIR: `geri:` / `vfx: vhs` sonrası bölüm sonuna kadar ölü karakter denetimi kapanıyor.
+1. AĞIR: "Çözüldü" düğmesi soruyu listeden kaldırmıyor (liste açık bölümden önceki durumu gösteriyor); bu bölüme eklenen soru/olay/durum da görünmüyor. → DÜZELTİLDİ (Seri Testi 49/0; arayüzde tıklanmadı).
+2. AĞIR: `geri:` / `vfx: vhs` sonrası bölüm sonuna kadar ölü karakter denetimi kapanıyor. → DÜZELTİLDİ (mantık testi).
 3. ORTA: ölünün `poz:`/`sarilma:`/`cikar:` satırları yanlış çelişki veriyor. 4. ORTA: ilgisiz bir `olay:` açıklamasız dirilmeyi susturuyor.
 5. ORTA: Olay/Durum düğmeleri satırı imlece değil sona koyuyor. 6. ORTA: önerilen seri adı/bölüm no ilk dosyadan alınıyor; numara kutusu Plan ile ortak.
 7. ORTA: numarasız veya kopya hikâye durumları karıştırıyor. 8. ORTA: başa satır eklemek `kapak: 24` satır numarasını kaydırıyor.
 9. KÜÇÜK: özet kartı sözcük ortasından kesiyor, tekrar tıklanınca ikinci kart ekliyor. 10. KÜÇÜK: dar pencerede düğme satırı taşar; kayıtlı hastane mekânında yanlış uyarı; sahneye hiç çıkmayan ölü "yazım hatası" sayılıyor.
 **Aşama 15 (denetçi, 18:08; kod okuması)**
-1. AĞIR: "devami:" kartı sonrasındaki her şeyi örtüyor (son yazısı, kararma, sert kesme); "secim:" ardından gelirse A/B kartı da örtülüyor.
-2. AĞIR: şablon yer tutucuları ("…başlığını yaz", "…buraya yaz", uydurma "sonuc: %60 A") videoya ve yayın dosyalarına girebilir; denetim uyarmıyor.
+1. AĞIR: "devami:" kartı sonrasındaki her şeyi örtüyor (son yazısı, kararma, sert kesme); "secim:" ardından gelirse A/B kartı da örtülüyor. → DÜZELTİLDİ (test_kart, test_kart2).
+2. AĞIR: şablon yer tutucuları ("…başlığını yaz", "…buraya yaz", uydurma "sonuc: %60 A") videoya ve yayın dosyalarına girebilir; denetim uyarmıyor. → DÜZELTİLDİ (mantık testi; yalnız uygulamanın kendi boş şablon cümleleri yakalanır).
 3. ORTA: alternatif son aynı bölüm numarasıyla kırmızı çelişki veriyor; fragmanda `bolum:` yok. 4. ORTA: fragman `ani/poz/isik/zaman/hava/atmosfer` satırlarını atıyor; `mekan` ile `mekan3d` birbirini eziyor.
 5. ORTA: "Son A/B" ses kopyalamıyor (Gemini hakkı harcanır); fragman Resources/Ses'tekileri almıyor. 6. ORTA: "Sezon oluştur" seçili şablonu yok sayıyor; şablonlar hep Arda/Anne.
 7. ORTA: oylama sonucu elle; alternatif son boş iskelet; seri kapağı yalnız rozet rengi (eski serilerin rozet rengi de değişti).
 8. KÜÇÜK: üretim düğmeleri onaysız; fragman sesi eski klasördeki dosyayı ezebilir; yersiz `oylama:` uyarısız; köprü denetleyicisi devami süresini saymıyor.
+**3. denetim (25 Kas 22:03): "yeterli değil"**
+1. AĞIR: karakterin ilk konuşmasında başı kadraj dışında kalabiliyor. → DÜZELTİLDİ 22:18 (ilk klipte çömelme kaldırıldı; test_ilk).
+2. ORTA: omuz üstü planda omuz yerine kopuk saç parçası. 3. ORTA: omuz eşiğinde / yürürken kamera sıçrayabilir (denenmedi).
+4. ORTA: `yer:` ile koltuğu alınan veya araba dışında oturan karakter 0,3 sn yumuşak kalkıyor (açık diz riski, Sahne3D.Hareket.cs ~886). → DÜZELTİLDİ (anında kalkma; test_araba2).
+5. KÜÇÜK: gizli kişiye `tut:` eşyayı havada bırakır; `secim:`+`gorsel:` kartı örter; 5. kişi ve EXE'de `dondur` denenmedi; arabada asagidan/yukaridan/goz etkisiz; arkada çocuğun yalnız başı görünür.
 **Eski açık maddeler:** yeni eşyalar kadraj dışında kalabiliyor; `hava` ile `atmosfer: yagmur` çakışıyor; her karede diskten okuma; aşama 4, 5, 6, 8, 9, 11'in denenmemiş parçaları; hareket/kamera/çeşit test videolarında konuşma sesi yok; aşama 13 öncesi cihazda yedek klasörü alınmadı (kural 4 atlandı; GitHub'daki 5cef8ae aşama 11 hali).
 
 ## Özet: Aşama 0-2 (tamam)
@@ -127,7 +133,7 @@ Kurallar: bozma, yedek, derleme kontrolü, test edilmeyen "tamam" değil, aşama
 Ayrıntılı sürüm: Doc "DURUM.dm" → "TAM GELİŞTİRME PLANI".
 
 ## Sonraki adım
-1) "HATALI" listesini tek tek düzelt (AĞIR olanlardan başla; ilki araba sahnesi, TikTok riski); her düzeltmede derleme + deneme + denetçi. 2) Aşama 16 için kullanıcı kararı (Docs/Asama16_Degerlendirme.md). 3) KULLANICIDAN: temiz bilgisayar testi; kaldırma testi; yeni kurulum dosyasını üretip çalıştırmak.
+1) Aşama 10–12 ORTA 6 (hastanede yatan: baş yatak başlığında, etek/bacaklar; TikTok riski) ve AĞIR 2 (test_mekan + EXE videosu); sonra Aşama 13 ORTA 4-9, Aşama 15 kare 2, Aşama 14 ORTA 3-8, Aşama 15 ORTA 3-7, KÜÇÜK maddeler; her düzeltmede derleme + deneme; denetçi her grup sonunda (kullanım tutumlu). 2) Aşama 16 için kullanıcı kararı (Docs/Asama16_Degerlendirme.md). 3) KULLANICIDAN: temiz bilgisayar testi; kaldırma testi; yeni kurulum dosyasını üretip çalıştırmak.
 
 ## İŞLEM GÜNLÜĞÜ
 - 25 Kas 01:15 — "DURUM.md" not defteri oluşturuldu. Alt ajanlar başlatıldı: (1) Dinle düzeltmesi, (2) Aşama 4 kod denetimi, (3) GitHub karşılaştırması. Uygulama izinleri alındı (Unity Hub, Unity, Gezgin, Hikayestudyo.exe).
@@ -186,3 +192,5 @@ Ayrıntılı sürüm: Doc "DURUM.dm" → "TAM GELİŞTİRME PLANI".
 - 25 Kas 18:10 — AŞAMA 16: maliyet/lisans değerlendirmesi yazıldı (Docs/Asama16_Degerlendirme.md). Kod yazılmadı (plan "sonraki sürüm"; ücretli hesap gerekiyor).
 - 25 Kas 18:12 — Windows derlemesi (18:11) Succeeded, 0 hata, 9 uyarı; aşama 14–15 artık EXE içinde. EXE açılıp DENENMEDİ; kurulum dosyası yeniden üretilmedi. Aşama 15 ekran karelerinden 2 yeni HATALI maddesi yazıldı.
 - 25 Kas 18:18 — Aşama 12–16 GitHub'a gönderildi (commit 87e9ad4; cihaz dosyalarıyla bayt bayt aynı). Sıradaki: HATALI listesini düzeltmek.
+- 25 Kas 21:07–22:15 — HATALI düzeltme turu (AĞIR): araba (arkada/önde herkesin yüzü görünür, kucak görünmez, inişte anında ayakta), gerçek omuz üstü, `dondur` gerçek donuk kare, gözyaşı/nefes (kafa kemiği yönü), seçim/devamı kartı, şablon cümle uyarısı, Çözüldü düğmesi, `geri:` sonrası ölü denetimi. Derleme 0 hata (22:04). Seri Testi 49/0, Yardımcı 48/0. Hepsi Editör/mantık testi; EXE denenmedi. Yeni testler: Docs/test_araba2, test_dondur, test_kart, test_kart2, test_omuz, test_yas, test_ilk. Bu turda cihazda yeni yedek klasörü alınmadı (kural 4 eksik; eski hal GitHub 9ba5f50). 22:12: kullanıcı isteğiyle 26 Kas 02:00 "devam et" mesajı kuruldu.
+- 25 Kas 22:31 — Baş kesilmesi (ilk klip çömelmesi) ve 3D mekân ORTA grubu (4, 5, 7, 8, 9, 10, 11) düzeltildi; derleme 0 hata (22:29); test_ilk, test_araba2, test_orta1 Editör karelerinde bakıldı. Commit + GitHub.
