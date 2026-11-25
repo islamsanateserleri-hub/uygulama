@@ -1,0 +1,19 @@
+// YORGAN KALKMA TESTI. HikayeKomut/hikaye_test_yatak2.txt olarak kopyala, "hikaye_yaz: test_yatak2", sonra "oynat: test_yatak2".
+oyuncu: Anne = VRM_Anne
+oyuncu: Baba = VRM_Baba
+
+mekan: oda_gunduz
+mekan3d: yatak_odasi
+yatak: Baba yat
+kamera: genis
+[Baba|uzgun|ic] Yatak odasinda yatiyorum, yorgan ustumde olmali.
+kalk: Baba
+kamera: genis
+[Baba|normal|dis] Kalktim, yatakta fazladan yorgan kalmamali.
+yatak: Anne yat
+kamera: genis
+[Anne|uzgun|ic] Simdi ben yatiyorum.
+mekan3d: mutfak
+kamera: genis
+[Anne|normal|dis] Mutfaga gectik, havada yorgan kalmamali.
+son: yumusak Test bitti

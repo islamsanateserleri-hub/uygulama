@@ -1,0 +1,14 @@
+// HASTANE YATAGI TESTI. HikayeKomut/hikaye_test_yatak.txt olarak kopyala, "hikaye_yaz: test_yatak", sonra "oynat: test_yatak".
+oyuncu: Anne = VRM_Anne
+oyuncu: Baba = VRM_Baba
+
+mekan: oda_gunduz
+mekan3d: hastane
+yatak: Anne yat
+kamera: genis
+[Anne|uzgun|ic] Hastanede yatiyorum, basim tahtanin icine girmemeli ve bacaklarim kapali olmali.
+kamera: yakin
+[Anne|uzgun|dis] Yakin plan, basim yastikta gorunmeli.
+kamera: yukaridan
+[Anne|uzgun|dis] Yukaridan da etegim cadir gibi durmamali.
+son: yumusak Test bitti

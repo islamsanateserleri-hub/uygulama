@@ -628,6 +628,8 @@ namespace HikayeStudyo
         void OnDestroy()
         {
             if (rt != null) { rt.Release(); Destroy(rt); }
+            foreach (var k in new List<string>(ortuler.Keys)) OrtuSil(k);
+            if (ortuPisirme != null) Destroy(ortuPisirme);
         }
     }
 }

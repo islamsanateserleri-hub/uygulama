@@ -908,6 +908,166 @@ namespace HikayeStudyo
             }
         }
 
+        // ---------- yatakta yatanin yorgani ----------
+        // Sirtustu yatirilan govdede etek cadir gibi acik kaliyor: ayaktan goguse kadar govdeyi izleyen ortu serilir.
+        // sirtustu listesi her karede izlenir; yatis nasil biterse bitsin (kalk, mekan degisimi, cikis) ortu kalkar.
+        class Ortu { public GameObject obj; public Mesh mesh; public Karakter3D a; public Vector3 konum; public float basla, sonraki; }
+        readonly Dictionary<string, Ortu> ortuler = new Dictionary<string, Ortu>();
+        const int OrtuDilim = 28;
+        Mesh ortuPisirme;
+
+        void LateUpdate()
+        {
+            Vector3 yatak = Vector3.zero;
+            float yaw;
+            bool yatakVar = Mekan != null && Mekan.Aktif && Mekan.NoktaBul("yatak", out yatak, out yaw);
+
+            List<string> sil = null;
+            foreach (var kv in ortuler)
+            {
+                Karakter3D a;
+                if (!yatakVar || !sirtustu.Contains(kv.Key) || !actors.TryGetValue(kv.Key, out a) || a == null || a != kv.Value.a
+                    || !a.gameObject.activeInHierarchy || kv.Value.obj == null)
+                {
+                    if (sil == null) sil = new List<string>();
+                    sil.Add(kv.Key);
+                }
+            }
+            if (sil != null) foreach (var k in sil) OrtuSil(k);
+            if (!yatakVar) return;
+
+            foreach (var k in sirtustu)
+            {
+                Karakter3D a;
+                if (!actors.TryGetValue(k, out a) || a == null || !a.gameObject.activeInHierarchy) continue;
+                Ortu o;
+                if (!ortuler.TryGetValue(k, out o))
+                {
+                    o = new Ortu { a = a, konum = a.transform.position, basla = Time.time };
+                    o.obj = new GameObject("YatakOrtusu_" + k);
+                    o.obj.transform.SetParent(transform, true);
+                    o.mesh = new Mesh();
+                    o.obj.AddComponent<MeshFilter>().sharedMesh = o.mesh;
+                    var mr = o.obj.AddComponent<MeshRenderer>();
+                    mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                    mr.receiveShadows = false;
+                    ortuler[k] = o;
+                }
+                else if (Vector3.Distance(o.konum, a.transform.position) > 0.01f)
+                {
+                    o.konum = a.transform.position;
+                    o.basla = Time.time;
+                    o.sonraki = 0f;
+                }
+                // durus ve etek kemikleri ilk saniyelerde oturur: o surede bicim yenilenir
+                if (Time.time >= o.sonraki && Time.time - o.basla < 3f)
+                {
+                    OrtuBicimle(o, yatak);
+                    o.sonraki = Time.time + 0.2f;
+                }
+            }
+        }
+
+        void OrtuSil(string k)
+        {
+            Ortu o;
+            if (!ortuler.TryGetValue(k, out o)) return;
+            ortuler.Remove(k);
+            if (o.obj != null) Destroy(o.obj);
+            if (o.mesh != null) Destroy(o.mesh);
+        }
+
+        void OrtuBicimle(Ortu o, Vector3 yatak)
+        {
+            var solAyak = Kemik(o.a, HumanBodyBones.LeftFoot);
+            var sagAyak = Kemik(o.a, HumanBodyBones.RightFoot);
+            var gogus = Kemik(o.a, HumanBodyBones.Chest);
+            if (gogus == null) gogus = Kemik(o.a, HumanBodyBones.Spine);
+            if (solAyak == null || sagAyak == null || gogus == null) return;
+            float x0 = Mathf.Min(solAyak.position.x, sagAyak.position.x) - 0.16f;   // ayak solda, bas sagda
+            float x1 = gogus.position.x + 0.06f;
+            if (x1 - x0 < 0.3f) return;
+
+            float taban = yatak.y + 0.08f;        // yataktaki sabit battaniyenin hemen ustu
+            float tavan = yatak.y + 0.6f;
+            float adim = (x1 - x0) / OrtuDilim;
+            var ham = new float[OrtuDilim + 1];
+            for (int i = 0; i <= OrtuDilim; i++) ham[i] = taban;
+
+            if (ortuPisirme == null) ortuPisirme = new Mesh();
+            foreach (var r in o.a.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                if (!r.enabled || r.sharedMesh == null) continue;
+                r.BakeMesh(ortuPisirme);
+                var m = Matrix4x4.TRS(r.transform.position, r.transform.rotation, Vector3.one);
+                foreach (var v in ortuPisirme.vertices)
+                {
+                    var d = m.MultiplyPoint3x4(v);
+                    if (d.x < x0 - adim || d.x > x1 + adim || Mathf.Abs(d.z - yatak.z) > 0.36f) continue;
+                    int i = Mathf.Clamp(Mathf.RoundToInt((d.x - x0) / adim), 0, OrtuDilim);
+                    if (d.y + 0.03f > ham[i]) ham[i] = Mathf.Min(tavan, d.y + 0.03f);
+                }
+            }
+            // komsunun en yuksegi + yumusatma: govde ortuden disari tasmasin
+            var genis = new float[OrtuDilim + 1];
+            var h = new float[OrtuDilim + 1];
+            for (int i = 0; i <= OrtuDilim; i++)
+                genis[i] = Mathf.Max(ham[i], Mathf.Max(ham[Mathf.Max(0, i - 1)], ham[Mathf.Min(OrtuDilim, i + 1)]));
+            for (int i = 0; i <= OrtuDilim; i++)
+                h[i] = Mathf.Max(ham[i], (genis[Mathf.Max(0, i - 1)] + genis[i] + genis[Mathf.Min(OrtuDilim, i + 1)]) / 3f);
+
+            // kesit: ortada govde yuksekligi, kenarlarda yataga iner, en kenarda asagi sarkar
+            Material malzeme;
+            float yari;
+            Mekan.OrtuBilgisi(out malzeme, out yari);
+            o.obj.GetComponent<MeshRenderer>().sharedMaterial = malzeme;
+            float[] kz = { -1f, -0.98f, -0.8f, -0.56f, -0.28f, 0f, 0.28f, 0.56f, 0.8f, 0.98f, 1f };
+            float[] kw = { 0f, 0f, 0.45f, 1f, 1f, 1f, 1f, 1f, 0.45f, 0f, 0f };
+            int n = kz.Length;
+
+            var v3 = new List<Vector3>();
+            var t = new List<int>();
+            for (int i = 0; i <= OrtuDilim; i++)
+                for (int j = 0; j < n; j++)
+                {
+                    float y = (j == 0 || j == n - 1) ? yatak.y - 0.1f : taban + (h[i] - taban) * kw[j];
+                    v3.Add(o.obj.transform.InverseTransformPoint(new Vector3(x0 + adim * i, y, yatak.z + kz[j] * yari)));
+                }
+            for (int i = 0; i < OrtuDilim; i++)
+                for (int j = 0; j < n - 1; j++)
+                {
+                    int p = i * n + j;
+                    t.Add(p); t.Add(p + 1); t.Add(p + n);
+                    t.Add(p + 1); t.Add(p + n + 1); t.Add(p + n);
+                }
+            // ayak ve gogus uclari kapali
+            foreach (int i in new[] { 0, OrtuDilim })
+            {
+                int bas = v3.Count;
+                for (int j = 1; j < n - 1; j++)
+                {
+                    v3.Add(v3[i * n + j]);
+                    v3.Add(o.obj.transform.InverseTransformPoint(new Vector3(x0 + adim * i, yatak.y - 0.02f, yatak.z + kz[j] * yari)));
+                }
+                for (int j = 0; j < n - 3; j++)
+                {
+                    int p = bas + j * 2;
+                    t.Add(p); t.Add(p + 1); t.Add(p + 2);
+                    t.Add(p + 2); t.Add(p + 1); t.Add(p + 3);
+                }
+            }
+            // iki yuzlu: ters sarimli kopya
+            int adet = v3.Count, ucgen = t.Count;
+            for (int i = 0; i < adet; i++) v3.Add(v3[i]);
+            for (int i = 0; i < ucgen; i += 3) { t.Add(t[i] + adet); t.Add(t[i + 2] + adet); t.Add(t[i + 1] + adet); }
+
+            o.mesh.Clear();
+            o.mesh.SetVertices(v3);
+            o.mesh.SetTriangles(t, 0);
+            o.mesh.RecalculateNormals();
+            o.mesh.RecalculateBounds();
+        }
+
         void HareketTemizle()
         {
             baglar.Clear();

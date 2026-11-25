@@ -21,6 +21,22 @@ namespace HikayeStudyo
         Color Zemin(Color varsayilan) { return Ozel(tarif != null ? tarif.Zemin : "", varsayilan); }
         Color Vurgu(Color varsayilan) { return Ozel(tarif != null ? tarif.Vurgu : "", varsayilan); }
 
+        // yatakta yatanin yorgani (bicimi Sahne3D kurar): rengi ve eni yataktaki sabit battaniyeden alinir
+        public void OrtuBilgisi(out Material malzeme, out float yariGenislik)
+        {
+            if (root != null)
+                foreach (var mr in root.GetComponentsInChildren<MeshRenderer>())
+                    if (mr.name == "Battaniye" || mr.name == "HBattaniye")
+                    {
+                        malzeme = mr.sharedMaterial;
+                        yariGenislik = mr.transform.localScale.z * 0.5f + 0.01f;
+                        return;
+                    }
+            // disaridan gelen yatak modeli
+            malzeme = Mat(Vurgu(Tur == "hastane" ? K(0.38f, 0.66f, 0.82f) : K(0.28f, 0.42f, 0.7f)), 0.05f, 0f, false);
+            yariGenislik = 0.48f;
+        }
+
         static Color Ozel(string ad, Color varsayilan)
         {
             Color c;
