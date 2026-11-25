@@ -32,11 +32,11 @@ namespace HikayeStudyo
 
         public bool Measuring = true;
 
-        // Otomatik ses seviyesi: son miksi kazancDb kadar yukseltir, tepe -1 dBFS'i asmasin diye sinirlayici (limiter) uygular.
+        // Otomatik ses seviyesi: son miksi kazancDb kadar yukseltir, tepe -1,5 dBFS'i asmasin diye sinirlayici (limiter) uygular.
         // Her bitiste olculen degere gore kazanc guncellenir (PlayerPrefs "HS_Kazanc"), boylece sonraki kayit hedefe yaklasir.
         public float kazancDb;
         double gain = 1, gr = 1, release;
-        const double Esik = 0.891;   // -1 dBFS
+        const double Esik = 0.841;   // -1,5 dBFS (AAC kodlamasi tepeyi ~0,5 dB yukseltir; gercek tepe -1 dBTP altinda kalsin)
 
         void Awake()
         {
