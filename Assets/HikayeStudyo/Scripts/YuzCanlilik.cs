@@ -454,6 +454,20 @@ namespace HikayeStudyo
             return -1;
         }
 
+        // Test araci icin: blendshape adi hangi yuz kanalina eslesiyor? Eslesmiyorsa null.
+        public static string KanalAdi(string sekilAdi)
+        {
+            if (string.IsNullOrEmpty(sekilAdi)) return null;
+            string son = sekilAdi;
+            int dot = sekilAdi.LastIndexOf('.');
+            if (dot >= 0 && dot < sekilAdi.Length - 1) son = sekilAdi.Substring(dot + 1);
+            string ln = son.ToLowerInvariant();
+            string nn = ln.Replace("_", "").Replace(" ", "").Replace("-", "");
+            int onc;
+            int ch = Sinif(ln, nn, out onc);
+            return ch < 0 ? null : ((Ch)ch).ToString();
+        }
+
         // ---------- ana dongu ----------
         void LateUpdate()
         {

@@ -36,7 +36,8 @@ Eski defterler/notlar `_Arsiv/` altında, okunmaz. Plan: `Hikaye_Studyo_Gelistir
 | 6 Yapay zekâ yardımcıları | TAMAM (25 Kas 09:45), EXE'de test edildi; GitHub'da (cf5ca58) |
 | 7 Kurulum ve son kontrol | Kurulum + üzerine güncelleme bu bilgisayarda denendi (25 Kas 11:00). AÇIK (kullanıcı): temiz bilgisayar testi, kaldırma testi |
 | 8 Karakter kimlik sistemi | TAMAM, EXE'de kısmen test edildi (25 Kas 11:25). Açık testler günlükte |
-| 9–16 | Başlanmadı |
+| 9 VRoid + gelişmiş yüz animasyonu | BAŞLADI (25 Kas 12:25): inceleme ve ölçüm yapıldı. KULLANICI BEKLENİYOR (UniVRM indirme izni + VRoid karakteri) |
+| 10–16 | Başlanmadı |
 
 ## Özet: Aşama 0-2 (tamam)
 - Aşama 0: dört derleme birimi (Core/Runtime/Editor/App), KarakterKatalogu (68 karakter), menü "Hikaye/Windows Derlemesi (Deneme)".
@@ -72,7 +73,7 @@ Kurallar: bozma, yedek, derleme kontrolü, test edilmeyen "tamam" değil, aşama
 Ayrıntılı sürüm: Doc "DURUM.dm" → "TAM GELİŞTİRME PLANI".
 
 ## Sonraki adım
-1) Aşama 9 (plan PDF sırasıyla). 2) KULLANICIDAN: temiz bilgisayar testi; Windows Ayarlar > Uygulamalar'dan kaldırma testi; yeni kurulum dosyasını çalıştırmak (kurulu uygulamayı günceller). 3) Aşama 4-5-7-8 açık testleri günlükte.
+1) Aşama 9 (devam): KULLANICIDAN a) UniVRM indirme izni (VRM-0.131.4_efd2.unitypackage, github.com/vrm-c/UniVRM, boyut sayfada yazmıyor) b) VRoid Studio'da (ücretsiz, vroid.com) en az bir karakter yapıp .vrm olarak dışa aktarmak. Gelince: paket, içe aktarma, ağız/göz/duygu testi, ağız senkronu ölçümü. 2) KULLANICIDAN: temiz bilgisayar testi; kaldırma testi; yeni kurulum dosyasını çalıştırmak. 3) Aşama 4-5-7-8 açık testleri günlükte.
 
 ## İŞLEM GÜNLÜĞÜ
 - 25 Kas 01:15 — "DURUM.md" not defteri oluşturuldu. Alt ajanlar başlatıldı: (1) Dinle düzeltmesi, (2) Aşama 4 kod denetimi, (3) GitHub karşılaştırması. Uygulama izinleri alındı (Unity Hub, Unity, Gezgin, Hikayestudyo.exe).
@@ -108,3 +109,5 @@ Ayrıntılı sürüm: Doc "DURUM.dm" → "TAM GELİŞTİRME PLANI".
   GÖZLENEN, DÜZELTİLMEDİ: 3D odada otomatik yakın plan kadrajı bozuk (yüze aşırı yaklaşıyor) → bu videoda kamera: genis; geniş planda sofra masası kadraj dışında; 2D "sofra" ön planı kısa karakterin yüzünü kapatıyor; "son: sert" son satırdan 0,3 sn kesiyor; Mixamo_Remy küçük resimde yalnız bacak görünüyor (ölçek sorunu olabilir).
 - 25 Kas 12:07 — Yeni kurulum dosyası üretildi: Build/Kurulum/HikayeStudyosu_Kurulum_4.0.1.exe (302 MB; Aşama 8 + 3D yön düzeltmesi içinde). ÇALIŞTIRILMADI/DENENMEDİ; kurulu uygulama kullanıcı bunu çalıştırınca güncellenir. Aşama 8, yön düzeltmesi ve kayıtlar GitHub dalı claude/hikaye-studyosu'na gönderilecek.
 - 25 Kas 12:10 — GitHub’a gönderildi: commit 6599893 (Aşama 8 + 3D yön düzeltmesi + DURUM), dal claude/hikaye-studyosu.
+- 25 Kas 12:25 — AŞAMA 9 ARA RAPORU (11:01 zamanlanmış "devam et" 12:09'da okundu). Mevcut kod: YuzCanlilik.cs + AgizSenkron.cs ağız (ses genliği), göz kırpma, bakış, duygu şekillerini (ARKit/VRM/VRoid adları) zaten destekliyor. ÖLÇÜM (yeni Editor/YuzTesti.cs, menü "Hikaye/Yuz Testi" → HikayeKomut/yuz_test.txt): 68 modelin 0'ında ağız şekli, göz kırpma, yüz duygusu var; yalnız 3'ünde (Mixamo Aj, Claire, Sporty_Granny) çene kemiği eşlenmiş. "Hikaye/Cene Gorselleri" (cene.png): 3'ünde de çene döndürülünce ağız AÇILMIYOR → hiçbir 3D karakterin ağzı oynamıyor (dorduncu_tabak videosu dahil). Plana göre kafa sallamak konuşma animasyonu sayılmaz → VRM/VRoid gerekli.
+  YENİ HATA (düzeltilmedi): Mixamo Aj, Claire, Sporty_Granny'nin yüz kaplamaları karışık/bozuk (önizlemede); Sporty_Granny'de "çene" kemiği aslında siperliği oynatıyor görünüyor. Bu 3 model kullanılmasın. Not: proje kuralı "paket ekleme yok" ile planın UniVRM şartı çelişiyor; kullanıcı izni bu istisnayı da kapsamalı. glTFast ile UniVRM .glb içe aktarıcı çakışması kontrol edilecek. Değişen: Scripts/YuzCanlilik.cs (yalnız KanalAdi eklendi). Yedek: Yedek_2026-11-25_asama9/. Derleme 0 hata (12:20); EXE yeniden derlenmedi (oynatıcı davranışı değişmedi).
