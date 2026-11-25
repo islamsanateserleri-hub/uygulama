@@ -14,7 +14,7 @@ namespace HikayeStudyo
         public static readonly string[] Gecisler = { "karar", "capraz", "beyaz" };
         public static readonly string[] Isiklar = { "normal", "gunduz", "dramatik", "yumusak", "soguk", "sicak", "karanlik", "mum" };
         public static readonly string[] Kameralar =
-            { "otomatik", "yakin", "genis", "salla", "tepki", "yaklas", "uzaklas", "goz", "yukaridan", "asagidan", "bulanik", "net" };
+            { "otomatik", "yakin", "genis", "salla", "tepki", "yaklas", "uzaklas", "goz", "yukaridan", "asagidan", "bulanik", "net", "orta", "omuz", "ters", "iki" };
 
         public static bool KapiMi(string s)
         {

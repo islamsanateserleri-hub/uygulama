@@ -39,7 +39,9 @@ namespace HikayeStudyo
             if (string.IsNullOrEmpty(kimlik)) return null;
             foreach (var k in karakterler)
                 if (k != null && k.prefab != null && string.Equals(k.kimlik, kimlik, StringComparison.OrdinalIgnoreCase)) return k.prefab;
-            return null;
+            // çeşit adı ("VRM_Anne_005"): temel modelden çalışma anında üretilir
+            string taban; int no;
+            return Varyantlar.AdAyir(kimlik, out taban, out no) ? Varyantlar.Sablon(kimlik, Varyantlar.TumPrefablar(this)) : null;
         }
 
         void OnValidate() { kimlikler = null; }

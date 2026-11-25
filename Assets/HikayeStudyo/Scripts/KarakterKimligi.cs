@@ -71,7 +71,8 @@ namespace HikayeStudyo
             if (d.model3D != null)
             {
                 k.gorunum = VarsayilanGorunum;
-                if (katalog != null)
+                if (d.model3D.GetComponent<VaryantGorunum>() != null) k.gorunum = d.model3D.name;   // karakter çeşidi
+                else if (katalog != null)
                     foreach (var kayit in katalog.karakterler)
                         if (kayit != null && kayit.prefab == d.model3D) { k.gorunum = kayit.kimlik; break; }
             }

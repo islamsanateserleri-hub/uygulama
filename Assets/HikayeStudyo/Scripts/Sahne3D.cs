@@ -9,7 +9,7 @@ namespace HikayeStudyo
     // seffaf bir resim olarak gosterilir. Boylece 2D mekan, altyazi, efektler ve kamera yakinlasmasi aynen calisir.
     // 'mekan3d:' ile kodla kurulan 3D bir mekan (Mekan3D) acilirsa kamera opak olur, 2D mekanin yerini alir ve
     // KameraYonetmen tam serbest planlar kullanir. Atmosfer / zaman / gecis islemleri AtmosferVolume'dadir.
-    public class Sahne3D : MonoBehaviour
+    public partial class Sahne3D : MonoBehaviour
     {
         const float W = 1080f, H = 1920f;
         public static readonly Vector3 Origin = new Vector3(0f, -1000f, 0f);
@@ -150,6 +150,14 @@ namespace HikayeStudyo
             return slotX2D / (W * 0.5f) * halfW;
         }
 
+        // Karakterin duracagi yer. 2D mekanda kamera sabit oldugundan kadraj disina tasmasin diye sinirlanir
+        // (sagda TikTok dugmeleri oldugu icin sag sinir daha icerde)
+        float YerX(float slotX2D)
+        {
+            float x = WorldX(slotX2D);
+            return OdaAktif ? x : Mathf.Clamp(x, -0.6f, 0.52f);
+        }
+
         // ---------- Yonlendirme (yuz yonu) ----------
         // 2D mekanda eskisi gibi hafifce ortaya bakar; 3D mekanda yanindaki karaktere 3/4 doner
         float FacingYaw(string k, float x)
@@ -186,7 +194,7 @@ namespace HikayeStudyo
             foreach (var kv in actors)
             {
                 var a = kv.Value;
-                if (a == null || walking.Contains(kv.Key)) continue;
+                if (a == null || walking.Contains(kv.Key) || sirtustu.Contains(kv.Key)) continue;
                 float yt;
                 if (!yawTarget.TryGetValue(kv.Key, out yt)) continue;
                 a.transform.rotation = Quaternion.Slerp(a.transform.rotation, Quaternion.Euler(0f, yt, 0f), kk);
@@ -205,7 +213,7 @@ namespace HikayeStudyo
             go.name = "Oyuncu_" + id;
             a = go.GetComponent<Karakter3D>();
             if (a == null) a = go.AddComponent<Karakter3D>();
-            float x = WorldX(slotX2D);
+            float x = YerX(slotX2D);
             slots[k] = x;
             go.transform.localScale = Vector3.one * Mathf.Max(0.3f, scale);
             float startX = enterFrom == 0 ? x : WorldX(enterFrom * 820f);
@@ -260,7 +268,8 @@ namespace HikayeStudyo
             var k = Util.Norm(id);
             Karakter3D a;
             if (!actors.TryGetValue(k, out a) || a == null) return;
-            float x = WorldX(slotX2D);
+            float x = YerX(slotX2D);
+            HareketBirak(k, a);
             slots[k] = x;
             lockedFacing.Remove(k);
             StartCoroutine(WalkTo(k, a, x, run));
@@ -283,6 +292,7 @@ namespace HikayeStudyo
         {
             Karakter3D a;
             if (!actors.TryGetValue(Util.Norm(id), out a) || a == null) return;
+            if (YatakKilidi(Util.Norm(id), a, talking)) return;
             if (motion == "zipla" || motion == "egil" || motion == "sarsil") { var m = Map(motion); if (m != null && Play(a, m)) return; }
             string e = Util.Norm(emotion);
             if (!talking && (e == "normal" || e == "mutlu" || e == "fisilti")) e = "sus";
@@ -294,6 +304,9 @@ namespace HikayeStudyo
         {
             Karakter3D a;
             if (!actors.TryGetValue(Util.Norm(id), out a) || a == null) return;
+            string k = Util.Norm(id), yeni = Util.Norm(pose);
+            YatakBirak(k, a);
+            if (yeni == "yatiyor" || yeni == "oturuyor") pozDurum[k] = yeni; else pozDurum.Remove(k);
             var list = Map(pose);
             if (list != null) Play(a, list);
         }
@@ -303,6 +316,7 @@ namespace HikayeStudyo
         {
             Karakter3D a;
             if (!actors.TryGetValue(Util.Norm(id), out a) || a == null) return;
+            if (YatakKilidi(Util.Norm(id), a, false)) return;
             var p = Util.Norm(pose);
             if (p == "yatiyor" || p == "oturuyor") return;
             Play(a, new[] { "dur" });
@@ -313,6 +327,7 @@ namespace HikayeStudyo
             var k = Util.Norm(id);
             Karakter3D a;
             if (!actors.TryGetValue(k, out a) || a == null) yield break;
+            HareketBirak(k, a);
             actors.Remove(k);
             lockedFacing.Remove(k);
             float x = slots.ContainsKey(k) ? slots[k] : 0f;
@@ -327,6 +342,7 @@ namespace HikayeStudyo
         {
             foreach (var kv in actors) if (kv.Value != null) Destroy(kv.Value.gameObject);
             actors.Clear(); slots.Clear(); yawTarget.Clear(); walking.Clear(); lockedFacing.Clear();
+            HareketTemizle();
             foreach (var e in extras) if (e != null) Destroy(e);
             extras.Clear();
             if (Yonetmen != null) Yonetmen.Sifirla();
@@ -454,6 +470,7 @@ namespace HikayeStudyo
             Vector3 w; float yaw;
             if (!NoktaBul(nokta, out w, out yaw)) { NoktaUyarisi(nokta); return false; }
             string k = Util.Norm(id);
+            HareketBirak(k, a);
             a.transform.position = w;
             slots[k] = w.x - Origin.x;
             yawTarget[k] = yaw; lockedFacing.Add(k);
@@ -478,6 +495,7 @@ namespace HikayeStudyo
                 dpos = Origin + new Vector3(WorldX((tx >= 0f ? 1f : -1f) * 820f), 0f, 0f);
                 dyaw = 180f;
             }
+            HareketBirak(k, a);
             lockedFacing.Remove(k);
             a.transform.position = Origin + new Vector3(0f, -60f, 0f);   // kapi acilirken gorunmesin
             if (kapiVar) { Mekan.KapiAc(true); yield return new WaitForSeconds(0.45f); }
@@ -501,6 +519,7 @@ namespace HikayeStudyo
             if (!actors.TryGetValue(k, out a) || a == null) yield break;
             Vector3 dpos; float dyaw;
             if (!NoktaBul(kapi, out dpos, out dyaw)) { NoktaUyarisi(kapi); yield return Exit(id); yield break; }
+            HareketBirak(k, a);
             actors.Remove(k);
             lockedFacing.Remove(k);
             bool kapiVar = Mekan != null && Mekan.KapiVar && Util.Norm(kapi).StartsWith("kapi");

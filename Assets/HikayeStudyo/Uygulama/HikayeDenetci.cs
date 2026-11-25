@@ -122,7 +122,7 @@ namespace HikayeStudyo
             foreach (var g in oyuncular) if (Util.Norm(g) == n) return true;
             foreach (var g in oyuncular) if (Util.Norm(g).EndsWith("_" + n)) return true;
             foreach (var g in oyuncular) if (Util.Norm(g).Contains(n)) return true;
-            return false;
+            return Varyantlar.AdGecerli(ad, oyuncular);   // karakter çeşidi: VRM_Anne_005
         }
 
         static int ParserSatir(string w)

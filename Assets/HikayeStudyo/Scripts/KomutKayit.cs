@@ -105,7 +105,7 @@ namespace HikayeStudyo
             Kaydet("efekt", "efekt: kapi", "Ses efekti çalar");
             Kaydet("cikar", "cikar: Anne", "Karakteri sahneden çıkarır");
             Kaydet("temizle", "temizle:", "Bütün karakterleri sahneden çıkarır");
-            Kaydet("kamera", "kamera: yakin", "Kamera modu: otomatik, yakin, genis, salla");
+            Kaydet("kamera", "kamera: yakin", "Kamera: otomatik (yönetmen), genis, orta, omuz, ters, iki, yakin; tek seferlik: tepki, yaklas, uzaklas, salla");
             Kaydet("atmosfer", "atmosfer: mum, toz", "Atmosfer: mum, toz, yagmur, buyu, gunes, yok");
             Kaydet("muzik", "muzik: pad", "Fon müziği: pad, yok ya da kütüphanedeki müzik");
             Kaydet("far", "far:", "Kamyon farları ve beyaz parlama");
@@ -120,6 +120,18 @@ namespace HikayeStudyo
             Kaydet("gecis", "gecis: karar", "Sahne geçişi: karar (siyah), capraz (çapraz geçiş), beyaz; 2D ve 3D sahnede");
             Kaydet("kapak", "kapak: 24", "Kapak karesi bu satırdan (ya da sonraki ilk konuşmadan) alınır; boş = sonraki konuşma");
             Kaydet("etiket", "etiket: aile, dram, duygusal", "Açıklamaya eklenecek hashtag'ler (# yazmak gerekmez)");
+            // Hareket ve etkilesim (3D karakterler; Hareket3D.cs)
+            Kaydet("sarilma", "sarilma: Anne Baba", "İki 3D karakter yaklaşıp sarılır (ayril: ile biter)");
+            Kaydet("el_tut", "el_tut: Anne Baba", "El ele tutuşurlar; biri oturuyor/yatıyorsa diğeri yanına gelip elini tutar");
+            Kaydet("yuzyuze", "yuzyuze: Anne Baba", "İki karakter birbirine döner ve bakar");
+            Kaydet("ayril", "ayril:", "Sarılma / el tutma / yüz yüze durumunu bitirir (ayril: Anne = yalnız onunkini)");
+            Kaydet("tepki_ver", "tepki_ver: Baba sasir", "Tepki: sasir, kork, uzul, agla, sevin, kiz, dusun, onayla, reddet, el_salla");
+            Kaydet("git", "git: Anne pencere", "Karakter bir noktaya ya da karakterin yanına yürür (sonuna 'kos' eklenirse koşar)");
+            Kaydet("tut", "tut: Anne bardak", "Eşya tutar: bardak, telefon, mektup, kitap, cicek, ilac, tabak, anahtar (sag/sol)");
+            Kaydet("birak", "birak: Anne", "Tutulan eşyayı bırakır");
+            Kaydet("kapi", "kapi: Anne ac", "3D mekanın kapısını açar/kapatır (kapi: ac, kapi: kapat, kapi: Anne ac)");
+            Kaydet("kalk", "kalk: Anne", "Oturduğu ya da yattığı yerden ayağa kalkar");
+            Kaydet("yatak", "yatak: Anne yat", "Yatağa yatırır ya da oturtur (yat/otur); konuşurken kalkmaz");
         }
     }
 }

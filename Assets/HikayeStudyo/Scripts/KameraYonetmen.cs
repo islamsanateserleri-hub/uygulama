@@ -1,17 +1,25 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace HikayeStudyo
 {
     // 3D kamera yonetmeni (Sahne3D'nin Kamera3D nesnesinde calisir). Duz Transform hareketi kullanir.
     // Kamera bir "yorunge" ile tarif edilir: pivot (bakilan nokta) + mesafe + yaw + pitch + FOV.
-    //  - 3D mekan (mekan3d:) acikken: omuz ustu, yakin, orta, genis ve tepki planlari; diyalogda otomatik degisim,
-    //    ayni plan ust uste 3 kez gelmez. ic ses = yavas yaklasma. kamera: tepki / yaklas / uzaklas / goz /
-    //    yukaridan / asagidan / bulanik / net.
+    //  - 3D mekan (mekan3d:) acikken: genis, orta, omuz ustu, yakin, tepki ve ikili planlar.
+    //    Konusan karakter kendiliginden bulunur; guclu duyguda / uzun satirda dinleyenin tepkisine kesilir;
+    //    sarilma / el tutma ikili planla, yurume ve kapi genis planla gosterilir. Karakterler hareket ettikce
+    //    kamera onlari her karede yeniden kadrajlar (kadraj disina tasmazlar).
+    //  - 180 derece kurali: kamera her zaman karakterlerin on tarafinda (-z) kalir; sol/sag yer degistirmez.
+    //  - Elle mudahale: kamera: genis / orta / omuz / ters / yakin / iki (kalici), otomatik (geri don),
+    //    tepki / yaklas / uzaklas / goz / yukaridan / asagidan / bulanik / net (tek seferlik).
     //  - 2D mekanda (karakterler 2D arka plan uzerinde): sadece cok hafif yorunge cesitliligi ve el titremesi.
     //  - El titremesi (Perlin) her zaman acik, panik aninda guclenir.
     public class KameraYonetmen : MonoBehaviour
     {
-        public enum Plan { Genis = 0, Orta = 1, Omuz = 2, Yakin = 3, Tepki = 4 }
+        public enum Plan { Genis = 0, Orta = 1, Omuz = 2, Yakin = 3, Tepki = 4, Iki = 5 }
+
+        const float Oran = 1080f / 1920f;     // dikey video en/boy
+        const float YakinFov = 28f;
 
         Sahne3D owner;
         Camera cam;
@@ -22,23 +30,32 @@ namespace HikayeStudyo
         float yaw2d;
 
         Plan plan = Plan.Genis;
+        string planS = "", planL = "";     // planin konusani (ozne) ve diger karakteri
+        bool planIc;
         int p1 = -1, p2 = -1;
         int genistenBeri;
+        int satirSayisi, sonTepkiSatiri = -10;
         string sonKonusan = "", sonDinleyen = "";
         string tepkiHedef = "";
         bool tepkiBekliyor;
-        float yon = 1f;
+        float yon = 1f, planYon = 1f;
+
+        // satir ortasinda dinleyene kesme (otomatik tepki cekimi)
+        bool gucluSatir;
+        float tepkiSayac = -1f;
+        string tepkiKisi = "";
 
         // hedef yorunge
         Vector3 pivot;
         float dist = Sahne3D.CamDist, yaw, pitch, fov = Sahne3D.CamFov;
-        float pushRate, minDist = 0.9f, maxDist = 9f;
+        float pushRate, itme, minDist = 0.9f, maxDist = 9f;
         // gecerli yorunge (yumusatilmis)
         Vector3 cPivot;
         float cDist, cYaw, cPitch, cFov;
         bool snap = true;
 
         float panik, seed;
+        readonly List<Vector3> noktalar = new List<Vector3>();
 
         public Plan SonPlan { get { return plan; } }
 
@@ -65,8 +82,10 @@ namespace HikayeStudyo
         public void Sifirla()
         {
             p1 = -1; p2 = -1; genistenBeri = 0;
+            satirSayisi = 0; sonTepkiSatiri = -10;
             sonKonusan = ""; sonDinleyen = "";
             tepkiBekliyor = false; tepkiHedef = "";
+            tepkiSayac = -1f;
             pushRate = 0f;
             if (oda) PlanKur(Plan.Genis, "", "", false);
             snap = true;
@@ -79,6 +98,9 @@ namespace HikayeStudyo
         {
             if (mod == "yakin") return Plan.Yakin;
             if (mod == "genis") return Plan.Genis;
+            if (mod == "orta") return Plan.Orta;
+            if (mod == "omuz" || mod == "ters") return dinleyenVar ? Plan.Omuz : Plan.Orta;
+            if (mod == "iki") return dinleyenVar ? Plan.Iki : Plan.Orta;
             Plan c;
             if (genistenBeri >= 6) c = Plan.Genis;
             else if (inner) c = Plan.Yakin;
@@ -121,6 +143,8 @@ namespace HikayeStudyo
             string lid = owner.DigerOyuncu(sid);
             sonKonusan = sid;
             yon = -yon;
+            tepkiSayac = -1f;
+            gucluSatir = GucluDuygu(e) && !inner;
 
             if (!oda)
             {
@@ -128,7 +152,9 @@ namespace HikayeStudyo
                 return false;
             }
 
-            Plan p;
+            satirSayisi++;
+            Plan p = Plan.Genis;
+            bool secildi = false;
             if (tepkiBekliyor)
             {
                 tepkiBekliyor = false;
@@ -137,16 +163,62 @@ namespace HikayeStudyo
                 {
                     lid = hid;
                     p = Plan.Tepki;
+                    sonTepkiSatiri = satirSayisi;
+                    secildi = true;
                 }
+            }
+            if (!secildi)
+            {
+                // sarilma / el tutma suruyorsa ikisi birlikte gosterilir
+                string es = mod == "otomatik" && !inner ? owner.EtkilesimEsi(sid) : "";
+                if (es.Length > 0 && owner.HasActor(es)) { lid = es; p = Plan.Iki; }
                 else p = PlanSec(p1, p2, genistenBeri, inner, GucluDuygu(e), lid.Length > 0, mod);
             }
-            else p = PlanSec(p1, p2, genistenBeri, inner, GucluDuygu(e), lid.Length > 0, mod);
 
             p2 = p1; p1 = (int)p;
             if (p == Plan.Genis) genistenBeri = 0; else genistenBeri++;
             sonDinleyen = lid;
-            PlanKur(p, sid, lid, inner);
+            // ters cekim: dinleyenin yuzu, konusanin omzu ustunden
+            if (mod == "ters" && p == Plan.Omuz) PlanKur(p, lid, sid, inner);
+            else PlanKur(p, sid, lid, inner);
+            if (Application.isEditor) Debug.Log("[Kamera] " + sid + " -> " + plan + (lid.Length > 0 ? " (diger: " + lid + ")" : ""));
             return true;
+        }
+
+        // StoryPlayer, satirin suresi belli olunca cagirir: guclu ya da uzun satirda dinleyene tepki kesmesi planlanir
+        public void SatirSuresi(float sure)
+        {
+            tepkiSayac = -1f;
+            if (!oda || mod != "otomatik" || planIc || plan == Plan.Tepki || plan == Plan.Iki) return;
+            if (sonDinleyen.Length == 0 || sure < 3f) return;
+            if (satirSayisi - sonTepkiSatiri < 3) return;
+            if (!gucluSatir && sure < 4.5f) return;
+            tepkiKisi = sonDinleyen;
+            tepkiSayac = Mathf.Clamp(sure * 0.62f, 1.6f, sure - 1.1f);
+        }
+
+        // Hikaye bir hareket komutu calistiriyor: kamera harekete uygun plana gecer (elle mod seciliyse dokunmaz)
+        public void Hareket(string komut, string a, string b)
+        {
+            tepkiSayac = -1f;
+            if (!oda || mod != "otomatik") return;
+            a = Util.Norm(a); b = Util.Norm(b);
+            Plan p;
+            string s = a, l = b;
+            switch (komut)
+            {
+                case "sarilma":
+                case "el_tut":
+                case "yuzyuze": p = Plan.Iki; break;
+                case "tepki_ver": p = Plan.Yakin; l = ""; break;
+                case "tut": p = Plan.Orta; l = ""; break;
+                case "birak": return;
+                default: p = Plan.Genis; s = ""; l = ""; break;     // git, kapi, gir, cikar, yatak, kalk, ayril
+            }
+            if (p == plan && s == planS && l == planL) return;
+            p2 = p1; p1 = (int)p;
+            if (p == Plan.Genis) genistenBeri = 0;
+            PlanKur(p, s, l, false);
         }
 
         // ---------- Plan geometrisi ----------
@@ -158,61 +230,146 @@ namespace HikayeStudyo
             p = Mathf.Asin(Mathf.Clamp(v.y / d, -1f, 1f)) * Mathf.Rad2Deg;
         }
 
-        void PlanKur(Plan p, string sid, string lid, bool inner)
+        // Verilen kafalari dikey karede (TikTok guvenli alanlari birakarak) icine alan mesafe ve bakis noktasi
+        static void Cerceve(List<Vector3> kafalar, float altPay, float gorusAcisi, out Vector3 merkez, out float d)
+        {
+            float minX = float.MaxValue, maxX = float.MinValue, ust = float.MinValue, alt = float.MaxValue, z = 0f, minZ = float.MaxValue;
+            foreach (var k in kafalar)
+            {
+                minX = Mathf.Min(minX, k.x); maxX = Mathf.Max(maxX, k.x);
+                ust = Mathf.Max(ust, k.y); alt = Mathf.Min(alt, k.y);
+                z += k.z; minZ = Mathf.Min(minZ, k.z);
+            }
+            z /= kafalar.Count;
+            minX -= 0.34f; maxX += 0.34f; ust += 0.32f; alt -= altPay;
+            float t = Mathf.Tan(gorusAcisi * 0.5f * Mathf.Deg2Rad);
+            float yariEn = (maxX - minX) * 0.5f, yariBoy = (ust - alt) * 0.5f;
+            d = Mathf.Max(yariEn / (t * Oran * 0.88f), yariBoy / (t * 0.74f)) + Mathf.Max(0f, z - minZ);
+            merkez = new Vector3((minX + maxX) * 0.5f, (ust + alt) * 0.5f, z);
+            // sagdaki ve alttaki arayuz bolgesi bos kalsin
+            merkez.x += 0.04f * 2f * d * t * Oran;
+            merkez.y -= 0.05f * 2f * d * t;
+        }
+
+        // Karakterin yuzunu gosterecek yorunge acisi (180 derece kurali: kamera on tarafta kalir)
+        float YuzAcisi(string id, float yedek)
+        {
+            Vector3 f;
+            if (owner == null || !owner.IleriYon(id, out f) || f.z > 0.2f) return yedek;
+            return Mathf.Clamp(-Mathf.Atan2(f.x, -f.z) * Mathf.Rad2Deg * 0.75f, -48f, 48f);
+        }
+
+        // Secili plani karakterlerin su anki yerine gore hesaplar
+        void Hesapla()
         {
             Vector3 S = Vector3.zero, L = Vector3.zero;
-            bool hs = !string.IsNullOrEmpty(sid) && owner != null && owner.HeadPos(sid, out S);
-            bool hl = !string.IsNullOrEmpty(lid) && owner != null && owner.HeadPos(lid, out L);
-            if (p != Plan.Genis && !hs && !(p == Plan.Tepki && hl)) p = Plan.Genis;
-            if (p == Plan.Omuz && !hl) p = Plan.Yakin;
-            if (p == Plan.Tepki && !hl) p = Plan.Yakin;
-            plan = p;
-            pushRate = 0f; minDist = 0.9f; fov = Sahne3D.CamFov;
-            Vector3 g = Sahne3D.Origin + new Vector3(0f, baseY, 0f);
+            bool hs = planS.Length > 0 && owner.HeadPos(planS, out S) && S.y > Sahne3D.Origin.y - 5f;
+            bool hl = planL.Length > 0 && owner.HeadPos(planL, out L) && L.y > Sahne3D.Origin.y - 5f;
+
+            Plan p = plan;
+            if (p == Plan.Tepki) { if (hl) { S = L; hs = true; } p = Plan.Yakin; }
+            if (p == Plan.Omuz && hs && (!hl || Mathf.Abs(L.x - S.x) + Mathf.Abs(L.z - S.z) > 2.2f)) p = hl ? Plan.Orta : Plan.Yakin;
+            if (p == Plan.Iki && !hl) p = Plan.Orta;
+            if (p != Plan.Genis && !hs) p = Plan.Genis;
+
+            fov = Sahne3D.CamFov;
+            bool yatik = hs && owner.YatiyorMu(plan == Plan.Tepki ? planL : planS);
+            string yuzu = plan == Plan.Tepki ? planL : planS;
             float d, y, pt;
             switch (p)
             {
                 case Plan.Orta:
-                    {
-                        Vector3 c = hl ? Vector3.Lerp(S, L, 0.3f) : S;
-                        pivot = c + Vector3.down * 0.3f;
-                        dist = 3.1f; yaw = yon * 14f; pitch = 3f + aciPitch;
-                        maxDist = 6f;
-                    }
+                    pivot = S + Vector3.down * 0.34f;
+                    dist = 3.1f; yaw = planYon * 12f; pitch = 3f; minDist = 2.2f; maxDist = 6f;
                     break;
+
                 case Plan.Omuz:
                     {
                         Vector3 u = L - S; u.y = 0f;
-                        if (u.sqrMagnitude < 0.01f) u = new Vector3(1f, 0f, 0f);
+                        if (u.sqrMagnitude < 0.01f) u = Vector3.right;
                         u.Normalize();
-                        Vector3 pf = new Vector3(-u.z, 0f, u.x);
-                        if (pf.z > 0f) pf = -pf;
-                        Vector3 cp = L + u * 0.65f + pf * 0.18f + Vector3.up * (0.1f + Mathf.Sin(aciPitch * Mathf.Deg2Rad) * 0.5f);
-                        Vector3 hedef = S + Vector3.down * 0.03f;
-                        Yorunge(cp, hedef, out d, out y, out pt);
-                        pivot = hedef; dist = d; yaw = y; pitch = pt + aciPitch * 0.5f;
-                        pushRate = -0.015f; minDist = 1.1f; maxDist = d + 2f;
+                        // dinleyenin tarafindan, on taraftan: dinleyenin omzu kadraj kenarinda, konusanin yuzu ortada
+                        Vector3 yone = (u * 2.2f + Vector3.back).normalized;
+                        fov = Sahne3D.CamFov;
+                        Vector3 hedef = Vector3.Lerp(S, L, 0.3f);
+                        hedef.y = S.y - 0.14f;
+                        Vector3 kameraYeri = hedef + yone * 2.35f + Vector3.up * 0.16f;
+                        Yorunge(kameraYeri, hedef, out d, out y, out pt);
+                        pivot = hedef; dist = d; yaw = y; pitch = pt; minDist = 1.9f; maxDist = d + 1.5f;
                     }
                     break;
+
                 case Plan.Yakin:
-                    pivot = S + Vector3.down * 0.04f;
-                    dist = 1.35f; yaw = yon * 10f; pitch = 2f + aciPitch; fov = 28f;
-                    pushRate = inner ? -0.05f : -0.015f; minDist = 0.95f; maxDist = 4f;
+                    fov = YakinFov;
+                    pivot = S + Vector3.down * 0.08f;
+                    dist = 2.15f; yaw = YuzAcisi(yuzu, planYon * 10f); pitch = 2f; minDist = 1.6f; maxDist = 4f;
                     break;
-                case Plan.Tepki:
-                    pivot = L + Vector3.down * 0.04f;
-                    dist = 1.3f; yaw = yon * 12f; pitch = 2f + aciPitch; fov = 28f;
-                    pushRate = -0.03f; minDist = 0.95f; maxDist = 4f;
+
+                case Plan.Iki:
+                    {
+                        noktalar.Clear(); noktalar.Add(S); noktalar.Add(L);
+                        Vector3 m;
+                        Cerceve(noktalar, 0.75f, Sahne3D.CamFov, out m, out d);
+                        pivot = m; dist = Mathf.Clamp(d, 2.6f, 7f); yaw = planYon * 5f; pitch = 3f;
+                        minDist = 2.2f; maxDist = 8f;
+                    }
                     break;
+
                 default:
                     {
-                        pivot = g;
-                        if (hs && hl) pivot.x += ((S.x + L.x) * 0.5f - Sahne3D.Origin.x) * 0.2f;
-                        dist = Sahne3D.CamDist; yaw = yon * 3f; pitch = aciPitch * 0.6f;
-                        maxDist = 8.5f;
+                        pivot = Sahne3D.Origin + new Vector3(0f, baseY, 0f);
+                        dist = Sahne3D.CamDist; yaw = planYon * 3f; pitch = 0f; minDist = 4f; maxDist = 8.5f;
+                        noktalar.Clear();
+                        owner.KafaKonumlari(noktalar);
+                        if (noktalar.Count > 0)
+                        {
+                            Vector3 m;
+                            Cerceve(noktalar, 1.4f, Sahne3D.CamFov, out m, out d);
+                            pivot.x = Mathf.Clamp(m.x, Sahne3D.Origin.x - 1.2f, Sahne3D.Origin.x + 1.2f);
+                            dist = Mathf.Clamp(Mathf.Max(Sahne3D.CamDist, d), Sahne3D.CamDist, 8.5f);
+                        }
                     }
                     break;
             }
+            if (yatik && p != Plan.Genis)
+            {
+                // yatan karaktere yukaridan bakilir
+                pitch = 30f; yaw *= 0.4f; dist = Mathf.Max(dist, 2.1f);
+            }
+            pitch += aciPitch * (p == Plan.Genis ? 0.6f : 1f);
+
+            // kamera oda duvarinin icine girmesin (ic mekan genisligi 5,2 m)
+            float kameraX = pivot.x - Sahne3D.Origin.x - Mathf.Sin(yaw * Mathf.Deg2Rad) * dist;
+            if (Mathf.Abs(kameraX) > 2.35f)
+            {
+                float sinus = (pivot.x - Sahne3D.Origin.x - Mathf.Sign(kameraX) * 2.35f) / dist;
+                yaw = Mathf.Asin(Mathf.Clamp(sinus, -1f, 1f)) * Mathf.Rad2Deg;
+            }
+        }
+
+        void PlanKur(Plan p, string sid, string lid, bool inner)
+        {
+            plan = p;
+            planS = sid ?? "";
+            planL = lid ?? "";
+            planIc = inner;
+            planYon = yon;
+            itme = 0f;
+            Vector3 t;
+            bool hs = planS.Length > 0 && owner != null && owner.HeadPos(planS, out t);
+            bool hl = planL.Length > 0 && owner != null && owner.HeadPos(planL, out t);
+            if (p == Plan.Omuz && !hl) plan = Plan.Yakin;
+            if (p == Plan.Tepki && !hl) plan = Plan.Yakin;
+            if (plan != Plan.Genis && !hs && !(plan == Plan.Tepki && hl)) plan = Plan.Genis;
+            switch (plan)
+            {
+                case Plan.Omuz: pushRate = -0.02f; break;
+                case Plan.Yakin: pushRate = inner ? -0.06f : -0.025f; break;
+                case Plan.Tepki: pushRate = -0.04f; break;
+                case Plan.Iki: pushRate = -0.03f; break;
+                default: pushRate = 0f; break;
+            }
+            if (owner != null) Hesapla();
             snap = true;
         }
 
@@ -241,11 +398,11 @@ namespace HikayeStudyo
                     return true;
                 case "yaklas":
                     if (!oda) { eski = "yakin"; return false; }
-                    pushRate = -0.2f; minDist = Mathf.Min(minDist, 0.95f);
+                    pushRate = -0.2f;
                     return true;
                 case "uzaklas":
                     if (!oda) { eski = "genis"; return false; }
-                    pushRate = 0.2f; maxDist = Mathf.Max(maxDist, dist + 2.5f);
+                    pushRate = 0.2f;
                     return true;
                 case "goz": SetAci(0f); return true;
                 case "yukaridan": SetAci(14f); return true;
@@ -259,10 +416,23 @@ namespace HikayeStudyo
                 case "salla":
                     Panik(1f);
                     return false;
+                case "orta":
+                case "omuz":
+                case "ters":
+                case "iki":
+                    if (!oda) { Debug.Log("[Hikaye] kamera: " + n + " sadece mekan3d icinde calisir (2D mekanda atlandi)."); return true; }
+                    mod = n; tepkiSayac = -1f;
+                    if (sonKonusan.Length > 0)
+                    {
+                        Plan p = PlanSec(-1, -1, 0, false, false, sonDinleyen.Length > 0, mod);
+                        if (n == "ters" && p == Plan.Omuz) PlanKur(p, sonDinleyen, sonKonusan, false);
+                        else PlanKur(p, sonKonusan, sonDinleyen, false);
+                    }
+                    return true;
                 case "yakin":
                 case "genis":
                 case "otomatik":
-                    mod = n;
+                    mod = n; tepkiSayac = -1f;
                     if (oda && n != "otomatik") PlanKur(n == "genis" ? Plan.Genis : Plan.Yakin, sonKonusan, sonDinleyen, false);
                     return false;
             }
@@ -272,7 +442,7 @@ namespace HikayeStudyo
         void SetAci(float a)
         {
             aciPitch = a;
-            if (oda) PlanKur(plan, sonKonusan, sonDinleyen, false);
+            if (oda) PlanKur(plan, planS, planL, planIc);
         }
 
         // ---------- Her kare ----------
@@ -285,24 +455,40 @@ namespace HikayeStudyo
             {
                 pivot = Sahne3D.Origin + new Vector3(0f, baseY, 0f);
                 dist = Sahne3D.CamDist; fov = Sahne3D.CamFov;
-                pitch = aciPitch * 0.4f; yaw = yaw2d; pushRate = 0f;
+                pitch = aciPitch * 0.4f; yaw = yaw2d; pushRate = 0f; itme = 0f;
             }
-            else if (pushRate != 0f)
+            else if (owner != null)
             {
-                dist = Mathf.Clamp(dist + pushRate * dt, minDist, maxDist);
-                if (dist <= minDist + 0.001f || dist >= maxDist - 0.001f) pushRate = 0f;
+                if (tepkiSayac > 0f)
+                {
+                    tepkiSayac -= dt;
+                    if (tepkiSayac <= 0f && owner.HasActor(tepkiKisi))
+                    {
+                        sonTepkiSatiri = satirSayisi;
+                        PlanKur(Plan.Tepki, sonKonusan, tepkiKisi, false);
+                        if (Application.isEditor) Debug.Log("[Kamera] tepki cekimi: " + tepkiKisi);
+                    }
+                }
+                Hesapla();
+                if (pushRate != 0f)
+                {
+                    float yeni = itme + pushRate * dt;
+                    if (dist + yeni > minDist && dist + yeni < maxDist) itme = yeni;
+                    else pushRate = 0f;
+                }
             }
 
+            float hedefDist = dist + itme;
             if (snap)
             {
-                cPivot = pivot; cDist = dist; cYaw = yaw; cPitch = pitch; cFov = fov;
+                cPivot = pivot; cDist = hedefDist; cYaw = yaw; cPitch = pitch; cFov = fov;
                 snap = false;
             }
             else
             {
-                float k = 1f - Mathf.Exp(-dt * 7f);
+                float k = 1f - Mathf.Exp(-dt * 3.5f);
                 cPivot = Vector3.Lerp(cPivot, pivot, k);
-                cDist = Mathf.Lerp(cDist, dist, k);
+                cDist = Mathf.Lerp(cDist, hedefDist, k);
                 cYaw = Mathf.LerpAngle(cYaw, yaw, k);
                 cPitch = Mathf.LerpAngle(cPitch, pitch, k);
                 cFov = Mathf.Lerp(cFov, fov, k);
@@ -321,7 +507,12 @@ namespace HikayeStudyo
             cam.transform.SetPositionAndRotation(pos, Quaternion.Euler(cPitch + hy, cYaw + hx, hr));
             cam.fieldOfView = cFov;
 
-            if (owner != null && owner.Atmosfer != null) owner.Atmosfer.OdakMesafe(cDist);
+            if (owner != null && owner.Atmosfer != null)
+            {
+                // odak degisimi: yakin ve tepki cekiminde arka plan yumusar, odak o karaktere gecer
+                owner.Atmosfer.OdakMesafe(cDist);
+                owner.Atmosfer.OtoBulaniklik(oda && (plan == Plan.Yakin || plan == Plan.Tepki || plan == Plan.Omuz));
+            }
         }
     }
 }

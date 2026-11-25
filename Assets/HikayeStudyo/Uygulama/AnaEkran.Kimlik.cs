@@ -168,10 +168,12 @@ namespace HikayeStudyo
             var gorunumler = new List<string> { GorunumCizgi };
             if (k.gorunum == KarakterKimligi.VarsayilanGorunum) gorunumler.Add(GorunumVarsayilan);
             if (katalog != null) foreach (var kayit in katalog.karakterler) if (kayit != null && !string.IsNullOrEmpty(kayit.kimlik)) gorunumler.Add(kayit.kimlik);
+            if (!string.IsNullOrEmpty(k.gorunum) && k.gorunum != KarakterKimligi.VarsayilanGorunum && !gorunumler.Contains(k.gorunum)) gorunumler.Add(k.gorunum);   // seçili çeşit
             string simdiki = string.IsNullOrEmpty(k.gorunum) ? GorunumCizgi : k.gorunum == KarakterKimligi.VarsayilanGorunum ? GorunumVarsayilan : k.gorunum;
             string sg = SecG(new Rect(x, y, 300, 32), kayma, "kk_gorunum", gorunumler, simdiki, 14);
             k.gorunum = sg == GorunumCizgi ? KarakterKimligi.CizgiGorunum : sg == GorunumVarsayilan ? KarakterKimligi.VarsayilanGorunum : sg;
-            Yazdir(new Rect(x + 312, y, w - x - 312, 32), "3D modelin yüzü ve kıyafeti modele aittir.", 12, Sönük);
+            bool cesitIstendi = Dugme(new Rect(x + 312, y, 150, 32), "Çeşitlerden seç", KimlikGri, 13);
+            Yazdir(new Rect(x + 474, y, w - x - 474, 32), "3D modelin yüzü ve kıyafeti modele aittir.", 12, Sönük);
             y += 42;
 
             KimlikEtiket(y, "Sahnedeki yeri");
@@ -221,6 +223,7 @@ namespace HikayeStudyo
             Yazdir(new Rect(0, y, w, 24), "Bir hikâyede \"oyuncu: " + k.ad + " = ...\" satırı yazarsan yalnız o hikâyede o model kullanılır.", 12, Sönük);
 
             ListeVer(ref kimlikFormKaydirma, g);
+            if (cesitIstendi) { cesitSecimKarti = k; karakterSekme = 3; kaydirma = 0f; acikId = null; mesaj = ""; }
         }
 
         void KimlikEtiket(float y, string t) { Yazdir(new Rect(0, y, 184, 32), t, 14, Yazi); }

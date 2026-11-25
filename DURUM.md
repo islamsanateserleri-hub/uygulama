@@ -3,6 +3,15 @@
 Tek kayıt dosyası. Her işlem, test sonucu ve hata yalnızca buraya eklenir (en fazla 1-2 sayfa; eskiyi kısalt). Yeni sohbet bu dosyayı okuyarak eksiksiz devam eder.
 Eski defterler/notlar `_Arsiv/` altında, okunmaz. Plan: `Hikaye_Studyo_Gelistirme_Plani.pdf` (kullanıcıdan alınır, sıra değişmez).
 
+## ÖZET (kullanıcı için, 25 Kas 16:35)
+**Neredeyiz:** 16 aşamalık planda 11. aşama bitti. Sıradaki: 12 (3D mekân ve atmosfer).
+**Önceden yapılanlar (aşama 0–9):** hazırlık; Unity'siz video kaydı; bağımsız Windows uygulaması; hikâye yazma ekranı ve otomatik sahne; Gemini ses sistemi; video düzenleme ve dışa aktarma (çekirdek); yapay zekâ yardımcıları; kurulum dosyası; karakter kimlik kartları; 3 VRoid karakteri (Anne, Baba, Çocuk) ve sesle uyumlu ağız hareketi. Ayrıca 3D karakterlerin sırtı dönük görünme hatası düzeltildi ve "Dördüncü Tabak" videosu üretildi.
+**Bugün öğleden sonra:** aşama 10 (sarılma, el tutma, yüz yüze durma, yürüme/koşma, eşya tutma, kapı, yatak, ayağa kalkma); 1000 karakter çeşidi; aşama 11 (otomatik kamera yönetmeni). Üçü de Windows uygulamasında video kaydıyla denendi (ses kulakla dinlenmedi).
+**Karakter tasarlama:** 3 yeni karakter VRoid Studio'da yapıldı. 1000 "çeşit" ise eldeki 50 insan modelinin renk/aksesuar/boy farklarıdır, 1000 ayrı yeni model DEĞİL.
+**Alt ajanlar:** şu anda çalışan ajan YOK. Hareketler ajanı ve çeşit ajanı işini bitirdi; kamera ajanı güvenlik filtresince durduruldu (dosya değiştirmedi), kamerayı Claude kendisi yazdı.
+**Dikkat:** UniVRM paketi kurulurken Unity "imza yok" uyarısı verdi (paket resmî GitHub sürümünden indirildi). Kaldırmak için menü "Hikaye/UniVRM Kaldir".
+**Senden beklenenler:** yeni kurulum dosyasını üretip çalıştırma ve temiz bilgisayar / kaldırma testi (eldeki kurulum dosyası bugünkü değişiklikleri İÇERMİYOR). Daha gerçekçi insan modeli istenirse (Microsoft Rocketbox, ücretsiz) indirme izni.
+
 ## KULLANICI KURALLARI (sırayla uy)
 1. PDF planına harfiyen uy; sıra değişmez; aşamayı bitirmeden diğerine geçme; test edilmemişi "tamam" yazma.
 2. Aşama aşama ilerle. 25 Kas 01:46 kullanıcı: "bundan sonra aşamalar için benden onay alma" → aşama bitince (rapor + DURUM + not defteri + GitHub) onay beklemeden sıradakine geç. Geri alınamaz kararlar ve kullanıcı gerektiren işler (API anahtarı, satın alma, hesap) için dur ve bildir.
@@ -37,8 +46,8 @@ Eski defterler/notlar `_Arsiv/` altında, okunmaz. Plan: `Hikaye_Studyo_Gelistir
 | 7 Kurulum ve son kontrol | Kurulum + üzerine güncelleme bu bilgisayarda denendi (25 Kas 11:00). AÇIK (kullanıcı): temiz bilgisayar testi, kaldırma testi |
 | 8 Karakter kimlik sistemi | TAMAM, EXE'de kısmen test edildi (25 Kas 11:25). Açık testler günlükte |
 | 9 VRoid + gelişmiş yüz animasyonu | TAMAM, EXE'de kısmen test edildi (25 Kas 14:10): 3 VRoid karakteri, ağız sesle uyumlu. Açık testler günlükte |
-| 10 Hareketler/etkileşim | Hazırlanıyor (alt ajan, 25 Kas 14:03) |
-| 11 Sahne yönetmeni | Başlanmadı (alt ajan güvenlik filtresince durdu, dosya değişmedi); 10 bitince yapılacak |
+| 10 Hareketler/etkileşim | TAMAM, Editör ve EXE'de test edildi (25 Kas 16:00). Açık maddeler günlükte |
+| 11 Sahne yönetmeni | TAMAM, EXE'de test edildi (25 Kas 16:29). Açık testler günlükte |
 | 12–16 | Başlanmadı |
 
 ## Özet: Aşama 0-2 (tamam)
@@ -75,7 +84,7 @@ Kurallar: bozma, yedek, derleme kontrolü, test edilmeyen "tamam" değil, aşama
 Ayrıntılı sürüm: Doc "DURUM.dm" → "TAM GELİŞTİRME PLANI".
 
 ## Sonraki adım
-1) Aşama 10 (alt ajan çıktısını ekle, derle, test et), sonra 11. Karakter çeşitleri alt ajanda. 2) KULLANICIDAN: temiz bilgisayar testi; kaldırma testi; yeni kurulum dosyasını çalıştırmak. 3) Aşama 4-5-7-8-9 açık testleri günlükte.
+1) Aşama 12 (3D mekân ve atmosfer: ev, hastane, sokak, köy, oda, mutfak, yatak odası, park, araba içi; gece/gündüz, yağmur, kar, sis, gün batımı, duygusal ışık), sonra 13–16 sırayla. 2) KULLANICIDAN: temiz bilgisayar testi; kaldırma testi; yeni kurulum dosyasını çalıştırmak. 3) Aşama 4–11 açık testleri günlükte.
 
 ## İŞLEM GÜNLÜĞÜ
 - 25 Kas 01:15 — "DURUM.md" not defteri oluşturuldu. Alt ajanlar başlatıldı: (1) Dinle düzeltmesi, (2) Aşama 4 kod denetimi, (3) GitHub karşılaştırması. Uygulama izinleri alındı (Unity Hub, Unity, Gezgin, Hikayestudyo.exe).
@@ -119,3 +128,9 @@ Ayrıntılı sürüm: Doc "DURUM.dm" → "TAM GELİŞTİRME PLANI".
 - 25 Kas 13:59 — Kullanıcı: "hızlan; alt ajan kullanabilirsin". 2 alt ajan: Aşama 10 (hareketler) ve Aşama 11 (kamera yönetmeni); dosya sahipliği ayrık.
 - 25 Kas 14:10 — AŞAMA 9 EXE TESTİ: Windows derlemesi Succeeded (14:02, 0 hata, 1058 MB; önceki 794 MB). "Exe Kayıt Testi" artık HikayeKomut/exe_hikaye.txt'deki hikayeyi alır (UygulamaDerle.cs). EXE ile vrm_sesli kaydı (Kayitlar/exe_vrm_sesli.mp4): 1080x1920 30 fps h264+AAC, 15,4 sn, tepe −1,5 dB; karelerde VRM karakterler dokulu, hareketli, altyazılı; Arda'nın ağzı karelerde açılıp kapanıyor. GÖRÜLEN, DÜZELTİLMEDİ: Anne solda kadraj dışına taşıyor (Aşama 11); fizik olmadığı için etek yürürken/otururken tuhaf kıvrılabiliyor. Kurulum dosyası bu sürümle YENİLENMEDİ.
 - 25 Kas 14:01 — Kullanıcı: "1000'e yakın karakter" → 1 alt ajan: eldeki modellerden renk/boy ÇEŞİDİ (yeni model değil). 14:08: Aşama 11 ajanı güvenlik filtresince durdu.
+- 25 Kas 16:00 — AŞAMA 10 RAPORU (hareketler/etkileşim). Yeni komutlar: sarilma, el_tut, yuzyuze, ayril, tepki_ver, git (kos), tut/birak, kapi ac|kapat, yatak yat|otur, kalk (Docs/HikayeSozdizimi.md). Yeni: Scripts/Hareket3D.cs, KolPozu.cs, Sahne3D.Hareket.cs, Editor/HareketTesti.cs, KareSerisi.cs, Docs/test_hareket.txt. Değişen: Sahne3D.cs, StoryModel.cs, StoryPlayer.cs, KomutKayit.cs, StudyoKilavuz.cs. Yedek: Yedek_2026-11-25_asama10/. Düzeltilen: yüz yüze/ayrılma sonrası iki karakter birbirinin içine giriyordu. Derleme 0 hata. GERÇEK TEST: Editörde kare kare; EXE derlemesi Succeeded (14:39, 1058 MB); Kayitlar/exe_test_hareket.mp4 (65 sn, 1080x1920) karelerinde sarılma, el tutma, mektup/telefon tutma, koşma, kapı, yatak, ayağa kalkma görüldü. AÇIK: insan iskeleti olmayan modeller kol pozlarını atlar; sevin/onayla/reddet/el_salla için klip yok (yedek poz); hastanede yatan karakter yatağın üstünde havada duruyor gibi görünüyor (Aşama 12); saç/etek fiziği yok.
+- 25 Kas 16:05 — KARAKTER ÇEŞİTLERİ (kullanıcı: "1000'e yakın karakter"; alt ajan). 50 insan modelinden 1000 renk/aksesuar/boy çeşidi (YENİ MODEL DEĞİL; 810'u renk/aksesuarla, 190'ı yalnız boyla ayrılır). Kullanım: `oyuncu: Anne = VRM_Anne_005`; uygulamada Karakterlerim > Çeşit karakterler (ara, süz, satırı kopyala). Yeni: Scripts/Varyantlar.cs, VaryantGorunum.cs, Uygulama/AnaEkran.Varyant.cs, Editor/VaryantTesti.cs. Testler: Varyant Testi (yinelenen ad/görünüm 0, çözülemeyen 0), Kimlik Testi 30/30; 3 çeşit Editörde ve EXE videosunda (exe_test_cesit.mp4) doğru renkte göründü. AÇIK: uygulamadaki "Çeşit karakterler" ekranı EXE'de elle denenmedi; Yardımcı Testi yeniden çalıştırılmadı; 10 Quaternius kadın modeli prefab olmuyor (iskelet hatası).
+- 25 Kas 16:29 — AŞAMA 11 RAPORU (sahne yönetmeni). Yapılanlar: konuşanı kendiliğinden bulur; omuz üstü, yakın, orta, ikili, geniş plan; uzun/güçlü cümlede dinleyene tepki çekimi; sarılma/el tutmada ikili plan; yürüme/kapı/yatakta geniş plan; yatan karaktere yukarıdan bakış; karakter hareket edince kamera yeniden kadrajlar; kamera hep ön tarafta (180° kuralı); yakın çekimde arka plan bulanıklığı. Elle: `kamera: genis|orta|omuz|ters|iki|yakin|otomatik`. 2D mekânda duran 3D karakterlerin yeri kadraj içine sınırlandı. Değişen: Scripts/KameraYonetmen.cs (yeniden yazıldı), Sahne3D.cs, Sahne3D.Hareket.cs, StoryPlayer.cs, AtmosferVolume.cs, KomutKayit.cs, Yonetmen3D.cs, Editor/StudyoKilavuz.cs, Docs/HikayeSozdizimi.md. Yedek: Yedek_2026-11-25_asama11/. Derleme 0 hata (16:21); EXE Succeeded (16:24).
+  GERÇEK TEST: Editörde kare kare + plan günlüğü; EXE videosu Kayitlar/exe_test_kamera.mp4 (37 sn): omuz üstü, tepki çekimi, iç ses yakın planı, sarılmada ikili, ters çekim, kapıda geniş görüldü. exe_vrm_sesli.mp4 (sesli, tepe −1,5 dB) kaydedildi.
+  AÇIK/TEST EDİLMEDİ: 2D mekânda konuşana yakın çekimde diğer karakter hâlâ kenardan kesilebiliyor, baş üstü taşabiliyor; elle `orta`, `omuz`, `yakin`, `genis`, `tepki`, `yaklas/uzaklas` tek tek denenmedi; yatan karaktere bakış denenmedi (kamera ile); bulanıklığın EXE'de görünüp görünmediği doğrulanmadı (derlemede DepthOfField uyarısı); yakın çekimde yan duvar mavimsi görünüyor (Aşama 12); Ritim Denetçisi yeni ikili/tepki planlarını hesaba katmıyor; Yardımcı Testi yeniden çalıştırılmadı.
+

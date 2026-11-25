@@ -336,7 +336,7 @@ namespace HikayeStudyo
             foreach (var g in OyuncuAdlari()) { if (Util.Norm(g) == n) return true; }
             foreach (var g in OyuncuAdlari()) { if (Util.Norm(g).EndsWith("_" + n)) return true; }
             foreach (var g in OyuncuAdlari()) { if (Util.Norm(g).Contains(n)) return true; }
-            return false;
+            return Varyantlar.AdGecerli(ad, OyuncuAdlari());   // karakter çeşidi: VRM_Anne_005
         }
 
         // Komut parser'da var mi? Kayit defterine ve parser'in kendisine bakar (StoryModel degisse de dogru kalir).

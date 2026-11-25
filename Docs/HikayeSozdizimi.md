@@ -169,7 +169,7 @@ Biçim: `komut: değer`. Aşağıdaki liste `StoryParser`'ın bildiği komutlard
 | `gecis` | `karar` `capraz` `beyaz` | `gecis: karar` | Sahne geçişi: `karar` siyaha kararıp açılır, `capraz` önceki kareden çapraz geçiş, `beyaz` beyaz parlamayla geçiş. Geçişten hemen sonra `mekan:` yaz. **2D ve 3D sahnelerde çalışır.** |
 | `gorsel` | `eller` / `yok` / kütüphane görseli | `gorsel: eller` | Tam ekran görsel. `eller` = kendi gözünden eller. `gorsel: yok` kapatır. |
 | `atmosfer` | `mum` `toz` `yagmur` `buyu` `gunes` `yok` (virgülle çoklu) | `atmosfer: mum, toz` | Ortam efekti; `yok` kapatır |
-| `kamera` | `otomatik` `yakin` `genis` `salla` | `kamera: yakin` | Kamera modu; `salla` bir kez sarsar |
+| `kamera` | `otomatik` `genis` `orta` `omuz` `ters` `iki` `yakin` `tepki` `yaklas` `uzaklas` `goz` `yukaridan` `asagidan` `bulanik` `net` `salla` | `kamera: omuz` | `otomatik`: yönetmen konuşana göre plan seçer, dinleyenin tepkisini gösterir, harekete göre açılır. `genis`/`orta`/`omuz`/`ters`/`iki`/`yakin` elle seçimdir, `otomatik` yazana kadar kalır. `tepki [Karakter]` sıradaki satırda dinleyeni gösterir; `salla` bir kez sarsar. Plan seçimi 3D mekanda (`mekan3d:`) çalışır |
 | `muzik` | `pad` / `yok` / kütüphane müziği | `muzik: yok` | Fon müziği (varsayılan `pad`) |
 | `efekt` | ses efekti | `efekt: kapi` | Hazır: `carpma` `korna` `geri` `whoosh` `gecis` `kapi` `buyu` `kalp` `tahta` `kase` `yagmur` `flas` `gok` `gokgurultusu` + kütüphane efektleri |
 
@@ -180,7 +180,7 @@ Biçim: `komut: değer`. Aşağıdaki liste `StoryParser`'ın bildiği komutlard
 | `poz` | `Karakter poz` | `poz: Arda oturuyor` | `ayakta` `yatiyor` `oturuyor` |
 | `cikar` | karakter | `cikar: Anne` | Karakteri sahneden çıkarır |
 | `temizle` | — | `temizle:` | Bütün karakterleri çıkarır |
-| `oyuncu` | `Karakter = 3DModel` | `oyuncu: Arda = Timmy` | Karakteri 3D modelle oynatır; `oyuncu: Arda = yok` çizgi karaktere döner. Model adı `karakter_listele` çıktısındaki `oyuncular_3d` adıdır (kısa ad yeter: `Timmy`). Hikayenin tamamı için geçerlidir; dosyanın başına yaz. |
+| `oyuncu` | `Karakter = 3DModel` | `oyuncu: Arda = Timmy` | Karakteri 3D modelle oynatır; `oyuncu: Arda = yok` çizgi karaktere döner. Model adı `karakter_listele` çıktısındaki `oyuncular_3d` adıdır (kısa ad yeter: `Timmy`). Hikayenin tamamı için geçerlidir; dosyanın başına yaz. Renk/boy çeşidi: model adına üç haneli numara ekle (`oyuncu: Anne = VRM_Anne_005`); yeni model değil, aynı modelin çeşididir. |
 
 ### Etkileşim ve bölüm sonu
 
@@ -189,6 +189,38 @@ Biçim: `komut: değer`. Aşağıdaki liste `StoryParser`'ın bildiği komutlard
 | `secim` | `A) ... / B) ...` | `secim: A) Babasına anlatsın / B) Sır saklasın` | İzleyici seçim kartı. **İki** seçenek `/` ile ayrılır. |
 | `sonuc` | `%oran Harf` | `sonuc: %69 A` | Önceki bölümün oylama sonucu kartı |
 | `son` | `yumusak [metin]` ya da `sert [metin]` | `son: yumusak Devamı yarın...` / `son: sert` | `yumusak`: merak bırakan bitiş. `sert`: gerilimde birden kesilir (siyah ekran), hikayeyi bitirir. Mod yazılmazsa yumuşak sayılır. |
+
+### Karakter hareketleri ve etkileşim (3D karakterler)
+
+Yalnız `oyuncu:` ile 3D modele bağlanan karakterlerde çalışır. Komut adlarını ve değerleri yazıldığı gibi (ASCII) yaz. Sarılma, el tutma, eşya tutma ve klipsiz tepkiler **insan iskeleti (Humanoid)** ister; iskeleti uygun olmayan karakterde hareket atlanır ve konsola bir Türkçe uyarı yazılır. Hangi karakterin neyi yapabildiğini görmek için Unity menüsü **Hikaye > Hareket Testi** (`HikayeKomut/hareket_testi.txt`).
+
+| Komut | Örnek | Açıklama |
+|---|---|---|
+| `sarilma` | `sarilma: Anne Baba` | İki karakter yaklaşıp sarılır. `ayril:` yazılana kadar sürer. |
+| `el_tut` | `el_tut: Anne Baba` | Yan yana gelip el ele tutuşur. Biri oturuyor/yatıyorsa diğeri yanına gelip elini tutar. |
+| `yuzyuze` | `yuzyuze: Anne Baba` | Gövde ve bakışla birbirine döner. (Yalnız göz için `bak:`.) |
+| `ayril` | `ayril:` / `ayril: Anne` | Sarılma, el tutma, yüz yüze durumunu bitirir. |
+| `tepki_ver` | `tepki_ver: Baba sasir` | `sasir` `kork` `uzul` `agla` `sevin` `kiz` `dusun` `onayla` `reddet` `el_salla`. İsteğe bağlı üçüncü değer: kime döneceği. Yaklaşık 2 sn sürer, hikaye beklemez. |
+| `git` | `git: Anne pencere` / `git: Baba Anne kos` | Noktaya (`sol` `orta` `sag` ya da 3D mekan noktası) veya bir karakterin yanına yürür; `kos` ile koşar. |
+| `tut` / `birak` | `tut: Anne bardak sol` / `birak: Anne` | Eşya: `bardak` `telefon` `mektup` `kitap` `cicek` `ilac` `tabak` `anahtar`; el: `sag` (varsayılan) ya da `sol`. |
+| `kapi` | `kapi: ac` / `kapi: Anne ac` / `kapi: Anne kapat` | Kapılı 3D mekanda kapıyı açar/kapatır; karakter verilirse kapıya yürüyüp koluna uzanır. Kapıdan girmek için `gir: Anne kapi`, çıkmak için `cikar: Anne kapi`. |
+| `yatak` | `yatak: Anne yat` / `yatak: Anne otur` | `mekan3d: hastane` / `oda` yatağına yatırır ya da oturtur; 2D mekanda olduğu yerde. Konuşurken kalkmaz. Yatma klibi yoksa gövde sırtüstü yatırılır. |
+| `kalk` | `kalk: Anne` | Oturduğu ya da yattığı yerden (`yatak:` veya `poz:`) ayağa kalkar. |
+
+Komut hareketin başlamasını bekler (yürüme, yaklaşma); görünmesi için ardından konuşma satırı ya da `bekle:` yaz. Karakter yürürse (`git`, `gir`, `cikar`, `yuru`/`kos` hareketi) sarılma ve el tutma kendiliğinden biter.
+
+```
+mekan3d: hastane
+yatak: Anne yat
+gir: Baba kapi
+el_tut: Baba Anne
+[Baba|uzgun|dis] Uyan artık, ne olur.
+ayril:
+kalk: Anne
+sarilma: Baba Anne
+bekle: 1.5
+ayril:
+```
 
 ### Ek komutlar (sürüme göre)
 

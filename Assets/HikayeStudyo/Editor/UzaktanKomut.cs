@@ -347,7 +347,7 @@ namespace HikayeStudyo
             var q = new List<string>();
             foreach (var n in StudyoDogrulama.OyuncuAdlari()) q.Add(HsJson.Q(n));
             sb.Append("  \"oyuncular_3d\": ").Append(HsJson.Dizi(q)).Append(",\n");
-            sb.Append("  \"not\": ").Append(HsJson.Q("Konuşma satırında karakter 'id' ile yazılır: [Arda|normal|dis] Metin. 3D için: oyuncu: Arda = Timmy (oyuncular_3d adının kısa hali de olur).")).Append("\n}");
+            sb.Append("  \"not\": ").Append(HsJson.Q("Konuşma satırında karakter 'id' ile yazılır: [Arda|normal|dis] Metin. 3D için: oyuncu: Arda = Timmy (oyuncular_3d adının kısa hali de olur). Her insan modelinin çeşitleri de oyuncu adıdır: <ad>_001, _002 ... (örn. VRM_Anne_005); toplam ~1000, uygulamada Karakterlerim > Çeşit karakterler.")).Append("\n}");
             Cikti("karakterler.json", sb.ToString());
             return "karakterler.json yazıldı";
         }

@@ -164,6 +164,7 @@ namespace HikayeStudyo
         bool roomActive, skyDis, anlik;
         float gecisSure = 1.5f;
         bool dofOn;
+        bool otoDof;      // kamera yonetmeninin yakin cekimde istedigi odak
         float odak = 6f;
         float ovW = 1f;
         UnityEngine.Rendering.AmbientMode origAmbMode;
@@ -296,6 +297,7 @@ namespace HikayeStudyo
         }
 
         public void OdakMesafe(float d) { odak = d; }
+        public void OtoBulaniklik(bool ac) { otoDof = ac; }
         public void Anlik() { anlik = true; }
 
         public void OdaDegisti(bool aktif, Mekan3D m)
@@ -668,8 +670,8 @@ namespace HikayeStudyo
             P("ChromaticAberration", "intensity", Mathf.Clamp01(cur.chroma));
             P("WhiteBalance", "temperature", Mathf.Clamp(cur.temp, -100f, 100f));
             P("WhiteBalance", "tint", Mathf.Clamp(cur.tint, -100f, 100f));
-            P("DepthOfField", "mode", dofOn ? "Gaussian" : "Off");
-            if (dofOn)
+            P("DepthOfField", "mode", dofOn || otoDof ? "Gaussian" : "Off");
+            if (dofOn || otoDof)
             {
                 P("DepthOfField", "gaussianStart", Mathf.Max(0.1f, odak + 0.9f));
                 P("DepthOfField", "gaussianEnd", odak + 5f);

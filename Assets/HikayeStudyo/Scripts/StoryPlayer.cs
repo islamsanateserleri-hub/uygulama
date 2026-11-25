@@ -344,7 +344,11 @@ namespace HikayeStudyo
                         case ItemType.Atmosphere: fx.SetAtmosphere(Util.Norm(it.Arg) == "yok" ? "" : it.Arg); break;
                         case ItemType.Music: SetMusic(it.Arg); break;
                         case ItemType.Camera: CameraCommand(it.Arg); break;
-                        case ItemType.Direct: if (s3d != null) Yonetmen3D.Hizli(s3d, it); break;
+                        case ItemType.Direct:
+                            if (s3d == null) break;
+                            if (Hareket3D.Tanir(it.Character)) { HareketPozu(it); yield return s3d.HareketCo(it, true); }
+                            else Yonetmen3D.Hizli(s3d, it);
+                            break;
                         case ItemType.Insert: ShowInsert(it.Arg); break;
                         case ItemType.Clear: ClearChars(); break;
                         case ItemType.Remove: StartCoroutine(Exit(it.Character)); break;
@@ -393,7 +397,14 @@ namespace HikayeStudyo
                         SetMusic(it.Arg);
                         break;
                     case ItemType.Direct:
-                        if (s3d != null) yield return Yonetmen3D.Uygula(s3d, it);
+                        if (s3d != null && Hareket3D.Tanir(it.Character))
+                        {
+                            if (!faded) { yield return Fade(1f, 0f, 0.3f); faded = true; }
+                            HareketPozu(it);
+                            KameraHareket(it);
+                            yield return s3d.HareketCo(it, false);
+                        }
+                        else if (s3d != null) { KameraHareket(it); yield return Yonetmen3D.Uygula(s3d, it); }
                         else if (Util.Norm(it.Character) == "gecis") yield return Gecis2D(it.Arg);   // 3D katman yoksa 2D gecis
                         else Debug.LogWarning("[Hikaye] " + it.Line + ". satır: '" + it.Character + ":' için 3D sahne yok (hikayede 3D karakter kadrosu gerekir).");
                         break;
@@ -768,7 +779,7 @@ namespace HikayeStudyo
             foreach (var g in oyuncular) if (g != null && Util.Norm(g.name) == n) return g;
             foreach (var g in oyuncular) if (g != null && Util.Norm(g.name).EndsWith("_" + n)) return g;
             foreach (var g in oyuncular) if (g != null && Util.Norm(g.name).Contains(n)) return g;
-            return null;
+            return Varyantlar.Sablon(name, oyuncular);   // karakter çeşidi, ör. "VRM_Anne_005"
         }
 
         GameObject Actor3D(CharacterDef d)
@@ -787,6 +798,23 @@ namespace HikayeStudyo
             s3d.Ensure(d.id, pf, SlotX(d), d.scale, !exists && enter ? (d.side > 0 ? 1 : -1) : 0, motion == "kos" || motion == "saril");
             if (exists && enter) s3d.MoveTo(d.id, SlotX(d), motion != "yuru");
             if (motion == "cik") StartCoroutine(s3d.Exit(d.id));
+        }
+
+        // kalk: / yatak: / git: karakterin eski 'poz:' durumunu gecersiz kilar (konusma sonrasi durgun hale donebilsin)
+        void HareketPozu(StoryItem it)
+        {
+            var k = Util.Norm(it.Character);
+            if (k == "kalk" || k == "yatak" || k == "git") pose3D.Remove(Util.Norm(Hareket3D.IlkKarakter(it.Arg)));
+        }
+
+        // Hareket komutunu kamera yonetmenine bildirir (harekete uygun plana gecer)
+        void KameraHareket(StoryItem it)
+        {
+            if (s3d == null || s3d.Yonetmen == null) return;
+            var k = Util.Norm(it.Character);
+            if (k != "gir" && k != "cikar" && !Hareket3D.Tanir(it.Character)) return;
+            var p = Hareket3D.Parcala(it.Arg);
+            s3d.Yonetmen.Hareket(k, p.Length > 0 ? p[0] : "", p.Length > 1 ? p[1] : "");
         }
 
         // Siradaki anlamli komut "son: sert" mi? (konusma 0,3 sn erken kesilir)
@@ -888,6 +916,7 @@ namespace HikayeStudyo
             float dur = clip != null ? clip.length : Mathf.Max(1.2f, it.Text.Length / charsPerSecond + 0.3f);
             if (clip != null) { voiceSrc.clip = clip; voiceSrc.volume = voiceVolume; voiceSrc.Play(); }
             if (cutEarly > 0f) dur = Mathf.Max(0.4f, dur - cutEarly);
+            if (is3D && s3d.Yonetmen != null) s3d.Yonetmen.SatirSuresi(dur);   // uzun/guclu satirda dinleyene tepki cekimi
 
             string vurgulu = string.IsNullOrEmpty(it.Vurgulu) ? it.Text : it.Vurgulu;
             bool karaokeAcik = karaoke != null && altyaziStil != KaraokeAltyazi.Klasik &&

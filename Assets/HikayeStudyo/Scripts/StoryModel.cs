@@ -379,6 +379,14 @@ namespace HikayeStudyo
                         if (!Util.In(item.Arg, Util.Poses)) r.Warnings.Add(lineNo + ". satır: '" + item.Arg + "' pozu bilinmiyor (ayakta, yatiyor, oturuyor).");
                         break;
                     default:
+                        if (Hareket3D.Tanir(key))
+                        {
+                            // Asama 10 hareket/etkilesim komutlari (Hareket3D.cs): Direct olarak tasinir
+                            item.Type = ItemType.Direct; item.Character = key; item.Arg = val;
+                            string hatali = Hareket3D.Dogrula(key, val);
+                            if (hatali != null) r.Warnings.Add(lineNo + ". satır: " + hatali);
+                            break;
+                        }
                         if (IsDirectKey(key))
                         {
                             item.Type = ItemType.Direct; item.Character = key; item.Arg = val;
