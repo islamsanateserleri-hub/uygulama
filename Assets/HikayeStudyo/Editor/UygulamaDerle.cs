@@ -210,7 +210,15 @@ namespace HikayeStudyo
             string kok = Directory.GetCurrentDirectory();
             string klasor = Path.Combine(kok, "Build", "HikayeStudyo");
             string exe = Path.Combine(klasor, "HikayeStudyo.exe");
-            string mp4 = Path.Combine(kok, "Kayitlar", "exe_deneme_3d.mp4");
+            // Başka hikaye denemek için: HikayeKomut/exe_hikaye.txt içine hikaye adını yaz (yoksa deneme_3d)
+            string hikaye = "deneme_3d";
+            string secim = Path.Combine(kok, "HikayeKomut", "exe_hikaye.txt");
+            if (File.Exists(secim))
+            {
+                string ad = File.ReadAllText(secim).Trim();
+                if (System.Text.RegularExpressions.Regex.IsMatch(ad, "^[A-Za-z0-9_-]+$")) hikaye = ad;
+            }
+            string mp4 = Path.Combine(kok, "Kayitlar", "exe_" + hikaye + ".mp4");
             string log = Path.Combine(kok, "Build", "exe_log.txt");
             string sonucYol = Path.Combine(kok, "Build", "exe_test_sonuc.txt");
             if (!File.Exists(exe)) { File.WriteAllText(sonucYol, "HATA: exe yok: " + exe); return; }
@@ -220,7 +228,7 @@ namespace HikayeStudyo
             if (File.Exists(ks)) File.Delete(ks);
             File.WriteAllText(sonucYol, System.DateTime.Now.ToString("HH:mm:ss") + " EXE basladi\n");
             var psi = new System.Diagnostics.ProcessStartInfo(exe,
-                "-screen-fullscreen 0 -screen-width 540 -screen-height 960 -logFile \"" + log + "\" -kayit \"" + mp4 + "\" -hikaye deneme_3d -klaket")
+                "-screen-fullscreen 0 -screen-width 540 -screen-height 960 -logFile \"" + log + "\" -kayit \"" + mp4 + "\" -hikaye " + hikaye + " -klaket")
             { WorkingDirectory = klasor, UseShellExecute = false };
             System.Diagnostics.Process p;
             try { p = System.Diagnostics.Process.Start(psi); }
