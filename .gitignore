@@ -30,3 +30,8 @@ Assets/StreamingAssets/ffmpeg/*.exe
 Kayitlar/
 ffkayit.txt
 ffkayit_sonuc.txt
+
+# Indirilen model kutuphanesi (buyuk dosyalar)
+Assets/HikayeStudyo/Kutuphane/
+Assets/HikayeStudyo/Kutuphane.meta
+KutuphaneHam/
