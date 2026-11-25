@@ -480,9 +480,16 @@ namespace HikayeStudyo
                 for (int i = 0; i < mats.Length; i++)
                 {
                     string mname = mats[i] != null ? mats[i].name : r.name;
-                    string parca = System.Text.RegularExpressions.Regex.Replace(mname.ToLowerInvariant().Trim(), @"^[a-z]+\d+(_|$)", "");
-                    parca = parca.Replace(' ', '_').Replace('/', '_').Replace(':', '_');
-                    string renk = RocketboxDokusu(dokular, parca, "color"), normal = RocketboxDokusu(dokular, parca, "normal");
+                    string low = mname.ToLowerInvariant().Trim().Replace(' ', '_').Replace('/', '_').Replace(':', '_');
+                    var onEk = System.Text.RegularExpressions.Regex.Match(low, @"^[a-z]+\d+(?=_|$)").Value;   // "f110"
+                    string parca = System.Text.RegularExpressions.Regex.Replace(low, @"^[a-z]+\d+(_|$)([a-z]_)?", "");
+                    parca = parca.Replace("equpiment", "equipment");   // kaynak dosyadaki yazim hatasi
+                    // ayni klasorde iki ayri takim doku olabilir: once malzemenin on ekiyle baslayanlar
+                    var kendi = System.Array.FindAll(dokular, d => onEk.Length > 0 && Path.GetFileName(d).ToLowerInvariant().StartsWith(onEk + "_"));
+                    var aday = kendi.Length > 0 ? kendi : dokular;
+                    string renk = RocketboxDokusu(aday, parca, "color"), normal = RocketboxDokusu(aday, parca, "normal");
+                    bool camli = false;
+                    if (renk == null) { renk = RocketboxDokusu(aday, parca + "_opacity", "color"); camli = renk != null; }   // gozluk
                     if (renk == null) { RigRapor(name + ": renk dokusu bulunamadı (malzeme " + mname + ")", true); continue; }
                     string matPath = klasor + "/" + name + "_" + (parca.Length > 0 ? parca : "govde") + ".mat";
                     var m = AssetDatabase.LoadAssetAtPath<Material>(matPath);
@@ -497,7 +504,7 @@ namespace HikayeStudyo
                         if (ti != null && ti.textureType != TextureImporterType.NormalMap) { ti.textureType = TextureImporterType.NormalMap; ti.SaveAndReimport(); }
                         m.SetTexture("_BumpMap", AssetDatabase.LoadAssetAtPath<Texture2D>(normal)); m.EnableKeyword("_NORMALMAP");
                     }
-                    bool cut = parca.Contains("opacity") || parca.Contains("hair") || parca.Contains("lash");   // saydam yerler kesilir, iki yuzlu
+                    bool cut = camli || parca.Contains("opacity") || parca.Contains("hair") || parca.Contains("lash");   // saydam yerler kesilir, iki yuzlu
                     m.SetFloat("_AlphaClip", cut ? 1f : 0f); m.SetFloat("_Cutoff", 0.35f);
                     if (cut) m.EnableKeyword("_ALPHATEST_ON"); else m.DisableKeyword("_ALPHATEST_ON");
                     m.SetFloat("_Cull", cut ? 0f : 2f);
