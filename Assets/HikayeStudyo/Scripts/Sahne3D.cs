@@ -36,6 +36,7 @@ namespace HikayeStudyo
         readonly Dictionary<string, float> yawTarget = new Dictionary<string, float>();
         readonly HashSet<string> walking = new HashSet<string>();
         readonly HashSet<string> lockedFacing = new HashSet<string>();
+        string konusan = "";     // son konusan karakter
         readonly List<GameObject> extras = new List<GameObject>();
 
         // Duygu / hareket etiketi -> animasyon (Karakter3D takma adlari). Kutuphanedeki tablo bunu ezer.
@@ -190,13 +191,15 @@ namespace HikayeStudyo
 
         void Update()
         {
-            float kk = 1f - Mathf.Exp(-Time.deltaTime * 6f);
+            float kk = 1f - Mathf.Exp(-Time.deltaTime * Karakter3D.Hiz * 6f);
             foreach (var kv in actors)
             {
                 var a = kv.Value;
                 if (a == null || walking.Contains(kv.Key) || sirtustu.Contains(kv.Key)) continue;
                 float yt;
                 if (!yawTarget.TryGetValue(kv.Key, out yt)) continue;
+                // konusan kameraya sirtini donmez (monitore, kapiya, pencereye bakiyor olsa da)
+                if (kv.Key == konusan && Mathf.Abs(Mathf.DeltaAngle(yt, 180f)) > 100f) yt = FacingYaw(kv.Key, a.transform.position.x - Origin.x);
                 a.transform.rotation = Quaternion.Slerp(a.transform.rotation, Quaternion.Euler(0f, yt, 0f), kk);
             }
         }
@@ -221,6 +224,7 @@ namespace HikayeStudyo
             actors[k] = a;
             yawTarget[k] = FacingYaw(k, x);
             go.transform.rotation = Quaternion.Euler(0f, yawTarget[k], 0f);
+            if (Mekan != null && Mekan.Oturmali) { ReFaceAll(); ArabayaOturt(); return a; }
             if (enterFrom != 0) StartCoroutine(WalkTo(k, a, x, run));
             ReFaceAll();
             return a;
@@ -245,11 +249,12 @@ namespace HikayeStudyo
             float speed = run ? 3.2f : 1.4f;
             while (a != null && (t.position - target).sqrMagnitude > 0.0004f)
             {
+                if (Mekan != null && Mekan.Oturmali) { walking.Remove(k); yield break; }
                 var d = target - t.position;
                 var flat = new Vector3(d.x, 0f, d.z);
                 if (flat.sqrMagnitude > 0.0004f)
                     t.rotation = Quaternion.Slerp(t.rotation, Quaternion.LookRotation(flat), 1f - Mathf.Exp(-Time.deltaTime * 12f));
-                t.position = Vector3.MoveTowards(t.position, target, speed * Time.deltaTime);
+                t.position = Vector3.MoveTowards(t.position, target, speed * Karakter3D.Hiz * Time.deltaTime);
                 yield return null;
             }
             walking.Remove(k);
@@ -268,6 +273,7 @@ namespace HikayeStudyo
             var k = Util.Norm(id);
             Karakter3D a;
             if (!actors.TryGetValue(k, out a) || a == null) return;
+            if (Mekan != null && Mekan.Oturmali) return;   // araba icinde yurunmez
             float x = YerX(slotX2D);
             HareketBirak(k, a);
             slots[k] = x;
@@ -292,6 +298,7 @@ namespace HikayeStudyo
         {
             Karakter3D a;
             if (!actors.TryGetValue(Util.Norm(id), out a) || a == null) return;
+            if (talking) konusan = Util.Norm(id);
             if (YatakKilidi(Util.Norm(id), a, talking)) return;
             if (motion == "zipla" || motion == "egil" || motion == "sarsil") { var m = Map(motion); if (m != null && Play(a, m)) return; }
             string e = Util.Norm(emotion);
@@ -305,10 +312,18 @@ namespace HikayeStudyo
             Karakter3D a;
             if (!actors.TryGetValue(Util.Norm(id), out a) || a == null) return;
             string k = Util.Norm(id), yeni = Util.Norm(pose);
+            if (Mekan != null && Mekan.Oturmali) return;     // arabada koltuktan kalkilmaz
             YatakBirak(k, a);
+            string eskiPoz;
+            if (yeni != "oturuyor" && pozDurum.TryGetValue(k, out eskiPoz) && eskiPoz == "oturuyor")
+            {
+                lockedFacing.Remove(k);
+                yawTarget[k] = FacingYaw(k, a.transform.position.x - Origin.x);
+            }
             if (yeni == "yatiyor" || yeni == "oturuyor") pozDurum[k] = yeni; else pozDurum.Remove(k);
             var list = Map(pose);
             if (list != null) Play(a, list);
+            if (yeni == "oturuyor") Dondur(k, a, OturmaYonu(k, a.transform.position.x), true);
         }
 
         // Konusmadan sonra durgun hale don (yatan/oturan pozu bozma)
@@ -342,6 +357,8 @@ namespace HikayeStudyo
         {
             foreach (var kv in actors) if (kv.Value != null) Destroy(kv.Value.gameObject);
             actors.Clear(); slots.Clear(); yawTarget.Clear(); walking.Clear(); lockedFacing.Clear();
+            konusan = "";
+            koltuklar.Clear();
             HareketTemizle();
             foreach (var e in extras) if (e != null) Destroy(e);
             extras.Clear();
@@ -403,20 +420,25 @@ namespace HikayeStudyo
         }
 
         // ---------- 3D mekan, noktalar, giris/cikis ----------
-        public void MekanKur(string tur)
+        public void MekanKur(string arg)
         {
-            string t = Util.Norm(tur);
+            string hata;
+            var tarif = MekanTarifi.Coz(arg, out hata);
+            if (Mekan != null && Mekan.Oturmali) ArabadanKaldir();
+            if (Mekan != null) MekanDegisiyor();
+            havaYagmur = havaKar = havaSis = false;      // hava mekana aittir; yeni mekana tasinmaz
             if (Mekan != null) { Mekan.gameObject.SetActive(false); Destroy(Mekan.gameObject); Mekan = null; }
-            if (t.Length == 0 || t == "yok" || t == "kapat") { OdaDegisti(); return; }
-            var m = Mekan3D.Kur(transform, t);
-            if (m == null)
-            {
-                Debug.LogWarning("[Hikaye] 3D mekan bilinmiyor: " + tur + " (" + string.Join(", ", Mekan3D.TurAdlari) + ")");
-                OdaDegisti();
-                return;
-            }
+            if (hata != null) Debug.LogWarning("[Hikaye] " + hata);
+            if (tarif == null || tarif.Tur == "yok") { OdaDegisti(); HavaKur(); return; }
+            var m = Mekan3D.Kur(transform, tarif.Tur, tarif);
+            if (m == null) { OdaDegisti(); HavaKur(); return; }
             Mekan = m;
+            if (tarif.Hava.Length > 0) HavaSec(tarif.Hava);
             OdaDegisti();
+            if (tarif.Zaman.Length > 0) ZamanAyarla(tarif.Zaman);
+            if (tarif.Isik.Length > 0) IsikAyarla(tarif.Isik);
+            if (Mekan.Oturmali) ArabayaOturt();
+            HavaKur();
         }
 
         // StoryPlayer 2D mekan degistirirken (SetBackground) cagirir
@@ -467,6 +489,7 @@ namespace HikayeStudyo
         {
             var a = Aktor(id, true);
             if (a == null) { Debug.LogWarning("[Hikaye] yer: karakter sahnede degil / 3D degil: " + id); return false; }
+            if (Mekan != null && Mekan.Oturmali) return KoltugaOturt(Util.Norm(id), a, nokta);
             Vector3 w; float yaw;
             if (!NoktaBul(nokta, out w, out yaw)) { NoktaUyarisi(nokta); return false; }
             string k = Util.Norm(id);
@@ -485,6 +508,7 @@ namespace HikayeStudyo
             var a = Aktor(id, true);
             if (a == null) { Debug.LogWarning("[Hikaye] gir: karakter sahnede degil / 3D degil: " + id); yield break; }
             string k = Util.Norm(id);
+            if (Mekan != null && Mekan.Oturmali) { ArabayaOturt(); yield break; }
             float tx = slots.ContainsKey(k) ? slots[k] : 0f;
             Vector3 target = Origin + new Vector3(tx, 0f, 0f);
             Vector3 dpos; float dyaw;
@@ -572,7 +596,7 @@ namespace HikayeStudyo
         // ---------- Atmosfer / zaman / gecis (null guvenli sarmalayicilar) ----------
         public void AtmosferAyarla(string ad) { if (Atmosfer != null) Atmosfer.Atmosfer(ad); }
         public void AniAyarla(string ad) { if (Atmosfer != null) Atmosfer.Ani(ad); }
-        public void ZamanAyarla(string ad) { if (Atmosfer != null) Atmosfer.Zaman(ad); }
+        public void ZamanAyarla(string ad) { if (Atmosfer != null) Atmosfer.Zaman(ad); HavaKur(); }
         public void IsikAyarla(string ad) { if (Atmosfer != null) Atmosfer.Isik(ad); }
 
         public IEnumerator GecisCo(string tur)

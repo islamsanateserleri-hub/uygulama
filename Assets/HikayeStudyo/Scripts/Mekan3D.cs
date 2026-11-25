@@ -4,21 +4,21 @@ using UnityEngine;
 
 namespace HikayeStudyo
 {
-    // Kodla kurulan basit 3D mekanlar: oda, sokak, koy, hastane.
+    // Kodla kurulan basit 3D mekanlar: oda, ev, mutfak, yatak_odasi, hastane, sokak, koy, park, araba.
     // Hepsi Sahne3D'nin Origin noktasina gore kurulur (karakterler z = 0 dizisinde, kamera -z tarafinda).
     // Adli duragi noktalar (kapi, pencere, yatak, sofra ...) 'yer:', 'gir:', 'cikar:' komutlarinda kullanilir.
     // Esya prefablari (Assets/HikayeStudyo/Karakterler/Esyalar vb.) varsa kullanilir, yoksa ilkel sekillerle cizilir.
-    public class Mekan3D : MonoBehaviour
+    public partial class Mekan3D : MonoBehaviour
     {
         public string Tur { get; private set; }
-        public bool Dis { get; private set; }               // sokak / koy: gokyuzu gorunur
+        public bool Dis { get; private set; }               // sokak / koy / park / araba: gokyuzu gorunur
         public bool KapiVar { get { return mentese != null; } }
         public bool Aktif { get { return !string.IsNullOrEmpty(Tur) && !yikildi; } }
 
         class Nk { public Vector3 pos; public float yaw; }
         struct LampInfo { public Light isik; public float baz; public bool mum; }
 
-        static readonly string[] Turler = { "oda", "sokak", "koy", "hastane" };
+        static readonly string[] Turler = { "oda", "ev", "mutfak", "yatak_odasi", "hastane", "sokak", "koy", "park", "araba" };
         static Shader litShader;
         static readonly Dictionary<string, GameObject> propCache = new Dictionary<string, GameObject>();
 
@@ -39,7 +39,7 @@ namespace HikayeStudyo
         public static string[] TurAdlari { get { return Turler; } }
 
         // ---------- Kurulum ----------
-        public static Mekan3D Kur(Transform parent, string tur)
+        public static Mekan3D Kur(Transform parent, string tur, MekanTarifi tarif = null)
         {
             string t = Util.Norm(tur);
             bool bilinen = false;
@@ -51,6 +51,7 @@ namespace HikayeStudyo
             var m = go.AddComponent<Mekan3D>();
             m.root = go.transform;
             m.Tur = t;
+            m.tarif = tarif;
             try
             {
                 switch (t)
@@ -59,6 +60,11 @@ namespace HikayeStudyo
                     case "hastane": m.KurOda(true); break;
                     case "sokak": m.KurSokak(); break;
                     case "koy": m.KurKoy(); break;
+                    case "ev": m.KurEv(); break;
+                    case "mutfak": m.KurMutfak(); break;
+                    case "yatak_odasi": m.KurYatakOdasi(); break;
+                    case "park": m.KurPark(); break;
+                    case "araba": m.KurAraba(); break;
                 }
             }
             catch (System.Exception e)
@@ -120,6 +126,7 @@ namespace HikayeStudyo
         void Update()
         {
             float dt = Time.deltaTime;
+            if (akan.Count > 0) AkisGuncelle(dt);
             if (mentese != null)
             {
                 kapiT = Mathf.MoveTowards(kapiT, kapiHedef ? 1f : 0f, dt * 2.2f);
@@ -347,6 +354,8 @@ namespace HikayeStudyo
         // Pencere: arkasi parlayan cam + cerceve + (istege bagli) perde
         void PencereYap(float cx, float cy, float zFace, float w, float h, Color cerceve, bool perde, Color perdeRenk)
         {
+            perdeRenk = Vurgu(perdeRenk);
+            pencereler.Add(new Pencere { x = cx, y = cy, z = zFace - 0.045f, w = w, h = h });
             var g = Part(PrimitiveType.Cube, "PencereCam", cx, cy, zFace - 0.02f, w, h, 0.03f, K(0.85f, 0.93f, 1f), 0.3f, 0.8f, null, true);
             var mr = g.GetComponent<MeshRenderer>();
             if (mr != null) camMat = mr.sharedMaterial;
@@ -365,6 +374,8 @@ namespace HikayeStudyo
 
         void Zarf(float genislik, float yukseklik, float zArka, float zOn, Color zemin, Color duvar, Color tavan, float zeminPar)
         {
+            zemin = Zemin(zemin);
+            duvar = Duvar(duvar);
             float derin = zArka - zOn;
             float zc = (zArka + zOn) / 2f;
             B("Zemin", 0f, -0.05f, zc, genislik, 0.1f, derin, zemin, zeminPar);
@@ -389,7 +400,7 @@ namespace HikayeStudyo
             else
             {
                 Zarf(5.2f, 3f, 3.14f, -8f, K(0.74f, 0.8f, 0.82f), K(0.9f, 0.95f, 0.95f), K(0.95f, 0.97f, 0.97f), 0.55f);
-                B("DuvarBandi", 0f, 0.9f, 3.1f, 5.2f, 0.7f, 0.03f, K(0.35f, 0.62f, 0.62f), 0.2f);
+                B("DuvarBandi", 0f, 0.9f, 3.1f, 5.2f, 0.7f, 0.03f, Vurgu(K(0.35f, 0.62f, 0.62f)), 0.2f);
                 B("TavanPaneli", 0f, 2.98f, 1.5f, 1.6f, 0.04f, 0.6f, Color.white, 0.2f, 1.2f);
                 Lamba("HastaneIsik", 0f, 2.7f, 1.5f, K(0.95f, 1f, 1f), 1.1f, 7f, false);
                 xMin = -1.9f; xMax = -0.4f; zMin = 1.7f; zMax = 2.6f;
@@ -401,37 +412,37 @@ namespace HikayeStudyo
             KapiYap(hastane ? -1.45f : -1.2f, 3.14f, 0.95f, 2.1f, hastane ? K(0.8f, 0.86f, 0.88f) : koyuAhsap, hastane ? K(0.85f, 0.85f, 0.88f) : K(0.25f, 0.16f, 0.1f));
             float kx = hastane ? -1.45f : -1.2f;
             N("kapi", kx, 0f, 2.7f, 180f);
-            N("pencere", 0.9f, 0f, 2.75f, 0f);
+            N("pencere", 1.0f, 0f, 1.45f, 0f);
 
-            // yatak
-            if (!Prop("yatak", 0.9f, 0f, 2.15f, 0f, 0.7f))
+            // yatak yan durur (baslik sagda): yatan kisi kameraya boydan gorunur
+            if (!Prop("yatak", 0.65f, 0f, 2.45f, 90f, 0.7f))
             {
                 if (!hastane)
                 {
-                    B("YatakCerceve", 0.9f, 0.25f, 2.15f, 1.5f, 0.3f, 2.0f, koyuAhsap);
-                    B("YatakBasliK", 0.9f, 0.65f, 3.08f, 1.5f, 1.0f, 0.1f, koyuAhsap);
-                    B("Yatak", 0.9f, 0.47f, 2.15f, 1.4f, 0.18f, 1.9f, K(0.95f, 0.92f, 0.85f), 0.05f);
-                    B("Battaniye", 0.9f, 0.6f, 1.65f, 1.44f, 0.1f, 1.2f, K(0.28f, 0.42f, 0.7f), 0.05f);
-                    B("Yastik", 0.9f, 0.6f, 2.85f, 0.55f, 0.12f, 0.32f, Color.white, 0.05f);
+                    B("YatakCerceve", 0.65f, 0.25f, 2.45f, 1.9f, 0.3f, 1.1f, koyuAhsap);
+                    B("YatakBasliK", 1.62f, 0.65f, 2.45f, 0.1f, 1.0f, 1.1f, koyuAhsap);
+                    B("Yatak", 0.65f, 0.47f, 2.45f, 1.82f, 0.18f, 1.02f, K(0.95f, 0.92f, 0.85f), 0.05f);
+                    B("Battaniye", 0.3f, 0.6f, 2.45f, 1.14f, 0.1f, 1.06f, Vurgu(K(0.28f, 0.42f, 0.7f)), 0.05f);
+                    B("Yastik", 1.37f, 0.6f, 2.45f, 0.3f, 0.12f, 0.55f, Color.white, 0.05f);
                 }
                 else
                 {
-                    B("HYatakCerceve", 0.9f, 0.52f, 2.15f, 0.95f, 0.07f, 1.95f, K(0.82f, 0.84f, 0.86f), 0.5f);
-                    B("HYatak", 0.9f, 0.64f, 2.15f, 0.88f, 0.16f, 1.85f, Color.white, 0.05f);
-                    B("HBattaniye", 0.9f, 0.74f, 1.65f, 0.92f, 0.07f, 1.1f, K(0.6f, 0.82f, 0.9f), 0.05f);
-                    B("HYastik", 0.9f, 0.76f, 2.9f, 0.5f, 0.12f, 0.3f, Color.white, 0.05f);
-                    B("HBasTahta", 0.9f, 0.85f, 3.1f, 0.95f, 0.6f, 0.05f, K(0.82f, 0.84f, 0.86f), 0.5f);
-                    B("HAyakTahta", 0.9f, 0.8f, 1.15f, 0.95f, 0.5f, 0.05f, K(0.82f, 0.84f, 0.86f), 0.5f);
-                    B("HKorkulukSol", 0.43f, 0.85f, 2.2f, 0.03f, 0.18f, 1.2f, K(0.75f, 0.77f, 0.8f), 0.6f);
-                    B("HKorkulukSag", 1.37f, 0.85f, 2.2f, 0.03f, 0.18f, 1.2f, K(0.75f, 0.77f, 0.8f), 0.6f);
+                    Color demir = K(0.55f, 0.58f, 0.64f);
+                    B("HYatakCerceve", 0.65f, 0.52f, 2.45f, 1.92f, 0.09f, 0.92f, demir, 0.5f);
+                    B("HYatak", 0.65f, 0.64f, 2.45f, 1.82f, 0.16f, 0.86f, K(0.93f, 0.94f, 0.96f), 0.05f);
+                    B("HBattaniye", 0.3f, 0.74f, 2.45f, 1.1f, 0.07f, 0.9f, Vurgu(K(0.38f, 0.66f, 0.82f)), 0.05f);
+                    B("HYastik", 1.37f, 0.76f, 2.45f, 0.3f, 0.12f, 0.5f, Color.white, 0.05f);
+                    B("HBasTahta", 1.63f, 0.85f, 2.45f, 0.05f, 0.6f, 0.92f, demir, 0.5f);
+                    B("HAyakTahta", -0.33f, 0.8f, 2.45f, 0.05f, 0.5f, 0.92f, demir, 0.5f);
+                    B("HKorkuluk", 0.65f, 0.78f, 2.9f, 1.2f, 0.18f, 0.03f, demir, 0.6f);
                     for (int i = 0; i < 4; i++)
-                        C("HYatakTeker" + i, (i % 2 == 0 ? 0.5f : 1.3f), 0.25f, (i < 2 ? 1.3f : 2.95f), 0.04f, 0.5f, K(0.6f, 0.62f, 0.65f), 0.6f);
+                        C("HYatakTeker" + i, (i % 2 == 0 ? -0.25f : 1.55f), 0.25f, (i < 2 ? 2.1f : 2.8f), 0.04f, 0.5f, K(0.4f, 0.42f, 0.46f), 0.6f);
                 }
             }
-            N("yatak", 0.9f, hastane ? 0.72f : 0.58f, 2.2f, 0f);
+            N("yatak", 0.65f, hastane ? 0.72f : 0.58f, 2.45f, 90f);
 
             // yan komodin + lamba / monitor
-            float cx = hastane ? -0.15f : -0.15f;
+            float cx = -0.55f;
             B("Komodin", cx, 0.3f, 2.9f, 0.5f, 0.6f, 0.4f, hastane ? K(0.85f, 0.87f, 0.9f) : koyuAhsap, hastane ? 0.4f : 0.15f);
             if (!hastane)
             {
@@ -477,11 +488,11 @@ namespace HikayeStudyo
                 if (emr != null) ekranMat = emr.sharedMaterial;
                 N("monitor", cx, 0f, 2.4f, 0f);
                 // serum askisi
-                C("SerumDireK", 0.2f, 1.0f, 2.85f, 0.025f, 2f, K(0.75f, 0.77f, 0.8f), 0.6f);
-                B("SerumKol", 0.28f, 1.98f, 2.85f, 0.2f, 0.03f, 0.03f, K(0.75f, 0.77f, 0.8f), 0.6f);
-                B("SerumTorba", 0.36f, 1.8f, 2.85f, 0.12f, 0.24f, 0.04f, K(0.85f, 0.95f, 1f), 0.5f);
-                C("SerumTaban", 0.2f, 0.03f, 2.85f, 0.2f, 0.04f, K(0.5f, 0.52f, 0.55f), 0.5f);
-                N("serum", 0.2f, 0f, 2.55f, 180f);
+                C("SerumDireK", 1.5f, 1.0f, 3.02f, 0.025f, 2f, K(0.75f, 0.77f, 0.8f), 0.6f);
+                B("SerumKol", 1.42f, 1.98f, 3.02f, 0.2f, 0.03f, 0.03f, K(0.75f, 0.77f, 0.8f), 0.6f);
+                B("SerumTorba", 1.34f, 1.8f, 3.02f, 0.12f, 0.24f, 0.04f, K(0.85f, 0.95f, 1f), 0.5f);
+                C("SerumTaban", 1.5f, 0.03f, 3.02f, 0.2f, 0.04f, K(0.5f, 0.52f, 0.55f), 0.5f);
+                N("serum", 1.5f, 0f, 1.6f, 180f);
                 // ziyaretci sandalyesi ve yan masa (sofra)
                 if (!Prop("sandalye", -0.9f, 0f, 1.5f, 90f, 0.9f))
                 {
@@ -499,7 +510,7 @@ namespace HikayeStudyo
         void KurSokak()
         {
             Dis = true;
-            B("Asfalt", 0f, -0.1f, -2.5f, 24f, 0.2f, 11f, K(0.13f, 0.13f, 0.15f), 0.35f);
+            B("Asfalt", 0f, -0.1f, -2.5f, 24f, 0.2f, 11f, Zemin(K(0.13f, 0.13f, 0.15f)), 0.35f);
             B("Kaldirim", 0f, 0.05f, 2.6f, 24f, 0.1f, 0.8f, K(0.5f, 0.5f, 0.53f), 0.1f);
             B("Bordur", 0f, 0.05f, 2.17f, 24f, 0.1f, 0.06f, K(0.74f, 0.74f, 0.76f), 0.1f);
             for (int i = 0; i < 12; i++) B("YolCizgi" + i, -6.6f + i * 1.2f, 0.004f, 1.0f, 0.6f, 0.01f, 0.1f, K(0.95f, 0.88f, 0.4f), 0.2f);
@@ -515,7 +526,7 @@ namespace HikayeStudyo
                 float bw = gen[i];
                 float bh = 5f + (float)rnd.NextDouble() * 4f;
                 float bcx = bx + bw / 2f;
-                B("Bina" + i, bcx, bh / 2f, 3.6f, bw - 0.05f, bh, 1.4f, cl[i % cl.Length], 0.05f);
+                B("Bina" + i, bcx, bh / 2f, 3.6f, bw - 0.05f, bh, 1.4f, Color.Lerp(cl[i % cl.Length], Duvar(cl[i % cl.Length]), 0.65f), 0.05f);
                 int kolon = Mathf.Max(2, Mathf.FloorToInt(bw / 0.7f));
                 for (int r = 0; r < 4; r++)
                     for (int cc = 0; cc < kolon; cc++)
@@ -532,7 +543,7 @@ namespace HikayeStudyo
                 {
                     KapiYap(bcx, 2.9f, 0.9f, 2.0f, K(0.25f, 0.16f, 0.1f), K(0.2f, 0.2f, 0.22f));
                     N("kapi", bcx, 0.1f, 2.35f, 180f);
-                    B("DukkanTabela", bcx, 2.55f, 2.86f, 1.2f, 0.3f, 0.05f, K(0.7f, 0.15f, 0.12f), 0.2f, 0.3f);
+                    B("DukkanTabela", bcx, 2.55f, 2.86f, 1.2f, 0.3f, 0.05f, Vurgu(K(0.7f, 0.15f, 0.12f)), 0.2f, 0.3f);
                 }
                 if (i == vitrinBina)
                 {
@@ -594,7 +605,7 @@ namespace HikayeStudyo
         void KurKoy()
         {
             Dis = true;
-            Color cimen = K(0.32f, 0.46f, 0.2f);
+            Color cimen = Zemin(K(0.32f, 0.46f, 0.2f));
             B("Cimen", 0f, -0.1f, 8f, 40f, 0.2f, 40f, cimen, 0.05f);
             C("ToprakYol", 0f, 0.004f, 0.8f, 1.9f, 0.01f, K(0.5f, 0.38f, 0.24f), 0.05f);
             for (int i = 0; i < 8; i++)
@@ -654,7 +665,7 @@ namespace HikayeStudyo
         void KoyEvi(float cx, float cz, float w, float d, float h, bool kapili)
         {
             float zFace = cz - d / 2f;
-            B("EvDuvar", cx, h / 2f, cz, w, h, d, K(0.86f, 0.8f, 0.68f), 0.05f);
+            B("EvDuvar", cx, h / 2f, cz, w, h, d, Duvar(K(0.86f, 0.8f, 0.68f)), 0.05f);
             var r1 = B("EvCati1", cx - w * 0.28f, h + 0.28f, cz, w * 0.62f, 0.07f, d + 0.3f, K(0.6f, 0.28f, 0.2f), 0.1f);
             r1.transform.localRotation = Quaternion.Euler(0f, 0f, 30f);
             var r2 = B("EvCati2", cx + w * 0.28f, h + 0.28f, cz, w * 0.62f, 0.07f, d + 0.3f, K(0.6f, 0.28f, 0.2f), 0.1f);

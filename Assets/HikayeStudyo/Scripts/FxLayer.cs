@@ -19,6 +19,12 @@ namespace HikayeStudyo
         bool mum, toz, yagmur, buyu, gunes;
         float dimTarget, dimNow, flashA;
         public bool Rewinding;
+        public bool Donuk;              // dondur: komutu - zerreler, yagmur, gren durur
+        float grenAlpha = 0.07f;
+        Image vinyetEk;
+        RectTransform sisRoot;
+        readonly List<RectTransform> sisler = new List<RectTransform>();
+        bool sis;
         public bool Raining { get { return yagmur; } }
 
         const float W = 1080f, H = 1920f;
@@ -72,6 +78,15 @@ namespace HikayeStudyo
                 rain.Add(d.rectTransform);
             }
 
+            sisRoot = Layer("Sis");
+            for (int i = 0; i < 9; i++)
+            {
+                var d = Gfx.Img("bulut", sisRoot, Gfx.SoftDot, new Color(0.85f, 0.88f, 0.92f, 0f),
+                    new Vector2(Random.Range(900f, 1400f), Random.Range(380f, 620f)),
+                    new Vector2(Random.Range(-W / 2, W / 2), -H / 2 + 120f + i * 150f));
+                sisler.Add(d.rectTransform);
+            }
+
             magicRoot = Layer("Buyu");
             glow = Gfx.Img("BuyuIsik", magicRoot, Gfx.SoftDot, new Color(0.45f, 1f, 0.6f, 0f), new Vector2(1100, 1100), new Vector2(0, 100));
             for (int i = 0; i < 40; i++)
@@ -92,6 +107,7 @@ namespace HikayeStudyo
 
             dim = Full("Karartma", null, new Color(0, 0, 0, 0));
             vignette = Full("KenarKarartma", Gfx.Vignette, new Color(0, 0, 0, 0.85f));
+            vinyetEk = Full("KenarKarartmaEk", Gfx.Vignette, new Color(0, 0, 0, 0f));
 
             grain = Gfx.Rect("Gren", rt).gameObject.AddComponent<RawImage>();
             Gfx.Stretch(grain.rectTransform);
@@ -109,7 +125,7 @@ namespace HikayeStudyo
         // "mum, toz" / "yagmur" / "yok"
         public void SetAtmosphere(string csv)
         {
-            mum = toz = yagmur = buyu = gunes = false;
+            mum = toz = yagmur = buyu = gunes = sis = false;
             foreach (var raw in (csv ?? "").Split(','))
             {
                 switch (Util.Norm(raw))
@@ -119,18 +135,27 @@ namespace HikayeStudyo
                     case "yagmur": yagmur = true; break;
                     case "buyu": buyu = true; break;
                     case "gunes": gunes = true; toz = true; break;
+                    case "sis": sis = true; break;
                 }
             }
         }
 
         public void AddAtmosphere(string csv)
         {
-            bool m = mum, t = toz, y = yagmur, b = buyu, g = gunes;
+            bool m = mum, t = toz, y = yagmur, b = buyu, g = gunes, s = sis;
             SetAtmosphere(csv);
-            mum |= m; toz |= t; yagmur |= y; buyu |= b; gunes |= g;
+            mum |= m; toz |= t; yagmur |= y; buyu |= b; gunes |= g; sis |= s;
         }
 
         public void Dim(float a) { dimTarget = a; }
+
+        // gren: / vinyet:  yok | az | normal | cok
+        public void Gren(string d) { grenAlpha = d == "yok" ? 0f : d == "az" ? 0.04f : d == "cok" ? 0.22f : 0.07f; }
+        public void Vinyet(string d)
+        {
+            vignette.color = new Color(0, 0, 0, d == "yok" ? 0f : d == "az" ? 0.45f : d == "cok" ? 1f : 0.85f);
+            vinyetEk.color = new Color(0, 0, 0, d == "cok" ? 0.8f : 0f);
+        }
         public void Flash(float strength = 1f) { flashA = Mathf.Max(flashA, strength); }
 
         // Kamyon farlari: iki isik buyuyerek yaklasir, sonunda beyaz parlama
@@ -166,7 +191,27 @@ namespace HikayeStudyo
             float k = 1f - Mathf.Exp(-dt * 3f);
 
             // film greni her kare kayar
+            grain.color = new Color(1, 1, 1, grenAlpha);
+            if (Donuk)
+            {
+                // zaman durdu: yalniz flas soner
+                flashA = Mathf.MoveTowards(flashA, 0f, dt * 2.2f);
+                flash.color = new Color(1, 1, 1, flashA);
+                return;
+            }
             var uv = grain.uvRect; uv.x = Random.value; uv.y = Random.value; grain.uvRect = uv;
+
+            // sis
+            for (int i = 0; i < sisler.Count; i++)
+            {
+                var d = sisler[i];
+                var p = d.anchoredPosition;
+                p.x += (18f + (i % 3) * 14f) * ((i % 2) * 2 - 1) * dt;
+                if (p.x > W) p.x = -W; else if (p.x < -W) p.x = W;
+                d.anchoredPosition = p;
+                var img = d.GetComponent<Image>();
+                img.color = Gfx.A(img.color, Mathf.Lerp(img.color.a, sis ? 0.2f : 0f, k));
+            }
 
             // mum
             float flick = (Mathf.PerlinNoise(t * 7f, 0.3f) - 0.5f) * 0.6f + (Mathf.PerlinNoise(t * 23f, 4f) - 0.5f) * 0.25f;

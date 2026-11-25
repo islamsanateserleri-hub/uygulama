@@ -9,6 +9,7 @@ namespace HikayeStudyo
         Bak, Dinle, AltyaziStil,   // bak: / dinle: / altyazi: komutlari (YuzSahne.cs, KaraokeAltyazi.cs)
         Dialogue, Background, Hook, Rewind, Title, Wait, Sfx, Remove, Clear,
         Camera, Atmosphere, Music, Pose, Headlights, Flash, Insert, End, Cast, Choice, Result,
+        DevamKarti,   // devami: "devami gelecek bolumde" karti (Asama 15)
         Direct   // yonetmen komutlari: mekan3d, yer, gir, cikar (kapi), figuran, atmosfer (huzun...), ani, zaman, gecis, sessizlik, isik
     }
 
@@ -24,6 +25,7 @@ namespace HikayeStudyo
         public string Speech = "";       // seslendirmeye giden metin (<sigh>, <sob> gibi etiketlerle)
         public string Vurgulu = "";      // altyazi metni, *vurgu* isaretleri korunmus (karaoke altyazi icin)
         public string Arg = "";
+        public string Soru = "";          // secim karti sorusu (oylama:)
         public float Seconds;
         public int VoiceIndex;           // 1'den baslayan konusma sirasi
     }
@@ -37,6 +39,49 @@ namespace HikayeStudyo
         public int Bolum;                        // bolum: 3
         public int KapakSatir;                   // kapak: 24  (kapak karesi bu dosya satirindan/sonraki ilk konusmadan alinir; 0 = otomatik)
         public readonly List<string> Etiketler = new List<string>();   // etiket: a, b, c  (aciklamaya #a #b #c olarak eklenir)
+        // Asama 14 (devamlilik): ozet/durum/olay/gecmis/iliski/soru/cozuldu/plan. Videoyu etkilemez.
+        public readonly List<SeriNotu> SeriNotlari = new List<SeriNotu>();
+    }
+
+    public class SeriNotu
+    {
+        public int Satir;
+        public string Tur = "";                 // normalize komut adi
+        public string Kim = "", Kim2 = "";      // karakter(ler); plan icin Kim = bolum numarasi
+        public string Deger = "";
+
+        public static readonly string[] Turler = { "ozet", "durum", "olay", "gecmis", "iliski", "soru", "cozuldu", "plan" };
+        public static readonly string[] Durumlar = { "hayatta", "olu", "kayip", "hastanede", "uzakta" };
+
+        // Hatali yazimda aciklama doner (null = tamam)
+        public static string Coz(string tur, string val, int satir, out SeriNotu not)
+        {
+            not = new SeriNotu { Satir = satir, Tur = tur, Deger = (val ?? "").Trim() };
+            if (not.Deger.Length == 0) return "'" + tur + ":' boş olamaz.";
+            if (tur == "ozet" || tur == "olay" || tur == "soru" || tur == "cozuldu") return null;
+            int eq = not.Deger.IndexOf('=');
+            string ornek = tur == "durum" ? "durum: Dede = olu" : tur == "gecmis" ? "gecmis: Anne = yıllarca yurt dışında çalıştı"
+                : tur == "iliski" ? "iliski: Anne - Arda = anne ve oğul" : "plan: 3 = mektup bulunur";
+            if (eq < 0) return "'" + ornek + "' biçiminde yaz.";
+            string sol = not.Deger.Substring(0, eq).Trim();
+            not.Deger = not.Deger.Substring(eq + 1).Trim();
+            if (sol.Length == 0 || not.Deger.Length == 0) return "'" + ornek + "' biçiminde yaz.";
+            if (tur == "iliski")
+            {
+                int t = sol.IndexOf('-');
+                if (t < 0) return "'" + ornek + "' biçiminde yaz.";
+                not.Kim = sol.Substring(0, t).Trim(); not.Kim2 = sol.Substring(t + 1).Trim();
+                return not.Kim.Length > 0 && not.Kim2.Length > 0 ? null : "'" + ornek + "' biçiminde yaz.";
+            }
+            not.Kim = sol;
+            if (tur == "plan") { int n; return int.TryParse(sol, out n) && n > 0 ? null : "'" + ornek + "' biçiminde yaz (bölüm numarası)."; }
+            if (tur == "durum")
+            {
+                not.Deger = Util.Norm(not.Deger);
+                if (!Util.In(not.Deger, Durumlar)) return "durum '" + not.Deger + "' bilinmiyor (" + string.Join(", ", Durumlar) + ").";
+            }
+            return null;
+        }
     }
 
     public static class Util
@@ -190,7 +235,8 @@ namespace HikayeStudyo
         // 'Direct' (yonetmen) komutlari: Character = komut adi, Arg = geri kalan metin.
         // Baska komutlar da eklenecekse (bak, dinle, altyazi ...) adini bu listeye yazmak yeterlidir.
         public static readonly string[] DirectKeys =
-            { "mekan3d", "yer", "gir", "figuran", "ani", "zaman", "gecis", "sessizlik", "isik" };
+            { "mekan3d", "yer", "gir", "figuran", "ani", "zaman", "gecis", "sessizlik", "isik", "hava",
+              "gren", "vinyet", "filtre", "yavas", "dondur", "gozyasi", "nefes" };
 
         // vfx: gorsel efekt komutu (B4: efekt = yalniz ses efekti, vfx = gorsel efekt, gecis = yalniz sahne gecisi).
         // Mevcut efektlere eslenir: flas -> Flash, far -> Headlights, vhs/geri -> Rewind (eski flas:/far:/geri: aynen calisir).
@@ -212,6 +258,7 @@ namespace HikayeStudyo
         {
             var r = new ParseResult();
             int voice = 0, lineNo = 0;
+            string oylamaSorusu = "";
             foreach (var raw in (text ?? "").Replace("\r", "").Split('\n'))
             {
                 lineNo++;
@@ -332,6 +379,16 @@ namespace HikayeStudyo
                     case "bak": item.Type = ItemType.Bak; if (!YuzSahne.KomutCoz(key, item, r.Warnings, lineNo)) continue; break;
                     case "dinle": item.Type = ItemType.Dinle; if (!YuzSahne.KomutCoz(key, item, r.Warnings, lineNo)) continue; break;
                     case "altyazi": item.Type = ItemType.AltyaziStil; if (!YuzSahne.KomutCoz(key, item, r.Warnings, lineNo)) continue; break;
+                    case "ozet": case "durum": case "olay": case "gecmis": case "iliski": case "soru": case "cozuldu": case "plan":
+                        {
+                            SeriNotu sn;
+                            string snHata = SeriNotu.Coz(key, val, lineNo, out sn);
+                            if (snHata != null) r.Warnings.Add(lineNo + ". satır: " + snHata);
+                            else r.SeriNotlari.Add(sn);
+                        }
+                        continue;
+                    case "oylama": oylamaSorusu = val; continue;
+                    case "devami": item.Type = ItemType.DevamKarti; break;
                     case "seri": r.Seri = val; continue;
                     case "baslik": r.Baslik = val; continue;
                     case "bolum":
@@ -341,6 +398,7 @@ namespace HikayeStudyo
                         {
                             // secim: A) Babasına söylesin / B) Sır saklasın
                             item.Type = ItemType.Choice;
+                            item.Soru = oylamaSorusu; oylamaSorusu = "";
                             var opts = val.Split('/');
                             if (opts.Length < 2) { r.Warnings.Add(lineNo + ". satır: 'secim: A) ... / B) ...' biçiminde iki seçenek yaz."); continue; }
                             item.Text = opts[0].Trim();

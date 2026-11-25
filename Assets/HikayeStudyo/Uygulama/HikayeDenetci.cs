@@ -147,6 +147,7 @@ namespace HikayeStudyo
                 case ItemType.End: return it.Arg == "sert" ? 1.2f : 2.8f;
                 case ItemType.Choice: return 4f;
                 case ItemType.Result: return 2.2f;
+                case ItemType.DevamKarti: return 2.9f;
             }
             return 0f;
         }
@@ -307,6 +308,12 @@ namespace HikayeStudyo
                                 Ekle(list, no, true, "VFX_BILINMIYOR", "'vfx: " + val + "' bilinmiyor. Geçerli: " + string.Join(", ", StoryParser.VfxListesi) + " (ses için efekt:, geçiş için gecis:).", vk, EnYakin(vk, StoryParser.VfxListesi));
                         }
                         break;
+                    case "gren": case "vinyet": case "filtre": case "yavas": case "dondur": case "gozyasi": case "nefes":
+                        {
+                            var sHata = SinematikEfekt.Dogrula(key, val);
+                            if (sHata != null) Ekle(list, no, true, "EFEKT_DEGERI", sHata, val, "");
+                        }
+                        break;
                     case "gecis":
                         if (!Util.In(val, YonetmenTablo.Gecisler))
                             Ekle(list, no, true, "GECIS_BILINMIYOR", "'gecis: " + val + "' bilinmiyor. Geçerli: " + string.Join(", ", YonetmenTablo.Gecisler) + ".", val, EnYakin(val, YonetmenTablo.Gecisler));
@@ -325,8 +332,20 @@ namespace HikayeStudyo
                             Ekle(list, no, false, "ETIKET_BOS", "'etiket:' boş. Örnek: etiket: aile, dram, duygusal", "", "");
                         break;
                     case "mekan3d":
-                        if (!Util.In(val, YonetmenTablo.Mekanlar))
-                            Ekle(list, no, true, "MEKAN3D_YOK", "'" + val + "' 3D mekânı yok. Geçerli: " + string.Join(", ", YonetmenTablo.Mekanlar) + ".", val, EnYakin(val, YonetmenTablo.Mekanlar));
+                        {
+                            string mHata;
+                            if (MekanTarifi.Coz(val, out mHata) == null)
+                            {
+                                string ilk = val.Split(new[] { ' ' }, 2)[0];
+                                Ekle(list, no, true, "MEKAN3D_YOK", mHata, ilk, Util.In(ilk, YonetmenTablo.Mekanlar) ? "" : EnYakin(ilk, YonetmenTablo.Mekanlar));
+                            }
+                        }
+                        break;
+                    case "hava":
+                        {
+                            var hHata = YonetmenTablo.Dogrula("hava", val);
+                            if (hHata != null) Ekle(list, no, true, "HAVA_YOK", hHata, val, EnYakin(val, YonetmenTablo.Havalar));
+                        }
                         break;
                 }
             }

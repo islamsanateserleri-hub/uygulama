@@ -135,6 +135,7 @@ namespace HikayeStudyo
                     case ItemType.Title: Kart(planlar, 2.2f, it.Line); cur = null; break;
                     case ItemType.Choice: Kart(planlar, 4f, it.Line); cur = null; break;
                     case ItemType.Result: Kart(planlar, 2.2f, it.Line); cur = null; break;
+                    case ItemType.DevamKarti: Kart(planlar, 2.9f, it.Line); cur = null; break;
                     case ItemType.End: Kart(planlar, it.Arg == "sert" ? 1.2f : 2.8f, it.Line); cur = null; break;
                     case ItemType.Dialogue:
                         {

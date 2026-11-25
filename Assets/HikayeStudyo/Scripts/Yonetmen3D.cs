@@ -7,12 +7,13 @@ namespace HikayeStudyo
     // Yonetmen komutlarinin gecerli degerleri (StoryParser uyarilari ve Studyo dogrulamasi icin)
     public static class YonetmenTablo
     {
-        public static readonly string[] Mekanlar = { "oda", "sokak", "koy", "hastane", "yok" };
+        public static readonly string[] Mekanlar = { "oda", "ev", "mutfak", "yatak_odasi", "hastane", "sokak", "koy", "park", "araba", "yok" };
+        public static readonly string[] Havalar = { "yagmur", "kar", "sis", "yok" };
         public static readonly string[] Zamanlar = { "sabah", "gun", "gun_batimi", "gece" };
         public static readonly string[] Atmosferler = { "huzun", "sicak_ani", "kabus", "normal" };
         public static readonly string[] Animlar = { "sepya", "vhs", "soluk", "bitir" };
         public static readonly string[] Gecisler = { "karar", "capraz", "beyaz" };
-        public static readonly string[] Isiklar = { "normal", "gunduz", "dramatik", "yumusak", "soguk", "sicak", "karanlik", "mum" };
+        public static readonly string[] Isiklar = { "normal", "gunduz", "dramatik", "yumusak", "soguk", "sicak", "karanlik", "mum", "romantik", "umut", "korku", "huzunlu" };
         public static readonly string[] Kameralar =
             { "otomatik", "yakin", "genis", "salla", "tepki", "yaklas", "uzaklas", "goz", "yukaridan", "asagidan", "bulanik", "net", "orta", "omuz", "ters", "iki" };
 
@@ -31,10 +32,18 @@ namespace HikayeStudyo
         public static string Dogrula(string key, string val)
         {
             string v = (val ?? "").Trim();
+            if (SinematikEfekt.Tanir(key)) return SinematikEfekt.Dogrula(key, v);
             switch (key)
             {
                 case "mekan3d":
-                    return Util.In(v, Mekanlar) ? null : "'mekan3d: " + v + "' bilinmiyor (" + string.Join(", ", Mekanlar) + ").";
+                    {
+                        string hata;
+                        return MekanTarifi.Coz(v, out hata) != null ? null : "'mekan3d: " + v + "': " + hata;
+                    }
+                case "hava":
+                    foreach (var tk in v.Split(new[] { ',', ' ' }, System.StringSplitOptions.RemoveEmptyEntries))
+                        if (!Util.In(tk, Havalar)) return "'hava: " + tk + "' bilinmiyor (" + string.Join(", ", Havalar) + ").";
+                    return v.Length > 0 ? null : "'hava:' boş (" + string.Join(", ", Havalar) + ").";
                 case "zaman":
                     return Util.In(v, Zamanlar) ? null : "'zaman: " + v + "' bilinmiyor (" + string.Join(", ", Zamanlar) + ").";
                 case "ani":
@@ -96,7 +105,8 @@ namespace HikayeStudyo
             string id, nokta;
             switch (key)
             {
-                case "mekan3d": s.MekanKur(n); break;
+                case "mekan3d": s.MekanKur(arg); break;
+                case "hava": s.HavaAyarla(arg); break;
                 case "yer": Bol(arg, out id, out nokta); s.Yer(id, nokta); break;
                 case "gir": Bol(arg, out id, out nokta); yield return s.GirCo(id, nokta); break;
                 case "cikar": Bol(arg, out id, out nokta); s.CikarKapi(id, nokta); break;
@@ -122,7 +132,9 @@ namespace HikayeStudyo
             string n = Util.Norm(arg);
             switch (key)
             {
-                case "mekan3d": s.MekanKur(n); break;
+                case "mekan3d": s.MekanKur(arg); break;
+                case "yer": { string kim, yeri; Bol(arg, out kim, out yeri); s.Yer(kim, yeri); } break;
+                case "hava": s.HavaAyarla(arg); break;
                 case "figuran": { int k; int.TryParse(arg.Trim(), out k); s.Figuran(k); } break;
                 case "atmosfer":
                     foreach (var tk in arg.Split(new[] { ',', ' ' }, System.StringSplitOptions.RemoveEmptyEntries)) s.AtmosferAyarla(tk);

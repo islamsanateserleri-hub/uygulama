@@ -21,6 +21,8 @@ namespace HikayeStudyo
 
         public string CurrentClip { get; private set; }
 
+        public static float Hiz = 1f;   // yavas: / dondur: komutlari (animasyon ve yurume hizi)
+
         Animator animator;
         Animation legacy;
         PlayableGraph graph;
@@ -35,6 +37,11 @@ namespace HikayeStudyo
             legacy = GetComponentInChildren<Animation>();
             if (!string.IsNullOrEmpty(startClip) && string.IsNullOrEmpty(CurrentClip)) Play(startClip, 0f);
             CanliLikEkle();
+            // VRM modellerinin hazir gorunurluk sinirlari yanlis (yerin altinda kaliyor): yakin planda karakter
+            // kadrajdayken cizilmeyebiliyordu. Sinirlar her karede kemiklerden hesaplansin.
+            if (Application.isPlaying)
+                foreach (var r in GetComponentsInChildren<SkinnedMeshRenderer>(true)) r.updateWhenOffscreen = true;
+            if (Application.isPlaying && GetComponent<DizKapat>() == null) gameObject.AddComponent<DizKapat>();
             VrmRenkAyarla();
         }
 
@@ -205,9 +212,11 @@ namespace HikayeStudyo
 
         void Update()
         {
+            if (mixer.IsValid()) mixer.SetSpeed(Hiz);
+            if (legacy != null) foreach (AnimationState d in legacy) d.speed = Hiz;
             if (fade < 1f)
             {
-                fade += fadeTime > 0f ? Time.deltaTime / fadeTime : 1f;
+                fade += fadeTime > 0f ? Time.deltaTime * Hiz / fadeTime : 1f;
                 ApplyWeights();
             }
         }

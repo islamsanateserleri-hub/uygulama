@@ -37,6 +37,11 @@ namespace HikayeStudyo
             var p = Hareket3D.Parcala(it.Arg);
             string satir = it.Line + ". satır '" + key + ":' ";
             if (Hareket3D.Dogrula(key, it.Arg) != null) { HareketUyar(satir + "değeri geçersiz, atlandı: " + it.Arg); yield break; }
+            if (Mekan != null && Mekan.Oturmali && key != "tepki_ver" && key != "tut" && key != "birak")
+            {
+                HareketUyar(satir + "arabada herkes oturur; bu komut atlandı.");
+                yield break;
+            }
             switch (key)
             {
                 case "sarilma":
@@ -590,6 +595,7 @@ namespace HikayeStudyo
             YatakBirak(k, a);
             pozDurum.Remove(k);
             lockedFacing.Remove(k);
+            if (konusan == k) konusan = "";
             slots[k] = hedef.x - Origin.x;
             if (aninda)
             {
@@ -633,13 +639,14 @@ namespace HikayeStudyo
         // kapi: ac | kapat | Karakter ac  (3D mekanin kapisi)
         IEnumerator KapiCo(string id, bool ac, string satir, bool aninda)
         {
-            if (Mekan == null || !Mekan.KapiVar) { HareketUyar(satir + "kapılı bir 3D mekan yok (mekan3d: oda, hastane, sokak, koy)."); yield break; }
+            if (Mekan == null || !Mekan.KapiVar) { HareketUyar(satir + "kapılı bir 3D mekan yok (mekan3d: oda, ev, mutfak, yatak_odasi, hastane, sokak, koy)."); yield break; }
             var mentese = Mekan.transform.Find("KapiMentese");
             var tokmak = mentese != null ? mentese.Find("KapiTokmak") : null;
             var a = id.Length > 0 ? HareketAktor(id, satir) : null;
             if (a == null || tokmak == null) { Mekan.KapiAc(ac); if (!aninda) yield return new WaitForSeconds(0.45f); yield break; }
 
             string k = Util.Norm(id);
+            if (konusan == k) konusan = "";
             Vector3 kol = mentese.position + tokmak.localPosition;     // kapi kapaliyken tokmagin yeri
             Vector3 dur;
             float yaw;
@@ -692,22 +699,53 @@ namespace HikayeStudyo
 
             yatakOncesi[k] = a.transform.position;
             walking.Remove(k);
-            if (!yat)
+            Vector3 koltuk; float koltukYaw;
+            if (!yat && Mekan != null && Mekan.NoktaBul("koltuk", out koltuk, out koltukYaw))
             {
                 Play(a, Hareket3D.KlipOtur);
-                // yatagin ayak ucunda, kameraya donuk oturur (oturma klibinde kalca yerden ~0,45 m yukarida)
-                if (yatakVar) a.transform.position = new Vector3(nokta.x, Mathf.Max(Origin.y, nokta.y - 0.45f * a.transform.localScale.y), nokta.z - 0.7f);
-                Dondur(k, a, 180f, true);
+                // koltukta zaten oturan varsa yanina oturulur (ust uste binmesin)
+                float yerX = koltuk.x;
+                foreach (var aday in new[] { 0f, -0.55f, 0.55f })
+                {
+                    yerX = koltuk.x + aday;
+                    bool dolu = false;
+                    foreach (var kv in actors)
+                        if (kv.Key != k && kv.Value != null && yataktaki.ContainsKey(kv.Key) && Mathf.Abs(kv.Value.transform.position.x - yerX) < 0.4f) { dolu = true; break; }
+                    if (!dolu) break;
+                }
+                a.transform.position = new Vector3(yerX, Mathf.Max(Origin.y, koltuk.y - 0.45f * a.transform.localScale.y), koltuk.z - 0.12f);
+                Dondur(k, a, OturmaYonu(k, yerX), true);
             }
-            else if (klipVar)
+            else if (!yat)
             {
+                Play(a, Hareket3D.KlipOtur);
+                // yatagin on kenarinda, kameraya donuk oturur (oturma klibinde kalca yerden ~0,45 m yukarida);
+                // onunde duran biri varsa kenarda ondan en uzak yere
+                if (yatakVar)
+                {
+                    float yerX = nokta.x, enUzak = -1f;
+                    foreach (var aday in new[] { 0f, 0.55f, -0.55f })
+                    {
+                        float uzak = 9f;
+                        foreach (var kv in actors)
+                            if (kv.Key != k && kv.Value != null) uzak = Mathf.Min(uzak, Mathf.Abs(kv.Value.transform.position.x - (nokta.x + aday)));
+                        if (uzak > enUzak + 0.05f) { enUzak = uzak; yerX = nokta.x + aday; }
+                        if (uzak >= 0.6f) break;
+                    }
+                    a.transform.position = new Vector3(yerX, Mathf.Max(Origin.y, nokta.y - 0.45f * a.transform.localScale.y), nokta.z - 0.45f);
+                }
+                Dondur(k, a, OturmaYonu(k, a.transform.position.x), true);
+            }
+            else if (klipVar && KolPozu.InsanAnimator(a.gameObject) == null)
+            {
+                // insan modellerinde yatma klibi kullanilmaz: kok hareketi karakteri havada birakiyor
                 Play(a, Hareket3D.KlipYat);
                 if (yatakVar) a.transform.position = nokta;
                 Dondur(k, a, yatakVar ? yaw : 180f, true);
             }
             else
             {
-                // yatma klibi yok: durgun pozdaki govde sirtustu yatirilir
+                // durgun pozdaki govde sirtustu yatirilir
                 var bas = Kemik(a, HumanBodyBones.Head);
                 float boy = bas != null ? Mathf.Clamp(Vector3.Distance(bas.position, a.transform.position) + 0.15f, 0.8f, 2.2f)
                                         : 1.65f * a.transform.localScale.y;
@@ -716,9 +754,9 @@ namespace HikayeStudyo
                 lockedFacing.Add(k);
                 if (yatakVar)
                 {
-                    // bas yastikta (+z), yuz yukari
-                    a.transform.rotation = Quaternion.LookRotation(Vector3.up, Vector3.forward);
-                    a.transform.position = new Vector3(nokta.x, nokta.y + 0.12f, nokta.z + 0.75f - boy);
+                    // bas yastikta (sagda), yuz yukari ve hafif kameraya
+                    a.transform.rotation = Quaternion.LookRotation(new Vector3(0f, 0.85f, -0.5f), Vector3.right);
+                    a.transform.position = new Vector3(nokta.x + 0.82f - boy, nokta.y + 0.12f, nokta.z);
                 }
                 else
                 {
@@ -730,6 +768,21 @@ namespace HikayeStudyo
             }
             yataktaki[k] = yat ? "yat" : "otur";
             pozDurum[k] = yat ? "yatiyor" : "oturuyor";
+        }
+
+        // Oturan karakter kameraya dumduz bakmaz: digerine dogru yan oturur
+        // (etek fizigi olmadigi icin onden gorunum etegin altini gosteriyordu)
+        float OturmaYonu(string k, float x)
+        {
+            float digerX = Origin.x;
+            float enYakin = float.MaxValue;
+            foreach (var kv in actors)
+            {
+                if (kv.Key == k || kv.Value == null) continue;
+                float d = Mathf.Abs(kv.Value.transform.position.x - x);
+                if (d < enYakin) { enYakin = d; digerX = kv.Value.transform.position.x; }
+            }
+            return digerX <= x ? 250f : 110f;
         }
 
         // yatak: kilidini ve sirtustu dondurmeyi kaldirir
@@ -773,7 +826,7 @@ namespace HikayeStudyo
             bool yanVar = false;
             if (yataktaydi && Mekan != null && Mekan.NoktaBul("yatak", out yanNokta, out yaw))
             {
-                yanNokta = new Vector3(yanNokta.x - 0.85f, Origin.y, yanNokta.z - 0.5f);
+                yanNokta = new Vector3(yanNokta.x - 0.4f, Origin.y, yanNokta.z - 0.95f);
                 yanVar = true;
             }
             // yatarken kalkis: once yatagin yanina alinir, sonra kalkma klibi oynar
@@ -817,6 +870,40 @@ namespace HikayeStudyo
             BagBitir(k);
             YatakBirak(k, a);
             pozDurum.Remove(k);
+        }
+
+        // Yeni mekan: yatma/oturma, dokunma ve yurunen derinlik eski mekandan tasinmaz
+        void MekanDegisiyor()
+        {
+            var sira = new List<KeyValuePair<string, Karakter3D>>();
+            foreach (var kv in actors)
+            {
+                if (kv.Value == null) continue;
+                BagBitir(kv.Key);
+                if (yataktaki.ContainsKey(kv.Key))
+                {
+                    YatakBirak(kv.Key, kv.Value);
+                    Play(kv.Value, Hareket3D.KlipDur);
+                }
+                walking.Remove(kv.Key);
+                if (!pozDurum.ContainsKey(kv.Key)) lockedFacing.Remove(kv.Key);
+                sira.Add(kv);
+            }
+            // herkes on cizgiye, birbirine en az 0,7 m arayla
+            sira.Sort((x, y) => x.Value.transform.position.x.CompareTo(y.Value.transform.position.x));
+            var yerler = new float[sira.Count];
+            for (int i = 0; i < sira.Count; i++)
+            {
+                yerler[i] = sira[i].Value.transform.position.x - Origin.x;
+                if (i > 0) yerler[i] = Mathf.Max(yerler[i], yerler[i - 1] + 0.7f);
+            }
+            float tasma = sira.Count > 0 ? Mathf.Max(0f, yerler[sira.Count - 1] - 0.9f) : 0f;
+            for (int i = 0; i < sira.Count; i++)
+            {
+                float x = yerler[i] - tasma;
+                slots[sira[i].Key] = x;
+                sira[i].Value.transform.position = new Vector3(Origin.x + x, Origin.y, Origin.z);
+            }
         }
 
         void HareketTemizle()

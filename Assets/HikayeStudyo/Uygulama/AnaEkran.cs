@@ -518,16 +518,6 @@ namespace HikayeStudyo
             ListeBitir(gorunum);
         }
 
-        void MekanlarCiz(Rect ic)
-        {
-            var turler = Mekan3D.TurAdlari;
-            Baslik(ic, "Mekânlar", "Hikâyende kullanabileceğin hazır 3D mekânlar ve arka planlar");
-            var liste = new List<string[]>();
-            foreach (var t in turler) liste.Add(new[] { t, "3D mekân" });
-            if (kutuphane != null) foreach (var b in kutuphane.backgrounds) if (b != null) liste.Add(new[] { b.id, "Çizgi arka plan" });
-            KartIzgara(new Rect(ic.x, ic.y + 84, ic.width, ic.height - 84), liste, 4, 64);
-        }
-
         void SesSatiri(Rect ic, float y, string ad, string anahtar, float varsayilan, bool genel)
         {
             Yazdir(new Rect(ic.x, y, 220, 36), ad, 17, Yazi);

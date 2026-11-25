@@ -8,7 +8,7 @@ namespace HikayeStudyo
     // Aşama 6: yazma yardımcıları. Tamamen kural tabanlıdır, internet ve API anahtarı gerektirmez.
     // Sahnelere ayırma, karakter algılama / eksik karakter, mekân - duygu - kamera önerisi,
     // tutarlılık ve yazım denetimi, sahne açıklaması. Metni kendiliğinden değiştirmez: öneri üretir.
-    public enum OneriTuru { Karakter, Mekan, Duygu, Kamera, Tutarlilik, Yazim }
+    public enum OneriTuru { Karakter, Mekan, Duygu, Kamera, Tutarlilik, Yazim, Efekt }
 
     public class YardimOneri
     {
@@ -198,6 +198,25 @@ namespace HikayeStudyo
             return o;
         }
 
+        // duyguya / anlatilana gore sinematik efekt onerisi (her sahnede her turden en fazla bir kez)
+        static void EfektOner(YardimAnaliz a, int satir, string ad, string duygu, string metin, bool uc, HashSet<string> var1, string[] l)
+        {
+            var kel = Kelimeler(metin);
+            // gozyasi ve nefes yalniz 3D sahnede gorunur
+            if (uc && ad.Length > 0 && duygu == "aglamakli" && var1.Add("gozyasi"))
+                Ekle(a, OneriTuru.Efekt, satir, ad + " ağlarken gözyaşı efekti", l, "gozyasi: " + ad, true);
+            if (uc && ad.Length > 0 && Say(kel, new[] { "usudum", "usuyorum", "soguk", "dondum", "buz", "=karda", "=ayaz" }) > 0 && var1.Add("nefes"))
+                Ekle(a, OneriTuru.Efekt, satir, "Soğuk anlatılıyor: nefes buharı", l, "nefes: " + ad, true);
+            if (uc && Say(kel, new[] { "hatirliyorum", "hatirladim", "cocukken", "cocuklugum", "=eskiden" }) > 0 && var1.Add("ani"))
+                Ekle(a, OneriTuru.Efekt, satir, "Geçmiş anlatılıyor: anı görünümü (bitince 'ani: bitir' ekle)", l, "ani: sepya", true);
+            if (duygu == "korkmus" && var1.Add("filtre"))
+                Ekle(a, OneriTuru.Efekt, satir, "Korku anı: soğuk renk filtresi", l, "filtre: soguk", true);
+            else if (duygu == "sevgi" && var1.Add("filtre"))
+                Ekle(a, OneriTuru.Efekt, satir, "Sevgi anı: sıcak renk filtresi", l, "filtre: sicak", true);
+            if (duygu == "sasirmis" && metin.IndexOf('!') >= 0 && var1.Add("flas"))
+                Ekle(a, OneriTuru.Efekt, satir, "Ani şaşkınlık: beyaz flaş", l, "flas:", true);
+        }
+
         // ---------------- ana analiz ----------------
         public static YardimAnaliz Incele(string metin, IList<string> karakterler, IList<string> mekanlar)
         {
@@ -236,6 +255,13 @@ namespace HikayeStudyo
                 var ham = new StringBuilder();
                 bool mekanVar = false, mekan3d = false, kameraVar = false;
                 int ilkKonusma = 0;
+                var efektler = new HashSet<string>();   // sahnede zaten olan / onerilen efektler
+
+                for (int i = bas; i < son; i++)
+                {
+                    string ek = Anahtar(l[i]);
+                    if (ek == "gozyasi" || ek == "nefes" || ek == "filtre" || ek == "flas" || ek == "ani") efektler.Add(ek);
+                }
 
                 for (int i = bas; i < son; i++)
                 {
@@ -279,6 +305,7 @@ namespace HikayeStudyo
                             l, KonusmaYaz(kn.Ad, d, kn.Mod, kn.Hareket, kn.Metin), false);
                     string etkin = simdiki != "normal" ? simdiki : d;
                     if (etkin != "normal") { int n; duygular.TryGetValue(etkin, out n); duygular[etkin] = n + 1; }
+                    EfektOner(a, kn.Satir, kn.Ad, etkin, kn.Metin, mekan3d, efektler, l);
                 }
 
                 int enCok = 0;

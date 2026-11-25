@@ -150,7 +150,7 @@ namespace HikayeStudyo
         Camera cam;
         Light key, fill;
         readonly Look cur = new Look();
-        Look zamanL = new Look(), moodL = new Look(), aniL = new Look();
+        Look zamanL = new Look(), moodL = new Look(), aniL = new Look(), filtreL = new Look(), donukL = new Look();
         LightSet ls = ZamanLS("gun");
         float isikKeyMul = 1f, isikFillMul = 1f, isikAmbMul = 1f;
         Color isikTint = Color.white;
@@ -261,6 +261,31 @@ namespace HikayeStudyo
             aniL = AniLook(n);
         }
 
+        // filtre: renk filtresi (sinematik efekt)
+        public void Filtre(string n)
+        {
+            var l = new Look();
+            switch (n)
+            {
+                case "sicak": l.temp = 28f; l.filter = new Color(1f, 0.92f, 0.82f); l.ov = Look.Pm(1f, 0.6f, 0.3f, 0.12f); break;
+                case "soguk": l.temp = -28f; l.filter = new Color(0.84f, 0.92f, 1f); l.ov = Look.Pm(0.3f, 0.5f, 1f, 0.12f); break;
+                case "siyah_beyaz": l.sat = -100f; l.con = 12f; l.ov = Look.Pm(0.5f, 0.5f, 0.5f, 0.15f); break;
+                case "pembe": l.sat = 8f; l.filter = new Color(1f, 0.86f, 0.92f); l.ov = Look.Pm(1f, 0.5f, 0.7f, 0.14f); break;
+                case "yesil": l.filter = new Color(0.88f, 1f, 0.88f); l.ov = Look.Pm(0.3f, 0.8f, 0.4f, 0.12f); break;
+                case "mavi": l.temp = -15f; l.filter = new Color(0.8f, 0.86f, 1f); l.ov = Look.Pm(0.2f, 0.3f, 0.9f, 0.16f); break;
+            }
+            filtreL = l;
+        }
+
+        // dondur: komutu sirasinda goruntu solar
+        public void DondurGorunum(bool ac)
+        {
+            var l = new Look();
+            if (ac) { l.sat = -70f; l.con = 12f; l.vig = 0.45f; }
+            donukL = l;
+            anlik = true;
+        }
+
         public void Zaman(string ad)
         {
             string n = Util.Norm(ad);
@@ -285,6 +310,11 @@ namespace HikayeStudyo
                 case "sicak": isikTint = new Color(1f, 0.8f, 0.55f); break;
                 case "karanlik": isikKeyMul = 0.35f; isikFillMul = 0.35f; isikAmbMul = 0.5f; break;
                 case "mum": isikTint = new Color(1f, 0.62f, 0.32f); isikKeyMul = 0.55f; isikFillMul = 0.15f; isikAmbMul = 0.6f; break;
+                // duygusal isiklar
+                case "romantik": isikTint = new Color(1f, 0.68f, 0.72f); isikKeyMul = 0.8f; isikFillMul = 1.1f; isikAmbMul = 0.9f; isikEulerVar = true; isikEuler = new Vector3(22f, 35f, 0f); break;
+                case "umut": isikTint = new Color(1f, 0.9f, 0.68f); isikKeyMul = 1.35f; isikFillMul = 1f; isikAmbMul = 1.15f; isikEulerVar = true; isikEuler = new Vector3(18f, -45f, 0f); break;
+                case "korku": isikTint = new Color(0.62f, 0.85f, 0.72f); isikKeyMul = 0.8f; isikFillMul = 0.1f; isikAmbMul = 0.35f; isikEulerVar = true; isikEuler = new Vector3(-25f, -15f, 0f); break;
+                case "huzunlu": isikTint = new Color(0.68f, 0.76f, 0.95f); isikKeyMul = 0.65f; isikFillMul = 0.5f; isikAmbMul = 0.7f; isikEulerVar = true; isikEuler = new Vector3(55f, 25f, 0f); break;
             }
             lightsTouched = true;
         }
@@ -434,7 +464,7 @@ namespace HikayeStudyo
             float tau = Mathf.Max(0.05f, gecisSure * 0.45f);
             float k = anlik ? 1f : 1f - Mathf.Exp(-dt / tau);
 
-            var hedef = Look.Birlestir(Look.Birlestir(zamanL, moodL), aniL);
+            var hedef = Look.Birlestir(Look.Birlestir(Look.Birlestir(Look.Birlestir(zamanL, moodL), aniL), filtreL), donukL);
             cur.Yaklas(hedef, k);
 
             ApplyLights(k);

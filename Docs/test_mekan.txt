@@ -1,0 +1,82 @@
+// MEKAN TESTİ (Aşama 12): bütün 3D mekanlar, hava durumu, renk ayarı, duygusal ışık.
+// Kullanım: HikayeKomut/hikaye_test_mekan.txt olarak kopyala, "hikaye_yaz: test_mekan", sonra "oynat: test_mekan".
+oyuncu: Anne = VRM_Anne
+oyuncu: Baba = VRM_Baba
+
+mekan: oda_gunduz
+mekan3d: ev
+kamera: genis
+[Anne|normal|dis] Burası salonumuz, her akşam burada otururduk.
+[Baba|normal|dis] Hiçbir şey değişmemiş.
+bekle: 2
+
+mekan3d: mutfak
+hava: yagmur
+kamera: genis
+[Anne|normal|dis] Mutfakta çay hazır, dışarıda yağmur var.
+bekle: 3
+
+mekan3d: yatak_odasi
+hava: kar
+zaman: gece
+kamera: genis
+[Baba|uzgun|ic] Gece oldu, pencereden kar görünüyor.
+bekle: 3
+
+mekan3d: park
+hava: yok
+zaman: gun_batimi
+isik: romantik
+kamera: genis
+[Anne|mutlu|dis] Parkta gün batımı ne güzel.
+bekle: 3
+
+mekan3d: park
+zaman: gun
+isik: normal
+hava: sis
+kamera: genis
+[Baba|normal|dis] Sabah sisi basmış.
+bekle: 3
+
+mekan3d: sokak
+hava: yagmur
+zaman: gece
+isik: huzunlu
+kamera: genis
+[Anne|aglamakli|ic] Yağmurda tek başıma yürüdüm.
+bekle: 3
+
+mekan3d: koy
+hava: kar
+zaman: gun
+isik: normal
+kamera: genis
+[Baba|normal|dis] Köye kar yağdı.
+bekle: 3
+
+mekan3d: araba
+hava: yok
+zaman: gun_batimi
+kamera: genis
+[Anne|normal|dis] Eve dönüş yolundayız.
+[Baba|sevgi|dis] Az kaldı.
+kamera: otomatik
+[Anne|mutlu|dis] Seni özlemişim.
+hava: yagmur
+bekle: 3
+
+mekan3d: hastane
+hava: yok
+zaman: gun
+kamera: genis
+[Anne|uzgun|dis] Hastane odası hâlâ aklımda.
+bekle: 2
+
+mekan3d: oda duvar=mavi vurgu=sari zemin=ahsap
+isik: korku
+kamera: genis
+[Baba|korkmus|dis] Aynı oda, ama renkleri değişik.
+bekle: 3
+
+son: yumusak Deneme bitti

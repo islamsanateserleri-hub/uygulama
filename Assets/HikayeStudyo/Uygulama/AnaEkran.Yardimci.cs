@@ -12,15 +12,15 @@ namespace HikayeStudyo
         YardimAnaliz yAnaliz;
         string yAnalizMetin;
         string yYardimMesaj = "";
-        int yFiltre;                 // 0 hepsi, 1..6 OneriTuru + 1, 7 sahneler, 8 gemini
+        int yFiltre;                 // 0 hepsi, 1..7 OneriTuru + 1, 8 sahneler, 9 gemini
         float yYardimKaydirma;
 
-        static readonly string[] FiltreAdlari = { "Hepsi", "Karakter", "Mekân", "Duygu", "Kamera", "Tutarlılık", "Yazım", "Sahneler", "Gemini" };
+        static readonly string[] FiltreAdlari = { "Hepsi", "Karakter", "Mekân", "Duygu", "Kamera", "Tutarlılık", "Yazım", "Efekt", "Sahneler", "Gemini" };
         static readonly Color YardimGri = new Color32(60, 66, 88, 255);
 
         void YardimAc()
         {
-            yYardim = true; yPano = false; ySes = false;
+            yYardim = true; yPano = false; ySes = false; ySeri = false;
             yAnalizMetin = null; yYardimMesaj = ""; yYardimKaydirma = 0f;
             if (yH != null && YardimciGemini.CevapKaynagi != yH.ad) YardimciGemini.Temizle();
         }
@@ -60,25 +60,25 @@ namespace HikayeStudyo
                 YardimUygula(YardimciMotor.AciklamalariEkle(yMetin, kars, mekanlar), "Sahne açıklamaları yorum satırı olarak eklendi");
             bool anahtarVar = GeminiUyg.Anahtar.Length > 0;
             if (Dugme(new Rect(x + 2 * (bw + 8), y, bw, 34), "Gemini: öneri al", YardimGri, 12, anahtarVar && !YardimciGemini.Busy))
-            { YardimciGemini.Calistir(yH.ad, yMetin, false, kars, mekanlar); yFiltre = 8; yYardimKaydirma = 0f; }
+            { YardimciGemini.Calistir(yH.ad, yMetin, false, kars, mekanlar); yFiltre = 9; yYardimKaydirma = 0f; }
             if (Dugme(new Rect(x + 3 * (bw + 8), y, bw, 34), "Gemini: biçime çevir", YardimGri, 12, anahtarVar && !YardimciGemini.Busy))
-            { YardimciGemini.Calistir(yH.ad, yMetin, true, kars, mekanlar); yFiltre = 8; yYardimKaydirma = 0f; }
+            { YardimciGemini.Calistir(yH.ad, yMetin, true, kars, mekanlar); yFiltre = 9; yYardimKaydirma = 0f; }
             y += 40;
             Yazdir(new Rect(x, y, a.width - 24, 18), "Öneriler internetsiz çalışır. Yalnız 'Gemini' düğmeleri hikâye metnini Google'a gönderir" +
                 (anahtarVar ? "." : " (API anahtarı yok: kapalı)."), 11, Sönük);
             y += 22;
 
             // ---- filtreler ----
-            float fw = (a.width - 24f - 8 * 4f) / 9f;
+            float fw = (a.width - 24f - 9 * 4f) / 10f;
             for (int i = 0; i < FiltreAdlari.Length; i++)
             {
-                int n = i == 0 ? yAnaliz.Oneriler.Count : (i <= 6 ? yAnaliz.Sayi((OneriTuru)(i - 1)) : (i == 7 ? yAnaliz.Sahneler.Count : -1));
+                int n = i == 0 ? yAnaliz.Oneriler.Count : (i <= 7 ? yAnaliz.Sayi((OneriTuru)(i - 1)) : (i == 8 ? yAnaliz.Sahneler.Count : -1));
                 if (Dugme(new Rect(x + i * (fw + 4), y, fw, 30), FiltreAdlari[i] + (n >= 0 ? " " + n : ""), yFiltre == i ? Vurgu : YardimGri, 11))
                 { yFiltre = i; yYardimKaydirma = 0f; }
             }
             y += 36;
 
-            if (yFiltre >= 1 && yFiltre <= 6)
+            if (yFiltre >= 1 && yFiltre <= 7)
             {
                 var tur = (OneriTuru)(yFiltre - 1);
                 int uyg = 0;
@@ -95,8 +95,8 @@ namespace HikayeStudyo
             y += 34;
 
             var g = new Rect(x, y, a.width - 24, a.yMax - y - 8);
-            if (yFiltre == 8) YardimGeminiCiz(g);
-            else if (yFiltre == 7) YardimSahneCiz(g);
+            if (yFiltre == 9) YardimGeminiCiz(g);
+            else if (yFiltre == 8) YardimSahneCiz(g);
             else YardimListeCiz(g, kars);
         }
 

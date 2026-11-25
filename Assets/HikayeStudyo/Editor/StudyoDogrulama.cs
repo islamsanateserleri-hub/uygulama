@@ -538,6 +538,12 @@ namespace HikayeStudyo
                                 Ekle(list, no, true, "VFX_BILINMIYOR", "'vfx: " + val + "' bilinmiyor. Geçerli: " + string.Join(", ", StoryParser.VfxListesi) + " (ses için efekt:, geçiş için gecis:).", vk, EnYakin(vk, StoryParser.VfxListesi));
                         }
                         break;
+                    case "gren": case "vinyet": case "filtre": case "yavas": case "dondur": case "gozyasi": case "nefes":
+                        {
+                            var sHata = SinematikEfekt.Dogrula(key, val);
+                            if (sHata != null) Ekle(list, no, true, "EFEKT_DEGERI", sHata, val, "");
+                        }
+                        break;
                     case "gecis":
                         if (!Util.In(val, YonetmenTablo.Gecisler))
                             Ekle(list, no, true, "GECIS_BILINMIYOR", "'gecis: " + val + "' bilinmiyor. Geçerli: " + string.Join(", ", YonetmenTablo.Gecisler) + ".", val, EnYakin(val, YonetmenTablo.Gecisler));

@@ -1,0 +1,15 @@
+# Asama 15 deneme: oylama sorusu, secim karti, devami karti, seri rengi
+seri: Dorduncu Tabak
+bolum: 2
+oyuncu: Arda = VRM_Cocuk
+oyuncu: Anne = VRM_Anne
+sonuc: %60 A
+mekan: sofra
+kanca: Dördüncü tabak yine sofrada.
+[Anne|uzgun|dis] Bunu sana anlatmalıyım.
+[Arda|korkmus|dis] Dinliyorum!
+oylama: Arda ne yapmalı?
+secim: A) Dinlesin / B) Çekip gitsin
+devami: Yarın aynı saatte
+ozet: Anne sırrı anlatmaya başladı
+son: yumusak

@@ -66,7 +66,7 @@ namespace HikayeStudyo
             root.AddChild(efekt);
 
             var atm = Grup("Atmosfer");
-            foreach (var a in new[] { "mum", "toz", "yagmur", "buyu", "gunes", "mum, toz", "yok" }) atm.AddChild(new EkleOgesi("atmosfer: " + a, "atmosfer: " + a, false));
+            foreach (var a in new[] { "mum", "toz", "yagmur", "buyu", "gunes", "sis", "mum, toz", "yok" }) atm.AddChild(new EkleOgesi("atmosfer: " + a, "atmosfer: " + a, false));
             root.AddChild(atm);
 
             var kam = Grup("Kamera");

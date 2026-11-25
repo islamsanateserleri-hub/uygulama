@@ -97,7 +97,31 @@ namespace HikayeStudyo
             Kaydet("seri", "seri: Sessiz Değişim", "Seri adı (kapak ve açıklama için)");
             Kaydet("bolum", "bolum: 3", "Bölüm numarası");
             Kaydet("baslik", "baslik: Annem beni tanımadı", "Bölüm başlığı (kapak ve açıklama)");
+            // Asama 14: bolumler arasi devamlilik (videoyu etkilemez)
+            Kaydet("ozet", "ozet: Arda annesinin mektubunu buldu", "Bu bölümün özeti (sonraki bölümde kullanılır)");
+            Kaydet("durum", "durum: Dede = olu", "Karakter durumu: hayatta, olu, kayip, hastanede, uzakta (o satırdan sonrası için)");
+            Kaydet("olay", "olay: Ev satıldı", "Geçmiş olay kaydı");
+            Kaydet("gecmis", "gecmis: Anne = yıllarca yurt dışında çalıştı", "Karakter geçmişi");
+            Kaydet("iliski", "iliski: Anne - Arda = anne ve oğul", "İki karakter arasındaki ilişki");
+            Kaydet("soru", "soru: Dördüncü tabak kimin?", "Açık kalan soru");
+            Kaydet("cozuldu", "cozuldu: Dördüncü tabak kimin?", "Daha önce sorulan sorunun yanıtlandığını işaretler");
+            Kaydet("plan", "plan: 3 = Mektup bulunur", "Sezon planı: bölüm numarası = ne olacak");
+            // Asama 15: etkilesimli seri
+            Kaydet("devami", "devami: Yarın aynı saatte", "Bölüm sonu 'devamı N. bölümde' kartı");
+            Kaydet("oylama", "oylama: Arda ne yapmalı?", "Sonraki 'secim:' kartının sorusu");
             Kaydet("mekan", "mekan: oda_gece", "Mekanı değiştirir, karakterleri temizler");
+            Kaydet("mekan3d", "mekan3d: mutfak", "3D mekan: oda, ev, mutfak, yatak_odasi, hastane, sokak, koy, park, araba, yok ya da kaydedilen ad; renk ayarı: duvar= zemin= vurgu=");
+            Kaydet("hava", "hava: yagmur", "3D mekanda hava: yagmur, kar, sis, yok (virgülle birlikte)");
+            // Sinematik efektler (SinematikEfekt.cs)
+            Kaydet("gren", "gren: cok", "Film greni: yok, az, normal, cok");
+            Kaydet("vinyet", "vinyet: cok", "Kenar karartma: yok, az, normal, cok");
+            Kaydet("filtre", "filtre: soguk", "Renk filtresi: sicak, soguk, siyah_beyaz, pembe, yesil, mavi, yok");
+            Kaydet("yavas", "yavas: 3", "Yavaş çekim: verilen saniye boyunca hareketler yavaşlar (yavas: yok bitirir)");
+            Kaydet("dondur", "dondur: 1.5", "Zaman dondurma: flaş + görüntü verilen saniye boyunca durur");
+            Kaydet("gozyasi", "gozyasi: Anne", "3D karakterin gözünden yaş süzülür (gozyasi: yok bitirir)");
+            Kaydet("nefes", "nefes: Anne", "3D karakterin ağzından nefes buharı çıkar (nefes: yok bitirir)");
+            Kaydet("zaman", "zaman: gun_batimi", "Zaman: sabah, gun, gun_batimi, gece");
+            Kaydet("isik", "isik: huzunlu", "Işık: normal, gunduz, dramatik, yumusak, soguk, sicak, karanlik, mum, romantik, umut, korku, huzunlu");
             Kaydet("kanca", "kanca: Öldüm.", "Siyah ekranda büyük kanca yazısı (ilk saniyeler)");
             Kaydet("geri", "geri: 1 saat önce", "Geri sarma (VHS) efekti ve yazısı");
             Kaydet("yazi", "yazi: Devamı 2. Bölümde...", "Üst-ortada büyük yazı");
@@ -106,7 +130,7 @@ namespace HikayeStudyo
             Kaydet("cikar", "cikar: Anne", "Karakteri sahneden çıkarır");
             Kaydet("temizle", "temizle:", "Bütün karakterleri sahneden çıkarır");
             Kaydet("kamera", "kamera: yakin", "Kamera: otomatik (yönetmen), genis, orta, omuz, ters, iki, yakin; tek seferlik: tepki, yaklas, uzaklas, salla");
-            Kaydet("atmosfer", "atmosfer: mum, toz", "Atmosfer: mum, toz, yagmur, buyu, gunes, yok");
+            Kaydet("atmosfer", "atmosfer: mum, toz", "Atmosfer: mum, toz, yagmur, buyu, gunes (ışık huzmesi), sis, yok");
             Kaydet("muzik", "muzik: pad", "Fon müziği: pad, yok ya da kütüphanedeki müzik");
             Kaydet("far", "far:", "Kamyon farları ve beyaz parlama");
             Kaydet("flas", "flas:", "Beyaz parlama");

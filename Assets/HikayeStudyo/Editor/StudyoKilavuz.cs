@@ -309,6 +309,16 @@ Biçim: `komut: değer`. Aşağıdaki liste `StoryParser`'ın bildiği komutlard
 | `flas` | — | `flas:` | Beyaz parlama |
 | `gorsel` | `eller` / `yok` / kütüphane görseli | `gorsel: eller` | Tam ekran görsel. `eller` = kendi gözünden eller. `gorsel: yok` kapatır. |
 | `atmosfer` | `mum` `toz` `yagmur` `buyu` `gunes` `yok` (virgülle çoklu) | `atmosfer: mum, toz` | Ortam efekti; `yok` kapatır |
+| `mekan3d` | `oda` `ev` `mutfak` `yatak_odasi` `hastane` `sokak` `koy` `park` `araba` `yok` ya da kayıtlı ad; ayarlar: `duvar=` `zemin=` `vurgu=` `zaman=` `hava=` `isik=` | `mekan3d: mutfak duvar=mavi vurgu=kirmizi` | 3D mekân. Renkler: beyaz krem sari turuncu kirmizi bordo pembe mor mavi lacivert turkuaz yesil kahve ahsap gri siyah. Uygulamada Mekânlar sayfasında adla kaydedilen mekân `mekan3d: ad` ile kullanılır. `araba`: karakterler oturur (sürücü koltuğu ekranda solda; `yer: Ad surucu/yolcu/arka_sol/arka_sag`). Arabada yalnız `tepki_ver`, `tut`, `birak` hareketleri çalışır; mekân değişince hava sıfırlanır |
+| `hava` | `yagmur` `kar` `sis` `yok` (virgülle çoklu) | `hava: yagmur, sis` | Yalnız 3D mekânda. İç mekânda yağmur/kar pencerenin dışında görünür, sis yalnız açık mekânda |
+| `gren` / `vinyet` | `yok` `az` `normal` `cok` | `gren: cok` | Film greni ve kenar karartma (2D ve 3D) |
+| `filtre` | `sicak` `soguk` `siyah_beyaz` `pembe` `yesil` `mavi` `yok` | `filtre: soguk` | Renk filtresi. `siyah_beyaz` yalnız 3D mekânda gerçek siyah beyaz olur |
+| `yavas` | saniye ya da `yok` | `yavas: 3` | Yavaş çekim: karakter hareketleri yavaşlar, konuşma sesi normal |
+| `dondur` | saniye | `dondur: 1.5` | Zaman dondurma: flaş + hareketler durur |
+| `gozyasi` / `nefes` | karakter adı ya da `yok` | `gozyasi: Anne` | Gözyaşı ve nefes buharı (yalnız 3D karakter; mekân değişince biter) |
+| diğer efektler | | | Beyaz flaş `flas:`, sarsıntı `kamera: salla`, geri sarma `geri:`, anı sahnesi `ani: sepya`, ışık huzmesi `atmosfer: gunes`, yağmur/sis `atmosfer: yagmur` / `atmosfer: sis` / `hava:` |
+| `zaman` | `sabah` `gun` `gun_batimi` `gece` | `zaman: gun_batimi` | Işık ve gökyüzü |
+| `isik` | `normal` `gunduz` `dramatik` `yumusak` `soguk` `sicak` `karanlik` `mum` `romantik` `umut` `korku` `huzunlu` | `isik: huzunlu` | Duygusal ışıklandırma |
 | `kamera` | `otomatik` `genis` `orta` `omuz` `ters` `iki` `yakin` `tepki` `yaklas` `uzaklas` `goz` `yukaridan` `asagidan` `bulanik` `net` `salla` | `kamera: omuz` | `otomatik`: yönetmen konuşana göre plan seçer, dinleyenin tepkisini gösterir, harekete göre açılır. `genis`/`orta`/`omuz`/`ters`/`iki`/`yakin` elle seçimdir, `otomatik` yazana kadar kalır. `tepki [Karakter]` sıradaki satırda dinleyeni gösterir; `salla` bir kez sarsar. Plan seçimi 3D mekanda (`mekan3d:`) çalışır |
 | `muzik` | `pad` / `yok` / kütüphane müziği | `muzik: yok` | Fon müziği (varsayılan `pad`) |
 | `efekt` | ses efekti | `efekt: kapi` | Hazır: `carpma` `korna` `geri` `whoosh` `gecis` `kapi` `buyu` `kalp` `tahta` `kase` `yagmur` `flas` `gok` `gokgurultusu` + kütüphane efektleri |
@@ -344,7 +354,7 @@ Yalnız `oyuncu:` ile 3D modele bağlanan karakterlerde çalışır. Komut adlar
 | `git` | `git: Anne pencere` / `git: Baba Anne kos` | Noktaya (`sol` `orta` `sag` ya da 3D mekan noktası) veya bir karakterin yanına yürür; `kos` ile koşar. |
 | `tut` / `birak` | `tut: Anne bardak sol` / `birak: Anne` | Eşya: `bardak` `telefon` `mektup` `kitap` `cicek` `ilac` `tabak` `anahtar`; el: `sag` (varsayılan) ya da `sol`. |
 | `kapi` | `kapi: ac` / `kapi: Anne ac` / `kapi: Anne kapat` | Kapılı 3D mekanda kapıyı açar/kapatır; karakter verilirse kapıya yürüyüp koluna uzanır. Kapıdan girmek için `gir: Anne kapi`, çıkmak için `cikar: Anne kapi`. |
-| `yatak` | `yatak: Anne yat` / `yatak: Anne otur` | `mekan3d: hastane` / `oda` yatağına yatırır ya da oturtur; 2D mekanda olduğu yerde. Konuşurken kalkmaz. Yatma klibi yoksa gövde sırtüstü yatırılır. |
+| `yatak` | `yatak: Anne yat` / `yatak: Anne otur` | 3D mekanın yatağına yatırır ya da oturtur (`ev` koltuğu, `park` bankı için `otur`); 2D mekanda olduğu yerde. Konuşurken kalkmaz. Yatma klibi yoksa gövde sırtüstü yatırılır. |
 | `kalk` | `kalk: Anne` | Oturduğu ya da yattığı yerden (`yatak:` veya `poz:`) ayağa kalkar. |
 
 Komut hareketin başlamasını bekler (yürüme, yaklaşma); görünmesi için ardından konuşma satırı ya da `bekle:` yaz. Karakter yürürse (`git`, `gir`, `cikar`, `yuru`/`kos` hareketi) sarılma ve el tutma kendiliğinden biter.
@@ -371,6 +381,24 @@ Stüdyonun ilerleyen sürümleri yeni komutlar ekler (karakter bakış/dinleme/a
 <!-- /HS:KOMUTLAR_EK -->
 
 ---
+
+## Seri ve devamlılık (videoda görünmez)
+
+Aynı `seri:` adını taşıyan hikâyeler `bolum:` numarasına göre sırayla okunur. Yazma ekranındaki **Seri** sekmesi önceki bölümleri özetler ve çelişkileri listeler (ölen karakterin açıklamasız konuşması, kapanmamış sorular, bölüm numarası hataları, ilişki / oyuncu modeli değişiklikleri).
+
+| Komut | Örnek | Anlamı |
+|---|---|---|
+| `ozet` | `ozet: Arda mektubu buldu` | Bölüm özeti |
+| `durum` | `durum: Dede = olu` | `hayatta`, `olu`, `kayip`, `hastanede`, `uzakta`. O satırdan **sonrası** için geçerlidir (ölüm sahnesinin arkasına yaz) |
+| `olay` | `olay: Ev satıldı` | Geçmiş olay; ölü karakter yeniden `hayatta` yapılacaksa önce açıklama olarak yazılır |
+| `gecmis` | `gecmis: Anne = yıllarca uzaktaydı` | Karakter geçmişi |
+| `iliski` | `iliski: Anne - Arda = anne ve oğul` | İlişki |
+| `soru` / `cozuldu` | `soru: Tabak kimin?` | Açık soru / yanıtlandı |
+| `plan` | `plan: 3 = Mektup bulunur` | Sezon planı |
+| `devami` | `devami: Yarın aynı saatte` | ""DEVAMI N. BÖLÜMDE"" kartı (`bolum:` + 1); bölüm sonunda ekranda kalır |
+| `oylama` | `oylama: Arda ne yapmalı?` | Sonraki `secim:` kartının sorusu |
+
+Ölen karakter yalnız anı / geri dönüş içinde (`ani: sepya` … `ani: bitir`, ya da `geri:` sonrasında) çelişki sayılmadan konuşabilir.
 
 ## 7. Projedeki karakterler, mekanlar ve 3D oyuncular
 

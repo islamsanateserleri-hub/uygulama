@@ -242,6 +242,7 @@ namespace HikayeStudyo
         // Sekmeden / bölümden çıkılınca (ya da hikâye oynatılınca) resim stüdyosu kapanır
         void LateUpdate()
         {
+            MekanOnizlemeDenetle();   // AnaEkran.Mekan.cs
             bool acik = !oynuyor && !yazmaAcik && bolum == Bolum.Karakterlerim && karakterSekme == 3;
             if (acik) return;
             cesitSecimKarti = null;

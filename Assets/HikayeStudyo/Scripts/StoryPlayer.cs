@@ -54,6 +54,7 @@ namespace HikayeStudyo
         Image insertImg, insertShade, fade;
         Text subtitle, bigText;
         FxLayer fx;
+        SinematikEfekt sinema;
         AudioSource voiceSrc, sfxSrc, ambSrc, rainSrc;
         readonly Dictionary<string, CharacterView> onScreen = new Dictionary<string, CharacterView>();
         readonly Dictionary<StoryItem, AudioClip> voices = new Dictionary<StoryItem, AudioClip>();
@@ -192,6 +193,7 @@ namespace HikayeStudyo
             insertRt.gameObject.SetActive(false);
 
             fx = FxLayer.Create(root);
+            sinema = SinematikEfekt.Kur(root, fx, () => s3d, PlaySfx);
 
             fade = Gfx.Img("Kararma", root, null, Color.black, Vector2.zero, Vector2.zero);
             Gfx.Stretch(fade.rectTransform);
@@ -322,6 +324,7 @@ namespace HikayeStudyo
         {
             Running = true;
             fade.color = Color.black;
+            if (s3d != null) s3d.HavaSifirla();
             yield return new WaitForSeconds(0.35f);   // kayit baslasin diye kisa siyah
             bool faded = false;
 
@@ -345,9 +348,10 @@ namespace HikayeStudyo
                         case ItemType.Music: SetMusic(it.Arg); break;
                         case ItemType.Camera: CameraCommand(it.Arg); break;
                         case ItemType.Direct:
+                            if (SinematikEfekt.Tanir(it.Character)) { yield return sinema.Calistir(it, true); break; }
                             if (s3d == null) break;
                             if (Hareket3D.Tanir(it.Character)) { HareketPozu(it); yield return s3d.HareketCo(it, true); }
-                            else Yonetmen3D.Hizli(s3d, it);
+                            else { Yonetmen3D.Hizli(s3d, it); Cizgi3DKapat(it); }
                             break;
                         case ItemType.Insert: ShowInsert(it.Arg); break;
                         case ItemType.Clear: ClearChars(); break;
@@ -397,14 +401,19 @@ namespace HikayeStudyo
                         SetMusic(it.Arg);
                         break;
                     case ItemType.Direct:
-                        if (s3d != null && Hareket3D.Tanir(it.Character))
+                        if (SinematikEfekt.Tanir(it.Character))
+                        {
+                            if (!faded && Util.Norm(it.Character) == "dondur") { yield return Fade(1f, 0f, 0.3f); faded = true; }
+                            yield return sinema.Calistir(it, false);
+                        }
+                        else if (s3d != null && Hareket3D.Tanir(it.Character))
                         {
                             if (!faded) { yield return Fade(1f, 0f, 0.3f); faded = true; }
                             HareketPozu(it);
                             KameraHareket(it);
                             yield return s3d.HareketCo(it, false);
                         }
-                        else if (s3d != null) { KameraHareket(it); yield return Yonetmen3D.Uygula(s3d, it); }
+                        else if (s3d != null) { if (Util.Norm(it.Character) == "mekan3d") sinema.MekanDegisti(); KameraHareket(it); yield return Yonetmen3D.Uygula(s3d, it); Cizgi3DKapat(it); }
                         else if (Util.Norm(it.Character) == "gecis") yield return Gecis2D(it.Arg);   // 3D katman yoksa 2D gecis
                         else Debug.LogWarning("[Hikaye] " + it.Line + ". satır: '" + it.Character + ":' için 3D sahne yok (hikayede 3D karakter kadrosu gerekir).");
                         break;
@@ -449,7 +458,11 @@ namespace HikayeStudyo
                     case ItemType.Choice:
                         if (!faded) { yield return Fade(1f, 0f, 0.3f); faded = true; }
                         secimler.Clear(); secimler.Add(it.Text); secimler.Add(it.Arg);
-                        yield return ChoiceCard(it.Text, it.Arg);
+                        yield return ChoiceCard(it.Text, it.Arg, it.Soru);
+                        break;
+                    case ItemType.DevamKarti:
+                        if (!faded) { yield return Fade(1f, 0f, 0.3f); faded = true; }
+                        yield return DevamKarti(it.Text, NextIsEnd(items, i));
                         break;
                     case ItemType.Result:
                         yield return ResultCard(it.Arg);
@@ -591,7 +604,7 @@ namespace HikayeStudyo
         }
 
         // ---------- Secim karti ----------
-        IEnumerator ChoiceCard(string a, string b)
+        IEnumerator ChoiceCard(string a, string b, string soru = "")
         {
             subtitle.text = "";
             var root = fade.transform.parent;
@@ -602,7 +615,8 @@ namespace HikayeStudyo
             var q = NewText("Soru", card, fontBlack, 84);
             q.rectTransform.anchorMin = new Vector2(0.06f, 0.66f); q.rectTransform.anchorMax = new Vector2(0.94f, 0.8f);
             q.rectTransform.offsetMin = q.rectTransform.offsetMax = Vector2.zero;
-            q.text = "SEN OLSAN NE YAPARDIN?"; AddTextEffects(q, 5);
+            q.resizeTextForBestFit = true; q.resizeTextMinSize = 44; q.resizeTextMaxSize = 84;
+            q.text = string.IsNullOrEmpty(soru) ? "SEN OLSAN NE YAPARDIN?" : soru.ToUpper(new System.Globalization.CultureInfo("tr-TR")); AddTextEffects(q, 5);
             var cols = new[] { new Color(0.16f, 0.45f, 0.95f), new Color(0.98f, 0.55f, 0.12f) };   // mavi / turuncu (renk korleri icin)
             var opts = new[] { a, b };
             var boxes = new RectTransform[2];
@@ -634,6 +648,47 @@ namespace HikayeStudyo
                 }
                 yield return null;
             }
+        }
+
+        // ---------- Devami karti (devami: metin) ----------
+        // Bolum sonundaysa ekranda kalir; ardindan konusma varsa kaldirilir.
+        IEnumerator DevamKarti(string metin, bool sonda)
+        {
+            subtitle.text = ""; bigText.text = "";
+            var root = fade.transform.parent;
+            var card = Gfx.Rect("DevamKarti", root);
+            Gfx.Stretch(card);
+            var bg = Gfx.Img("Karartma", card, null, new Color(0.03f, 0.03f, 0.07f, 0.94f), Vector2.zero, Vector2.zero);
+            Gfx.Stretch(bg.rectTransform);
+            var ust = NewText("Ust", card, fontBlack, 150);
+            ust.rectTransform.anchorMin = new Vector2(0.06f, 0.6f); ust.rectTransform.anchorMax = new Vector2(0.94f, 0.74f);
+            ust.rectTransform.offsetMin = ust.rectTransform.offsetMax = Vector2.zero;
+            ust.text = "DEVAMI"; AddTextEffects(ust, 6);
+            int bolum = meta != null ? meta.Bolum : 0;
+            var kutu = Box(card, Gfx.RoundRect, SeriRengi(meta != null ? meta.Seri : ""), new Vector2(760, 180), new Vector2(0, 60), 0);
+            var kt = NewText("Bolum", kutu.transform, fontBlack, 84);
+            Gfx.Stretch(kt.rectTransform);
+            kt.text = bolum > 0 ? (bolum + 1) + ". BÖLÜMDE" : "SIRADAKİ BÖLÜMDE";
+            var alt = NewText("Metin", card, font, 60);
+            alt.rectTransform.anchorMin = new Vector2(0.08f, 0.3f); alt.rectTransform.anchorMax = new Vector2(0.92f, 0.42f);
+            alt.rectTransform.offsetMin = alt.rectTransform.offsetMax = Vector2.zero;
+            alt.resizeTextForBestFit = true; alt.resizeTextMinSize = 36; alt.resizeTextMaxSize = 60;
+            alt.text = metin; AddTextEffects(alt, 3);
+            var clip = FindSfx("whoosh");
+            if (clip != null) sfxSrc.PlayOneShot(clip, sfxVolume * 0.7f);
+            yield return PopText(kutu.rectTransform, 1.3f);
+            yield return new WaitForSeconds(2.4f);
+            if (!sonda) Destroy(card.gameObject);
+        }
+
+        // Her serinin kendi rengi olur (seri adi ayniysa kapak ve devam karti ayni renkte)
+        static Color SeriRengi(string seri)
+        {
+            string n = Util.Norm(seri);
+            if (n.Length == 0) return new Color(0.9f, 0.12f, 0.2f);
+            uint h = 2166136261;
+            foreach (var c in n) h = unchecked((h ^ c) * 16777619);
+            return Color.HSVToRGB((h % 360) / 360f, 0.82f, 0.75f);
         }
 
         // sonuc: %69 A  -> "Çoğunuz A dedi" karti (yeni bolumun ilk saniyesi)
@@ -694,7 +749,7 @@ namespace HikayeStudyo
             mid.text = baslik; AddTextEffects(mid, 7);
             if (bolum > 0)
             {
-                var badge = Box(cover, Gfx.RoundRect, new Color(0.9f, 0.12f, 0.2f), new Vector2(560, 170), new Vector2(0, -560), 0);
+                var badge = Box(cover, Gfx.RoundRect, SeriRengi(seri), new Vector2(560, 170), new Vector2(0, -560), 0);
                 var bt = NewText("Bolum", badge.transform, fontBlack, 96);
                 Gfx.Stretch(bt.rectTransform);
                 bt.text = "BÖLÜM " + bolum;
@@ -1134,11 +1189,18 @@ namespace HikayeStudyo
             world.anchoredPosition = camPos + sh;
         }
 
+        // 3D mekan acilinca cizgi mekanin ekran efektleri (gunes huzmesi, toz, mum) ustte kalmasin
+        void Cizgi3DKapat(StoryItem it)
+        {
+            if (s3d != null && s3d.OdaAktif && Util.Norm(it.Character) == "mekan3d") fx.SetAtmosphere("");
+        }
+
         // ---------- Mekan ----------
         IEnumerator SetBackground(string id)
         {
             if (fade.color.a < 0.99f) yield return Fade(fade.color.a, 1f, 0.25f);
             ClearChars();
+            sinema.MekanDegisti();
             if (s3d != null) s3d.MekanKapat();
             ShowInsert("yok");
             var b = library.FindBackground(id);

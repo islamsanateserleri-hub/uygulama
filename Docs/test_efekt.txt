@@ -1,0 +1,35 @@
+// EFEKT TESTİ (Aşama 13). HikayeKomut/hikaye_test_efekt.txt olarak kopyala, "hikaye_yaz: test_efekt", sonra "oynat: test_efekt".
+oyuncu: Anne = VRM_Anne
+oyuncu: Baba = VRM_Baba
+
+mekan: oda_gunduz
+mekan3d: oda
+kamera: yakin
+gozyasi: Anne
+[Anne|aglamakli|dis] Gözyaşım yanağımdan süzülüyor olmalı.
+gozyasi: yok
+filtre: siyah_beyaz
+gren: cok
+vinyet: cok
+[Anne|uzgun|dis] Şimdi görüntü siyah beyaz ve grenli.
+filtre: yok
+gren: normal
+vinyet: normal
+mekan3d: park zaman=gece hava=kar
+kamera: yakin
+nefes: Baba
+[Baba|normal|dis] Çok soğuk, nefesimin buharı görünmeli.
+nefes: yok
+kamera: genis
+yavas: 4
+git: Baba Anne
+[Anne|sevgi|dis] Her şey yavaşladı sanki.
+dondur: 2
+[Baba|sasirmis|dis] Zaman durdu mu!
+filtre: sicak
+[Anne|mutlu|dis] Sıcak renk filtresi.
+filtre: yok
+mekan: oda_gece
+atmosfer: sis
+[Anne|normal|dis] Çizgi mekanda sis.
+son: yumusak Efekt testi bitti

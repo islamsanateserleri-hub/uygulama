@@ -381,7 +381,7 @@ namespace HikayeStudyo
             }
             sb.Append("  \"muzikler\": ").Append(HsJson.Dizi(mu)).Append(",\n");
             sb.Append("  \"gorseller\": ").Append(HsJson.Dizi(gr)).Append(",\n");
-            sb.Append("  \"atmosferler\": ").Append(HsJson.Dizi(new[] { HsJson.Q("mum"), HsJson.Q("toz"), HsJson.Q("yagmur"), HsJson.Q("buyu"), HsJson.Q("gunes"), HsJson.Q("yok") })).Append(",\n");
+            sb.Append("  \"atmosferler\": ").Append(HsJson.Dizi(new[] { HsJson.Q("mum"), HsJson.Q("toz"), HsJson.Q("yagmur"), HsJson.Q("buyu"), HsJson.Q("gunes"), HsJson.Q("sis"), HsJson.Q("yok") })).Append(",\n");
             sb.Append("  \"kameralar\": ").Append(HsJson.Dizi(new[] { HsJson.Q("otomatik"), HsJson.Q("yakin"), HsJson.Q("genis"), HsJson.Q("salla") })).Append(",\n");
             sb.Append("  \"pozlar\": ").Append(HsJson.Dizi(Quote(Util.Poses))).Append(",\n");
             sb.Append("  \"duygular\": ").Append(HsJson.Dizi(Quote(Util.Emotions))).Append(",\n");
