@@ -93,6 +93,15 @@ namespace HikayeStudyo
             var rg = SeriMotoru.Incele(once, "K", 2);
             Bekle("geri: sonrasi olu karakter hafif uyari verir", Var(rg, 2, "öldü ama") && !rg.Celiskiler.Exists(c => c.Agir && c.Mesaj.Contains("öldü ama")));
 
+            string olum = "seri: C\nbolum: 1\ndurum: Dede = olu\nson: sert";
+            var cn = new List<SeriBolum> { SeriMotoru.Bolum("c1", olum),
+                SeriMotoru.Bolum("c2", "seri: C\nbolum: 2\nmekan: sofra\npoz: Dede yatiyor\nsarilma: Anne Dede\ncikar: Dede kapi\nson: sert") };
+            Bekle("olunun yatmasi/sarilmasi/cikarilmasi celiski degil", !Var(SeriMotoru.Incele(cn, "C", 2), 2, "öldü ama"));
+            cn[1] = SeriMotoru.Bolum("c2", "seri: C\nbolum: 2\nolay: yagmur yagdi\ndurum: Dede = hayatta\nson: sert");
+            Bekle("ilgisiz olay dirilmeyi aciklamaz", Var(SeriMotoru.Incele(cn, "C", 2), 2, "açıklamasız"));
+            cn[1] = SeriMotoru.Bolum("c2", "seri: C\nbolum: 2\nolay: Dede'nin yasadigi ortaya cikti\ndurum: Dede = hayatta\nson: sert");
+            Bekle("adi gecen olay dirilmeyi aciklar", !Var(SeriMotoru.Incele(cn, "C", 2), 2, "açıklamasız"));
+
             Bekle("seri adi bos -> bos rapor", SeriMotoru.Incele(l, "", 0).Bolumler.Count == 0);
 
             // ---- Asama 15 ----

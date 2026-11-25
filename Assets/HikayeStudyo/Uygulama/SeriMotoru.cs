@@ -116,7 +116,8 @@ namespace HikayeStudyo
                 foreach (var n in b.P.SeriNotlari) sira.Add(new KeyValuePair<int, object>(n.Satir, n));
                 sira.Sort((x, y) => x.Key.CompareTo(y.Key));
 
-                bool ani = false, geriDonus = false, olayVar = false;
+                bool ani = false, geriDonus = false;
+                var olaylar = new List<string>();       // bu bolumde su ana kadarki olay: metinleri
                 string mekan = "";
                 var bildirilen = new HashSet<string>();
 
@@ -131,8 +132,8 @@ namespace HikayeStudyo
                                 {
                                     string k = Util.Norm(n.Kim);
                                     Olum eski;
-                                    if (durum.TryGetValue(k, out eski) && eski.Durum == "olu" && n.Deger != "olu" && !olayVar && !ani)
-                                        Ekle(r, b, n.Satir, true, n.Kim + " " + eski.Bolum + ". bölümde ölmüştü; açıklamasız '" + n.Deger + "' yapılıyor. Önce 'olay:' ile açıkla.");
+                                    if (durum.TryGetValue(k, out eski) && eski.Durum == "olu" && n.Deger != "olu" && !ani && !olaylar.Exists(o => o.Contains(SoruNorm(n.Kim))))
+                                        Ekle(r, b, n.Satir, true, n.Kim + " " + eski.Bolum + ". bölümde ölmüştü; açıklamasız '" + n.Deger + "' yapılıyor. Önce adını geçiren bir 'olay:' satırıyla açıkla.");
                                     durum[k] = new Olum { Ad = n.Kim, Durum = n.Deger, Bolum = b.No };
                                     bildirilen.Remove(k);
                                     durumAdlari.Add(new SeriCeliski { Dosya = b.Ad, Bolum = b.No, Satir = n.Satir, Mesaj = "'" + n.Kim + "' adlı karakter seride hiç görünmüyor (yazım hatası olabilir)." });
@@ -140,7 +141,7 @@ namespace HikayeStudyo
                                     break;
                                 }
                             case "olay":
-                                olayVar = true;
+                                olaylar.Add(SoruNorm(n.Deger));
                                 r.Olaylar.Add(b.No + ". bölüm: " + n.Deger);
                                 break;
                             case "gecmis":
@@ -267,9 +268,16 @@ namespace HikayeStudyo
             else if (it.Type == ItemType.Direct && it.Character != "ani" && it.Character != "mekan3d")
             {
                 // gir: / git: / sarilma: gibi komutlarda yalnız durumu bilinen karakter adlarını yakala
+                bool olununKalabilir = it.Character == "cikar" || it.Character == "sarilma" || it.Character == "saril";
                 foreach (var p in (it.Arg ?? "").Split(new[] { ' ', ',' }, System.StringSplitOptions.RemoveEmptyEntries))
-                    if (durum.ContainsKey(Util.Norm(p))) l.Add(p);
+                {
+                    Olum o;
+                    if (durum.TryGetValue(Util.Norm(p), out o) && !(olununKalabilir && o.Durum == "olu")) l.Add(p);
+                }
             }
+            // cenaze: olunun yatmasi, sarilinmasi, cikarilmasi celiski degil
+            if (it.Type == ItemType.Pose && it.Arg == "yatiyor")
+                l.RemoveAll(ad => { Olum o; return durum.TryGetValue(Util.Norm(ad), out o) && o.Durum == "olu"; });
             return l;
         }
 
