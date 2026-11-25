@@ -982,14 +982,17 @@ namespace HikayeStudyo
             CharacterView view = null;
             if (s3d != null) s3d.KonusmaOldu();
 
-            bool is3D = !narr && Actor3D(def) != null;
+            bool sesYalniz = def.bedensiz;   // sahnede gorunmeyen konusmaci (Mira, telsiz, kayit)
+            if (sesYalniz && Util.Norm(def.id) == "mira" && s3d != null && s3d.Mekan != null)
+                s3d.Mekan.HalkaKonus(voices.ContainsKey(it) && voices[it] != null ? voices[it].length : Mathf.Max(1.2f, it.Text.Length / charsPerSecond + 0.3f));
+            bool is3D = !narr && !sesYalniz && Actor3D(def) != null;
             if (is3D)
             {
                 Ensure3D(def, it.Motion);
                 s3d.Act(def.id, it.Emotion, it.Motion, !it.Inner);
                 foreach (var kv in onScreen) kv.Value.SetFocus(false);
             }
-            else if (!narr)
+            else if (!narr && !sesYalniz)
             {
                 view = GetOrCreate(def, it.Motion);
                 view.SetEmotion(it.Emotion);

@@ -1,0 +1,236 @@
+// SIFIRINCI YANKI - kullanicinin revize senaryosu (Docs/senaryo)
+seri: Sıfırıncı Yankı
+baslik: Ölü Frekans
+etiket: bilimkurgu, korku, zamandöngüsü
+oyuncu: Aren = VRM_Baba
+oyuncu: Kopya = VRM_Baba
+gorunum: Aren tulum
+gorunum: Kopya golge
+altyazi: karaoke
+
+// ---- 1: ACILIS - OLU FREKANS
+mekan3d: kopru
+isik: soguk
+muzik: pad
+vinyet: cok
+gren: az
+kanca: Bu sinyal henüz gönderilmedi.
+kamera: genis
+yer: Aren orta
+bekle: 3
+kamera: otomatik
+[Aren|yorgun|dis] Günlük kayıt beş yüz kırk iki. Boreas dört.
+[Aren|yorgun|dis] Dış sıcaklık eksi yüz seksen dört derece.
+[Aren|yorgun|dis] Derin uzay taraması yine ölü.
+[Aren|dusunceli|dis] On sekiz aydır tek bir yankı yok.
+bekle: 1.5
+muzik: yok
+bekle: 1
+istasyon: sinyal
+efekt: geri
+bekle: 1.5
+[Mira|normal|dis] Uyarı. Tanımlanamayan dar bantlı sinyal algılandı.
+[Mira|normal|dis] Frekans on dört virgül yirmi megahertz.
+muzik: pad
+[Aren|sasirmis|dis] Mira, kaynağı üçgenle. Hangi sektörden geliyor?
+[Mira|normal|dis] Dış anten dizisi sinyal almıyor. Düzeltiyorum.
+[Mira|normal|dis] Sinyal, Sektör Sıfır iç kapısının hemen ötesinden geliyor.
+[Aren|korkmus|dis] Bu imkânsız. Orası üç yıldır mühürlü.
+[Mira|normal|dis] Mühürlü olan kapı. Sinyal değil.
+bekle: 1.5
+
+// ---- 2: TESPIT - IMKANSIZ ZAMAN DAMGASI
+istasyon: kamera
+kamera: genis
+bekle: 3
+efekt: kalp
+bekle: 1
+efekt: kalp
+kamera: otomatik
+[Mira|normal|dis] Alt katmanda biyolojik bir nabız var.
+[Mira|normal|dis] Dakikada elli dört vuruş. Senin dinlenme nabzınla aynı.
+istasyon: sinyal
+yazi: ALIM ZAMANI 04:17:09
+yazi: SAATİN 04:13:22
+[Aren|korkmus|dis] Üç dakika kırk yedi saniye…
+[Aren|korkmus|dis] Bu sinyal henüz gönderilmedi.
+[Mira|normal|dis] Atomik saat normal. Sinyal, senin zaman çizginden ileride.
+[Aren|dusunceli|dis] Bunu daha önce gördüm mü?
+[Mira|normal|dis] Bu soruyu daha önce de sordun.
+kamera: yakin
+tepki_ver: Aren sasir
+bekle: 2.5
+kamera: otomatik
+[Mira|normal|dis] Sektör Sıfır'a gitmeni önermiyorum.
+[Mira|normal|dis] İç kapı, Doktor Selin Kara'nın yönetici mührüyle kapatıldı.
+efekt: kalp
+tut: Aren fener sag
+bekle: 2
+
+// ---- EK SEKANS A: KARAKUTU 00
+gecis: karar
+mekan3d: koridor
+isik: soguk
+nefes: Aren
+kamera: genis
+yer: Aren orta
+bekle: 2.5
+yazi: DR. SELİN KARA — SON KAYIT
+efekt: geri
+filtre: sicak
+[Selin|korkmus|dis] Bunu dinliyorsan, saatine güvenme.
+[Selin|korkmus|dis] Burada zaman ilerlemiyor; kendi üstüne katlanıyor.
+[Selin|dusunceli|dis] Üç yıl önce iç kapıyı mühürledim.
+[Selin|korkmus|dis] Çünkü camın arkasındaki şey dışarıdan gelmedi. Bizden çıktı.
+efekt: tahta
+bekle: 1
+[Selin|korkmus|dis] Mira sana kapıyı açmamanı söyleyecek.
+[Selin|korkmus|dis] Sonra da açman için bir sebep verecek. Ona güvenme.
+[Selin|korkmus|dis] Gözlem camına yaklaşma.
+[Selin|fisilti|dis] Camdaki şey seni görürse, seni taklit etmeye başlar.
+efekt: carpma
+filtre: soguk
+bekle: 1.5
+efekt: tahta
+bekle: 2
+
+// ---- EK SEKANS B: EKSIK ADIM
+efekt: tahta
+bekle: 0.6
+efekt: tahta
+bekle: 0.6
+efekt: tahta
+bekle: 1.4
+efekt: carpma
+istasyon: karart
+isik: karanlik
+bekle: 1.2
+yer: Kopya arka
+gorunum: Kopya golge
+isik: korku
+efekt: kalp
+kamera: genis
+bekle: 2
+isik: karanlik
+gorunum: Kopya gizli
+bekle: 1.5
+cikar: Kopya
+istasyon: yak
+isik: soguk
+istasyon: izler
+bekle: 3.5
+kamera: otomatik
+efekt: geri
+[Sinyal|fisilti|dis] El fenerini sol eline aldın. Nefesini tuttun.
+tut: Aren fener sol
+[Sinyal|fisilti|dis] Beni dinle. Ben senin önceki döngünden kalan hâlinim.
+[Sinyal|fisilti|dis] Camın arkasına bakma. Dış kapıyı açma.
+[Sinyal|fisilti|dis] Mira seni seçime götürüyor.
+[Aren|korkmus|dis] Sen kimsin?
+[Sinyal|fisilti|dis] Senin olabileceğin şey.
+kamera: yakin
+tepki_ver: Aren kork
+bekle: 2.5
+kamera: otomatik
+efekt: geri
+[Mira|normal|dis] Aren, iç kapının kilidi kendiliğinden çözülüyor.
+[Mira|normal|dis] Sinyalin kaynağına ulaşmanın tek yolu gözlem hava kilidi.
+[Aren|korkmus|dis] Selin kapıyı mühürlemişti.
+[Mira|normal|dis] Selin seni korumaya çalıştı. Ama o da seçim yapamadı.
+efekt: kalp
+bekle: 2
+kamera: genis
+kapi: ac
+efekt: kapi
+bekle: 4
+
+// ---- 3: YUZLESME - GECIKEN YANSIMA
+gecis: karar
+mekan3d: hava_kilidi
+isik: soguk
+yer: Aren orta
+kamera: genis
+bekle: 3
+git: Aren cam
+bekle: 2.5
+istasyon: kirag
+efekt: buyu
+bekle: 4
+git: Aren orta
+efekt: carpma
+bekle: 1.5
+yazi: “KAPI AÇILDIĞINDA İÇERİ GİRENİ ÖLDÜR. O SEN DEĞİLSİN.”
+yazi: Kırık saat: 04:17:09
+kamera: otomatik
+[Aren|korkmus|dis] Bunu ben mi yazdım?
+[Mira|normal|dis] On yedi kez. Her döngüde aynı uyarıyı bıraktın.
+[Mira|normal|dis] Her döngüde kapı açıldı.
+[Aren|uzgun|dis] Peki neden hâlâ buradayım?
+[Mira|normal|dis] Çünkü hanginizin dışarı çıkması gerektiğine karar veremedim.
+[Aren|sasirmis|dis] Hangimiz?
+[Mira|normal|dis] Çatlak iki eşdeğer bilinç örüntüsü üretti.
+[Mira|normal|dis] Biri burada kalmalı. Diğeri eşikten geçmeli.
+[Mira|normal|dis] Görevim, çatlağın istasyon dışına taşmasını önlemek.
+istasyon: mor
+bekle: 2
+[Mira|uzgun|dis] Ben birini seçemem, Aren. Bu yüzden döngü devam ediyor.
+bekle: 2
+
+// ---- 4: DORUK VE FINAL
+muzik: yok
+kamera: genis
+kapi: ac
+efekt: kapi
+yazi: DIŞARIDAN GEÇERSİZ KILMA ONAYLANDI
+yazi: BASINÇ EŞİTLENİYOR
+muzik: pad
+kamera: otomatik
+[Aren|korkmus|dis] Dışarıdan kim onay verdi?
+[Mira|normal|dis] Dışarıdan kimse. Eski yönetici anahtarını kullandım.
+[Mira|normal|dis] Kapının açılması için protokol bunu gerektiriyordu.
+[Aren|kizgin|dis] Beni buraya sen getirdin.
+[Mira|uzgun|dis] Seni buraya her seferinde sen getiriyorsun.
+[Mira|uzgun|dis] Ben yalnızca kapıyı açıyorum.
+yazi: 04:17:01
+efekt: geri
+[Sinyal|fisilti|dis] Kapı açıldığında içeri giren sensen…
+[Sinyal|fisilti|dis] burada kalan kim olacak?
+[Aren|korkmus|dis] Sen benden önce geldin. Neden beni durdurmaya çalışıyorsun?
+[Sinyal|fisilti|dis] Çünkü bir zamanlar ben de senin yerindeydim.
+[Sinyal|fisilti|dis] Ve dışarı çıkmak istiyorum.
+istasyon: bozuk
+bekle: 1.5
+yazi: 04:17:09
+kamera: genis
+atmosfer: sis
+efekt: buyu
+flas:
+yer: Kopya esik
+bekle: 3
+gorunum: Kopya tulum soguk
+tut: Kopya fener sol
+efekt: kalp
+bekle: 3
+yuzyuze: Aren Kopya
+bekle: 3
+
+// MUTLAK KARANLIK
+atmosfer: yok
+muzik: yok
+mekan: siyah
+bekle: 1
+efekt: kalp
+bekle: 2
+efekt: kalp
+bekle: 0.4
+efekt: kalp
+bekle: 1.2
+efekt: kalp
+bekle: 0.9
+efekt: kalp
+bekle: 0.5
+efekt: kalp
+bekle: 2
+[Mira|fisilti|dis] Karantina… hâlâ aktif.
+bekle: 1
+son: sert SON.

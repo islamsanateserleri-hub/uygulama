@@ -110,8 +110,10 @@ namespace HikayeStudyo
             Kaydet("devami", "devami: Yarın aynı saatte", "Bölüm sonu 'devamı N. bölümde' kartı");
             Kaydet("oylama", "oylama: Arda ne yapmalı?", "Sonraki 'secim:' kartının sorusu");
             Kaydet("mekan", "mekan: oda_gece", "Mekanı değiştirir, karakterleri temizler");
-            Kaydet("mekan3d", "mekan3d: mutfak", "3D mekan: oda, ev, mutfak, yatak_odasi, hastane, sokak, koy, park, araba, yok ya da kaydedilen ad; renk ayarı: duvar= zemin= vurgu=");
+            Kaydet("mekan3d", "mekan3d: mutfak", "3D mekan: oda, ev, mutfak, yatak_odasi, hastane, sokak, koy, park, araba, kopru, koridor, hava_kilidi, yok ya da kaydedilen ad; renk ayarı: duvar= zemin= vurgu=");
             Kaydet("hava", "hava: yagmur", "3D mekanda hava: yagmur, kar, sis, yok (virgülle birlikte)");
+            Kaydet("istasyon", "istasyon: sinyal", "İstasyon mekânında: sinyal, gurultu, kamera, mavi, mor, bozuk, kirag, izler, karart, yak");
+            Kaydet("gorunum", "gorunum: Kopya golge", "3D karakterin rengi: tulum, golge, soguk, gizli, normal (birlikte yazılabilir)");
             // Sinematik efektler (SinematikEfekt.cs)
             Kaydet("gren", "gren: cok", "Film greni: yok, az, normal, cok");
             Kaydet("vinyet", "vinyet: cok", "Kenar karartma: yok, az, normal, cok");

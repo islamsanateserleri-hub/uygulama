@@ -257,7 +257,7 @@ namespace HikayeStudyo
         // Baska komutlar da eklenecekse (bak, dinle, altyazi ...) adini bu listeye yazmak yeterlidir.
         public static readonly string[] DirectKeys =
             { "mekan3d", "yer", "gir", "figuran", "ani", "zaman", "gecis", "sessizlik", "isik", "hava",
-              "gren", "vinyet", "filtre", "yavas", "dondur", "gozyasi", "nefes" };
+              "gren", "vinyet", "filtre", "yavas", "dondur", "gozyasi", "nefes", "istasyon", "gorunum" };
 
         // vfx: gorsel efekt komutu (B4: efekt = yalniz ses efekti, vfx = gorsel efekt, gecis = yalniz sahne gecisi).
         // Mevcut efektlere eslenir: flas -> Flash, far -> Headlights, vhs/geri -> Rewind (eski flas:/far:/geri: aynen calisir).

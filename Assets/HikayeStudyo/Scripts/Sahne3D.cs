@@ -229,6 +229,7 @@ namespace HikayeStudyo
             go.transform.position = Origin + new Vector3(startX, 0f, 0f);
             a.KafaEkseniKaydet(Kemik(a, HumanBodyBones.Head));
             actors[k] = a;
+            GorunumUygula(k, a);
             yawTarget[k] = FacingYaw(k, x);
             go.transform.rotation = Quaternion.Euler(0f, yawTarget[k], 0f);
             if (Mekan != null && Mekan.Oturmali) { ReFaceAll(); ArabayaOturt(); return a; }

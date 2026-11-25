@@ -12,13 +12,13 @@ namespace HikayeStudyo
     {
         public string Tur { get; private set; }
         public bool Dis { get; private set; }               // sokak / koy / park / araba: gokyuzu gorunur
-        public bool KapiVar { get { return mentese != null; } }
+        public bool KapiVar { get { return mentese != null || surgu != null; } }
         public bool Aktif { get { return !string.IsNullOrEmpty(Tur) && !yikildi; } }
 
         class Nk { public Vector3 pos; public float yaw; }
         struct LampInfo { public Light isik; public float baz; public bool mum; }
 
-        static readonly string[] Turler = { "oda", "ev", "mutfak", "yatak_odasi", "hastane", "sokak", "koy", "park", "araba" };
+        static readonly string[] Turler = { "oda", "ev", "mutfak", "yatak_odasi", "hastane", "sokak", "koy", "park", "araba", "kopru", "koridor", "hava_kilidi" };
         static Shader litShader;
         static readonly Dictionary<string, GameObject> propCache = new Dictionary<string, GameObject>();
 
@@ -65,6 +65,9 @@ namespace HikayeStudyo
                     case "yatak_odasi": m.KurYatakOdasi(); break;
                     case "park": m.KurPark(); break;
                     case "araba": m.KurAraba(); break;
+                    case "kopru": m.KurKopru(); break;
+                    case "koridor": m.KurKoridor(); break;
+                    case "hava_kilidi": m.KurHavaKilidi(); break;
                 }
             }
             catch (System.Exception e)
@@ -127,6 +130,7 @@ namespace HikayeStudyo
         {
             float dt = Time.deltaTime;
             if (akan.Count > 0) AkisGuncelle(dt);
+            IstasyonGuncelle(dt);
             if (mentese != null)
             {
                 kapiT = Mathf.MoveTowards(kapiT, kapiHedef ? 1f : 0f, dt * 2.2f);

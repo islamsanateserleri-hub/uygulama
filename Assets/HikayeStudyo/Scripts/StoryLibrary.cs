@@ -24,6 +24,7 @@ namespace HikayeStudyo
         public string innerVoice = "";
         [System.NonSerialized] public string konusmaTarzi;   // kimlik kartından gelir (varlığa yazılmaz)
         public Color subtitleColor = Color.white;
+        [Tooltip("Yalnizca ses: sahnede gorunmez (or. yapay zeka, telsiz, kayit)")] public bool bedensiz;
 
         [Header("Sahne")]
         [Range(-1, 1)] public int side = 0;          // -1 sol, 0 orta, 1 sag
@@ -114,7 +115,27 @@ namespace HikayeStudyo
             var k = Util.Norm(id);
             if (k == Util.Norm(narrator.id)) return narrator;
             foreach (var c in characters) if (c != null && Util.Norm(c.id) == k) return c;
+            foreach (var c in EkKadro) if (Util.Norm(c.id) == k) return c;
             return null;
+        }
+
+        // Kutuphane varligini degistirmeden her projede hazir olan bilim kurgu kadrosu
+        static CharacterDef[] ekKadro;
+        public static CharacterDef[] EkKadro
+        {
+            get
+            {
+                if (ekKadro != null) return ekKadro;
+                ekKadro = new[]
+                {
+                    new CharacterDef { id = "Aren", voice = "Algenib", side = 0, scale = 1.02f, subtitleColor = Color.white },
+                    new CharacterDef { id = "Kopya", voice = "Algenib", side = 1, scale = 1.02f, subtitleColor = new Color(0.8f, 0.65f, 1f) },
+                    new CharacterDef { id = "Mira", voice = "Despina", bedensiz = true, subtitleColor = new Color(0.6f, 0.88f, 1f) },
+                    new CharacterDef { id = "Selin", voice = "Autonoe", bedensiz = true, subtitleColor = new Color(1f, 0.66f, 0.3f) },
+                    new CharacterDef { id = "Sinyal", voice = "Enceladus", bedensiz = true, subtitleColor = new Color(0.8f, 0.65f, 1f) },
+                };
+                return ekKadro;
+            }
         }
 
         public bool IsNarrator(CharacterDef d) { return d == narrator; }

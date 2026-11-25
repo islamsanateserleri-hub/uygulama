@@ -156,6 +156,11 @@ namespace HikayeStudyo
                     Parca(PrimitiveType.Cylinder, t, new Vector3(0f, 0.02f, 0f), new Vector3(0.22f, 0.012f, 0.22f), new Color(0.95f, 0.93f, 0.88f));
                     Parca(PrimitiveType.Sphere, t, new Vector3(0f, 0.04f, 0f), new Vector3(0.12f, 0.05f, 0.12f), new Color(0.85f, 0.6f, 0.3f));
                     break;
+                case "fener":   // aluminyum el feneri
+                    Parca(PrimitiveType.Cylinder, t, new Vector3(0f, 0.04f, 0f), new Vector3(0.038f, 0.085f, 0.038f), new Color(0.62f, 0.64f, 0.68f));
+                    Parca(PrimitiveType.Cylinder, t, new Vector3(0f, 0.135f, 0f), new Vector3(0.062f, 0.018f, 0.062f), new Color(0.4f, 0.42f, 0.46f));
+                    Parca(PrimitiveType.Cylinder, t, new Vector3(0f, 0.156f, 0f), new Vector3(0.05f, 0.003f, 0.05f), new Color(0.95f, 0.93f, 0.7f));
+                    break;
                 default:   // anahtar
                     Parca(PrimitiveType.Sphere, t, new Vector3(0f, 0.07f, 0f), new Vector3(0.045f, 0.045f, 0.012f), new Color(0.85f, 0.68f, 0.25f));
                     Parca(PrimitiveType.Cube, t, new Vector3(0f, 0.02f, 0f), new Vector3(0.012f, 0.08f, 0.008f), new Color(0.85f, 0.68f, 0.25f));

@@ -12,7 +12,7 @@ namespace HikayeStudyo
         public static readonly string[] Tepkiler =
             { "sasir", "kork", "uzul", "agla", "sevin", "kiz", "dusun", "onayla", "reddet", "el_salla" };
         public static readonly string[] Esyalar =
-            { "bardak", "telefon", "mektup", "kitap", "cicek", "ilac", "tabak", "anahtar" };
+            { "bardak", "telefon", "mektup", "kitap", "cicek", "ilac", "tabak", "anahtar", "fener" };
 
         // Karakter3D.Find adaylari (sirayla denenir)
         public static readonly string[] KlipYuru = { "yuru" };

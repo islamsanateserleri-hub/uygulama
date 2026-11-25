@@ -7,7 +7,7 @@ namespace HikayeStudyo
     // Yonetmen komutlarinin gecerli degerleri (StoryParser uyarilari ve Studyo dogrulamasi icin)
     public static class YonetmenTablo
     {
-        public static readonly string[] Mekanlar = { "oda", "ev", "mutfak", "yatak_odasi", "hastane", "sokak", "koy", "park", "araba", "yok" };
+        public static readonly string[] Mekanlar = { "oda", "ev", "mutfak", "yatak_odasi", "hastane", "sokak", "koy", "park", "araba", "kopru", "koridor", "hava_kilidi", "yok" };
         public static readonly string[] Havalar = { "yagmur", "kar", "sis", "yok" };
         public static readonly string[] Zamanlar = { "sabah", "gun", "gun_batimi", "gece" };
         public static readonly string[] Atmosferler = { "huzun", "sicak_ani", "kabus", "normal" };
@@ -40,6 +40,10 @@ namespace HikayeStudyo
                         string hata;
                         return MekanTarifi.Coz(v, out hata) != null ? null : "'mekan3d: " + v + "': " + hata;
                     }
+                case "istasyon":
+                    return Util.In(v, Mekan3D.IstasyonDurumlari) ? null : "'istasyon: " + v + "' bilinmiyor (" + string.Join(", ", Mekan3D.IstasyonDurumlari) + ").";
+                case "gorunum":
+                    return Sahne3D.GorunumDogrula(v);
                 case "hava":
                     foreach (var tk in v.Split(new[] { ',', ' ' }, System.StringSplitOptions.RemoveEmptyEntries))
                         if (!Util.In(tk, Havalar)) return "'hava: " + tk + "' bilinmiyor (" + string.Join(", ", Havalar) + ").";
@@ -107,6 +111,8 @@ namespace HikayeStudyo
             {
                 case "mekan3d": s.MekanKur(arg); break;
                 case "hava": s.HavaAyarla(arg); break;
+                case "istasyon": if (s.Mekan != null) s.Mekan.IstasyonDurum(n); else Uyar(it.Line + ". satır: 'istasyon:' yalnız istasyon mekânlarında çalışır."); break;
+                case "gorunum": Bol(arg, out id, out nokta); s.Gorunum(id, nokta); break;
                 case "yer": Bol(arg, out id, out nokta); s.Yer(id, nokta); break;
                 case "gir": Bol(arg, out id, out nokta); yield return s.GirCo(id, nokta); break;
                 case "cikar": Bol(arg, out id, out nokta); s.CikarKapi(id, nokta); break;
@@ -135,6 +141,8 @@ namespace HikayeStudyo
                 case "mekan3d": s.MekanKur(arg); break;
                 case "yer": { string kim, yeri; Bol(arg, out kim, out yeri); s.Yer(kim, yeri); } break;
                 case "hava": s.HavaAyarla(arg); break;
+                case "istasyon": if (s.Mekan != null && n != "izler") s.Mekan.IstasyonDurum(n); break;
+                case "gorunum": { string kim, ne; Bol(arg, out kim, out ne); s.Gorunum(kim, ne); } break;
                 case "figuran": { int k; int.TryParse(arg.Trim(), out k); s.Figuran(k); } break;
                 case "atmosfer":
                     foreach (var tk in arg.Split(new[] { ',', ' ' }, System.StringSplitOptions.RemoveEmptyEntries)) s.AtmosferAyarla(tk);
