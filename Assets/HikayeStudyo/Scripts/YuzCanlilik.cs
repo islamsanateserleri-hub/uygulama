@@ -140,6 +140,7 @@ namespace HikayeStudyo
             public int i;
             public float olcek = 1f;
             public int oncelik;
+            public string ad;
         }
 
         class Kanal
@@ -396,6 +397,8 @@ namespace HikayeStudyo
                     var g = new Giris();
                     g.rw = rw; g.i = i; g.oncelik = onc;
                     g.olcek = OlcekAl((Ch)ch);
+                    g.ad = nn;
+                    if (nn.Contains("fclall")) g.olcek *= 0.5f;   // VRoid "tum yuz" sekli parca sekillerle birlikte kullanilir
                     kanal[ch].g.Add(g);
                     if (!rw.kul.Contains(i)) rw.kul.Add(i);
                 }
@@ -407,6 +410,18 @@ namespace HikayeStudyo
                 int best = 99;
                 for (int i = 0; i < ag.Count; i++) if (ag[i].oncelik < best) best = ag[i].oncelik;
                 for (int i = ag.Count - 1; i >= 0; i--) if (ag[i].oncelik != best) ag.RemoveAt(i);
+            }
+            // goz: hem iki goz birden hem sol/sag sekli varsa (VRoid) yalniz birlesik olan kalsin, yoksa kapak iki kat kapanir
+            var kp = kanal[(int)Ch.Kirp].g;
+            for (int i = kp.Count - 1; i >= 0; i--)
+            {
+                var g = kp[i];
+                for (int j = 0; j < kp.Count; j++)
+                {
+                    var h = kp[j];
+                    if (h == g || h.rw != g.rw) continue;
+                    if (g.ad == h.ad + "l" || g.ad == h.ad + "r" || g.ad == h.ad + "left" || g.ad == h.ad + "right") { kp.RemoveAt(i); break; }
+                }
             }
             yuzVar = false;
             for (int i = 0; i < kanal.Length; i++) if (kanal[i].Var) { yuzVar = true; break; }

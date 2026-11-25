@@ -23,6 +23,7 @@ namespace HikayeStudyo
         public const string GaleriPath = "Assets/HikayeStudyo/KarakterGalerisi.unity";
         public const string MixamoDir = Root + "/Mixamo";
         public const string MixamoAnimDir = Root + "/MixamoAnimasyon";
+        public const string VrmDir = Root + "/VRM";
         const string InstallKey = "HS_GltfKuruluyor";
         const string AskedKey = "HS_GaleriSoruldu";
         static bool scheduled;
@@ -86,7 +87,7 @@ namespace HikayeStudyo
         {
             return Files(Root + "/Insanlar/Erkek", ".glb").Length + Files(Root + "/Insanlar/Kadin", ".glb").Length +
                    Files(Root + "/Hayvanlar", ".glb").Length + Files(Root + "/Oyuncak", ".glb").Length +
-                   Files(Root + "/Oyuncak", ".fbx").Length + Files(MixamoDir, ".fbx").Length;
+                   Files(Root + "/Oyuncak", ".fbx").Length + Files(MixamoDir, ".fbx").Length + Files(VrmDir, ".vrm").Length;
         }
 
         static int CountPrefabs() { return Files(Hazir, ".prefab").Length; }
@@ -131,6 +132,7 @@ namespace HikayeStudyo
                 foreach (var p in Files(Root + "/Oyuncak", ".glb")) if (Own(p, "Oyuncak", rebuild)) made++;
                 foreach (var p in Files(Root + "/Oyuncak", ".fbx")) if (Own(p, "Oyuncak", rebuild)) made++;
                 foreach (var p in Files(MixamoDir, ".fbx")) if (MixamoChar(p, ual, rebuild)) made++;
+                foreach (var p in Files(VrmDir, ".vrm")) if (VrmChar(p, ual, rebuild)) made++;
             }
             finally
             {
@@ -225,6 +227,91 @@ namespace HikayeStudyo
                 var k = go.AddComponent<Karakter3D>();
                 k.id = name; k.kategori = kat; k.clips = clips;
                 k.startClip = "Idle";
+                PrefabUtility.SaveAsPrefabAsset(go, prefabPath);
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError("[Hikaye Stüdyosu] " + name + " hazırlanamadı: " + e.Message);
+                return false;
+            }
+            finally { Object.DestroyImmediate(go); }
+        }
+
+        // VRoid Studio'dan dışa aktarılan .vrm dosyaları proje kökündeki "VRoid" klasöründen alınır.
+        // Köprüden: menu: Hikaye/VRM Karakterleri Ekle  ->  HikayeKomut/vrm_ekle.txt
+        [MenuItem("Hikaye/VRM Karakterleri Ekle", priority = 42)]
+        public static void VrmEkle()
+        {
+            var rapor = Path.Combine(UzaktanKomut.Dir, "vrm_ekle.txt");
+            var sb = new StringBuilder();
+            Folder(VrmDir);
+            int kopya = 0;
+            foreach (var f in Files("VRoid", ".vrm"))
+            {
+                var hedef = VrmDir + "/" + Path.GetFileName(f);
+                if (File.Exists(hedef) && new FileInfo(hedef).Length == new FileInfo(f).Length) continue;
+                File.Copy(f, hedef, true);
+                kopya++;
+            }
+            AssetDatabase.Refresh();
+            int made = BuildAll(false);
+            sb.AppendLine("kopyalanan=" + kopya + " yeni_prefab=" + made);
+            foreach (var p in Files(VrmDir, ".vrm"))
+            {
+                var pf = AssetDatabase.LoadAssetAtPath<GameObject>(Hazir + "/" + VrmAdi(p) + ".prefab");
+                if (pf == null) { sb.AppendLine(VrmAdi(p) + ": PREFAB YOK"); continue; }
+                var an = pf.GetComponent<Animator>();
+                int sekil = 0;
+                var golgeler = new SortedDictionary<string, int>();
+                foreach (var r in pf.GetComponentsInChildren<Renderer>(true))
+                {
+                    var smr = r as SkinnedMeshRenderer;
+                    if (smr != null && smr.sharedMesh != null) sekil += smr.sharedMesh.blendShapeCount;
+                    foreach (var m in r.sharedMaterials)
+                    {
+                        var ad = m == null || m.shader == null ? "(malzeme yok)" : m.shader.name;
+                        int n; golgeler.TryGetValue(ad, out n); golgeler[ad] = n + 1;
+                    }
+                }
+                sb.Append(pf.name).Append(": insan=").Append(an != null && an.isHuman ? "EVET" : "hayir")
+                  .Append(" blendshape=").Append(sekil).Append(" golgelendirici:");
+                foreach (var kv in golgeler) sb.Append(' ').Append(kv.Key).Append('=').Append(kv.Value);
+                sb.AppendLine();
+            }
+            KatalogKurulum.Guncelle();
+            Directory.CreateDirectory(UzaktanKomut.Dir);
+            File.WriteAllText(rapor, sb.ToString(), new UTF8Encoding(false));
+            Debug.Log("[Hikaye Stüdyosu] VRM karakterleri: " + sb);
+        }
+
+        static string VrmAdi(string path) { return "VRM_" + Path.GetFileNameWithoutExtension(path).Replace(' ', '_'); }
+
+        static bool VrmChar(string path, List<AnimationClip> clips, bool rebuild)
+        {
+            string name = VrmAdi(path);
+            string prefabPath = Hazir + "/" + name + ".prefab";
+            if (!rebuild && File.Exists(prefabPath)) return false;
+            var src = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            if (src == null) { Debug.LogWarning("[Hikaye Stüdyosu] VRM içe aktarılmadı (UniVRM kurulu mu?): " + path); return false; }
+            var go = (GameObject)Object.Instantiate(src);
+            go.name = name;
+            try
+            {
+                var an = go.GetComponent<Animator>();
+                if (an == null || an.avatar == null || !an.avatar.isHuman)
+                {
+                    RigRapor(name + ": VRM içinde Humanoid avatar yok, prefab atlandı.", true);
+                    return false;
+                }
+                // Vrm10Instance her karede yüz ağırlıklarını sıfırlar; yüzü YuzCanlilik oynattığı için kaldırılır
+                // (bedeli: saç/etek sallanma fiziği de kapanır).
+                foreach (var c in go.GetComponentsInChildren<MonoBehaviour>(true))
+                    if (c != null && c.GetType().Name == "Vrm10Instance") Object.DestroyImmediate(c);
+                an.applyRootMotion = false;
+                an.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+                var k = go.AddComponent<Karakter3D>();
+                k.id = name; k.kategori = "VRM"; k.clips = clips; k.startClip = "Idle_Loop";
                 PrefabUtility.SaveAsPrefabAsset(go, prefabPath);
                 return true;
             }

@@ -16,6 +16,8 @@ namespace HikayeStudyo
         public List<AnimationClip> clips = new List<AnimationClip>();
         [Tooltip("Otomatik canlilik (goz kirpma, nefes, bakis, agiz hareketi). Kapatmak icin isareti kaldir.")]
         public bool canliLik = true;
+        [Tooltip("VRoid (VRM) karakterlerinde ten ve beyaz renkler parlamasin diye renk carpani.")]
+        [Range(0.4f, 1f)] public float vrmParlaklik = 0.72f;
 
         public string CurrentClip { get; private set; }
 
@@ -33,6 +35,31 @@ namespace HikayeStudyo
             legacy = GetComponentInChildren<Animation>();
             if (!string.IsNullOrEmpty(startClip) && string.IsNullOrEmpty(CurrentClip)) Play(startClip, 0f);
             CanliLikEkle();
+            VrmRenkAyarla();
+        }
+
+        // MToon malzemeleri sahne isiklarinda (ana + dolgu + ortam) beyaza kaciyor: renkleri kis.
+        // Yalnizca bu karakterin malzeme kopyalari degisir; asil dosyalara dokunulmaz.
+        readonly List<Material> vrmKopyalar = new List<Material>();
+
+        void VrmRenkAyarla()
+        {
+            if (kategori != "VRM" || !Application.isPlaying || vrmKopyalar.Count > 0) return;
+            foreach (var r in GetComponentsInChildren<Renderer>(true))
+                foreach (var m in r.materials)
+                {
+                    if (m == null) continue;
+                    vrmKopyalar.Add(m);
+                    Kis(m, "_Color");
+                    Kis(m, "_ShadeColor");
+                }
+        }
+
+        void Kis(Material m, string ad)
+        {
+            if (!m.HasProperty(ad)) return;
+            var c = m.GetColor(ad);
+            m.SetColor(ad, new Color(c.r * vrmParlaklik, c.g * vrmParlaklik, c.b * vrmParlaklik, c.a));
         }
 
         // Yuz/govde canliligi (YuzCanlilik.cs). Eklenemezse sessizce atlanir.
@@ -188,6 +215,8 @@ namespace HikayeStudyo
         void OnDestroy()
         {
             if (graph.IsValid()) graph.Destroy();
+            foreach (var m in vrmKopyalar) if (m != null) Destroy(m);
+            vrmKopyalar.Clear();
         }
     }
 }
