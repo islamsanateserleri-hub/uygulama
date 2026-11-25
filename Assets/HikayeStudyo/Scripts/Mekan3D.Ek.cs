@@ -37,6 +37,17 @@ namespace HikayeStudyo
             yariGenislik = 0.48f;
         }
 
+        // cizgi mekandaki yorgan icin (3D mekan kurulu degil)
+        public static Material DuzMalzeme(Color c)
+        {
+            var m = new Material(Lit());
+            if (m.HasProperty("_BaseColor")) m.SetColor("_BaseColor", c);
+            if (m.HasProperty("_Color")) m.SetColor("_Color", c);
+            if (m.HasProperty("_Smoothness")) m.SetFloat("_Smoothness", 0.05f);
+            if (m.HasProperty("_Glossiness")) m.SetFloat("_Glossiness", 0.05f);
+            return m;
+        }
+
         static Color Ozel(string ad, Color varsayilan)
         {
             Color c;

@@ -254,14 +254,19 @@ namespace HikayeStudyo
             walking.Add(k);
             Play(a, new[] { run ? "kos" : "yuru", "yuru" });
             float speed = run ? 3.2f : 1.4f;
-            while (a != null && (t.position - target).sqrMagnitude > 0.0004f)
+            while (a != null)
             {
+                // cizgi mekanda zemin duz: yalniz yatay yurunur (sofra yukseltmesi y'yi her karede degistirir,
+                // dikey fark hedefte sayilirsa yuruyus hic bitmez)
+                var hedef = target;
+                if (!OdaAktif) hedef.y = t.position.y;
+                if ((t.position - hedef).sqrMagnitude <= 0.0004f) break;
                 if (Mekan != null && Mekan.Oturmali) { walking.Remove(k); yield break; }
-                var d = target - t.position;
+                var d = hedef - t.position;
                 var flat = new Vector3(d.x, 0f, d.z);
                 if (flat.sqrMagnitude > 0.0004f)
                     t.rotation = Quaternion.Slerp(t.rotation, Quaternion.LookRotation(flat), 1f - Mathf.Exp(-Time.deltaTime * 12f));
-                t.position = Vector3.MoveTowards(t.position, target, speed * Karakter3D.Hiz * Time.deltaTime);
+                t.position = Vector3.MoveTowards(t.position, hedef, speed * Karakter3D.Hiz * Time.deltaTime);
                 yield return null;
             }
             walking.Remove(k);
@@ -309,6 +314,12 @@ namespace HikayeStudyo
             konusanIcSes = !talking;
             havaTaze = false;
             if (YatakKilidi(Util.Norm(id), a, talking)) return;
+            string pz;
+            if (pozDurum.TryGetValue(Util.Norm(id), out pz))     // poz: ile oturan / yatan konusunca ayaga kalkmaz
+            {
+                if (pz == "oturuyor") { Play(a, talking ? Hareket3D.KlipOturKonus : Hareket3D.KlipOtur); return; }
+                if (pz == "yatiyor") return;
+            }
             if (motion == "zipla" || motion == "egil" || motion == "sarsil") { var m = Map(motion); if (m != null && Play(a, m)) return; }
             string e = Util.Norm(emotion);
             if (!talking && (e == "normal" || e == "mutlu" || e == "fisilti")) e = "sus";
@@ -630,6 +641,7 @@ namespace HikayeStudyo
             if (rt != null) { rt.Release(); Destroy(rt); }
             foreach (var k in new List<string>(ortuler.Keys)) OrtuSil(k);
             if (ortuPisirme != null) Destroy(ortuPisirme);
+            if (cizgiOrtuMalzemesi != null) Destroy(cizgiOrtuMalzemesi);
         }
     }
 }

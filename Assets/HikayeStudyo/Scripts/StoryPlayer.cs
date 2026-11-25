@@ -980,6 +980,7 @@ namespace HikayeStudyo
             bool narr = library.IsNarrator(def);
             string emo = Util.Norm(it.Emotion);
             CharacterView view = null;
+            if (s3d != null) s3d.KonusmaOldu();
 
             bool is3D = !narr && Actor3D(def) != null;
             if (is3D)

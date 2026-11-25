@@ -9,6 +9,9 @@ namespace HikayeStudyo
     {
         HavaDurumu3D havaGorsel;
         bool havaYagmur, havaKar, havaSis, havaUyarildi;
+        // herhangi bir konusma satiri (anlatici dahil): onceki hava: artik "hemen once" sayilmaz
+        public void KonusmaOldu() { havaTaze = false; }
+
         bool havaTaze;     // son konusmadan sonra 'hava:' yazildi
 
         // 10: 3D mekandaki yagmurun da sesi olsun
