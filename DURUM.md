@@ -34,7 +34,7 @@ Eski defterler/notlar `_Arsiv/` altında, okunmaz. Plan: `Hikaye_Studyo_Gelistir
 | 4 Gemini ses sistemi | TAMAM (25 Kas 01:50; commit eed18dc + rapor). Gerçek Gemini: 6 istek, 6/8 satır üretildi, günlük 429 doğru yakalandı. Açık: Geri al, Durdur, ağ/400/kesik ses yolları gerçek testte tetiklenmedi |
 | 5 Video düzenleme + dışa aktarma | ÇEKİRDEK TAMAM, EXE'de test edildi (25 Kas 02:17). Açık testler aşağıda (İŞLEM GÜNLÜĞÜ 02:17) |
 | 6 Yapay zekâ yardımcıları | TAMAM (25 Kas 09:45), EXE'de test edildi; GitHub'da (cf5ca58) |
-| 7 Kurulum ve son kontrol | Kurulum dosyası üretildi ve bu bilgisayarda kuruldu/denendi (25 Kas 10:39). AÇIK: temiz bilgisayar testi, üzerine güncelleme, kaldırma |
+| 7 Kurulum ve son kontrol | Kurulum + üzerine güncelleme bu bilgisayarda denendi (25 Kas 11:00). AÇIK (kullanıcı): temiz bilgisayar testi, kaldırma testi |
 | 8–16 | Başlanmadı |
 
 ## Özet: Aşama 0-2 (tamam)
@@ -71,7 +71,7 @@ Kurallar: bozma, yedek, derleme kontrolü, test edilmeyen "tamam" değil, aşama
 Ayrıntılı sürüm: Doc "DURUM.dm" → "TAM GELİŞTİRME PLANI".
 
 ## Sonraki adım
-1) Üzerine güncelleme (Build\Kurulum\HikayeStudyosu_Kurulum_4.0.1.exe tekrar çalıştır) ve kaldırma testi, sonra Aşama 8 (karakter kimlik sistemi). 2) KULLANICIDAN: temiz bilgisayar testi. 3) Aşama 4-5-7 açık testleri günlükte.
+1) Aşama 8 (karakter kimlik sistemi; plan PDF s. "AŞAMA 8": ad, yaş, yüz, boy, saç, kıyafet, fiziksel özellik, ses kimliği, konuşma tarzı, duygusal özellik; bölümler arası aynı görünüm, yalnız kullanıcı isterse değişir). 2) KULLANICIDAN: temiz bilgisayar testi; Windows Ayarlar > Uygulamalar'dan kaldırma testi. 3) Aşama 4-5-7 açık testleri günlükte.
 
 ## İŞLEM GÜNLÜĞÜ
 - 25 Kas 01:15 — "DURUM.md" not defteri oluşturuldu. Alt ajanlar başlatıldı: (1) Dinle düzeltmesi, (2) Aşama 4 kod denetimi, (3) GitHub karşılaştırması. Uygulama izinleri alındı (Unity Hub, Unity, Gezgin, Hikayestudyo.exe).
@@ -99,3 +99,4 @@ Ayrıntılı sürüm: Doc "DURUM.dm" → "TAM GELİŞTİRME PLANI".
   TEST EDİLMEDİ: kurulum betiği HİÇ derlenmedi/çalıştırılmadı; temiz bilgisayar; güncelleme/kaldırma; anahtar kutusuna yeni anahtar yazma (EXE'de); videonun sesi kulakla. "Güncelleme altyapısı" yalnız üzerine kurulumdur, çevrimiçi güncelleme denetimi YOK. Not: şifre aynı Windows kullanıcısındaki programlara karşı korumaz; Editör aracı (GeminiSes) anahtarı ayrı ve düz saklamaya devam ediyor. Commit: YOK (GitHub izni bekliyor).
 - 25 Kas 10:24 — Kullanıcı GitHub izni verdi. Aşama 6+7 gönderildi: commit cf5ca58 (dal claude/hikaye-studyosu; kod + Installer/; DURUM.md ayrı commit). Inno Setup indirme yeri kullanıcıya söylendi (resmi sayfada güncel 6 sürümü 6.7.4; menümüz yalnız "Inno Setup 6" klasörünü arar; sayfa ticari kullanıcılardan lisans satın almasını istiyor).
 - 25 Kas 10:39 — Kullanıcı Inno Setup 6'yı kurdu. Menü "Hikaye/Kurulum Dosyası Oluştur" TAMAM: Build/Kurulum/HikayeStudyosu_Kurulum_4.0.1.exe (302 MB). GERÇEK TEST (bu PC, kurulum sihirbazı): Türkçe adımlar, hedef %LocalAppData%\Programs\HikayeStudyosu, yönetici izni istemedi, kurulum tamamlandı, kurulu uygulama açıldı; Ayarlar: ffmpeg Hazır, sürüm 4.0.1; anahtar "Şifreli (53 karakter)"; kurulu uygulamadan deneme_3d Videoya al → "Video hazır" (16 sn, kalite 0 hata, uyarılı). Test için Arda sesi geçici Otomatik yapıldı, Fenrir'e geri alındı. AÇIK/TEST EDİLMEDİ: temiz bilgisayar, üzerine güncelleme, kaldırma, kurulu uygulamadan Gemini isteği, video gözle/kulakla, kalite uyarı içeriği, masaüstü kısayolu gözle. Notlar: eski "Hikaye Studyosu" masaüstü kısayolu (Build klasörünü açar) duruyor; "Rapor" düğmesinde Windows "Birlikte aç" penceresi çıktı; derleme günlüğünde DepthOfField gölgelendiricileri çıkarılmış uyarısı var (etkisi incelenmedi).
+- 25 Kas 11:00 — Kullanıcı: "otomatik mesajı bekleme, devam et". Üzerine güncelleme testi: uygulama kapalıyken TAMAM; uygulama AÇIKKEN HATA bulundu (kurulum kapatamadı, dstorage.dll "DeleteFile kod 5"). DÜZELTME: Uygulama/UygulamaKilidi.cs (adlı kilit) + .iss AppMutex; yedek Yedek_2026-11-25_asama7b/. Derleme 0 hata, EXE Succeeded (10:51), yeni kurulum dosyası (10:55). GERÇEK TEST: uygulama açıkken kurulum "çalışmakta olduğunu algıladı" uyarısı verdi; kapatıp Tamam → kurulum tamamlandı. Kaldırma testi YAPILMADI.

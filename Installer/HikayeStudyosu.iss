@@ -28,6 +28,8 @@ WizardStyle=modern
 UninstallDisplayIcon={app}\{#Exe}
 UninstallDisplayName={#Ad}
 CloseApplications=yes
+; Uygulama açıksa güncelleme/kaldırma başlamadan kapatılması istenir (Uygulama/UygulamaKilidi.cs ile aynı ad).
+AppMutex=HikayeStudyosu_Calisiyor
 
 [Languages]
 Name: "turkce"; MessagesFile: "compiler:Languages\Turkish.isl"
