@@ -32,11 +32,26 @@ namespace HikayeStudyo
         public static readonly List<string> Rapor = new List<string>();
         static bool stopRequested;
 
+        // Asama 7: anahtar Windows DPAPI ile sifreli saklanir; eski duz kayit ilk okumada tasinir.
+        public const string KeyKorumaliPref = "HS_GeminiKeyKorumali";
+        static string anahtarOnbellek;     // her karede cozmemek icin
+        static bool anahtarSifreli;
+
         public static string Anahtar
         {
-            get { return PlayerPrefs.GetString(KeyPref, "").Trim(); }
-            set { PlayerPrefs.SetString(KeyPref, (value ?? "").Trim()); }
+            get
+            {
+                if (anahtarOnbellek == null) anahtarOnbellek = SirKoruma.Oku(KeyPref, KeyKorumaliPref, out anahtarSifreli);
+                return anahtarOnbellek;
+            }
+            set
+            {
+                string v = (value ?? "").Trim();
+                anahtarSifreli = SirKoruma.Yaz(KeyPref, KeyKorumaliPref, v) && v.Length > 0;
+                anahtarOnbellek = v;
+            }
         }
+        public static bool AnahtarSifreli { get { return Anahtar.Length > 0 && anahtarSifreli; } }
 
         public static string Model
         {

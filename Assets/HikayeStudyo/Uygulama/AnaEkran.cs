@@ -36,6 +36,7 @@ namespace HikayeStudyo
         public static string Kok { get { return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "HikayeStudyosu"); } }
         public static string HikayeKlasoru { get { return Path.Combine(Kok, "Hikayeler"); } }
         public static string VideoKlasoru { get { return Path.Combine(Kok, "Videolar"); } }
+        public static string GunlukDosyasi { get { return Path.Combine(Kok, "arayuz_log.txt"); } }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void Basla()
@@ -668,7 +669,19 @@ namespace HikayeStudyo
                 if (Dugme(new Rect(ic.x + 380, y, 120, 42), "Evet", Tehlike, 15)) { SesVideoSifirla(); sifirlaOnay = false; mesaj = "Ayarlar varsayılana döndü."; mesajHata = false; }
                 if (Dugme(new Rect(ic.x + 510, y, 120, 42), "Vazgeç", new Color32(60, 66, 88, 255), 15)) sifirlaOnay = false;
             }
-            MesajCiz(new Rect(ic.x, y + 60, Mathf.Min(ic.width, 560), 44));
+            // Asama 7: hata raporu (yalniz dosya olusturur, hicbir yere gondermez)
+            if (Dugme(new Rect(ic.x, y + 54, 240, 42), "Hata raporu oluştur", new Color32(60, 66, 88, 255), 15))
+            {
+                try
+                {
+                    string rapor = HataRaporu.Olustur();
+                    Ac("explorer.exe", "/select,\"" + rapor + "\"");
+                    mesaj = "Rapor kaydedildi: " + Path.GetFileName(rapor); mesajHata = false;
+                }
+                catch (Exception e) { Gunluk("Hata raporu: " + e); mesaj = "Rapor oluşturulamadı: " + e.Message; mesajHata = true; }
+            }
+            Yazdir(new Rect(ic.x + 256, y + 54, Mathf.Max(100, ic.width - 256), 42), "Hiçbir yere gönderilmez; API anahtarı gizlenir.", 12, Sönük, TextAnchor.MiddleLeft, false, true);
+            MesajCiz(new Rect(ic.x, y + 108, Mathf.Min(ic.width, 560), 44));
         }
 
         static void SesVideoSifirla()
@@ -680,7 +693,15 @@ namespace HikayeStudyo
         // ---------- hikâye oynatma ----------
         static void Gunluk(string m)
         {
-            try { File.AppendAllText(Path.Combine(Directory.GetCurrentDirectory(), "arayuz_log.txt"), DateTime.Now.ToString("HH:mm:ss") + " " + m + "\r\n"); } catch { }
+            // Kurulu uygulamada program klasorune degil, kullanicinin Belgeler klasorune yazilir; 1 MB'i gecince bastan baslar.
+            try
+            {
+                string yol = GunlukDosyasi;
+                Directory.CreateDirectory(Kok);
+                if (File.Exists(yol) && new FileInfo(yol).Length > 1048576) File.Delete(yol);
+                File.AppendAllText(yol, DateTime.Now.ToString("dd.MM HH:mm:ss") + " " + m + "\r\n");
+            }
+            catch { }
         }
 
         void Oyna(HikayeBilgi h)

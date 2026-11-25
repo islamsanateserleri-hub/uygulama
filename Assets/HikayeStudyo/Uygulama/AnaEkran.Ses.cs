@@ -95,7 +95,7 @@ namespace HikayeStudyo
                 PlayerPrefs.Save();
             }
             bool var_ = GeminiUyg.Anahtar.Length > 0;
-            Yazdir(new Rect(642, y, w - 642, 38), var_ ? "Kayıtlı (" + GeminiUyg.Anahtar.Length + " karakter)" : "Anahtar yok", 14, var_ ? Basari : Tehlike);
+            Yazdir(new Rect(642, y, w - 642, 38), var_ ? (GeminiUyg.AnahtarSifreli ? "Şifreli (" : "ŞİFRESİZ (") + GeminiUyg.Anahtar.Length + " karakter)" : "Anahtar yok", 14, var_ && GeminiUyg.AnahtarSifreli ? Basari : Tehlike);
             y += 50;
 
             // model

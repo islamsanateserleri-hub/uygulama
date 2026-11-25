@@ -231,7 +231,13 @@ namespace HikayeStudyo
             rainSrc.loop = true; rainSrc.clip = ProcAudio.Rain(); rainSrc.volume = 0f;
             voiceSrc.volume = voiceVolume;
             var lis = FindAnyObjectByType<AudioListener>();
-            if (lis == null) lis = gameObject.AddComponent<AudioListener>();
+            if (lis == null)
+            {
+                // Dinleyici ayri nesnede: ses olcer (OnAudioFilterRead) AudioSource'larla ayni nesnede olursa Unity hata verir.
+                var dinleyici = new GameObject("Dinleyici");
+                dinleyici.transform.SetParent(transform, false);
+                lis = dinleyici.AddComponent<AudioListener>();
+            }
             olcer = lis.GetComponent<SesOlcer>();
             if (olcer == null) olcer = lis.gameObject.AddComponent<SesOlcer>();
         }

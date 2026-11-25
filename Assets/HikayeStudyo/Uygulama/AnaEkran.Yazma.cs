@@ -98,7 +98,7 @@ namespace HikayeStudyo
             yKaydirma = ySorunKaydirma = yPanoKaydirma = 0f;
             yImlec = 0; yImlecIstek = 0; ySecimIstek = -1; yOncekiImlec = -1; yIstekSayaci = 0; yAtlaIdx = -1;
             yDenetimGerek = true; ySatirYGerek = true; ySahneGerek = true; ySecSahne = 0;
-            yPano = false; ySes = false; acikId = null; yUretiyor = false; yUretimMesaj = "";
+            yPano = false; ySes = false; yYardim = false; yAnaliz = null; acikId = null; yUretiyor = false; yUretimMesaj = "";
             foreach (var t in yKucukler.Values) if (t != null) Destroy(t);
             yKucukler.Clear();
             yDurum = "Açıldı";
@@ -258,7 +258,7 @@ namespace HikayeStudyo
         void AtlaSatir(int satirNo)
         {
             if (satirNo <= 0) return;
-            yPano = false; ySes = false;
+            yPano = false; ySes = false; yYardim = false;
             yAtlaIdx = SatirBaslangici(satirNo);
             yIstekSayaci = 0; yTakip = true;
         }
@@ -417,9 +417,10 @@ namespace HikayeStudyo
 
             // ---- sekmeler ----
             float ty = ic.y + 44;
-            if (Dugme(new Rect(ic.x, ty, 150, 34), "Yaz", !yPano && !ySes ? Vurgu : new Color32(60, 66, 88, 255), 14)) { yPano = false; ySes = false; }
-            if (Dugme(new Rect(ic.x + 158, ty, 170, 34), "Sahne panosu", yPano ? Vurgu : new Color32(60, 66, 88, 255), 14)) { yPano = true; ySes = false; ySahneGerek = true; }
-            if (Dugme(new Rect(ic.x + 336, ty, 110, 34), "Ses", ySes ? Vurgu : new Color32(60, 66, 88, 255), 14)) { ySes = true; yPano = false; SesVerisiniYenile(true); }
+            if (Dugme(new Rect(ic.x, ty, 90, 34), "Yaz", !yPano && !ySes && !yYardim ? Vurgu : new Color32(60, 66, 88, 255), 14)) { yPano = false; ySes = false; yYardim = false; }
+            if (Dugme(new Rect(ic.x + 98, ty, 140, 34), "Sahne panosu", yPano ? Vurgu : new Color32(60, 66, 88, 255), 14)) { yPano = true; ySes = false; yYardim = false; ySahneGerek = true; }
+            if (Dugme(new Rect(ic.x + 246, ty, 80, 34), "Ses", ySes ? Vurgu : new Color32(60, 66, 88, 255), 14)) { ySes = true; yPano = false; yYardim = false; SesVerisiniYenile(true); }
+            if (Dugme(new Rect(ic.x + 334, ty, 114, 34), "Yardımcı", yYardim ? Vurgu : new Color32(60, 66, 88, 255), 14)) YardimAc();
             int hata = HikayeDenetci.HataSayisi(ySorunlar);
             int uyari = ySorunlar.Count - hata;
             string ozet = hata == 0 && uyari == 0 ? "Sorun yok" : hata + " hata, " + uyari + " uyarı";
@@ -427,7 +428,7 @@ namespace HikayeStudyo
             Yazdir(new Rect(ic.xMax - 300, ty, 300, 34), "İmleç: satır " + ImlecSatiri() + "   ·   Ctrl+Z geri al, Ctrl+Y yinele", 12, Sönük, TextAnchor.MiddleRight);
 
             var alan = new Rect(ic.x, ty + 40, ic.width, ic.yMax - (ty + 40));
-            if (ySes) SesSekmesiCiz(alan); else if (yPano) PanoCiz(alan); else YazCiz(alan);
+            if (yYardim) YardimCiz(alan); else if (ySes) SesSekmesiCiz(alan); else if (yPano) PanoCiz(alan); else YazCiz(alan);
 
             GUI.enabled = true;
             if (sesGitIstek) { sesGitIstek = false; Git(Bolum.Ses); return; }
