@@ -84,6 +84,7 @@ namespace HikayeStudyo
         bool paused;
         int startLine;
         Sahne3D s3d;
+        float masaUstu;     // cizgi mekanda 3D oyuncularin onundeki sofra
         SesOlcer olcer;
         ParseResult meta;
         Texture2D kapakKare;
@@ -888,6 +889,7 @@ namespace HikayeStudyo
         {
             var pf = Actor3D(d);
             s3d.SetFloor(floorY);
+            s3d.MasaUstu = masaUstu;
             bool exists = s3d.Has(d.id);
             bool enter = motion == "kos" || motion == "yuru" || motion == "saril";
             s3d.Ensure(d.id, pf, SlotX(d), d.scale, !exists && enter ? (d.side > 0 ? 1 : -1) : 0, motion == "kos" || motion == "saril");
@@ -1265,6 +1267,8 @@ namespace HikayeStudyo
             for (int i = bgRoot.childCount - 1; i >= 0; i--) Destroy(bgRoot.GetChild(i).gameObject);
             for (int i = frontRoot.childCount - 1; i >= 0; i--) Destroy(frontRoot.GetChild(i).gameObject);
             hasBed = false;
+            masaUstu = 0f;
+            if (s3d != null) s3d.MasaUstu = 0f;
             if (b == null) { floorY = -640f; return; }
 
             float fh = H * b.floorHeight;
@@ -1386,6 +1390,9 @@ namespace HikayeStudyo
             if (b.table)
             {
                 float ty = floorY + 330f;
+                // masa tahtasinin ust yuzu (zeminden), 3D sahnenin olcusunde
+                masaUstu = (ty + 26f - floorY) / H * 2f * Sahne3D.CamDist * Mathf.Tan(Sahne3D.CamFov * 0.5f * Mathf.Deg2Rad);
+                if (s3d != null) s3d.MasaUstu = masaUstu;
                 Box(frontRoot, Gfx.RoundRect, Gfx.Mul(wood, 0.85f), new Vector2(980, 230), new Vector2(0, ty - 130), 5);
                 Box(frontRoot, Gfx.RoundRect, wood, new Vector2(1040, 52), new Vector2(0, ty), 5);
                 Box(frontRoot, Gfx.Circle, new Color(0.55f, 0.33f, 0.18f), new Vector2(220, 100), new Vector2(-60, ty + 50), 4);

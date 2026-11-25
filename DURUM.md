@@ -3,7 +3,7 @@
 Tek kayıt dosyası. Her işlem, test sonucu ve hata yalnızca buraya eklenir (en fazla 1-2 sayfa; eskiyi kısalt). Yeni sohbet bu dosyayı okuyarak eksiksiz devam eder.
 Eski defterler/notlar `_Arsiv/` altında, okunmaz. Plan: `Hikaye_Studyo_Gelistirme_Plani.pdf` (kullanıcıdan alınır, sıra değişmez).
 
-## ÖZET (kullanıcı için, 25 Kas 22:46)
+## ÖZET (kullanıcı için, 25 Kas 23:02)
 **Neredeyiz:** Aşamaların hepsi geçildi. 12–15 yazıldı ama HATALI maddeleri var; 16 yalnız değerlendirildi (ücretli yapay zekâ için senin kararın gerekiyor). Şimdi HATALI listesi düzeltiliyor: AĞIR maddelerin çoğu bitti (yalnız Editör karelerinde ve mantık testinde; EXE'de DENENMEDİ). Kalan kaba tahmin: orta ~26 madde 3-4 saat, küçük + son kontrol 2-3 saat. 26 Kas 02:00 için "devam et" mesajı kurulu.
 **Yeni çalışma düzeni (kullanıcı, 17:38):** küçük hatalarda durma; "HATALI" yaz, aşamalara devam et; denetçi ajan her aşamayı denetlesin; uygulama bitince hatalar tek tek düzeltilecek.
 **Dikkat:** araba sahnesindeki açık görüntü Editör karelerinde düzeldi; EXE videosunu kendin izlemeden TikTok'a koyma (EXE bugünkü düzeltmeleri İÇERMİYOR).
@@ -57,7 +57,7 @@ Eski defterler/notlar `_Arsiv/` altında, okunmaz. Plan: `Hikaye_Studyo_Gelistir
 ## HATALI – SONRA DÜZELTİLECEK
 **Aşama 10–12 (denetçi, 25 Kas ~17:35)**
 1. AĞIR (TikTok riski): araba yakın planında iç çamaşırı göründü (kare_21). Torpido yükseltildi, orta konsol eklendi; DENENMEDİ. → DÜZELTİLDİ 25 Kas (Editör: test_araba, test_araba2).
-2. AĞIR: son araba / konuşanın sırtı düzeltmeleri çalıştırılıp denenmedi; aşama 12 mekânlarının EXE videosu yok; Mekânlar sayfası ve kayıtlı mekân denenmedi; test_mekan yeniden çalıştırılmadı. → KISMEN: araba denendi; test_mekan, Mekânlar sayfası, EXE videosu AÇIK.
+2. AĞIR: son araba / konuşanın sırtı düzeltmeleri çalıştırılıp denenmedi; aşama 12 mekânlarının EXE videosu yok; Mekânlar sayfası ve kayıtlı mekân denenmedi; test_mekan yeniden çalıştırılmadı. → KISMEN: araba denendi; test_mekan 22:50 yeniden çalıştırıldı (Editör karelerinde mekânlar, yağmur, kar çizildi). Mekânlar sayfası, kayıtlı mekân (Belgeler klasörüne erişimim yok), EXE videosu AÇIK.
 3. AĞIR: omuz üstü plan fiilen kalktı ("ters" ile neredeyse aynı) (KameraYonetmen.cs ~276-301). → KISMEN: dinleyen kenarda görünüyor (test_omuz); bazen omuz yerine saç parçası (3. denetim).
 4. ORTA: `mekan3d: mutfak, duvar=mavi` / `mekan3d: duvar=mavi` 3D'yi sessizce kapatıyor; `duvar=mavi, zemin=ahsap` ve `hava=yagmur,sis` reddediliyor. → DÜZELTİLDİ (test_orta1; `hava=yagmur,sis` yalnız kodda).
 5. ORTA: arabada ilk konuşan sürücü oluyor. → DÜZELTİLDİ: çocuk sürücü olmaz (test_orta1). 6. ORTA: hastanede yatan karakterin başı yatak başlığının içinde; etek çadır gibi, bacaklar açık. → DÜZELTİLDİ (22:45): 3D yatakta yatana gövdeyi izleyen yorgan serilir; baş yastıkta; kalkınca/mekân değişince kalkar (test_yatak, test_yatak2 Editör kareleri; EXE denenmedi). KÜÇÜK (açık): etek yüzünden yorgan yüksek tümsek yapıyor; 2D mekânda yatana yorgan yok.
@@ -77,7 +77,7 @@ Eski defterler/notlar `_Arsiv/` altında, okunmaz. Plan: `Hikaye_Studyo_Gelistir
 10. KÜÇÜK: satırdan başlatınca gözyaşı/buhar sonraki mekâna taşınıyor; yanlış karakter adı uyarısız; `nefes: yok` herkesi kapatıyor; 2D sis çok soluk; 2D mekânda 3D karakter ilk karede çömelmiş gibi; park başında baş kadraj dışında.
 **Aşama 15 ekran kareleri (kendi bakışım, 18:10; Editör önizlemesi, test_seri)**
 1. AĞIR: "devamı" kartı hâlâ ekranda duran seçim kartının üstüne biniyor ("Yarın aynı saatte" B düğmesinin üzerinde) — denetçinin 1. maddesi doğrulandı. → DÜZELTİLDİ (Editör: test_kart).
-2. ORTA: 2D "sofra" mekânında 3D karakterlerle, Arda'nın "Dinliyorum!" satırında Arda görünmüyor (yalnız ayakları), Anne sol kenarda kesik.
+2. ORTA: 2D "sofra" mekânında 3D karakterlerle, Arda'nın "Dinliyorum!" satırında Arda görünmüyor (yalnız ayakları), Anne sol kenarda kesik. → DÜZELTİLDİ (23:02): kısa karakter masanın üstünde kalacak kadar yükseltilir, korkup çömelince de görünür (test_sofra Editör kareleri; EXE denenmedi). Açık (KÜÇÜK): yakın planda diğer kişi kenarda kesik kalır; buhar çocuğun önünden geçer.
 **Aşama 14 (denetçi, 18:10; kod okuması)**
 1. AĞIR: "Çözüldü" düğmesi soruyu listeden kaldırmıyor (liste açık bölümden önceki durumu gösteriyor); bu bölüme eklenen soru/olay/durum da görünmüyor. → DÜZELTİLDİ (Seri Testi 49/0; arayüzde tıklanmadı).
 2. AĞIR: `geri:` / `vfx: vhs` sonrası bölüm sonuna kadar ölü karakter denetimi kapanıyor. → DÜZELTİLDİ (mantık testi).
@@ -133,7 +133,7 @@ Kurallar: bozma, yedek, derleme kontrolü, test edilmeyen "tamam" değil, aşama
 Ayrıntılı sürüm: Doc "DURUM.dm" → "TAM GELİŞTİRME PLANI".
 
 ## Sonraki adım
-1) Aşama 10–12 AĞIR 2 (test_mekan + EXE videosu); sonra Aşama 13 ORTA 4-9, Aşama 15 kare 2, Aşama 14 ORTA 3-8, Aşama 15 ORTA 3-7, KÜÇÜK maddeler; her düzeltmede derleme + deneme; denetçi her grup sonunda (kullanım tutumlu). 2) Aşama 16 için kullanıcı kararı (Docs/Asama16_Degerlendirme.md). 3) KULLANICIDAN: temiz bilgisayar testi; kaldırma testi; yeni kurulum dosyasını üretip çalıştırmak.
+1) Aşama 13 ORTA 4-9; sonra Aşama 14 ORTA 3-8, Aşama 15 ORTA 3-7, KÜÇÜK maddeler; her düzeltmede derleme + deneme; denetçi her grup sonunda (kullanım tutumlu). 2) Aşama 16 için kullanıcı kararı (Docs/Asama16_Degerlendirme.md). 3) KULLANICIDAN: temiz bilgisayar testi; kaldırma testi; yeni kurulum dosyasını üretip çalıştırmak.
 
 ## İŞLEM GÜNLÜĞÜ
 - 25 Kas 01:15 — "DURUM.md" not defteri oluşturuldu. Alt ajanlar başlatıldı: (1) Dinle düzeltmesi, (2) Aşama 4 kod denetimi, (3) GitHub karşılaştırması. Uygulama izinleri alındı (Unity Hub, Unity, Gezgin, Hikayestudyo.exe).
@@ -195,3 +195,4 @@ Ayrıntılı sürüm: Doc "DURUM.dm" → "TAM GELİŞTİRME PLANI".
 - 25 Kas 21:07–22:15 — HATALI düzeltme turu (AĞIR): araba (arkada/önde herkesin yüzü görünür, kucak görünmez, inişte anında ayakta), gerçek omuz üstü, `dondur` gerçek donuk kare, gözyaşı/nefes (kafa kemiği yönü), seçim/devamı kartı, şablon cümle uyarısı, Çözüldü düğmesi, `geri:` sonrası ölü denetimi. Derleme 0 hata (22:04). Seri Testi 49/0, Yardımcı 48/0. Hepsi Editör/mantık testi; EXE denenmedi. Yeni testler: Docs/test_araba2, test_dondur, test_kart, test_kart2, test_omuz, test_yas, test_ilk. Bu turda cihazda yeni yedek klasörü alınmadı (kural 4 eksik; eski hal GitHub 9ba5f50). 22:12: kullanıcı isteğiyle 26 Kas 02:00 "devam et" mesajı kuruldu.
 - 25 Kas 22:31 — Baş kesilmesi (ilk klip çömelmesi) ve 3D mekân ORTA grubu (4, 5, 7, 8, 9, 10, 11) düzeltildi; derleme 0 hata (22:29); test_ilk, test_araba2, test_orta1 Editör karelerinde bakıldı. Commit + GitHub.
 - 25 Kas 22:46 — Aşama 10–12 ORTA 6 (yatan karakter) düzeltildi: yorgan (Sahne3D.Hareket.cs, Mekan3D.Ek.cs). Derleme 0 hata (22:44). Editör karelerinde hastane + yatak odası, kalkış ve mekân değişimi bakıldı. Commit + GitHub.
+- 25 Kas 23:02 — test_mekan yeniden çalıştırıldı (Editör kareleri). Sofrada çocuk görünmüyordu: düzeltildi (Sahne3D.Hareket.cs, StoryPlayer.cs); derleme 0 hata (22:59); test_sofra karelerinde bakıldı. Commit + GitHub.

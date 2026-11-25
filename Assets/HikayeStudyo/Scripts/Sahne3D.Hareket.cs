@@ -916,8 +916,52 @@ namespace HikayeStudyo
         const int OrtuDilim = 28;
         Mesh ortuPisirme;
 
+        // ---------- cizgi mekandaki sofra ----------
+        // Sofra 3D oyuncularin onune ciziliyor: kisa karakter (cocuk) masanin arkasinda kayboluyordu.
+        // Basi masanin ustunde kalacak kadar yukseltilir (sandalyede oturuyormus gibi); ayaklar masanin arkasinda kalir.
+        public float MasaUstu;                       // cizgi mekanda masanin ust yuzu (metre); 0 = masa yok
+        readonly Dictionary<string, float> yukseltilen = new Dictionary<string, float>();
+        const float MasaUstuBas = 0.45f;             // bas kemigi masanin en az bu kadar ustunde
+        const float KisaKarakter = 1.15f;            // yalniz bundan kisa (bas kemigi) oyuncular yukseltilir
+
+        void MasaYukseltme()
+        {
+            foreach (var kv in actors)
+            {
+                var a = kv.Value;
+                if (a == null) continue;
+                float eski;
+                bool vardi = yukseltilen.TryGetValue(kv.Key, out eski);
+                var p = a.transform.position;
+                float fark = p.y - Origin.y;
+                bool sahnede = Mathf.Abs(fark) < 1f;
+                float yuk = 0f;
+                if (!OdaAktif && MasaUstu > 0f && sahnede && !yataktaki.ContainsKey(kv.Key)
+                    && a.KafaYuksekligi > 0.1f && a.KafaYuksekligi < KisaKarakter)
+                {
+                    // o anki durusa gore: korkup comelince de basi masanin ustunde kalir
+                    var bas = Kemik(a, HumanBodyBones.Head);
+                    float basY = bas != null ? bas.position.y - p.y : a.KafaYuksekligi;
+                    yuk = Mathf.Clamp(MasaUstu + MasaUstuBas - basY, 0.001f, 0.55f);
+                    yuk = Mathf.MoveTowards(vardi ? eski : yuk, yuk, Time.deltaTime * 0.8f);
+                }
+                if (yuk > 0.001f)
+                {
+                    yukseltilen[kv.Key] = yuk;
+                    if (Mathf.Abs(fark - yuk) > 0.0005f) a.transform.position = new Vector3(p.x, Origin.y + yuk, p.z);
+                }
+                else if (vardi)
+                {
+                    yukseltilen.Remove(kv.Key);
+                    // baska bir komut konumu degistirdiyse dokunulmaz
+                    if (Mathf.Abs(fark - eski) < 0.01f) a.transform.position = new Vector3(p.x, Origin.y, p.z);
+                }
+            }
+        }
+
         void LateUpdate()
         {
+            MasaYukseltme();
             Vector3 yatak = Vector3.zero;
             float yaw;
             bool yatakVar = Mekan != null && Mekan.Aktif && Mekan.NoktaBul("yatak", out yatak, out yaw);
@@ -1075,6 +1119,7 @@ namespace HikayeStudyo
             yataktaki.Clear();
             yatakOncesi.Clear();
             sirtustu.Clear();
+            yukseltilen.Clear();
         }
     }
 }
