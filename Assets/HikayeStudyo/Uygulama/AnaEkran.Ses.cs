@@ -280,7 +280,7 @@ namespace HikayeStudyo
                 string kim = string.IsNullOrEmpty(it.Character) ? "Anlatıcı" : it.Character;
                 Yazdir(new Rect(r.x + 10, r.y + 4, 56, 22), it.Line + ".", 13, Sönük, TextAnchor.MiddleLeft);
                 Yazdir(new Rect(r.x + 56, r.y + 4, 250, 22), kim + (it.Inner ? " (iç ses)" : ""), 14, Yazi, TextAnchor.MiddleLeft, true);
-                Yazdir(new Rect(r.x + 56, r.y + 28, 250, 22), kutuphane.VoiceFor(it) + " · " + Util.ToneFor(it), 11, Sönük, TextAnchor.MiddleLeft, false, false);
+                Yazdir(new Rect(r.x + 56, r.y + 28, 250, 22), kutuphane.VoiceFor(it) + " · " + kutuphane.ToneFor(it), 11, Sönük, TextAnchor.MiddleLeft, false, false);
                 string metin = it.Text ?? "";
                 if (metin.Length > 70) metin = metin.Substring(0, 70) + "…";
                 Yazdir(new Rect(r.x + 312, r.y + 4, w - 312 - 330, 46), "“" + metin + "”", 12, Yazi, TextAnchor.MiddleLeft, false, true);

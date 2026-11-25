@@ -93,6 +93,7 @@ namespace HikayeStudyo
         void Start()
         {
             if (library == null) library = Resources.Load<StoryLibrary>("StoryLibrary");
+            library = KimlikDeposu.Uygula(library);   // Aşama 8: karakter kimlik kartları (kopya üzerinde)
             if (story == null) story = Resources.Load<TextAsset>("Hikayeler/ornek");
             if (library == null || story == null)
             {

@@ -938,6 +938,7 @@ namespace HikayeStudyo
             }
         }
         bool MixAnim { get { return assetPath.Replace('\\', '/').Contains("/Karakterler/MixamoAnimasyon/"); } }
+        bool UalKutuphane { get { return assetPath.Replace('\\', '/').Contains("/Karakterler/Animasyonlar/"); } }
         bool Toy { get { var p = assetPath.Replace('\\', '/'); return p.Contains("/Karakterler/Oyuncak/") && p.ToLowerInvariant().EndsWith(".fbx"); } }
 
         void OnPreprocessModel()
@@ -978,7 +979,9 @@ namespace HikayeStudyo
                 c.lockRootRotation = true;
                 c.lockRootHeightY = true;
                 c.lockRootPositionXZ = true;
-                c.keepOriginalOrientation = !MixAnim;   // Mixamo kliplerinde gövde yönü sıfırlansın (yana dönük başlamasın)
+                // Gövde yönü sıfırlansın: Mixamo klipleri yana dönük başlamasın; UAL kütüphanesi -Z'ye bakar,
+                // orijinal yön korunursa karakterlerin sırtı kameraya döner.
+                c.keepOriginalOrientation = !MixAnim && !UalKutuphane;
                 c.keepOriginalPositionY = true;
                 c.keepOriginalPositionXZ = true;
             }
@@ -1002,6 +1005,13 @@ namespace HikayeStudyo
         }
 
         static readonly List<string> DokuCikarSirasi = new List<string>();
+
+        [MenuItem("Hikaye/Hareket Kutuphanesini Yeniden Ice Aktar")]
+        static void UalYenileMenu()
+        {
+            AssetDatabase.ImportAsset(Karakter3DKurulum.UalPath, ImportAssetOptions.ForceUpdate);
+            Debug.Log("[Hikaye Stüdyosu] Hareket kütüphanesi yeniden içe aktarıldı.");
+        }
 
         [MenuItem("Hikaye/Mixamo Animasyonlarını Yenile")]
         static void AnimYenileMenu()

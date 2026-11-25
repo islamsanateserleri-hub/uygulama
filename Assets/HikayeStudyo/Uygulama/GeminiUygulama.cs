@@ -249,7 +249,7 @@ namespace HikayeStudyo
                 foreach (var it in todo)
                 {
                     if (stopRequested) { Status = "Durduruldu. " + done + " ses üretildi."; halted = true; break; }
-                    string voice = lib.VoiceFor(it), tone = Util.ToneFor(it), ck = lib.ClipKey(it);
+                    string voice = lib.VoiceFor(it), tone = lib.ToneFor(it), ck = lib.ClipKey(it);
                     string speech = TurkceMetin.ForSpeech(string.IsNullOrEmpty(it.Speech) ? it.Text : it.Speech);
                     string label = it.Line + ". satır  " + (string.IsNullOrEmpty(it.Character) ? "Anlatıcı" : it.Character) + " (" + voice + ")";
                     Status = (done + atlanan + 1) + "/" + todo.Count + "  " + label;

@@ -62,7 +62,7 @@ namespace HikayeStudyo
         string yeniAd = "";
         string sonOlusturulan;
         string karakterArama = "";
-        int karakterSekme;        // 0: 3D, 1: çizgi
+        int karakterSekme;        // 0: 3D, 1: çizgi, 2: kimlik kartları
         List<HikayeBilgi> hikayeler;
         List<VideoBilgi> videolar;
         KarakterKatalogu katalog; StoryLibrary kutuphane;
@@ -93,7 +93,8 @@ namespace HikayeStudyo
             try { font = Font.CreateDynamicFontFromOSFont(new[] { "Segoe UI", "Arial", "Liberation Sans" }, 32); } catch { font = null; }
             if (font == null) font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             katalog = KarakterKatalogu.Yukle();
-            kutuphane = Resources.Load<StoryLibrary>("StoryLibrary");
+            KimlikDeposu.Etkin = true;
+            kutuphane = KimlikDeposu.Uygula(Resources.Load<StoryLibrary>("StoryLibrary"));   // Aşama 8
             AudioListener.volume = PlayerPrefs.GetFloat("HS_SesGenel", 1f);
             Application.runInBackground = true;
             Application.targetFrameRate = 60;
@@ -298,6 +299,7 @@ namespace HikayeStudyo
         {
             if (yazmaAcik) YazmaKapat();
             bolum = b; kaydirma = 0f; mesaj = ""; sifirlaOnay = false;
+            kimlikForm = null; acikId = null;
             if (b == Bolum.Hikayelerim) HikayeleriYukle();
             if (b == Bolum.Projeler) VideolariYukle();
         }
@@ -462,6 +464,8 @@ namespace HikayeStudyo
             Baslik(ic, "Karakterlerim", "Hikâyende kullanabileceğin karakterler");
             if (Dugme(new Rect(ic.x, ic.y + 76, 190, 38), "3D karakterler (" + n3d + ")", karakterSekme == 0 ? Vurgu : new Color32(60, 66, 88, 255), 14)) { karakterSekme = 0; kaydirma = 0f; }
             if (Dugme(new Rect(ic.x + 200, ic.y + 76, 200, 38), "Çizgi karakterler (" + n2d + ")", karakterSekme == 1 ? Vurgu : new Color32(60, 66, 88, 255), 14)) { karakterSekme = 1; kaydirma = 0f; }
+            if (Dugme(new Rect(ic.x + 410, ic.y + 76, 190, 38), "Kimlik kartları", karakterSekme == 2 ? Vurgu : new Color32(60, 66, 88, 255), 14)) { karakterSekme = 2; kaydirma = 0f; kimlikForm = null; acikId = null; mesaj = ""; }
+            if (karakterSekme == 2) { KimlikCiz(new Rect(ic.x, ic.y + 126, ic.width, ic.height - 126)); return; }
             var alan = new Rect(ic.xMax - 280, ic.y + 76, 280, 38);
             Kutu(alan, Kart);
             var tf = new GUIStyle(YaziStil(15, TextAnchor.MiddleLeft, Yazi, false, false)) { padding = new RectOffset(12, 12, 0, 0) };

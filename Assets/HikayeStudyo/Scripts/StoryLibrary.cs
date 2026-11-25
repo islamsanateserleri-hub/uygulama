@@ -22,6 +22,7 @@ namespace HikayeStudyo
         public string voice = "Puck";
         [Tooltip("Ic ses baska bir sesle okunacaksa (or. Arda'nin yetiskin zihni: Orus)")]
         public string innerVoice = "";
+        [System.NonSerialized] public string konusmaTarzi;   // kimlik kartından gelir (varlığa yazılmaz)
         public Color subtitleColor = Color.white;
 
         [Header("Sahne")]
@@ -157,10 +158,18 @@ namespace HikayeStudyo
             return d.voice;
         }
 
+        // Satirin ses tonu: duygu + (varsa) karakterin kimlik kartindaki konusma tarzi
+        public string ToneFor(StoryItem it)
+        {
+            var d = FindCharacter(it.Character) ?? narrator;
+            string t = Util.ToneFor(it);
+            return string.IsNullOrEmpty(d.konusmaTarzi) ? t : t + ", " + d.konusmaTarzi;
+        }
+
         // Ses dosyasinin adi: ses + ton + metin ozetinden. Satir eklemek digerlerini bozmaz.
         public string ClipKey(StoryItem it)
         {
-            return Util.Hash(VoiceFor(it) + "|" + Util.ToneFor(it) + "|" + (string.IsNullOrEmpty(it.Speech) ? it.Text : it.Speech));
+            return Util.Hash(VoiceFor(it) + "|" + ToneFor(it) + "|" + (string.IsNullOrEmpty(it.Speech) ? it.Text : it.Speech));
         }
     }
 }
