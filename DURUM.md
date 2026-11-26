@@ -23,6 +23,30 @@ Kurulu uygulama (25 Kas) yeni içeriği İÇERMİYOR. `UygulamaDerle` Resources/
 ### 5) Sonra (yeni video çıkmadan yeni özellik isteme sözü var)
 Tek tuş "düz hikâye → sahne" (yapay zekâ ile) ve arayüzü sadeleştirme (kullanıcı: "çok karmaşık, bir insan yapamaz"), 4K, Unity açılış ekranını kapatma, karakter çeşitleri, HATALI listesi, "Sıfırıncı Yankı" kalanı.
 
+## !!! FİLM RAPORU: "Üçüncü Kişi" (26 Kas, 16:40) !!!
+**Durum: VİDEO HAZIR** (kayıt bitti, hikâye sonuna kadar oynadı): `C:\Users\Teknodc\Videos\Hikaye\ucuncu_kisi_20261126_163835\ucuncu_kisi.mp4` (322 MB). Ses -16,5 LUFS (hedef -14): biraz kısık; istersen bir kez daha "Videoya al" de, kendiliğinden yükselir.
+
+**Başarılanlar**
+- ~5 dk bilim kurgu/gerilim hikâyesi, 68 konuşma, gerçekçi 3D karakterler, kopya karakter, nefes buğusu ipucu, sonda ters köşe.
+- Ayrı yardımcı denetçi 3 kez inceledi, bulguları uygulandı; sessiz önizleme kareleri kontrol edildi.
+- Yeni: zindan, şato, mağara, mezarlık, orman mekânları; vampir; ejderha; derleme 0 hata.
+- Bütün sesler Gemini ile yalnız 2 istekte üretildi (yeni araç `Editor/TopluSes.cs`; günlük hak ~9/10).
+
+**Hatalar / aksayanlar**
+- İlk hikâye ("Sıfırıncı Yankı") beğenilmedi, yenisi yazıldı.
+- ElevenLabs: ilk deneme "meşgul"; sonra yalnız Mira üretildi (1570/10000 kredi) ama dosya indirilemedi (site engelliyor) → ElevenLabs sesi FİLMDE YOK.
+- Bir komut dosyası eski haliyle gitti, bölme adımı ikinci kez çalıştırıldı.
+
+**Kusurlar (dinleyerek/izleyerek kontrol et)**
+- Sesler HİÇ DİNLENMEDİ. Toplu sesten satırlara bölme tahminle yapıldı: bazı satırlarda kelime kayması/kesilme olabilir. En şüpheli: konuşma sırası 14, 16–43 arası (özellikle 23, 25, 26), 51, 56.
+- Video baştan sona İZLENMEDİ (klasöre erişimim yok).
+- El ve yüz hareketleri sınırlı; ağız açıkken diş görünmüyor; saçta gri lekeler olabilir; nefes buğusu küçük ekranda zor seçilebilir.
+- Süre ~5 dk: TikTok'ta uzun; izlenme düşebilir, 2 parçaya bölmek düşünülebilir.
+- Yanlış bir satır duyarsan: Unity > Hikaye > Stüdyo > `ucuncu_kisi` > o satırı "Yeniden seslendir" (yarın hak yenilenince), sonra "Videoya al". Ses dosyaları `Assets/Resources/Ses/ucuncu_kisi/NN.wav` (NN = 01–68).
+
+**Paylaşım:** ticari değil (kullanıcı kararı). Gemini sesi kullanıldı; "elevenlabs.io" yazmak GEREKMİYOR (ElevenLabs sesi kullanılmadı). Yapay zekâ içeriği olduğunu TikTok'ta işaretle.
+**Yapılmayan:** 4.2.0 Windows kurulumu derlenmedi; EXE'de bu film DENENMEDİ.
+
 ## 26 KASIM FİLM ÇALIŞMASI (15:20 sonrası)
 - Eklendi (derleme 0 hata, karelerde görüldü): `mekan3d: zindan, sato, magara, mezarlik, orman` (`Scripts/Mekan3D.Masal.cs`; ayrıca kopru, koridor, hava_kilidi belgelendi), `oyuncu: X = Vampir|Vampir_Kadin`, `nesne: ejderha[_kirmizi|_siyah|_mavi]` (`Scripts/Yaratik.cs`, kodla üretilir). `Kare Serisi` ayarı `HikayeKomut/kare_ayar.txt` ("aralık_sn en_çok_kare"). "Mekânlar" sayfasında kaydırma yüksekliği artık ölçülüyor (EDİTÖRDE/EXE'DE TIKLANARAK DENENMEDİ).
 - **Film "Üçüncü Kişi"** (`Resources/Hikayeler/ucuncu_kisi.txt`, 68 konuşma, tahmini ~4:50): sessiz önizlemede baştan sona kontrol edildi; ayrı bir alt ajan üç kez denetledi, bulguları uygulandı. Kadro `StoryLibrary` EkKadro: Deniz, Kerem, Kerem2 (kopya), KeremSes, Kayit.

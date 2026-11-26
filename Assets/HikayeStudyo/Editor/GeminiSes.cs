@@ -105,7 +105,7 @@ namespace HikayeStudyo
             return EditorPrefs.GetString(KotaGunKey, "") == KotaGunu() ? EditorPrefs.GetInt(KotaSayiKey, 0) : 0;
         }
 
-        static void KotaArtir()
+        public static void KotaArtir()
         {
             string g = KotaGunu();
             int n = EditorPrefs.GetString(KotaGunKey, "") == g ? EditorPrefs.GetInt(KotaSayiKey, 0) : 0;
