@@ -23,6 +23,12 @@ Kurulu uygulama (25 Kas) yeni içeriği İÇERMİYOR. `UygulamaDerle` Resources/
 ### 5) Sonra (yeni video çıkmadan yeni özellik isteme sözü var)
 Tek tuş "düz hikâye → sahne" (yapay zekâ ile) ve arayüzü sadeleştirme (kullanıcı: "çok karmaşık, bir insan yapamaz"), 4K, Unity açılış ekranını kapatma, karakter çeşitleri, HATALI listesi, "Sıfırıncı Yankı" kalanı.
 
+## !!! KULLANICI VİDEOYU İZLEDİ: BEĞENMEDİ (26 Kas) — PAYLAŞILMAYACAK !!!
+Şikâyet: altyazı ile konuşma uyumsuz; karakterler yerinde durup saçma hareket ediyor; yürüme/koşma yok; "rezalet, kolaya kaçmışsın".
+- Olası neden (dinlenmedi, doğrulanmadı): toplu ses cümlelere TAHMİNLE bölündü. Bu yöntemi bir daha kullanma; satır satır ses üret ya da zaman damgalı döküm ile doğrula.
+- Hikâyede yürüme/koşma sahnesi yok, duygu animasyonları yerinde ve abartılı: hareketleri sadeleştir, gerçek yer değiştirme ekle (önce desteklendiğini dene).
+- Süreç: önce 30-60 sn örnek yap, kullanıcıya göster, onay almadan tamamını kaydetme. Sesi/hareketi doğrulamadan "hazır" deme.
+
 ## !!! FİLM RAPORU: "Üçüncü Kişi" (26 Kas, 16:40) !!!
 **Durum: VİDEO HAZIR** (kayıt bitti, hikâye sonuna kadar oynadı): `C:\Users\Teknodc\Videos\Hikaye\ucuncu_kisi_20261126_163835\ucuncu_kisi.mp4` (322 MB). Ses -16,5 LUFS (hedef -14): biraz kısık; istersen bir kez daha "Videoya al" de, kendiliğinden yükselir.
 
