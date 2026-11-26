@@ -57,3 +57,62 @@ Kullanıcı şartı: videolar UYGULAMAMIZDAN, yapay zekâ üreticisi olmadan, bu
 Güçlü bilgisayar/ekran kartı alınacak mı, kiralanacak mı, yoksa A ile mi devam?
 ## İncelenmeyenler
 TikTok/YouTube videoları izlenemiyor. Unity HDRP, Blender işleme süreleri, ücretsiz ejderha/zırh seçenekleri ayrıntılı denenmedi; bilgisayarın işlemci/RAM modeli doğrulanmadı.
+
+---
+# 2. RAPOR (26 Kas 2026 akşam) — DONANIM KONTROLÜ ve KAPSAMLI ARAŞTIRMA
+
+## 1. Bilgisayar (okunarak doğrulandı: `Hikaye > Donanim Raporu`)
+| Parça | Durum |
+|---|---|
+| İşlemci | AMD Ryzen 5 5600GT (12 iş parçacığı) — İYİ |
+| Bellek | 64 GB — ÇOK İYİ |
+| Anakart | Gigabyte A520M K V2 — 1 adet PCIe 3.0 x16 yuvası BOŞ görünüyor: ekran kartı takılabilir |
+| Ekran kartı | YALNIZ işlemci içi Radeon. Ayrı kart yok. Işın izleme YOK. ("32 GB ekran belleği" paylaşılan RAM'dir) |
+| Disk C: | 45 GB boş — AZ (büyük motor ve modeller sığmaz) |
+
+**Sonuç:** Yeni bilgisayar GEREKMİYOR. Ekran kartı + disk alanı yeter. (Önceki "bu bilgisayarda mümkün değil" sözü kartsız hali içindir.)
+
+## 2. Donanım alışverişi
+- Ekran kartı: en az RTX 3060 **12 GB**; daha iyisi RTX 5060 Ti 16 GB ya da RTX 4070 sınıfı. NVIDIA: Unity HDRP ışın/yol izleme RTX ister.
+- ALMADAN ÖNCE: güç kaynağının wattı (genel bilgi: bu sınıf için ~550–650 W kaliteli) ve kasaya sığma kontrol edilmeli. Bilgisayarcıya sordur.
+- SSD: ek 1–2 TB (genel öneri).
+- TL fiyatı ÖĞRENİLEMEDİ (fiyat siteleri otomatik okumayı engelledi). Akakçe / itopya / incehesap'tan bak.
+
+## 3. Motor: Unity'de kalıp HDRP'ye geçmek (ÖNERİLEN)
+Unity belgesine göre YALNIZ HDRP'de: saç gölgelendirici, ten altı ışık (gerçekçi cilt), hacimli bulut/sis, yol izleme, ışın izleme. Alan derinliği ve VFX Graph ikisinde de var. Projemiz şu an URP.
+(Bir kısmı belgenin özetinden; geçmeden doğrula.) Seçenek 2: Unreal Engine 5 — görüntü kolay yükselir ama uygulama baştan yazılır.
+
+## 4. Gereken kod işleri (sıra ile)
+| # | İş | Nerede | Kart gerekir mi |
+|---|---|---|---|
+| 1 | Satır satır ses; altyazı süresi ses dosyasından; kayıt öncesi eşleşme denetimi | GeminiSes, StoryPlayer, KaraokeAltyazi | Hayır |
+| 2 | Plan yöneticisi: ~3 sn'de kesme, aşırı yakın/geniş/tepki/üstten/nesne planı | Yonetmen3D, yeni PlanListesi; komut `plan:` | Hayır |
+| 3 | Yürüme, koşma, hedefe gitme, dövüş; abartılı yerinde hareketleri kapatma | Sahne3D, Mixamo hareketleri | Hayır |
+| 4 | Kalabalık (kopyalanan figüran), diz çökme, kaçışma | yeni Kalabalik | Hayır (az sayıda) |
+| 5 | Parlayan damar/göz, ateş, duman, yıkım efektleri | emissive doku, VFX Graph/parçacık | Kısmen |
+| 6 | Gerçek ejderha modeli (iskeletli) + uçuş yolu; koddaki ejderha yerine | Yaratik, NesneKatalogu | Kısmen |
+| 7 | HDRP geçişi: malzemeler, ışık, cilt, saç, sis, gölgelendiriciler | tüm sahne kodu | EVET |
+| 8 | Yeni karakterler (MetaHuman ya da Character Creator), yüz ifadesi ve dudak eşleme | Karakter3DKurulum | EVET |
+| 9 | Yüksek kalite çevrim dışı kayıt (örnek sayısı, süper örnekleme) | StudyoKayit | EVET |
+| 10 | Müzik, ses efekti karışımı, ses düzeyi, renk | ffmpeg adımı | Hayır |
+Büyüklük: tahminen haftalar sürer; hiçbiri henüz yapılmadı.
+
+## 5. Yardımcı uygulamalar
+| Uygulama | İşe yarar | Ücret / koşul |
+|---|---|---|
+| Unity HDRP, Cinemachine, Timeline, VFX Graph | görüntü, kamera, efekt | Unity paketleri (proje kuralı: eklemek için KULLANICI ONAYI) |
+| MetaHuman Creator | gerçekçi insan | gelir 1M$ altı ücretsiz; Unity'de kullanılabilir |
+| Character Creator / iClone | gerçekçi karakter + animasyon | CC aylık ~8,30$, iClone ~16,90$ (yıllık, Oca 2026) |
+| iClone Personal | animasyon, RTX render | ücretsiz; yalnız kişisel/sosyal paylaşım; dışarı 30 aktarım sınırı |
+| Mixamo | yürüme, koşma, dövüş | Adobe hesabıyla ücretsiz |
+| Poly Haven | ışık, doku, model | CC0, serbest |
+| Fab | zırh, şato, ejderha | ücretsiz + ücretli (zırh paketleri 350–600$) |
+| Cascadeur | elle animasyon | ücretsiz sürüm FBX vermiyor → işimize yaramaz |
+| Blender | model düzeltme, ayrı render | ücretsiz (genel bilgi) |
+| DaVinci Resolve | kurgu, renk | ücretsiz sürümü var (genel bilgi) |
+
+## 6. Plan
+1. KART YOKKEN (hemen yapılabilir): işler 1, 2, 3, 4, 10 + parıltı efekti → 30 sn örnek → onay.
+2. KART + SSD gelince: 7, 8, 9, 6 → 30 sn örnek → onay → tam film.
+Kullanıcı yapacak: kart/SSD alımı, Epic/Adobe/Reallusion hesapları, ödemeler, paket onayı.
+**Dürüst sınır:** örnekteki "gerçek insan filmi" görünümünün birebir aynısı garanti değil; hedef iyi bir oyun sinematiği.
