@@ -74,6 +74,7 @@ namespace HikayeStudyo
         // Aşama 2: uygulama kimliği (pencere başlığı, simge, pencere boyutu). Exe Unity Editör'e bağlı değildir.
         static void UygulamaKimligi()
         {
+            PlayerSettings.bundleVersion = "4.1.0";   // yeni icerik eklendikce arttirin (kurulum dosyasi adi)
             PlayerSettings.companyName = "HikayeStudyosu";
             PlayerSettings.productName = "Hikâye Stüdyosu";
             PlayerSettings.defaultScreenWidth = 1280;

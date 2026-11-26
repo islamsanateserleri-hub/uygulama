@@ -6,7 +6,7 @@ Tek güncel kayıt dosyası. Her işlem, test sonucu ve hata buraya eklenir; kı
 ## >>> YENİ SOHBET BURADAN BAŞLA (26 Kas 2026, 03:30) <<<
 **Kullanıcı:** İngilizce bilmiyor; basit Türkçe yaz, düşünmeni/akıl yürütmeni de Türkçe yaz. Saat dilimi Europe/Istanbul. 03:27'de: "gereken bütün onayı veriyorum", uyuyor; soru sorma, kendi başına çalış, sabaha kısa yazılı özet bırak. 5 saatlik ve haftalık kullanım sınırı dar: tutumlu ol, sınır bitmeden bu dosyayı güncelle.
 **Son söz (03:25):** "10-15 efekt az olur, 100 tane efekt ekle; söz, yeni video çıkana kadar bir şey eklemeyeceğim. Kaldığın yerden devam et, indirdiklerimizi yükle, sonra test aşamasına geç."
-**SON ÇALIŞAN OTURUM:** 26 Kas 14:35 (07:00 görevinin sohbeti; kullanıcı 13:55'te klasör iznini verdi). ÇALIŞIYOR: 4. iş, Windows derlemesi. Çalışmaya başlayan her oturum buraya saatini yazsın ve güncellesin (iki oturum aynı anda Unity'yi sürmesin).
+**SON ÇALIŞAN OTURUM:** 26 Kas 15:15 (07:00 görevinin sohbeti). İŞİ BİTİRDİ, SERBEST: başka oturum Unity'yi kullanabilir. Çalışmaya başlayan her oturum buraya saatini yazsın ve güncellesin (iki oturum aynı anda Unity'yi sürmesin).
 **07:00 görevi:** 26 Kas 07:00'de YENİ bir sohbet açıp işe devam eden zamanlanmış görev kuruldu (klasör bağlı, otomatik onaylı; bilgisayar, Unity ve Claude uygulaması açık olmalı). Eski sohbete giden 07:00 hatırlatıcısı da AÇIK kaldı (kapatma izni verilmedi): 07:00'de ESKİ sohbet uyanırsa hiçbir işe dokunmaz, işi yalnız yeni görevin sohbeti yürütür.
 **GitHub:** gece yapılan kod ve bu dosya gönderildi (42fac34 ve sonrası).
 **Derleme:** 03:22:41 "0 hata". Unity açık ve köprüye yanıt veriyor.
@@ -18,18 +18,21 @@ Hepsi kodla üretilir; gerçek ses kaydı değildir. Adların tam listesi: Docs/
 Aşağıdaki envanterle `HikayeKomut/nesne_rapor.txt`, `hareket_rapor.txt`, `karakterler.json` karşılaştır. Astronot (donus 200) ve araba (donus 110) yönü son düzeltmeden sonra GÖZLE DOĞRULANMADI. Yeni hareket takma adları ve uzay arka planları için `Assets/Resources/Hikayeler/test_hersey.txt` var.
 ### 3) Test aşaması — YAPILDI (Editör)
 Baştan sona ~1 dk'lık yeni hikâye (yeni karakter, nesne, mekân, efekt, animasyon). Sessiz kareler; sonra `seslendir:` (Gemini anahtarı kullanıcının girdiği haliyle kayıtlıysa; günlük ~10 istek, boşa harcama; ANAHTAR YAZMA) ve `kaydet:`. Anahtar yoksa/kota dolduysa kullanıcıya yaz.
-### 4) Windows derlemesi + kurulum dosyası
+### 4) Windows derlemesi + kurulum dosyası — YAPILDI (kurulum KURULUP DENENMEDİ)
 Kurulu uygulama (25 Kas) yeni içeriği İÇERMİYOR. `UygulamaDerle` Resources/OyuncuListesi.asset'e tüm Hazir prefablarını yazar; NesneKatalogu nesneleri çeker. EXE birkaç GB olacak; Inno Setup >2,1 GB için DiskSpanning isteyebilir. Yeni kurulum dosyasını çalıştırmak kullanıcıya kalır.
 ### 5) Sonra (yeni video çıkmadan yeni özellik isteme sözü var)
 Tek tuş "düz hikâye → sahne" (yapay zekâ ile) ve arayüzü sadeleştirme (kullanıcı: "çok karmaşık, bir insan yapamaz"), 4K, Unity açılış ekranını kapatma, karakter çeşitleri, HATALI listesi, "Sıfırıncı Yankı" kalanı.
 
-## 26 KASIM ÖĞLEDEN SONRA (13:58–14:35)
+## 26 KASIM ÖĞLEDEN SONRA (13:58–15:15)
 - Not: 07:00 görevi klasör bağlı olmadan açıldı (Claude penceresi yoktu); kullanıcı 13:55'te yazıp izin verince devam edildi.
 - **1. iş TAMAM (Editör):** 98 yeni ses (`Scripts/ProcAudio.Ses.cs`) + 63 yeni görsel efekt (`Scripts/EfektKatmani.cs`, `vfx: ad [saniye|surekli]`, `vfx: yok`). Derleme 0 hata. `menu: Hikaye/Ses Testi` → 112 ses, 0 sorunlu (`HikayeKomut/ses_ornekleri.wav`); KULAKLA DİNLENMEDİ. 63 görselin hepsi karelerde görüldü (test_efekt100a–d). Yedek: `HikayeKomut/yedek/efekt_oncesi/`.
 - **2. iş TAMAM:** raporlar envanterle uyuyor (651 nesne, 51 uzay mekânı, NASA 256/256, 326 hareket, 115 karakter). Astronot ve araba karelerde göründü (astronot kolları iki yana açık duruyor; model pozu).
 - **3. iş TAMAM (Editör):** `test_buyuk` sessiz kareler + `seslendir` (7/7 ses; kota ~7/10) + `kaydet` → `Videos\Hikaye\test_buyuk_20261126_143015\test_buyuk.mp4` (34 MB, sona kadar oynadı, -10,1 LUFS). Video İZLENMEDİ/DİNLENMEDİ (klasöre erişim yok).
 - **HATALI (yeni):** Masal_Sovalye 3D'de kadraja çok yakın / başı alttan kesik; araba yol_gece'de kadraj dışında kalıyor; sandık karakterin arkasında gizleniyor; mekân değişiminde eski mekânın yağmuru ~1 sn görünüyor; `mekan3d: salon` yok (hazır: oda, ev, ...).
 - Test hikâyeleri `Resources/Hikayeler/test_efekt100a–d, test_buyuk` uygulamada listede görünür (köprü silemiyor).
+- **4. iş (14:37–15:06):** Windows derlemesi 4.1.0 `Succeeded, hata=0, uyari=9, 10817 MB`. `Exe Kayıt Testi` çıkış 0 → `Kayitlar/exe_test_buyuk.mp4` (1080x1920, 26,6 sn, sesli akış var); karelerde yeni karakter, nesne, efekt ve uzay arka planı göründü (kareler ilk EXE denemesinden; video baştan sona İZLENMEDİ/DİNLENMEDİ). Kurulum dosyası: `Build/Kurulum/HikayeStudyosu_Kurulum_4.1.0.exe` + `-1.bin` + `-2.bin` (toplam ~3,1 GB; ÜÇÜ AYNI KLASÖRDE durmalı). Kurulup DENENMEDİ; çalıştırmak kullanıcıya kalır (kurulu hali ~11 GB yer ister). `Installer/HikayeStudyosu.iss`: sürüm 4.1.0, lzma2/fast, DiskSpanning.
+- **EXE'de 3 konuşma sessiz — nedeni bulundu:** uygulamada Arda için `Fenrir` sesi seçili (satır 15, 24, 29); deneme sesleri Editörde `Puck` ile üretilmişti. Kod hatası görünmüyor; uygulamada "Eksik sesleri üret" ile tamamlanır (DENENMEDİ). Uyarı artık eksik satırı, sesi ve anahtarı yazıyor (`StoryPlayer.PreloadVoices`).
+- **HATALI (yeni):** EXE'de alan derinliği (bulanık arka plan) ve Panini gölgelendiricileri derlemeye girmiyor ("stripped from the build"); bu efektler uygulamada çalışmaz. Muhtemelen eskiden de vardı (doğrulanmadı).
 
 ## 26 KASIM GECE YAPILANLAR (02:42 sonrası; derleme 0 hata, sessiz Editör testi; sesli video ve EXE DENENMEDİ)
 - Rocketbox'ın 326 doğal hareketi bağlandı (`Kutuphane/RbAnim/f|m`, menü "Hikaye/Gercek Hareketleri Ekle"); 115 Gercek_* yeniden kuruldu; bacak açık duruş sorunu bununla giderildi. Türkçe takma adlar (alkis, sevin, kahkaha, telefon, esne, kapi_cal ...).

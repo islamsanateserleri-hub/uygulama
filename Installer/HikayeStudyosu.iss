@@ -4,7 +4,7 @@
 ; AppId DEĞİŞTİRİLMEMELİ: yeni sürümün eskisinin üzerine kurulmasını bu sağlar.
 
 #ifndef Surum
-  #define Surum "4.0.1"
+  #define Surum "4.1.0"
 #endif
 #define Ad "Hikâye Stüdyosu"
 #define Exe "HikayeStudyo.exe"
@@ -22,7 +22,10 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 OutputDir=..\Build\Kurulum
 OutputBaseFilename=HikayeStudyosu_Kurulum_{#Surum}
-Compression=lzma2
+; 26 Kas 2026: gercekci karakter ve nesnelerle paket ~11 GB oldu; hizli sikistirma ve parcali kurulum (exe + .bin ayni klasorde durmali)
+Compression=lzma2/fast
+DiskSpanning=yes
+DiskSliceSize=2100000000
 SolidCompression=yes
 WizardStyle=modern
 UninstallDisplayIcon={app}\{#Exe}

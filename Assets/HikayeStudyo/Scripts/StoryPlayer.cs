@@ -296,6 +296,7 @@ namespace HikayeStudyo
         {
             var byKey = new Dictionary<string, AudioClip>();
             int found = 0, total = 0;
+            var eksik = new System.Text.StringBuilder();
             foreach (var it in items)
             {
                 if (it.Type != ItemType.Dialogue) continue;
@@ -311,9 +312,10 @@ namespace HikayeStudyo
                     byKey[key] = clip;
                 }
                 if (clip != null) { voices[it] = clip; found++; }
+                else eksik.Append("\n  satir ").Append(it.Line).Append(" ses=").Append(library.VoiceFor(it)).Append(" anahtar=").Append(key);
             }
             if (found < total)
-                Debug.LogWarning("[Hikaye] " + (total - found) + "/" + total + " satırın sesi yok; süre metinden tahmin edilecek. (Hikaye > Stüdyo > Eksik sesleri üret)");
+                Debug.LogWarning("[Hikaye] " + (total - found) + "/" + total + " satırın sesi yok; süre metinden tahmin edilecek. (Hikaye > Stüdyo > Eksik sesleri üret)" + eksik);
         }
 
         float Level()
