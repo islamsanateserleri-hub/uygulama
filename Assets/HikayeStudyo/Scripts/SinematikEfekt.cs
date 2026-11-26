@@ -98,7 +98,7 @@ namespace HikayeStudyo
                     yield return Dondur(Mathf.Clamp(sn, 0.2f, 10f));
                     break;
                 case "gozyasi": YuzEfekti(yaslar, arg, it.Line, 6); break;
-                case "nefes": YuzEfekti(nefesler, arg, it.Line, 6); break;
+                case "nefes": YuzEfekti(nefesler, arg, it.Line, 9); break;
             }
         }
 
@@ -304,14 +304,15 @@ namespace HikayeStudyo
             for (int i = 0; i < y.parcalar.Count; i++)
             {
                 float gecen = Time.time - y.baslangic - i * 0.09f;
-                float t = Mathf.Repeat(gecen, 2.6f) / 1.5f;
+                float t = Mathf.Repeat(gecen, 2.1f) / 1.5f;
                 var img = y.parcalar[i];
                 Vector3 w = kaynak + ileri * ((0.02f + 0.1f * t) * boy) - Vector3.up * (0.03f * t * boy)
-                          + s.Cam.transform.right * ((((i % 3) - 1) * 0.015f + 0.04f) * t * boy);
+                          // buhar yuzun baktigi yana dogru suzulsun (yuzu kapatmasin, acikca secilsin)
+                          + s.Cam.transform.right * (((((i % 3) - 1) * 0.02f) + (Vector3.Dot(ileri, s.Cam.transform.right) >= 0.15f ? 0.07f : -0.07f)) * t * boy);
                 Vector2 p; float o;
                 if (gecen < 0f || t > 1f || !Izdusum(s, w, out p, out o)) { img.color = new Color(1, 1, 1, 0); continue; }
-                float cap = (0.018f + 0.055f * t) * boy * o;
-                Koy(img, p, cap, cap * 0.75f, new Color(0.95f, 0.97f, 1f, 0.34f * Mathf.Clamp01(t * 5f) * (1f - t)));
+                float cap = (0.06f + 0.17f * t) * boy * o;
+                Koy(img, p, cap, cap * 0.75f, new Color(0.95f, 0.97f, 1f, 0.85f * Mathf.Clamp01(t * 5f) * (1f - t * 0.85f)));
             }
         }
 

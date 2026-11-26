@@ -6,7 +6,7 @@ Tek güncel kayıt dosyası. Her işlem, test sonucu ve hata buraya eklenir; kı
 ## >>> YENİ SOHBET BURADAN BAŞLA (26 Kas 2026, 03:30) <<<
 **Kullanıcı:** İngilizce bilmiyor; basit Türkçe yaz, düşünmeni/akıl yürütmeni de Türkçe yaz. Saat dilimi Europe/Istanbul. 03:27'de: "gereken bütün onayı veriyorum", uyuyor; soru sorma, kendi başına çalış, sabaha kısa yazılı özet bırak. 5 saatlik ve haftalık kullanım sınırı dar: tutumlu ol, sınır bitmeden bu dosyayı güncelle.
 **Son söz (03:25):** "10-15 efekt az olur, 100 tane efekt ekle; söz, yeni video çıkana kadar bir şey eklemeyeceğim. Kaldığın yerden devam et, indirdiklerimizi yükle, sonra test aşamasına geç."
-**SON ÇALIŞAN OTURUM:** 26 Kas 15:15 (07:00 görevinin sohbeti). İŞİ BİTİRDİ, SERBEST: başka oturum Unity'yi kullanabilir. Çalışmaya başlayan her oturum buraya saatini yazsın ve güncellesin (iki oturum aynı anda Unity'yi sürmesin).
+**SON ÇALIŞAN OTURUM:** 26 Kas 15:20 (07:00 görevinin sohbeti). ÇALIŞIYOR: vampir/ejderha/mekân ve eksikler (kullanıcı bilgisayar başında değil, 'gereken her şeyi yap' dedi). Başka oturum Unity'yi sürmesin.
 **07:00 görevi:** 26 Kas 07:00'de YENİ bir sohbet açıp işe devam eden zamanlanmış görev kuruldu (klasör bağlı, otomatik onaylı; bilgisayar, Unity ve Claude uygulaması açık olmalı). Eski sohbete giden 07:00 hatırlatıcısı da AÇIK kaldı (kapatma izni verilmedi): 07:00'de ESKİ sohbet uyanırsa hiçbir işe dokunmaz, işi yalnız yeni görevin sohbeti yürütür.
 **GitHub:** gece yapılan kod ve bu dosya gönderildi (42fac34 ve sonrası).
 **Derleme:** 03:22:41 "0 hata". Unity açık ve köprüye yanıt veriyor.
@@ -22,6 +22,14 @@ Baştan sona ~1 dk'lık yeni hikâye (yeni karakter, nesne, mekân, efekt, anima
 Kurulu uygulama (25 Kas) yeni içeriği İÇERMİYOR. `UygulamaDerle` Resources/OyuncuListesi.asset'e tüm Hazir prefablarını yazar; NesneKatalogu nesneleri çeker. EXE birkaç GB olacak; Inno Setup >2,1 GB için DiskSpanning isteyebilir. Yeni kurulum dosyasını çalıştırmak kullanıcıya kalır.
 ### 5) Sonra (yeni video çıkmadan yeni özellik isteme sözü var)
 Tek tuş "düz hikâye → sahne" (yapay zekâ ile) ve arayüzü sadeleştirme (kullanıcı: "çok karmaşık, bir insan yapamaz"), 4K, Unity açılış ekranını kapatma, karakter çeşitleri, HATALI listesi, "Sıfırıncı Yankı" kalanı.
+
+## 26 KASIM FİLM ÇALIŞMASI (15:20 sonrası)
+- Eklendi (derleme 0 hata, karelerde görüldü): `mekan3d: zindan, sato, magara, mezarlik, orman` (`Scripts/Mekan3D.Masal.cs`; ayrıca kopru, koridor, hava_kilidi belgelendi), `oyuncu: X = Vampir|Vampir_Kadin`, `nesne: ejderha[_kirmizi|_siyah|_mavi]` (`Scripts/Yaratik.cs`, kodla üretilir). `Kare Serisi` ayarı `HikayeKomut/kare_ayar.txt` ("aralık_sn en_çok_kare"). "Mekânlar" sayfasında kaydırma yüksekliği artık ölçülüyor (EDİTÖRDE/EXE'DE TIKLANARAK DENENMEDİ).
+- **Film "Üçüncü Kişi"** (`Resources/Hikayeler/ucuncu_kisi.txt`, 68 konuşma, tahmini ~4:50): sessiz önizlemede baştan sona kontrol edildi; ayrı bir alt ajan üç kez denetledi, bulguları uygulandı. Kadro `StoryLibrary` EkKadro: Deniz, Kerem, Kerem2 (kopya), KeremSes, Kayit.
+- **SESLER YOK, VİDEO KAYDEDİLMEDİ.** ElevenLabs ilk denemede "ücretsiz üretim meşgul" dedi (kredi harcanmadı). Plan: eleven_v4; Ayaz `i4Vkimmf9IrZ2RdG16Rv` (Kerem), Esin `vevaMEPHZ5tHlFtS3YPm` (Deniz), Nergis `hALSUJsnqdqp1bY0quM2` (Mira); ses başına tek istek, sessizlikten böl, `Resources/Ses/ucuncu_kisi/NN.wav` (NN = konuşma sırası, 00'dan), sonra `kaydet: ucuncu_kisi`.
+- Windows sürümü 4.2.0'a çekildi; EXE sesler eklendikten SONRA derlenecek.
+- HATALI (küçük): vampirin soluk yüzü/kırmızı gözü uzaktan az seçiliyor; mezarlık `zaman: gece` verilmezse gündüz gökyüzlü; `vfx: vhs`/`geri:` ekranı siyah bırakıp karakterleri siliyor (filmde kullanma).
+- Deneme hikâyesi `test_masal` listede görünür (köprü silemiyor).
 
 ## 26 KASIM ÖĞLEDEN SONRA (13:58–15:15)
 - Not: 07:00 görevi klasör bağlı olmadan açıldı (Claude penceresi yoktu); kullanıcı 13:55'te yazıp izin verince devam edildi.

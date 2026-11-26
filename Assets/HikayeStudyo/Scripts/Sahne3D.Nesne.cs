@@ -53,7 +53,7 @@ namespace HikayeStudyo
             string ad; List<string> yerler;
             NesneAyir(arg, out ad, out yerler);
             var kat = NesneKatalogu.Al();
-            var n = kat != null ? kat.Bul(ad) : null;
+            var n = Yaratik.Ejderha(ad) ?? (kat != null ? kat.Bul(ad) : null);
             if (n == null || n.model == null) { Debug.LogWarning("[Hikaye] Nesne yok: " + ad); return; }
             NesneKoy(n, yerler);
         }
@@ -61,7 +61,7 @@ namespace HikayeStudyo
         void NesneSil(string ad)
         {
             var kat = NesneKatalogu.Al();
-            var n = kat != null ? kat.Bul(ad) : null;
+            var n = Yaratik.Ejderha(ad) ?? (kat != null ? kat.Bul(ad) : null);
             var on = (n != null ? n.id : ad) + "@";
             var silinecek = new List<string>();
             foreach (var kv in nesneler) if (kv.Key.StartsWith(on)) silinecek.Add(kv.Key);

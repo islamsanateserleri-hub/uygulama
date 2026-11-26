@@ -119,6 +119,7 @@ namespace HikayeStudyo
         static bool OyuncuVar(string ad, IList<string> oyuncular)
         {
             string n = Util.Norm(ad);
+            if (Yaratik.OyuncuAdi(n)) return true;
             if (n.Length == 0 || oyuncular == null) return false;
             foreach (var g in oyuncular) if (Util.Norm(g) == n) return true;
             foreach (var g in oyuncular) if (Util.Norm(g).EndsWith("_" + n)) return true;

@@ -334,6 +334,7 @@ namespace HikayeStudyo
         {
             string n = Util.Norm(ad);
             if (n.Length == 0) return false;
+            if (Yaratik.OyuncuAdi(n)) return true;
             foreach (var g in OyuncuAdlari()) { if (Util.Norm(g) == n) return true; }
             foreach (var g in OyuncuAdlari()) { if (Util.Norm(g).EndsWith("_" + n)) return true; }
             foreach (var g in OyuncuAdlari()) { if (Util.Norm(g).Contains(n)) return true; }

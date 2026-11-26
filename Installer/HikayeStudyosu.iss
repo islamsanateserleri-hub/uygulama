@@ -4,7 +4,7 @@
 ; AppId DEĞİŞTİRİLMEMELİ: yeni sürümün eskisinin üzerine kurulmasını bu sağlar.
 
 #ifndef Surum
-  #define Surum "4.1.0"
+  #define Surum "4.2.0"
 #endif
 #define Ad "Hikâye Stüdyosu"
 #define Exe "HikayeStudyo.exe"

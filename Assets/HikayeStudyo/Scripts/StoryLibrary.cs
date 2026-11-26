@@ -133,6 +133,12 @@ namespace HikayeStudyo
                     new CharacterDef { id = "Mira", voice = "Despina", bedensiz = true, subtitleColor = new Color(0.6f, 0.88f, 1f) },
                     new CharacterDef { id = "Selin", voice = "Autonoe", bedensiz = true, subtitleColor = new Color(1f, 0.66f, 0.3f) },
                     new CharacterDef { id = "Sinyal", voice = "Enceladus", bedensiz = true, subtitleColor = new Color(0.8f, 0.65f, 1f) },
+                    // "Üçüncü Kişi" kadrosu: kopya karakter ve karanlıktan gelen ses aynı altyazı rengini kullanır
+                    new CharacterDef { id = "Deniz", voice = "Autonoe", side = -1, subtitleColor = new Color(1f, 0.84f, 0.9f) },
+                    new CharacterDef { id = "Kerem", voice = "Algenib", side = 1, scale = 1.02f, subtitleColor = Color.white },
+                    new CharacterDef { id = "Kerem2", voice = "Algenib", side = 1, scale = 1.02f, subtitleColor = Color.white },
+                    new CharacterDef { id = "KeremSes", voice = "Algenib", bedensiz = true, subtitleColor = Color.white },
+                    new CharacterDef { id = "Kayit", voice = "Autonoe", bedensiz = true, subtitleColor = new Color(1f, 0.84f, 0.9f) },
                 };
                 return ekKadro;
             }

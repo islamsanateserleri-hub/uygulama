@@ -21,6 +21,7 @@ namespace HikayeStudyo
         Light mekanIsik;
         RenderTexture mekanResim;
         string mekanCizilen = "";
+        float mekanIcerik = 960f;   // son cizimde olculen sayfa yuksekligi
 
         static string MekanEtiket(string t)
         {
@@ -139,8 +140,7 @@ namespace HikayeStudyo
             float g = gorunum.width - 16;
             var kutuAdlari = new List<string>();
             if (kutuphane != null) foreach (var b in kutuphane.backgrounds) if (b != null) kutuAdlari.Add(b.id);
-            float icerik = 640 + mekanKayitli.Count * 44 + 90;
-            ListeBasla(gorunum, icerik);
+            ListeBasla(gorunum, mekanIcerik);
             float y = 0;
             y = MekanSecim(0, y, g, "Mekân", Mekan3D.TurAdlari, mekanForm.Tur, d => MekanDegistir("tur", d), 104);
             y = MekanRenk(0, y, g, "Duvar", "duvar");
@@ -202,6 +202,7 @@ namespace HikayeStudyo
                 y += 44;
             }
             Yazdir(new Rect(0, y + 4, g, 48), "Çizgi arka planlar (mekan:): " + string.Join(", ", kutuAdlari.ToArray()), 13, Sönük, TextAnchor.UpperLeft, false, true);
+            mekanIcerik = y + 60;   // mekan turu cogaldikca satir sayisi da artar
             ListeBitir(gorunum);
         }
 

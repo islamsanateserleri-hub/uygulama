@@ -1,0 +1,260 @@
+// UCUNCU KISI - 5 dakikalik bilim kurgu / korku / gizem filmi
+seri: Üçüncü Kişi
+baslik: Gemide iki kişiyiz
+etiket: bilimkurgu, korku, gizem
+oyuncu: Deniz = Gercek_SaglikKadin03
+oyuncu: Kerem = Gercek_SaglikErkek02
+oyuncu: Kerem2 = Gercek_SaglikErkek02
+altyazi: karaoke
+
+// ---- 1: KOPRU
+mekan: siyah
+muzik: pad
+kanca: Gemide iki kişiyiz. Sensör üç kişi sayıyor.
+mekan: uzay_europa
+efekt: uzay
+yazi: EUROPA · 212. GÜN
+bekle: 1
+gecis: karar
+mekan3d: kopru
+isik: soguk
+vinyet: normal
+gren: az
+yer: Deniz sol
+yer: Kerem sag
+kamera: genis
+efekt: alarm
+bekle: 0.5
+[Mira|normal|dis] Kaptan, uyanık olmanız iyi. Gemide üç kişi görüyorum.
+kamera: otomatik
+[Kerem|sasirmis|dis] Üç mü? Biz iki kişiyiz.
+[Mira|normal|dis] Ben de bunu söylüyorum.
+efekt: kalp
+istasyon: sinyal
+vfx: tarama 4
+[Mira|normal|dis] Üçüncü kişi karantina odasında.
+[Deniz|dusunceli|dis] Orada yalnızca dün çıkardığımız buz örnekleri var.
+[Deniz|normal|dis] Karantina mühürlü kalacak. Sabaha kadar kimse açmayacak.
+[Mira|normal|dis] Dün gece, saat üçü on iki geçe, o odadan bir ses kaydı geldi.
+[Kerem|korkmus|dis] Kimin sesi?
+[Mira|normal|dis] Kaptanın.
+efekt: davul
+tepki_ver: Deniz sasir
+bekle: 1.8
+kamera: otomatik
+efekt: bip
+vfx: karincalanma 6
+yazi: KAYIT · 03:12
+[Kayit|aglamakli|dis] Mira… kapıyı aç. İçeride kaldım. Çok üşüyorum.
+bekle: 1.2
+[Kerem|korkmus|dis] Deniz… bu senin sesin.
+[Deniz|dusunceli|dis] Kapıyı açtın mı, Mira?
+[Mira|normal|dis] Hayır. O saatte yatağınızda görünüyordunuz.
+[Deniz|normal|dis] İyi yapmışsın.
+bekle: 1.2
+efekt: gerilim
+[Mira|normal|dis] Dikkat. Karantina odasının yanındaki kapak açıldı.
+efekt: kapi_carpma
+istasyon: karart
+bekle: 1.2
+efekt: korku
+istasyon: yak
+[Kerem|korkmus|dis] Bir şey dışarı çıktı.
+bekle: 1
+
+// ---- 2: KORIDOR
+gecis: karar
+mekan3d: koridor
+isik: soguk
+yer: Deniz sol
+yer: Kerem sag
+kamera: genis
+efekt: adim
+bekle: 2.5
+kamera: otomatik
+[Deniz|fisilti|dis] Dinle. O şey sesimizi taklit edebiliyor.
+[Deniz|fisilti|dis] Ayrılırsak parola soracağız.
+[Kerem|fisilti|dis] Ne parolası?
+[Deniz|fisilti|dis] Annemin köpeğinin adı. Boncuk.
+yazi: PAROLA: BONCUK
+bekle: 0.5
+git: Kerem tablet
+bekle: 2
+efekt: bip
+[Kerem|dusunceli|dis] Biri tableti burada bırakmış. Son notu sen yazmışsın.
+[Deniz|normal|dis] Oku.
+yazi: SON NOT · 03:09
+[Kerem|korkmus|dis] “Dışarıda dolaşan bir ben görürsen, ona sakın inanma.”
+efekt: gerilim
+kamera: yakin
+bekle: 2
+[Deniz|normal|dis] Onu o şey yazmıştır. Bizi birbirimize düşürmek istiyor.
+kamera: otomatik
+[Kerem|uzgun|dis] Haklısın. Sana güveniyorum.
+bekle: 1
+git: Kerem sag
+efekt: tahta
+bekle: 0.8
+efekt: tahta
+bekle: 0.8
+istasyon: izler
+kamera: genis
+bekle: 2.5
+[Kerem|korkmus|dis] Yerde ıslak ayak izleri var. Çıplak ayak.
+efekt: carpma
+istasyon: karart
+bekle: 1
+gorunum: Kerem gizli
+cikar: Kerem
+istasyon: yak
+vfx: glitch 1.5
+efekt: hayalet
+bekle: 2
+kamera: otomatik
+[Deniz|korkmus|dis] Kerem?
+bekle: 1.5
+efekt: nefes
+bekle: 1
+[KeremSes|korkmus|dis] Deniz! Buradayım! Bacağım sıkıştı!
+[Deniz|fisilti|dis] Parola.
+bekle: 2
+efekt: kalp
+bekle: 1
+[KeremSes|normal|dis] Parola.
+efekt: davul
+kamera: yakin
+tepki_ver: Deniz kork
+bekle: 1.8
+[Deniz|korkmus|dis] Parolayı söyle!
+[KeremSes|normal|dis] Parolayı… söyle.
+efekt: kalp_hizli
+bekle: 2.5
+[KeremSes|mutlu|dis] Boncuk.
+efekt: korku
+vfx: sok 1.5
+bekle: 1.8
+[Deniz|korkmus|dis] Bizi dinliyormuş.
+kamera: otomatik
+efekt: siren
+vfx: kirmizi 5
+[Mira|normal|dis] Kaptan, artık dört kişi sayıyorum.
+[Mira|normal|dis] İki tane Kerem var. İkisi de hava kilidinde.
+[Deniz|kizgin|dis] Hangisi gerçek?
+[Mira|normal|dis] Ölçümlerim ikisini ayıramıyor.
+bekle: 1
+
+// ---- 3: HAVA KILIDI
+gecis: karar
+mekan3d: hava_kilidi
+isik: soguk
+gorunum: Kerem normal
+yer: Kerem sol
+yer: Kerem2 esik
+yer: Deniz orta
+nefes: Kerem
+kamera: genis
+efekt: gerilim
+bekle: 3
+kamera: otomatik
+[Kerem|korkmus|dis] Deniz, ondan uzak dur! O ben değilim!
+[Kerem2|korkmus|dis] Yalan söylüyor! Koridorda beni o bıraktı!
+kamera: yakin
+[Deniz|dusunceli|dis] Parola artık işe yaramaz. O da duydu.
+bekle: 1.5
+[Deniz|dusunceli|dis] İlk gün sana ne verdim?
+[Kerem|dusunceli|dis] Dedenin kırık saatini.
+[Kerem2|dusunceli|dis] Dedenin kırık saatini. 04:17’de durmuştu.
+efekt: tiktak
+[Deniz|aglamakli|dis] İkisi de her şeyi biliyor.
+bekle: 1.5
+kamera: otomatik
+[Mira|normal|dis] Kırk saniye sonra hava kilidi boşalacak.
+[Mira|normal|dis] Birini seçmelisiniz.
+efekt: geri_sayim
+yazi: 00:40
+bekle: 2.5
+kamera: yakin
+[Kerem|uzgun|dis] Deniz, bana bak. Sana hiç yalan söylemedim.
+bekle: 2
+[Kerem2|uzgun|dis] İki yıldır yanındayım. Beni tanıyorsun.
+efekt: kalp
+bekle: 2
+kamera: otomatik
+yazi: İÇ SICAKLIK: EKSİ 20 DERECE
+efekt: nefes
+bekle: 1
+kamera: yakin
+[Kerem|korkmus|dis] Deniz… çok soğuk. Titriyorum.
+bekle: 2.5
+[Deniz|dusunceli|dis] Burası eksi yirmi derece.
+[Deniz|dusunceli|dis] Burada nefes alan herkesin ağzından buhar çıkar.
+bekle: 1.5
+efekt: davul
+[Deniz|kizgin|dis] Senden buhar çıkmıyor.
+kamera: otomatik
+tepki_ver: Kerem2 sasir
+bekle: 2
+[Deniz|normal|dis] Mira. Dış kapıyı aç.
+[Kerem2|fisilti|dis] Senden de…
+kamera: genis
+kapi: ac
+efekt: ruzgar
+efekt: whoosh
+bekle: 1.8
+flas:
+vfx: hiz_cizgileri 2
+cikar: Kerem2 kapi
+bekle: 2
+kapi: kapat
+efekt: kapi_carpma
+muzik: yok
+bekle: 2.5
+
+// ---- 4: UCUNCU KISI
+kamera: yakin
+[Kerem|uzgun|dis] Bitti… değil mi?
+[Deniz|mutlu|dis] Bitti. Seni tanıyorum.
+bekle: 1.5
+muzik: pad
+[Kerem|dusunceli|dis] Giderken “senden de” dedi. Ne demek istedi?
+bekle: 1
+efekt: bip
+[Mira|normal|dis] Kaptan, biri dışarıda kaldı.
+[Mira|normal|dis] Ama hâlâ üç kişi sayıyorum.
+efekt: kalp
+bekle: 2
+vfx: karincalanma 6
+yazi: KARANTİNA ODASI
+[Kayit|aglamakli|dis] Kerem… yanındaki ben değilim. Beni buraya o kilitledi.
+efekt: davul
+bekle: 1.5
+kamera: otomatik
+tepki_ver: Kerem kork Deniz
+bekle: 2
+kamera: genis
+[Kerem|korkmus|dis] Deniz… senden de buhar çıkmıyor.
+bekle: 2.5
+efekt: kalp
+kamera: yakin
+[Deniz|normal|dis] Mira. Karantina odasının havasını boşalt.
+[Kerem|kizgin|dis] Hayır! Yapma!
+[Mira|normal|dis] Komut kaptandan geldi. Uygulanıyor.
+efekt: ruzgar
+vfx: glitch 2
+bekle: 2
+yazi: KİŞİ SAYISI: 2
+[Mira|normal|dis] Kişi sayısı iki, Kaptan. Her şey normal.
+efekt: kalp
+bekle: 2
+kamera: yakin
+[Deniz|normal|dis] Seni neden kurtardım sanıyorsun?
+[Deniz|fisilti|dis] Bu gemiyi Dünya'ya götürecek biri lazımdı.
+bekle: 1
+efekt: carpma
+mekan: siyah
+bekle: 1
+mekan: uzay_dunya
+efekt: gong
+yazi: ROTA: DÜNYA
+bekle: 3
+son: sert SON.

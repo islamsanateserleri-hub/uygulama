@@ -7,7 +7,7 @@ namespace HikayeStudyo
     // Yonetmen komutlarinin gecerli degerleri (StoryParser uyarilari ve Studyo dogrulamasi icin)
     public static class YonetmenTablo
     {
-        public static readonly string[] Mekanlar = { "oda", "ev", "mutfak", "yatak_odasi", "hastane", "sokak", "koy", "park", "araba", "kopru", "koridor", "hava_kilidi", "yok" };
+        public static readonly string[] Mekanlar = { "oda", "ev", "mutfak", "yatak_odasi", "hastane", "sokak", "koy", "park", "araba", "kopru", "koridor", "hava_kilidi", "zindan", "sato", "magara", "mezarlik", "orman", "yok" };
         public static readonly string[] Havalar = { "yagmur", "kar", "sis", "yok" };
         public static readonly string[] Zamanlar = { "sabah", "gun", "gun_batimi", "gece" };
         public static readonly string[] Atmosferler = { "huzun", "sicak_ani", "kabus", "normal" };
@@ -50,7 +50,7 @@ namespace HikayeStudyo
                         if (ilk == "yok" || ilk == "sil") return null;
                         string ad; System.Collections.Generic.List<string> yerler;
                         Sahne3D.NesneAyir(v, out ad, out yerler);
-                        if (kat.Bul(ad) != null) return null;
+                        if (Yaratik.EjderhaAdi(ad) || kat.Bul(ad) != null) return null;
                         var benzer = kat.Benzer(ad, 6);
                         return "'nesne: " + v + "' bulunamadı." + (benzer.Count > 0 ? " Benzer: " + string.Join(", ", benzer.ToArray()) + "." : "");
                     }

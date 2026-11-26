@@ -883,6 +883,7 @@ namespace HikayeStudyo
         {
             var n = Util.Norm(name);
             if (n.Length == 0) return null;
+            if (Yaratik.OyuncuAdi(n)) return Yaratik.Sablon(n, oyuncular);
             foreach (var g in oyuncular) if (g != null && Util.Norm(g.name) == n) return g;
             foreach (var g in oyuncular) if (g != null && Util.Norm(g.name).EndsWith("_" + n)) return g;
             foreach (var g in oyuncular) if (g != null && Util.Norm(g.name).Contains(n)) return g;

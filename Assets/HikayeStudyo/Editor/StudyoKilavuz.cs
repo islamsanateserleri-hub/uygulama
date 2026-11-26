@@ -313,7 +313,7 @@ Biçim: `komut: değer`. Aşağıdaki liste `StoryParser`'ın bildiği komutlard
 | `flas` | — | `flas:` | Beyaz parlama |
 | `gorsel` | `eller` / `yok` / kütüphane görseli | `gorsel: eller` | Tam ekran görsel. `eller` = kendi gözünden eller. `gorsel: yok` kapatır. |
 | `atmosfer` | `mum` `toz` `yagmur` `buyu` `gunes` `yok` (virgülle çoklu) | `atmosfer: mum, toz` | Ortam efekti; `yok` kapatır |
-| `mekan3d` | `oda` `ev` `mutfak` `yatak_odasi` `hastane` `sokak` `koy` `park` `araba` `yok` ya da kayıtlı ad; ayarlar: `duvar=` `zemin=` `vurgu=` `zaman=` `hava=` `isik=` | `mekan3d: mutfak duvar=mavi vurgu=kirmizi` | 3D mekân. Renkler: beyaz krem sari turuncu kirmizi bordo pembe mor mavi lacivert turkuaz yesil kahve ahsap gri siyah. Uygulamada Mekânlar sayfasında adla kaydedilen mekân `mekan3d: ad` ile kullanılır. `araba`: karakterler oturur (sürücü koltuğu ekranda solda; `yer: Ad surucu/yolcu/arka_sol/arka_sag`). Arabada yalnız `tepki_ver`, `tut`, `birak` hareketleri çalışır; mekân değişince hava sıfırlanır |
+| `mekan3d` | `oda` `ev` `mutfak` `yatak_odasi` `hastane` `sokak` `koy` `park` `araba` `kopru` `koridor` `hava_kilidi` (uzay istasyonu) `zindan` `sato` `magara` `mezarlik` `orman` `yok` ya da kayıtlı ad; ayarlar: `duvar=` `zemin=` `vurgu=` `zaman=` `hava=` `isik=` | `mekan3d: mutfak duvar=mavi vurgu=kirmizi` | 3D mekân. Renkler: beyaz krem sari turuncu kirmizi bordo pembe mor mavi lacivert turkuaz yesil kahve ahsap gri siyah. Uygulamada Mekânlar sayfasında adla kaydedilen mekân `mekan3d: ad` ile kullanılır. `araba`: karakterler oturur (sürücü koltuğu ekranda solda; `yer: Ad surucu/yolcu/arka_sol/arka_sag`). Arabada yalnız `tepki_ver`, `tut`, `birak` hareketleri çalışır; mekân değişince hava sıfırlanır |
 | `hava` | `yagmur` `kar` `sis` `yok` (virgülle çoklu) | `hava: yagmur, sis` | Yalnız 3D mekânda. İç mekânda yağmur/kar pencerenin dışında görünür, sis yalnız açık mekânda |
 | `gren` / `vinyet` | `yok` `az` `normal` `cok` | `gren: cok` | Film greni ve kenar karartma (2D ve 3D) |
 | `filtre` | `sicak` `soguk` `siyah_beyaz` `pembe` `yesil` `mavi` `yok` | `filtre: soguk` | Renk filtresi. `siyah_beyaz` yalnız 3D mekânda gerçek siyah beyaz olur |
@@ -335,7 +335,7 @@ Biçim: `komut: değer`. Aşağıdaki liste `StoryParser`'ın bildiği komutlard
 | `poz` | `Karakter poz` | `poz: Arda oturuyor` | `ayakta` `yatiyor` `oturuyor` |
 | `cikar` | karakter | `cikar: Anne` | Karakteri sahneden çıkarır |
 | `temizle` | — | `temizle:` | Bütün karakterleri çıkarır |
-| `oyuncu` | `Karakter = 3DModel` | `oyuncu: Arda = Timmy` | Karakteri 3D modelle oynatır; `oyuncu: Arda = yok` çizgi karaktere döner. Model adı `karakter_listele` çıktısındaki `oyuncular_3d` adıdır (kısa ad yeter: `Timmy`). Hikayenin tamamı için geçerlidir; dosyanın başına yaz. Renk/boy çeşidi: model adına üç haneli numara ekle (`oyuncu: Anne = VRM_Anne_005`); yeni model değil, aynı modelin çeşididir. |
+| `oyuncu` | `Karakter = 3DModel` | `oyuncu: Arda = Timmy` | Karakteri 3D modelle oynatır; `oyuncu: Arda = yok` çizgi karaktere döner. Model adı `karakter_listele` çıktısındaki `oyuncular_3d` adıdır (kısa ad yeter: `Timmy`). Hikayenin tamamı için geçerlidir; dosyanın başına yaz. Renk/boy çeşidi: model adına üç haneli numara ekle (`oyuncu: Anne = VRM_Anne_005`); yeni model değil, aynı modelin çeşididir. Kodla hazırlanan vampirler: `Vampir`, `Vampir_Kadin`. Ejderha bir karakter değil nesnedir: `nesne: ejderha` / `ejderha_kirmizi` / `ejderha_siyah` / `ejderha_mavi` (yer: `sol sag orta arka uzak gok`). Gece mezarlık için `zaman: gece` yaz. |
 
 ### Etkileşim ve bölüm sonu
 

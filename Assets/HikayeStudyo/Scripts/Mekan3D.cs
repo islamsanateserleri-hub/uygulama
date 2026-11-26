@@ -18,7 +18,7 @@ namespace HikayeStudyo
         class Nk { public Vector3 pos; public float yaw; }
         struct LampInfo { public Light isik; public float baz; public bool mum; }
 
-        static readonly string[] Turler = { "oda", "ev", "mutfak", "yatak_odasi", "hastane", "sokak", "koy", "park", "araba", "kopru", "koridor", "hava_kilidi" };
+        static readonly string[] Turler = { "oda", "ev", "mutfak", "yatak_odasi", "hastane", "sokak", "koy", "park", "araba", "kopru", "koridor", "hava_kilidi", "zindan", "sato", "magara", "mezarlik", "orman" };
         static Shader litShader;
         static readonly Dictionary<string, GameObject> propCache = new Dictionary<string, GameObject>();
 
@@ -68,6 +68,11 @@ namespace HikayeStudyo
                     case "kopru": m.KurKopru(); break;
                     case "koridor": m.KurKoridor(); break;
                     case "hava_kilidi": m.KurHavaKilidi(); break;
+                    case "zindan": m.KurZindan(); break;
+                    case "sato": m.KurSato(); break;
+                    case "magara": m.KurMagara(); break;
+                    case "mezarlik": m.KurMezarlik(); break;
+                    case "orman": m.KurOrman(); break;
                 }
             }
             catch (System.Exception e)
