@@ -159,6 +159,99 @@ namespace HikayeStudyo
             }
         }
 
+        // ---------- vfx: efektlerinin sekilleri ----------
+        // 4 alt ornekle kenar yumusatmali sekil; koordinatlar -1..1
+        static Sprite Sekil(string key, int boy, System.Func<float, float, bool> icinde)
+        {
+            return FromAlpha(key, boy, boy, (x, y) =>
+            {
+                float sum = 0;
+                for (int i = 0; i < 4; i++)
+                {
+                    float u = (x + (i % 2) * 0.5f - 0.25f) / boy * 2f - 1f;
+                    float v = (y + (i / 2) * 0.5f - 0.25f) / boy * 2f - 1f;
+                    if (icinde(u, v)) sum += 0.25f;
+                }
+                return sum;
+            }, Vector4.zero);
+        }
+
+        // Bes koseli yildiz
+        public static Sprite Star
+        {
+            get
+            {
+                return Sekil("star", 128, (u, v) =>
+                {
+                    float aci = Mathf.Atan2(u, v);
+                    const float dilim = 1.2566371f;                       // 72 derece
+                    float a = Mathf.Abs(Mathf.Repeat(aci + dilim / 2f, dilim) - dilim / 2f);   // en yakin uca aci
+                    float r = Len(u, v);
+                    float px = r * Mathf.Cos(a), py = r * Mathf.Sin(a);
+                    // uc (0.98, 0) ile ic kose (0.42 @ 36 derece) arasindaki kenar
+                    float ix = 0.42f * Mathf.Cos(dilim / 2f), iy = 0.42f * Mathf.Sin(dilim / 2f);
+                    return (ix - 0.98f) * py - iy * (px - 0.98f) >= 0f;
+                });
+            }
+        }
+
+        // Ici bos halka
+        public static Sprite Ring
+        {
+            get
+            {
+                return FromAlpha("ring", 256, 256, (x, y) => Mathf.Clamp01(9f - Mathf.Abs(Len(x - 128, y - 128) - 117f)), Vector4.zero);
+            }
+        }
+
+        // Yaprak / tac yapragi
+        public static Sprite Leaf
+        {
+            get { return Sekil("leaf", 96, (u, v) => Mathf.Abs(u) < 0.62f * (1f - v * v) && Mathf.Abs(u) > 0.03f * (v < 0.3f ? 1f : 0f)); }
+        }
+
+        // Su damlasi (sivri ucu yukarida)
+        public static Sprite Drop
+        {
+            get { return Sekil("drop", 96, (u, v) => Len(u, v + 0.35f) < 0.6f || (v > -0.05f && v < 0.95f && Mathf.Abs(u) < 0.52f * (0.95f - v))); }
+        }
+
+        // Muzik notasi
+        public static Sprite Note
+        {
+            get
+            {
+                return Sekil("note", 128, (u, v) =>
+                    Len((u + 0.25f) / 0.38f, (v + 0.6f) / 0.3f) < 1f ||
+                    (u > 0.03f && u < 0.14f && v > -0.62f && v < 0.85f) ||
+                    (u >= 0.14f && u < 0.6f && v < 0.85f - (u - 0.14f) * 0.7f && v > 0.55f - (u - 0.14f) * 1.2f));
+            }
+        }
+
+        // Dort uclu parilti
+        public static Sprite Spark
+        {
+            get
+            {
+                return FromAlpha("spark", 128, 128, (x, y) =>
+                {
+                    float u = Mathf.Abs(x - 64f) / 64f, v = Mathf.Abs(y - 64f) / 64f;
+                    float kol = Mathf.Max(Mathf.Clamp01(1f - u - v * 7f), Mathf.Clamp01(1f - v - u * 7f));
+                    float orta = Mathf.Clamp01(1f - Len(u, v) * 2.6f);
+                    return kol * 1.4f + orta;
+                }, Vector4.zero);
+            }
+        }
+
+        // Ortasi acik, disi dolu ortu (spot ve odak icin)
+        public static Sprite Hole
+        {
+            get
+            {
+                return FromAlpha("hole", 256, 256, (x, y) => Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.17f, 0.34f, Len(x - 128f, y - 128f) / 128f)), Vector4.zero);
+            }
+        }
+
         public static Texture2D Noise
         {
             get

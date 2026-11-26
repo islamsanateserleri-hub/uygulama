@@ -174,7 +174,7 @@ namespace HikayeStudyo
             foreach (var it in p.Items)
             {
                 if (it.Type == ItemType.Background || it.Type == ItemType.Music || it.Type == ItemType.Atmosphere ||
-                    it.Type == ItemType.Camera || it.Type == ItemType.Pose || it.Type == ItemType.Cast || SahneKomutu(it.Type))
+                    it.Type == ItemType.Camera || it.Type == ItemType.Pose || it.Type == ItemType.Cast || it.Type == ItemType.Vfx || SahneKomutu(it.Type))
                 { t += it.Type == ItemType.Background ? 0.3f : 0f; continue; }
                 any = true;
                 satir = it.Line;
@@ -228,8 +228,7 @@ namespace HikayeStudyo
     // Hikaye metnini kutuphaneye gore denetler; sorunlari satir, kod, mesaj ve "Bunu mu demek istediniz" onerisiyle verir.
     public static class StudyoDogrulama
     {
-        static readonly string[] HazirEfektler =
-            { "carpma", "korna", "geri", "whoosh", "gecis", "kapi", "buyu", "kalp", "tahta", "kase", "yagmur", "flas", "gok", "gokgurultusu" };
+        static readonly List<string> HazirEfektler = ProcAudio.Adlar;
 
         static readonly Dictionary<string, bool> komutOnbellek = new Dictionary<string, bool>();
         static string[] oyuncuAdlari;

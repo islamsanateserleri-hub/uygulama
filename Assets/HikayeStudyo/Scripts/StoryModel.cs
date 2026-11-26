@@ -10,6 +10,7 @@ namespace HikayeStudyo
         Dialogue, Background, Hook, Rewind, Title, Wait, Sfx, Remove, Clear,
         Camera, Atmosphere, Music, Pose, Headlights, Flash, Insert, End, Cast, Choice, Result,
         DevamKarti,   // devami: "devami gelecek bolumde" karti (Asama 15)
+        Vfx,          // vfx: gorsel efekt (EfektKatmani.cs)
         Direct   // yonetmen komutlari: mekan3d, yer, gir, cikar (kapi), figuran, atmosfer (huzun...), ani, zaman, gecis, sessizlik, isik
     }
 
@@ -261,7 +262,15 @@ namespace HikayeStudyo
 
         // vfx: gorsel efekt komutu (B4: efekt = yalniz ses efekti, vfx = gorsel efekt, gecis = yalniz sahne gecisi).
         // Mevcut efektlere eslenir: flas -> Flash, far -> Headlights, vhs/geri -> Rewind (eski flas:/far:/geri: aynen calisir).
-        public static readonly string[] VfxListesi = { "flas", "far", "vhs", "geri" };
+        // Digerleri EfektKatmani'na gider: vfx: <ad> [saniye|surekli], vfx: yok
+        public static readonly string[] VfxListesi = VfxHepsi();
+
+        static string[] VfxHepsi()
+        {
+            var l = new List<string> { "flas", "far", "vhs", "geri", "yok" };
+            l.AddRange(EfektKatmani.Adlar);
+            return l.ToArray();
+        }
 
         static bool IsDirectKey(string key)
         {
@@ -377,6 +386,13 @@ namespace HikayeStudyo
                             if (vk == "flas") item.Type = ItemType.Flash;
                             else if (vk == "far") item.Type = ItemType.Headlights;
                             else if (vk == "vhs" || vk == "geri") item.Type = ItemType.Rewind;
+                            else if (vk == "yok" || EfektKatmani.Var(vk))
+                            {
+                                item.Type = ItemType.Vfx;
+                                item.Arg = val;
+                                if (vk != "yok" && vt.Length > 0 && Util.Norm(vt) != "surekli" && Util.ParseFloat(vt, -1f) <= 0f)
+                                    r.Warnings.Add(lineNo + ". satır: 'vfx: " + val + "' süresi anlaşılmadı (saniye ya da surekli yazın).");
+                            }
                             else { r.Warnings.Add(lineNo + ". satır: 'vfx: " + val + "' bilinmiyor (" + string.Join(", ", VfxListesi) + ")."); continue; }
                         }
                         break;

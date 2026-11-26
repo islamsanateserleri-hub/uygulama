@@ -130,7 +130,7 @@ namespace HikayeStudyo
             Kaydet("geri", "geri: 1 saat önce", "Geri sarma (VHS) efekti ve yazısı");
             Kaydet("yazi", "yazi: Devamı 2. Bölümde...", "Üst-ortada büyük yazı");
             Kaydet("bekle", "bekle: 0.5", "Saniye bekler");
-            Kaydet("efekt", "efekt: kapi", "Ses efekti çalar");
+            Kaydet("efekt", "efekt: kapi", "Ses efekti çalar. Hazır sesler: " + string.Join(", ", ProcAudio.Adlar.ToArray()));
             Kaydet("cikar", "cikar: Anne", "Karakteri sahneden çıkarır");
             Kaydet("temizle", "temizle:", "Bütün karakterleri sahneden çıkarır");
             Kaydet("kamera", "kamera: yakin", "Kamera: otomatik (yönetmen), genis, orta, omuz, ters, iki, yakin; tek seferlik: tepki, yaklas, uzaklas, salla");
@@ -144,7 +144,7 @@ namespace HikayeStudyo
             Kaydet("oyuncu", "oyuncu: Arda = Timmy", "Karakteri 3D modelle oynatır (yok = çizgi karakter)");
             Kaydet("son", "son: yumusak Devamı yarın...", "Bölüm sonu: yumusak ya da sert");
             Kaydet("poz", "poz: Arda yatiyor", "Karakter pozu: ayakta, yatiyor, oturuyor");
-            Kaydet("vfx", "vfx: flas", "Görsel efekt: flas, far, vhs (geri ile aynı; vfx: vhs 1 saat önce)");
+            Kaydet("vfx", "vfx: kar 5", "Görsel efekt: vfx: ad [saniye|surekli]; vfx: yok kapatır; mekân değişince kapanır. Eskiler: flas, far, vhs (vfx: vhs 1 saat önce). Yeniler: " + string.Join(", ", EfektKatmani.Adlar));
             Kaydet("gecis", "gecis: karar", "Sahne geçişi: karar (siyah), capraz (çapraz geçiş), beyaz; 2D ve 3D sahnede");
             Kaydet("kapak", "kapak: 24", "Kapak karesi bu satırdan (ya da sonraki ilk konuşmadan) alınır; boş = sonraki konuşma");
             Kaydet("etiket", "etiket: aile, dram, duygusal", "Açıklamaya eklenecek hashtag'ler (# yazmak gerekmez)");

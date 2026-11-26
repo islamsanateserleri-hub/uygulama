@@ -18,8 +18,7 @@ namespace HikayeStudyo
 
     public static class HikayeDenetci
     {
-        static readonly string[] HazirEfektler =
-            { "carpma", "korna", "geri", "whoosh", "gecis", "kapi", "buyu", "kalp", "tahta", "kase", "yagmur", "flas", "gok", "gokgurultusu" };
+        static readonly List<string> HazirEfektler = ProcAudio.Adlar;
 
         public static int Uzaklik(string a, string b)
         {

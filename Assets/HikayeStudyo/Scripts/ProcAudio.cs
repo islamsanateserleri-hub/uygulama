@@ -4,7 +4,7 @@ using UnityEngine;
 namespace HikayeStudyo
 {
     // Ses temizleme (bosluk kirpma, seviye esitleme) ve hazir dosya yokken kodla uretilen efekt sesleri
-    public static class ProcAudio
+    public static partial class ProcAudio
     {
         const int Rate = 44100;
         static readonly Dictionary<string, AudioClip> cache = new Dictionary<string, AudioClip>();
@@ -131,7 +131,7 @@ namespace HikayeStudyo
                 case "buyu": case "kalp": case "tahta": case "kase": case "yagmur": case "flas": case "gok": case "gokgurultusu":
                     return true;
             }
-            return false;
+            return YeniVar(Util.Norm(id));
         }
 
         public static AudioClip Get(string id)
@@ -218,7 +218,7 @@ namespace HikayeStudyo
                 case "yagmur":
                     return Rain();
             }
-            return null;
+            return YeniSes(Util.Norm(id));
         }
 
         // Dongulu yagmur sesi

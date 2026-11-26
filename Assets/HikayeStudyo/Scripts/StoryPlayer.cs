@@ -62,6 +62,7 @@ namespace HikayeStudyo
         Image insertImg, insertShade, fade;
         Text subtitle, bigText;
         FxLayer fx;
+        EfektKatmani vfx;
         SinematikEfekt sinema;
         AudioSource voiceSrc, sfxSrc, ambSrc, rainSrc;
         string yazarAtmosfer = "";     // son 'atmosfer:' komutu
@@ -203,6 +204,7 @@ namespace HikayeStudyo
             insertRt.gameObject.SetActive(false);
 
             fx = FxLayer.Create(root);
+            vfx = EfektKatmani.Create(root, fx);
             sinema = SinematikEfekt.Kur(root, fx, () => s3d, PlaySfx);
 
             fade = Gfx.Img("Kararma", root, null, Color.black, Vector2.zero, Vector2.zero);
@@ -335,6 +337,7 @@ namespace HikayeStudyo
             Running = true;
             fade.color = Color.black;
             if (s3d != null) s3d.HavaSifirla();
+            vfx.Temizle();
             yield return new WaitForSeconds(0.35f);   // kayit baslasin diye kisa siyah
             bool faded = false;
 
@@ -347,6 +350,7 @@ namespace HikayeStudyo
                     switch (it.Type)
                     {
                         case ItemType.Background: yield return SetBackground(it.Arg); faded = true; break;
+                        case ItemType.Vfx: vfx.Calistir(it.Arg, true); break;
                         case ItemType.Pose:
                             {
                                 var d0 = library.FindCharacter(it.Character);
@@ -424,7 +428,7 @@ namespace HikayeStudyo
                             KameraHareket(it);
                             yield return s3d.HareketCo(it, false);
                         }
-                        else if (s3d != null) { if (Util.Norm(it.Character) == "mekan3d") sinema.MekanDegisti(); KameraHareket(it); yield return Yonetmen3D.Uygula(s3d, it); Cizgi3DKapat(it); }
+                        else if (s3d != null) { if (Util.Norm(it.Character) == "mekan3d") { sinema.MekanDegisti(); vfx.Temizle(); } KameraHareket(it); yield return Yonetmen3D.Uygula(s3d, it); Cizgi3DKapat(it); }
                         else if (Util.Norm(it.Character) == "gecis") yield return Gecis2D(it.Arg);   // 3D katman yoksa 2D gecis
                         else Debug.LogWarning("[Hikaye] " + it.Line + ". satır: '" + it.Character + ":' için 3D sahne yok (hikayede 3D karakter kadrosu gerekir).");
                         break;
@@ -445,6 +449,11 @@ namespace HikayeStudyo
                         break;
                     case ItemType.Flash:
                         fx.Flash(1f);
+                        break;
+                    case ItemType.Vfx:
+                        if (!faded) { yield return Fade(1f, 0f, 0.3f); faded = true; }
+                        vfx.Calistir(it.Arg);
+                        if (EfektKatmani.Sarsar(it.Arg.Split(' ')[0])) shake = 1.1f;
                         break;
                     case ItemType.Insert:
                         ShowInsert(it.Arg);
@@ -1248,6 +1257,7 @@ namespace HikayeStudyo
             if (fade.color.a < 0.99f) yield return Fade(fade.color.a, 1f, 0.25f);
             ClearChars();
             sinema.MekanDegisti();
+            vfx.Temizle();
             if (s3d != null) s3d.MekanKapat();
             ShowInsert("yok");
             yazarAtmosfer = "";
@@ -1478,7 +1488,9 @@ namespace HikayeStudyo
             sfxSrc.PlayOneShot(clip, sfxVolume);
             var n = Util.Norm(id);
             if (n == "carpma") { shake = 1.2f; fx.Flash(0.8f); }
-            if (n == "gok" || n == "gokgurultusu") fx.Flash(0.6f);
+            if (n == "gok" || n == "gokgurultusu" || n == "simsek") fx.Flash(0.6f);
+            if (n == "patlama") { shake = 1.2f; fx.Flash(0.5f); }
+            if (n == "deprem") shake = 2.2f;   // ~0,9 sn sarsinti
         }
 
         void SetMusic(string id)

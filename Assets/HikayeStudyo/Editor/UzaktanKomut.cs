@@ -396,6 +396,10 @@ namespace HikayeStudyo
             foreach (var e in StudyoDogrulama.EfektAdlari(lib)) ef.Add(HsJson.Q(e));
             sb.Append("  \"efektler\": ").Append(HsJson.Dizi(ef)).Append(",\n");
 
+            var vl = new List<string>();
+            foreach (var e in StoryParser.VfxListesi) vl.Add(HsJson.Q(e));
+            sb.Append("  \"vfx\": ").Append(HsJson.Dizi(vl)).Append(",\n");
+
             var mu = new List<string> { HsJson.Q("pad"), HsJson.Q("yok") };
             var gr = new List<string> { HsJson.Q("eller"), HsJson.Q("yok") };
             if (lib != null)
