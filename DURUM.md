@@ -7,7 +7,7 @@ Tek güncel kayıt dosyası. Her işlem, test sonucu ve hata buraya eklenir; kı
 **Kullanıcı:** İngilizce bilmiyor; basit Türkçe yaz, düşünmeni/akıl yürütmeni de Türkçe yaz. Saat dilimi Europe/Istanbul. 03:27'de: "gereken bütün onayı veriyorum", uyuyor; soru sorma, kendi başına çalış, sabaha kısa yazılı özet bırak. 5 saatlik ve haftalık kullanım sınırı dar: tutumlu ol, sınır bitmeden bu dosyayı güncelle.
 **Son söz (03:25):** "10-15 efekt az olur, 100 tane efekt ekle; söz, yeni video çıkana kadar bir şey eklemeyeceğim. Kaldığın yerden devam et, indirdiklerimizi yükle, sonra test aşamasına geç."
 **SON ÇALIŞAN OTURUM:** 26 Kas 03:35, eski sohbet devri yapıp BIRAKTI (serbest). Çalışmaya başlayan her oturum buraya saatini yazsın ve güncellesin (iki oturum aynı anda Unity'yi sürmesin).
-**07:00 görevi:** 26 Kas 07:00'de YENİ bir sohbet açıp işe devam eden zamanlanmış görev kuruldu (klasör bağlı, otomatik onaylı; bilgisayar, Unity ve Claude uygulaması açık olmalı). Eski sohbete giden 07:00 hatırlatıcısı kapatıldı.
+**07:00 görevi:** 26 Kas 07:00'de YENİ bir sohbet açıp işe devam eden zamanlanmış görev kuruldu (klasör bağlı, otomatik onaylı; bilgisayar, Unity ve Claude uygulaması açık olmalı). Eski sohbete giden 07:00 hatırlatıcısı da AÇIK kaldı (kapatma izni verilmedi): 07:00'de ESKİ sohbet uyanırsa hiçbir işe dokunmaz, işi yalnız yeni görevin sohbeti yürütür.
 **GitHub:** gece yapılan kod ve bu dosya gönderildi (42fac34 ve sonrası).
 **Derleme:** 03:22:41 "0 hata". Unity açık ve köprüye yanıt veriyor.
 
