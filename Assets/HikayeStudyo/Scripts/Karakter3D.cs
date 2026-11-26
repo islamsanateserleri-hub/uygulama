@@ -156,6 +156,28 @@ namespace HikayeStudyo
                 case "tepki": return "reacting";
                 case "konus2": return "talking";
                 case "serum": return "iv_pole_walking";
+                // gercekci karakterlerin kendi hareketleri
+                case "alkis": return "claphands";
+                case "sevin": case "tezahurat": return "cheer";
+                case "kahkaha": return "gestic_laugh";
+                case "omuz_silk": return "gestic_shrug";
+                case "dusunceli": return "gestic_thoughtful";
+                case "telefon": return "cell_phone";
+                case "ic": return "drink_drinking";
+                case "belge": return "documents_check";
+                case "kapi_cal": return "knock_door";
+                case "esne": return "idle_yawn";
+                case "gerin": return "idle_stretch_arms";
+                case "oksur": return "idle_cough";
+                case "sarhos": return "idle_drunk";
+                case "etrafa_bak": return "idle_look_around";
+                case "fotograf": return "take_picture";
+                case "semsiye": return "umbrella_idle";
+                case "kulaklik": return "headphones_idle";
+                case "sinirli": return "idle_angry";
+                case "gergin": return "idle_nervous";
+                case "gazete": return "newspaper_hand_idle";
+                case "masada_calis": return "work_table";
             }
             return n;
         }

@@ -126,6 +126,24 @@ namespace HikayeStudyo
             return ual;
         }
 
+        public const string RbAnimDir = "Assets/HikayeStudyo/Kutuphane/RbAnim";
+
+        // Rocketbox'in kendi dogal hareketleri (Hikaye/Gercek Hareketleri Ekle).
+        // Sira: ana adlilar (Idle_Loop...) + ortak kutuphane + digerleri; boylece "idle" yine Idle_Loop'u bulur.
+        static List<AnimationClip> RbListe(bool kadin, List<AnimationClip> ortak)
+        {
+            var ana = new List<AnimationClip>();
+            var diger = new List<AnimationClip>();
+            var d = RbAnimDir + (kadin ? "/f" : "/m");
+            if (Directory.Exists(d))
+                foreach (var p in Files(d, ".fbx"))
+                    foreach (var c in Clips(p)) (char.IsUpper(c.name[0]) ? ana : diger).Add(c);
+            var l = new List<AnimationClip>(ana);
+            l.AddRange(ortak);
+            l.AddRange(diger);
+            return l;
+        }
+
         // Yalnizca gercekci (Rocketbox) karakterleri kurar; ayni yola yazildigi icin prefab kimlikleri degismez
         public static int GercekKur(bool rebuild)
         {
@@ -435,7 +453,7 @@ namespace HikayeStudyo
                 an.applyRootMotion = false;
                 an.cullingMode = AnimatorCullingMode.AlwaysAnimate;
                 var k = go.AddComponent<Karakter3D>();
-                k.id = name; k.kategori = "Gercek"; k.clips = clips; k.startClip = "Idle_Loop";
+                k.id = name; k.kategori = "Gercek"; k.clips = RbListe(Path.GetFileName(klasor).Contains("Female"), clips); k.startClip = "Idle_Loop";
                 RocketboxMalzemeler(go, klasor, name);
                 PrefabUtility.SaveAsPrefabAsset(go, prefabPath);
                 return true;

@@ -368,6 +368,30 @@ namespace HikayeStudyo
                 }
             sb.Append(first ? "],\n" : "\n  ],\n");
 
+            var kat = NesneKatalogu.Al();
+            if (kat != null)
+            {
+                var gk = new List<string>();
+                foreach (var g in kat.gokler) if (g != null) gk.Add(HsJson.Q(g.id));
+                sb.Append("  \"uzayMekanlari\": ").Append(HsJson.Dizi(gk)).Append(",\n");
+                var gruplar = new SortedDictionary<string, List<string>>();
+                foreach (var n in kat.nesneler)
+                {
+                    if (n == null) continue;
+                    List<string> g;
+                    if (!gruplar.TryGetValue(n.kategori, out g)) gruplar[n.kategori] = g = new List<string>();
+                    g.Add(HsJson.Q(n.id));
+                }
+                sb.Append("  \"nesneler\": {");
+                bool ilk = true;
+                foreach (var kv in gruplar)
+                {
+                    sb.Append(ilk ? "\n    " : ",\n    ").Append(HsJson.Q(kv.Key)).Append(": ").Append(HsJson.Dizi(kv.Value));
+                    ilk = false;
+                }
+                sb.Append("\n  },\n");
+            }
+
             var ef = new List<string>();
             foreach (var e in StudyoDogrulama.EfektAdlari(lib)) ef.Add(HsJson.Q(e));
             sb.Append("  \"efektler\": ").Append(HsJson.Dizi(ef)).Append(",\n");

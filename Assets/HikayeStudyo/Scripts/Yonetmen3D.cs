@@ -40,6 +40,23 @@ namespace HikayeStudyo
                         string hata;
                         return MekanTarifi.Coz(v, out hata) != null ? null : "'mekan3d: " + v + "': " + hata;
                     }
+                case "nesne":
+                    {
+                        var kat = NesneKatalogu.Al();
+                        if (kat == null) return "'nesne:' için katalog yok. Unity'de Hikaye > Her Seyi Ekle çalıştır.";
+                        var p = v.Split(new[] { ' ' }, 2, System.StringSplitOptions.RemoveEmptyEntries);
+                        if (p.Length == 0) return "'nesne: ad [sol|sag|orta|on|arka|gok]' biçiminde yaz.";
+                        var ilk = Util.Norm(p[0]);
+                        if (ilk == "yok" || ilk == "sil") return null;
+                        string ad; System.Collections.Generic.List<string> yerler;
+                        Sahne3D.NesneAyir(v, out ad, out yerler);
+                        if (kat.Bul(ad) != null) return null;
+                        var benzer = kat.Benzer(ad, 6);
+                        return "'nesne: " + v + "' bulunamadı." + (benzer.Count > 0 ? " Benzer: " + string.Join(", ", benzer.ToArray()) + "." : "");
+                    }
+                case "animasyon":
+                    return v.Split(new[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries).Length >= 2
+                        ? null : "'animasyon: Karakter hareket' biçiminde yaz (örn. animasyon: Ayşe alkis).";
                 case "istasyon":
                     return Util.In(v, Mekan3D.IstasyonDurumlari) ? null : "'istasyon: " + v + "' bilinmiyor (" + string.Join(", ", Mekan3D.IstasyonDurumlari) + ").";
                 case "gorunum":
@@ -110,6 +127,8 @@ namespace HikayeStudyo
             switch (key)
             {
                 case "mekan3d": s.MekanKur(arg); break;
+                case "nesne": s.NesneKomutu(arg); break;
+                case "animasyon": Bol(arg, out id, out nokta); s.Animasyon(id, nokta); break;
                 case "hava": s.HavaAyarla(arg); break;
                 case "istasyon": if (s.Mekan != null) s.Mekan.IstasyonDurum(n); else Uyar(it.Line + ". satır: 'istasyon:' yalnız istasyon mekânlarında çalışır."); break;
                 case "gorunum": Bol(arg, out id, out nokta); s.Gorunum(id, nokta); break;
@@ -139,6 +158,7 @@ namespace HikayeStudyo
             switch (key)
             {
                 case "mekan3d": s.MekanKur(arg); break;
+                case "nesne": s.NesneKomutu(arg); break;
                 case "yer": { string kim, yeri; Bol(arg, out kim, out yeri); s.Yer(kim, yeri); } break;
                 case "hava": s.HavaAyarla(arg); break;
                 case "istasyon": if (s.Mekan != null && n != "izler") s.Mekan.IstasyonDurum(n); break;

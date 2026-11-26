@@ -1,0 +1,24 @@
+oyuncu: Anne = Gercek_Kadin01
+oyuncu: Arda = Gercek_ErkekCocuk01
+oyuncu: Baba = Masal_Sovalye
+mekan: oda_gunduz
+nesne: kopek sag
+[Anne|mutlu|dis] Bak Arda, kapıya kimin geldiğini görüyor musun?
+animasyon: Arda alkis
+[Anne|mutlu|dis] Bu köpek artık bizimle yaşayacak, ona iyi bak.
+nesne: yok
+mekan: yol_gece
+nesne: at sag
+[Baba|normal|dis] Ben uzak diyarlardan gelen yalnız bir şövalyeyim.
+nesne: araba arka sol
+[Arda|sasirmis|dis] Vay canına, hem at hem araba aynı yolda!
+mekan: uzay_mars
+nesne: astronot sag
+[Arda|sasirmis|dis] Anne bak, galiba şimdi Mars'a kadar geldik.
+animasyon: Anne el_salla
+[Anne|mutlu|dis] Dünyaya el sallıyorum, umarım bizi görüyorlardır.
+mekan: siyah
+nesne: kilic sol
+nesne: sandik sag
+nesne: gunes gok
+[Baba|normal|dis] Hazine ve kılıç burada, güneş de tepemizde parlıyor.

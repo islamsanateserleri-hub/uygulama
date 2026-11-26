@@ -43,7 +43,7 @@ namespace HikayeStudyo
                     if (k != null)
                     {
                         k.startClip = "";
-                        bool insan = k.kategori == "Erkek" || k.kategori == "Kadin" || k.kategori == "Mixamo" || k.kategori == "VRM" || k.kategori == "Gercek";
+                        bool insan = k.kategori == "Erkek" || k.kategori == "Kadin" || k.kategori == "Mixamo" || k.kategori == "VRM" || k.kategori == "Gercek" || k.kategori == "Masal";
                         var liste = insan ? insanHareketleri : digerHareketler;
                         string h = liste[(hareket + i) % liste.Length];
                         StartCoroutine(PlayNextFrame(k, h, liste));

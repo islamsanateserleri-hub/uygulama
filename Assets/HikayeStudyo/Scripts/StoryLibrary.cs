@@ -144,6 +144,9 @@ namespace HikayeStudyo
         {
             var k = Util.Norm(id);
             foreach (var b in backgrounds) if (b != null && Util.Norm(b.id) == k) return b;
+            var kat = NesneKatalogu.Al();     // uzay arka planlari
+            var gok = kat != null ? kat.GokBul(k) : null;
+            if (gok != null) return new BackgroundDef { id = k, sprite = gok };
             return null;
         }
 

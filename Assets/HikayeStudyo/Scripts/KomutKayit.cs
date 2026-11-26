@@ -111,6 +111,8 @@ namespace HikayeStudyo
             Kaydet("oylama", "oylama: Arda ne yapmalı?", "Sonraki 'secim:' kartının sorusu");
             Kaydet("mekan", "mekan: oda_gece", "Mekanı değiştirir, karakterleri temizler");
             Kaydet("mekan3d", "mekan3d: mutfak", "3D mekan: oda, ev, mutfak, yatak_odasi, hastane, sokak, koy, park, araba, kopru, koridor, hava_kilidi, yok ya da kaydedilen ad; renk ayarı: duvar= zemin= vurgu=");
+            Kaydet("nesne", "nesne: at sag", "Sahneye eşya/hayvan/yapı/gezegen koyar: ad + yer (sol, sag, orta, on, arka, uzak, gok). 'nesne: sil at' siler, 'nesne: yok' hepsini kaldırır. Adlar: mekan_listele > nesneler");
+            Kaydet("animasyon", "animasyon: Ayşe alkis", "Karaktere bir hareket yaptırır: alkis, sevin, kahkaha, omuz_silk, dusunceli, el_salla, dans, telefon, ic, belge, kapi_cal, esne, gerin, oksur, sarhos, etrafa_bak, fotograf, semsiye, kulaklik, sinirli, gergin, gazete (gerçekçi karakterlerde)");
             Kaydet("hava", "hava: yagmur", "3D mekanda hava: yagmur, kar, sis, yok (virgülle birlikte)");
             Kaydet("istasyon", "istasyon: sinyal", "İstasyon mekânında: sinyal, gurultu, kamera, mavi, mor, bozuk, kirag, izler, karart, yak");
             Kaydet("gorunum", "gorunum: Kopya golge", "3D karakterin rengi: tulum, golge, soguk, gizli, normal (birlikte yazılabilir)");

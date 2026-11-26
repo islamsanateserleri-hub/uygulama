@@ -383,29 +383,49 @@ namespace HikayeStudyo
             return sb.ToString();
         }
 
+        string yeniMetin = "";
+        float yeniKaydirma;
+
         void YeniHikayeCiz(Rect ic)
         {
-            Baslik(ic, "Yeni hikâye", "Hikâyene bir ad ver, ben boş bir şablon hazırlayayım.");
-            float y = ic.y + 90;
-            Yazdir(new Rect(ic.x, y, 300, 24), "Hikâye adı", 14, Sönük);
-            var alan = new Rect(ic.x, y + 26, 520, 44);
+            Baslik(ic, "Yeni hikâye", "Hikâyeni düz yazıyla anlat; sahnelere ben çeviririm. Yazı sınırı yok.");
+            float y = ic.y + 84;
+            float gen = Mathf.Min(ic.width, 980);
+            Yazdir(new Rect(ic.x, y, gen, 22), "Kısa ad (boş bırakabilirsin)", 14, Sönük);
+            var alan = new Rect(ic.x, y + 24, 420, 40);
             Kutu(alan, Kart);
             var ts = YaziStil(18, TextAnchor.MiddleLeft, Yazi, false, false);
             var tf = new GUIStyle(ts) { padding = new RectOffset(14, 14, 0, 0), clipping = TextClipping.Clip };
             tf.focused.textColor = Yazi; tf.hover.textColor = Yazi; tf.active.textColor = Yazi;
             yeniAd = GUI.TextField(alan, yeniAd, 40, tf);
-            string dosyaAdi = Sadelestir(yeniAd);
-            Yazdir(new Rect(ic.x, y + 76, 700, 22), dosyaAdi.Length == 0 ? "Dosya adı: (bir ad yaz)" : "Dosya adı: " + dosyaAdi + ".txt", 13, Sönük);
-            if (Dugme(new Rect(ic.x, y + 112, 200, 46), "Oluştur", Vurgu, 17, dosyaAdi.Length > 0)) YeniHikayeOlustur(dosyaAdi);
-            MesajCiz(new Rect(ic.x, y + 176, Mathf.Min(ic.width, 760), 56));
-            if (!string.IsNullOrEmpty(sonOlusturulan))
-            {
-                float by = y + 250;
-                if (Dugme(new Rect(ic.x, by, 240, 42), "Not Defteri'nde aç", new Color32(60, 66, 88, 255), 15)) Ac("notepad.exe", "\"" + sonOlusturulan + "\"");
-                if (Dugme(new Rect(ic.x + 256, by, 220, 42), "Hikâyelerim'e git", new Color32(60, 66, 88, 255), 15)) Git(Bolum.Hikayelerim);
-            }
-            Yazdir(new Rect(ic.x, ic.yMax - 60, ic.width, 50),
-                "Oluşturunca hikâye yazma ekranı açılır: menülerden seçerek ya da doğrudan komut yazarak hikâyeni yaz.", 13, Sönük, TextAnchor.UpperLeft, false, true);
+
+            Yazdir(new Rect(ic.x, y + 76, gen, 22), "Hikâyen (istediğin kadar uzun yaz)  —  " + yeniMetin.Length + " harf", 14, Sönük);
+            var kutu = new Rect(ic.x, y + 100, gen, Mathf.Max(160f, ic.yMax - (y + 100) - 118f));
+            Kutu(kutu, new Color32(14, 17, 25, 255));
+            var ma = new GUIStyle(YaziStil(17, TextAnchor.UpperLeft, Yazi, false, true));
+            ma.padding = new RectOffset(10, 10, 8, 8);
+            ma.focused.textColor = Yazi; ma.hover.textColor = Yazi; ma.active.textColor = Yazi;
+            ma.richText = false;
+            var gorunum = new Rect(kutu.x + 4, kutu.y + 4, kutu.width - 8, kutu.height - 8);
+            float metinGen = gorunum.width - 16f;
+            float icH = Mathf.Max(gorunum.height, ma.CalcHeight(new GUIContent(yeniMetin + " "), metinGen) + 24f);
+            ListeAl(ref yeniKaydirma, gorunum, icH);
+            yeniMetin = GUI.TextArea(new Rect(0, 0, metinGen, icH), yeniMetin, ma);   // uzunluk siniri yok
+            ListeVer(ref yeniKaydirma, gorunum);
+
+            float by = kutu.yMax + 12;
+            if (Dugme(new Rect(ic.x, by, 300, 46), yeniMetin.Trim().Length > 0 ? "Sahnelere çevir ve aç" : "Boş hikâye oluştur", Vurgu, 17, true))
+                YeniHikayeOlustur(YeniDosyaAdi());
+            MesajCiz(new Rect(ic.x, by + 54, gen, 50));
+        }
+
+        string YeniDosyaAdi()
+        {
+            string ad = Sadelestir(yeniAd);
+            if (ad.Length > 0) return ad;
+            int i = 1;
+            while (File.Exists(Path.Combine(HikayeKlasoru, "hikayem_" + i + ".txt"))) i++;
+            return "hikayem_" + i;
         }
 
         void YeniHikayeOlustur(string ad)
@@ -416,8 +436,14 @@ namespace HikayeStudyo
                 string yol = Path.Combine(HikayeKlasoru, ad + ".txt");
                 if (File.Exists(yol)) { mesaj = "Bu adda bir hikâye zaten var. Başka bir ad dene."; mesajHata = true; return; }
                 string sablon = "// " + ad + "\r\nkanca: Buraya ilk cümleni yaz.\r\n[Anlatici|normal|dis] Buraya anlatıcı metnini yaz.\r\nson: sert\r\n";
+                if (yeniMetin.Trim().Length > 0)
+                {
+                    string cevrilen = YardimciMotor.DuzMetniCevir(yeniMetin.Replace("\r\n", "\n").Replace("\r", "\n"),
+                        HikayeDenetci.KarakterAdlari(kutuphane), HikayeDenetci.MekanAdlari(kutuphane));
+                    sablon = "// " + ad + "\r\n" + cevrilen.Replace("\n", "\r\n") + "\r\nson: sert\r\n";
+                }
                 File.WriteAllText(yol, sablon, new UTF8Encoding(false));
-                sonOlusturulan = yol; yeniAd = "";
+                sonOlusturulan = yol; yeniAd = ""; yeniMetin = "";
                 mesaj = "Hikâye oluşturuldu: " + yol; mesajHata = false;
                 HikayeleriYukle();
                 foreach (var hh in hikayeler) if (!hh.yerlesik && hh.yol == yol) { YazmaAc(hh); break; }

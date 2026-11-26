@@ -116,6 +116,10 @@ namespace HikayeStudyo
             foreach (var b in lib.backgrounds) if (b != null && !string.IsNullOrEmpty(b.id)) m.Add("`" + b.id + "`");
             var sb = new StringBuilder();
             sb.AppendLine("**Mekanlar** (`mekan:` değeri): " + string.Join(" · ", m.ToArray()));
+            var kat = NesneKatalogu.Al();
+            if (kat != null)
+                sb.AppendLine("\n**Uzay mekânları ve nesneler:** " + kat.gokler.Count + " uzay arka planı, " + kat.nesneler.Count +
+                              " nesne (`nesne:` komutu). Güncel adlar için `mekan_listele`.");
             sb.AppendLine();
             var o = new List<string>();
             foreach (var n in StudyoDogrulama.OyuncuAdlari()) o.Add("`" + n + "`");

@@ -298,6 +298,8 @@ namespace HikayeStudyo
         {
             var l = new List<string>();
             if (lib != null) foreach (var b in lib.backgrounds) if (b != null && !string.IsNullOrEmpty(b.id)) l.Add(b.id);
+            var kat = NesneKatalogu.Al();
+            if (kat != null) foreach (var g in kat.gokler) if (g != null) l.Add(g.id);
             return l;
         }
 

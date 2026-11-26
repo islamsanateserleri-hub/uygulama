@@ -384,6 +384,7 @@ namespace HikayeStudyo
             HareketTemizle();
             foreach (var e in extras) if (e != null) Destroy(e);
             extras.Clear();
+            NesneTemizle();
             if (Yonetmen != null) Yonetmen.Sifirla();
         }
 
@@ -450,6 +451,7 @@ namespace HikayeStudyo
             if (tarif == null) { if (hata != null) Debug.LogWarning("[Hikaye] " + hata); return; }
             if (Mekan != null && Mekan.Oturmali) ArabadanKaldir();
             if (Mekan != null) MekanDegisiyor();
+            NesneTemizle();
             // hava mekana aittir; yeni mekana tasinmaz. Istisna: hemen once (konusma olmadan) yazilan 'hava:'
             if (!havaTaze) havaYagmur = havaKar = havaSis = false;
             havaTaze = false;
