@@ -23,6 +23,8 @@ Kurulu uygulama (25 Kas) yeni içeriği İÇERMİYOR. `UygulamaDerle` Resources/
 ### 5) Sonra (yeni video çıkmadan yeni özellik isteme sözü var)
 Tek tuş "düz hikâye → sahne" (yapay zekâ ile) ve arayüzü sadeleştirme (kullanıcı: "çok karmaşık, bir insan yapamaz"), 4K, Unity açılış ekranını kapatma, karakter çeşitleri, HATALI listesi, "Sıfırıncı Yankı" kalanı.
 
+## >>> YENİ VİDEO İŞİNDEN ÖNCE `Docs/VideoKalitesi.md` OKU (kullanıcının hedef tarzı, örnek video analizi) <<<
+
 ## !!! KULLANICI VİDEOYU İZLEDİ: BEĞENMEDİ (26 Kas) — PAYLAŞILMAYACAK !!!
 Şikâyet: altyazı ile konuşma uyumsuz; karakterler yerinde durup saçma hareket ediyor; yürüme/koşma yok; "rezalet, kolaya kaçmışsın".
 - Olası neden (dinlenmedi, doğrulanmadı): toplu ses cümlelere TAHMİNLE bölündü. Bu yöntemi bir daha kullanma; satır satır ses üret ya da zaman damgalı döküm ile doğrula.
