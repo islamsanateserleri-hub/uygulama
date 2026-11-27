@@ -11,13 +11,13 @@ Araştırma bitince de geliştirmeye KENDİLİĞİNDEN geçilmez; sonuçlar sunu
 Sıra: ÖĞREN → KAYDET → DOĞRULA → GENİŞLET → DENETLE → TAMAMLA → TEST ET → KARAR VER → EN SON GELİŞTİR.
 
 ## Durum (son güncelleme: 27 Kas 2026)
-**AŞAMA 1: Kurulum ve 1. dalga alt ajan araştırması.** Araştırma TAMAMLANMADI.
+**AŞAMA 1 bitti: kurulum + 1. dalga (6 ajan).** 2. dalga bekliyor (web arama hakkı için kullanıcının yeni mesajı gerekiyor). Araştırma TAMAMLANMADI.
 
 | Aşama | Durum |
 |---|---|
 | Mevcut proje incelemesi | yapıldı (TOPICS/00_mevcut_proje.md) |
 | Dosya sistemi | kuruldu |
-| 1. dalga (A01, A02, A03, A04, A07, A09) | başlıyor |
+| 1. dalga (A01, A02, A03, A04, A07, A09) | raporlar yazıldı (çapraz denetimden geçmedi; bazı alt konular eksik, Q-012) |
 | 2. dalga (A05, A06, A08, A10, A11, A12) | bekliyor |
 | Çapraz denetim + çelişkiler | bekliyor |
 | Test planı, 13 rapor | bekliyor |
@@ -53,7 +53,10 @@ Her ajanın görev tanımı ve raporu: `AGENTS/Axx_*.md`; kaynakları: `SOURCES/
 - `TOPICS/` konu notları · `EXPERIMENTS/` gerçek denemeler · `REPORTS/` 13 rapor
 
 ## Önemli kararlar
-Henüz teknik karar YOK (bkz. `04_DECISION_LOG.md`).
+Geliştirme kararı YOK. Yalnız düzeltme: HDRP önerisi geri çekildi (K-003).
+
+## Önemli kaynaklar
+Unity render hattı duyurusu (29 Eyl 2026): https://discussions.unity.com/t/the-path-to-a-single-render-pipeline-in-unity-7/1737908 · Hedef video analizi: `Docs/VideoKalitesi.md`. Dizin: `09_SOURCE_DATABASE.md`.
 
 ## Önceki araştırmalar (silinmedi)
 `Docs/VideoKalitesi.md`, `Docs/Kaynak_Arastirmasi.md`, `Docs/Asama16_Degerlendirme.md`. İçlerindeki bilgiler "ön araştırma"dır; yeniden doğrulanacak.

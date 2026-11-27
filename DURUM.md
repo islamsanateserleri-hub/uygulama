@@ -3,6 +3,10 @@
 Tek güncel kayıt dosyası. Her işlem, test sonucu ve hata buraya eklenir; kısa tut, eskiyi `_Arsiv/`ye taşı.
 26 Kas 03:30 öncesinin TAM günlüğü: `_Arsiv/DURUM_26Kas_0330_oncesi.md` (yalnız gerekirse bak).
 
+## !!! 27 KASIM: ÖNCE ARAŞTIRMA PROTOKOLÜ (kullanıcı talimatı) !!!
+Kullanıcı 32 sayfalık protokol verdi: **araştırma tamamlanana kadar kod/özellik geliştirme YOK**; bitince de geliştirme ayrı karar. Her oturum `HIKAYE_STUDYOSU_ARASTIRMA/00_MASTER_INDEX.md` ile başlar.
+Durum: 1. dalga (6 uzman ajan) bitti; 2. dalga (6 ajan) web arama hakkı için kullanıcının yeni mesajını bekliyor.
+
 ## >>> YENİ SOHBET BURADAN BAŞLA (26 Kas 2026, 03:30) <<<
 **Kullanıcı:** İngilizce bilmiyor; basit Türkçe yaz, düşünmeni/akıl yürütmeni de Türkçe yaz. Saat dilimi Europe/Istanbul. 03:27'de: "gereken bütün onayı veriyorum", uyuyor; soru sorma, kendi başına çalış, sabaha kısa yazılı özet bırak. 5 saatlik ve haftalık kullanım sınırı dar: tutumlu ol, sınır bitmeden bu dosyayı güncelle.
 **Son söz (03:25):** "10-15 efekt az olur, 100 tane efekt ekle; söz, yeni video çıkana kadar bir şey eklemeyeceğim. Kaldığın yerden devam et, indirdiklerimizi yükle, sonra test aşamasına geç."

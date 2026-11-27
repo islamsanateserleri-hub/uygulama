@@ -116,3 +116,6 @@ Büyüklük: tahminen haftalar sürer; hiçbiri henüz yapılmadı.
 2. KART + SSD gelince: 7, 8, 9, 6 → 30 sn örnek → onay → tam film.
 Kullanıcı yapacak: kart/SSD alımı, Epic/Adobe/Reallusion hesapları, ödemeler, paket onayı.
 **Dürüst sınır:** örnekteki "gerçek insan filmi" görünümünün birebir aynısı garanti değil; hedef iyi bir oyun sinematiği.
+
+---
+> **27 Kas 2026 DÜZELTME:** Yukarıdaki "HDRP'ye geç" önerisi GEÇERSİZ: Unity HDRP'yi Unity 7'de kaldırılacak olarak duyurdu. Güncel ve kanıtlı araştırma: `HIKAYE_STUDYOSU_ARASTIRMA/00_MASTER_INDEX.md`. Araştırma bitene kadar kod geliştirme yok (kullanıcı protokolü).
