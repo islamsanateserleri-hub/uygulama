@@ -13,8 +13,8 @@ Sinematik görüntü tek bir ayar değildir. Birlikte çalışması gereken katm
 5. **Karakter, ortam, efekt kalitesi** (tavanı bunlar belirler).
 
 ## 2. Bugün neden sinematik görünmüyor [KOD, TEST EDİLMEDİ]
-- 3D sahnede gölge yok, kamera HDR kapalı, tonemapping ve AO yok (A04 K1–K5; A09 K1–K2; X1 D4, X2 D12 doğruladı).
-- Mekânlar dokusuz küp/silindir/küre; metal ile ahşap aynı görünür (A05 M1–M2).
+- 3D sahnede gölge yok, kamera HDR kapalı, tonemapping yok (A04 K1–K5; A09 K1–K2; X1 D4, X2 D12 doğruladı). Ortam gölgelemesi (AO/SSAO) kodda açılmıyor; bu bir proje (renderer) ayarı olduğu ve URP ayarları depoda olmadığı için açık olup olmadığı **bilinmiyor** (Q-008).
+- Kodla kurulan 3D mekânlar dokusuz küp/silindir/küre (katalog eşyaları bu tespitin dışında); metal ile ahşap aynı görünür (A05 M1–M2).
 - Işık dünyaya sabit; plana göre değişmiyor, kenar ve göz ışığı yok (A04 K12).
 - Gerçek yakın plan yok: "yakın" planda baş kadrajın ~%22'si (bel planı gibi); bütün planlar yaklaşık 59–72 mm (A01 §S12; X1 D10).
 - Plan süresi neredeyse replik süresi kadar (A01 K3; A08 E1–E2).

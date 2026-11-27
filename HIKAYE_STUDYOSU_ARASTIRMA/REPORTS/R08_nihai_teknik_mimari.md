@@ -1,5 +1,7 @@
 # R08 — Nihai teknik mimari (ÖNERİ, sade anlatım)
 
+> **TESTSİZ TASLAK.** Yalnız teşhis aşaması (15 numaralı dosya Aşama 1; testler T0) bağlayıcı plandır ve o da kullanıcı onayıyla başlar. Sonrası T0 sonuçlarına göre yeniden yazılır. "URP'de kal" bir karar değil **varsayılan hipotezdir** (04: K-005).
+
 Tarih: 2026-11-27. **Test edilmedi.** Protokol bu raporu "araştırma ve testler sonucunda" ister; testler henüz yapılmadığı için bu bir **taslak öneridir**. Teknik ayrıntı: `../14_FINAL_ARCHITECTURE.md`.
 
 ## 1. Tek cümle
@@ -8,7 +10,7 @@ Mevcut uygulama atılmaz; Unity URP üzerinde, "önce her şeyi planla, sonra ç
 ## 2. Neden bu yol
 | Seçenek | Neden seçilmedi / seçildi |
 |---|---|
-| URP'de geliştirmek | kod korunur, bu bilgisayarda çalışır, Unity'nin ana yolu → **seçildi** |
+| URP'de geliştirmek | kod korunur, bu bilgisayarda çalışır, Unity'nin ana yolu → **varsayılan hipotez** |
 | HDRP | Unity kaldıracağını açıkladı [A04-S002] |
 | Unreal 5 | yeniden yazım, ekran kartı ve disk gerekir (A09, A10) |
 | Blender'a taşımak | bu bilgisayarda çok yavaş, büyük aktarım işi |

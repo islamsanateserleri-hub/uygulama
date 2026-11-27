@@ -2,7 +2,18 @@
 
 Tarih: 2026-11-27. Fiyatlar kaynaklardan aktarılmıştır, hızlı değişir. **Satın alma kararı yoktur.** Performans ve görüntü kalitesi satırlarının hepsi ÇIKARIM ve **TEST EDİLMEDİ**. Ana kaynak: A10; ek: A02, A03, A07, A12, `11_COST_DATABASE.md`.
 
-**Önemli:** Plan B ve C için güvenilir tek bir TL toplamı **verilemiyor** (güncel TL ekran kartı fiyatı alınamadı; SSD ve güç kaynağı TL fiyatı yok). Emek (geliştirme zamanı) ve elektrik hiçbir planda hesaplanmadı.
+**Önemli:** Aşağıdaki dolar toplamları yalnız göstergedir. Plan B ve C için güvenilir tek bir TL toplamı **verilemiyor** (güncel TL ekran kartı fiyatı alınamadı; SSD ve güç kaynağı TL fiyatı yok). Emek (geliştirme zamanı) ve elektrik hiçbir planda hesaplanmadı.
+
+## Gösterge toplamlar (ABD doları; teklif değildir)
+Yalnız araştırma dosyalarındaki fiyatlar toplandı. ABD fiyatıdır; Türkiye vergisi, kur, kargo yok. **Güç kaynağı fiyatı dosyalarda hiç yok ve toplamlara dahil değil.** Satın almadan önce satıcıdan güncel TL fiyatı istenmeli.
+
+| Plan | Parçalar (tarih, kaynak) | Gösterge toplam |
+|---|---|---|
+| B1 | 1 TB SSD ~144 $ (25 Eki 2026) [A10-S022] | **~144 $** |
+| B2 | SSD ~144 $ + RTX 3060 12 GB 350–460 $ (ikinci el en düşük / yeni üst; 26 Kas 2026) [A10-S016] | **~494–604 $** + güç kaynağı (gerekirse) |
+| C | 1 TB SSD ~144 $ + tek kart: RX 9060 XT 16 GB 620 $ (Eki) [A10-S014] · RTX 5060 Ti 16 GB 790–830 $ (Eki–11 Kas) [A10-S014][A10-S015] · RTX 5070 12 GB 900 $ (Eki) [A10-S014] | **~764–1.044 $** + güç kaynağı; 2 TB SSD fiyatı dosyalarda yok |
+
+C'ye isteğe bağlı yazılım eklenirse (CC5, MHBridge vb.; aşağıdaki tablo) toplam artar. Güven: düşük-orta (B/C sınıfı fiyat takibi; stok ve fiyat hızlı değişiyor).
 
 ## Plan A — Sıfır yatırım
 | Alan | İçerik |

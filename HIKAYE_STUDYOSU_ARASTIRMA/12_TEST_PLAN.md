@@ -2,6 +2,10 @@
 
 Tarih: 2026-11-27. **Durum: PLAN HAZIR, HİÇBİR TEST YAPILMADI.** Bu plandaki hiçbir sayı ölçüm sonucu değildir. Tek gerçek gözlem protokol öncesi D001 sessiz önizlemesidir (`13_TEST_RESULTS.md`).
 
+> **Unity koşulu uyarısı (K-004, Q-016):** netleşene ve kullanıcı karar verene kadar [SERBEST] testlerdeki "köprü komutu" yolu KULLANILMAZ. Unity işlemlerini kullanıcı menüden elle başlatır ya da onay verirse Unity CLI yolu kurulur (`AGENTS/D1_duzeltme_arastirmasi.md` §3). [SERBEST] işareti Unity koşulu açısından serbestlik anlamına gelmez.
+>
+> **Eklenen deneme (GÖRÜNÜM, Q-018) [KOD][İNDİRME olabilir][KULLANICI]:** aynı 10-20 sn'lik sahne üç görünümle (bugünkü; ışık/gölge iyileştirilmiş gerçekçi; VRoid + MToon + boyama tarzı mekân). Ölçüt: kullanıcının kör seçimi, kayıt süresi, tutarlılık. Yapılmadı.
+
 ## 0. Okuma anahtarı
 
 **Kanıt türü:** KOD = statik kod okuması (çalıştırılmadı) · KAYNAK = belge/yayın · ÇIKARIM = yorum ya da başlangıç değeri · TEST EDİLMEDİ.

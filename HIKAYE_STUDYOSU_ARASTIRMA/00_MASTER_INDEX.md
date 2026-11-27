@@ -10,18 +10,18 @@ Araştırma tamamlanana kadar: yeni özellik yok, kod değişikliği yok, HDRP g
 Araştırma bitince de geliştirmeye KENDİLİĞİNDEN geçilmez; sonuçlar sunulur, geçiş kullanıcının ayrı kararıdır.
 Sıra: ÖĞREN → KAYDET → DOĞRULA → GENİŞLET → DENETLE → TAMAMLA → TEST ET → KARAR VER → EN SON GELİŞTİR.
 
-## Durum (son güncelleme: 27 Kas 2026)
-**AŞAMA 2 bitti: 12 uzman raporu + takip.** Sırada çapraz denetim, test planı, 13 rapor, denetimler. Araştırma TAMAMLANMADI.
+## Durum (son güncelleme: 27 Kas 2026, denetim sonrası)
+**Raporlar, denetimler ve düzeltmeler yazıldı; araştırma TAMAMLANDI işaretlenmedi** (gerekçe: 16 §3).
 
 | Aşama | Durum |
 |---|---|
-| Mevcut proje incelemesi | yapıldı (TOPICS/00_mevcut_proje.md) |
-| Dosya sistemi | kuruldu |
-| 1. dalga (A01, A02, A03, A04, A07, A09) | raporlar yazıldı (çapraz denetimden geçmedi; bazı alt konular eksik, Q-012) |
-| 2. dalga (A05, A06, A08, A10, A11, A12) + takip (A00) | raporlar yazıldı |
-| Çapraz denetim + çelişkiler | bekliyor |
-| Test planı, 13 rapor | bekliyor |
-| Öz denetim (§16) + bağımsız denetçi (§17) | bekliyor |
+| Mevcut proje, dosya sistemi | yapıldı |
+| A01–A12 + A00 takip | raporlar yazıldı (bazı kısıtlar: 16 §1) |
+| Çapraz denetim (X1, X2), test planı, 13 rapor | yazıldı; testler koşulmadı |
+| Bağımsız denetçi (DEN), düzeltme araştırması (D1), öz denetim (16) | yapıldı |
+| Kalan | kullanıcı yanıtları (REPORTS/00); D1 §5 açık konuları; düzeltmelerin yeniden denetimi; testler (onayla) |
+
+**UYARI:** Q-016 / K-004: Unity'ye dosya köprüsüyle komut gönderme.
 
 Ayrıntılı ilerleme: `02_RESEARCH_PROGRESS.md`.
 
@@ -42,7 +42,8 @@ Her ajanın görev tanımı ve raporu: `AGENTS/Axx_*.md`; kaynakları: `SOURCES/
 | A10 | Donanım ve ekonomik optimizasyon |
 | A11 | Uluslararası teknoloji ve gelecek |
 | A12 | Lisans, ticari kullanım, risk denetçisi |
-| DEN | Bağımsız denetçi (en sonda) |
+| DEN | Bağımsız denetçi |
+| D1 | Denetim sonrası düzeltme araştırması |
 
 ## Dosyalar
 - `01_MASTER_RESEARCH_PLAN.md` — kapsam haritası, öncelikler, ajan kuralları
@@ -53,7 +54,7 @@ Her ajanın görev tanımı ve raporu: `AGENTS/Axx_*.md`; kaynakları: `SOURCES/
 - `TOPICS/` konu notları · `EXPERIMENTS/` gerçek denemeler · `REPORTS/` 13 rapor
 
 ## Önemli kararlar
-Geliştirme kararı YOK. Yalnız düzeltme: HDRP önerisi geri çekildi (K-003).
+Uygulanan geliştirme kararı YOK. HDRP önerisi geri çekildi (K-003); köprü kullanımı durduruldu (K-004); K-005..K-016 yalnız ÖNERİ.
 
 ## Önemli kaynaklar
 Unity render hattı duyurusu (29 Eyl 2026): https://discussions.unity.com/t/the-path-to-a-single-render-pipeline-in-unity-7/1737908 · Hedef video analizi: `Docs/VideoKalitesi.md`. Dizin: `09_SOURCE_DATABASE.md`.

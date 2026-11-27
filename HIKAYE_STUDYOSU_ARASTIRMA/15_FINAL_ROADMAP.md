@@ -1,5 +1,7 @@
 # 15 YOL HARİTASI (ÖNERİ)
 
+> **TESTSİZ TASLAK.** Yalnız teşhis aşaması (15 numaralı dosya Aşama 1; testler T0) bağlayıcı plandır ve o da kullanıcı onayıyla başlar. Sonrası T0 sonuçlarına göre yeniden yazılır. "URP'de kal" bir karar değil **varsayılan hipotezdir** (04: K-005).
+
 Tarih: 2026-11-27. **Durum: ÖNERİ. Test edilmedi. Hiçbir aşama kendiliğinden başlamaz; geliştirmeye geçiş kullanıcının ayrı kararıdır.**
 Süre tahmini verilmiyor: ajanlardaki süreler ölçümsüz tahmindi. Her aşamanın sonunda kullanıcı sesli ve hareketli örneği izleyip onaylar.
 

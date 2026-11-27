@@ -1,12 +1,14 @@
 # R13 — Nihai karar (ÖNERİ)
 
-Tarih: 2026-11-27. **Hiçbir deneysel test yapılmadı.** Bu yüzden protokolün istediği "kesin öneri", bugün **kanıta dayalı ama testle doğrulanmamış** bir yön önerisidir. Öz denetim ve bağımsız denetçi henüz yapılmadı; bu karar onlardan sonra değişebilir.
+> **TESTSİZ TASLAK.** Yalnız teşhis aşaması (15 numaralı dosya Aşama 1; testler T0) bağlayıcı plandır ve o da kullanıcı onayıyla başlar. Sonrası T0 sonuçlarına göre yeniden yazılır. "URP'de kal" bir karar değil **varsayılan hipotezdir** (04: K-005).
+
+Tarih: 2026-11-27. **Hiçbir deneysel test yapılmadı.** Bu yüzden protokolün istediği "kesin öneri", bugün **kanıta dayalı ama testle doğrulanmamış** bir yön önerisidir. Bağımsız denetçi raporu hazır (`../AGENTS/DEN_bagimsiz_denetci.md`) ve araştırmayı tamamlanmış saymadı; öz denetim için `../16_RESEARCH_AUDIT.md`'ye bakın. Bu öneri değişebilir.
 
 ## 1. Soru
 En yüksek uygulanabilir sinematik kalite, en düşük sürdürülebilir maliyetle nasıl elde edilir?
 
 ## 2. Öneri
-1. **Unity URP'de kal.** HDRP'ye geçme (kaldırılacak [A04-S002]); şimdi Unreal/Blender'a taşıma (A09, A10).
+1. **Unity URP'de kal (varsayılan hipotez; test edilmedi).** HDRP'ye geçme (kaldırılacak [A04-S002]); şimdi Unreal/Blender'a taşıma (A09, A10).
 2. **Önce kusurları düzelt, sonra güzelleştir:** hareket ve ses/altyazı → yüz → gölge/ışık → kamera/kurgu → mekân/efekt → büyük sahneler.
 3. **Sıfır yatırımla başla (Plan A)** ve ölç. İlk gerekirse disk; ekran kartı ancak ölçüm ve güç kaynağı/kasa kontrolünden sonra.
 4. **Varlıklarda MIT/CC0 çekirdeği** (Rocketbox, UAL, Poly Haven, ambientCG; lisans kaydıyla); dağıtım yapılacaksa Mixamo ve mağaza varlıkları çıkarılır.
@@ -47,12 +49,12 @@ Gerekçe:
 | Kaynak kaydı, çelişki ve risk kaydı | yapıldı; açık çelişkiler var |
 | Test planı, mimari ve yol haritası önerisi, kalıcı hafıza | hazır |
 | Araştırma dosyalarının güncelliği | index/ilerleme dosyaları güncellenmeli |
-| Araştırma denetimi (§16) | **yapılmadı** |
-| Bağımsız denetçi (§17) | **yapılmadı** |
+| Araştırma denetimi (§16) | durumu için `16_RESEARCH_AUDIT.md` |
+| Bağımsız denetçi (§17) | yapıldı (`AGENTS/DEN_bagimsiz_denetci.md`); bulduğu eksiklerin bir kısmı açık |
 | Geçiş gerekçesi | bu bölüm |
 
 **Ön koşullar (sırayla):**
-1. Öz denetim ve bağımsız denetçi; bulunan eksiklerin kapatılması.
+1. Öz denetim; bağımsız denetçinin bulduğu eksiklerin kapatılması; Unity koşulu için kullanıcı kararı (Q-016).
 2. Kullanıcının soruları yanıtlaması (00_KULLANICI_OZETI).
 3. Kullanıcının "ayrı kopya projede teşhis ve prototip başlasın" demesi.
 4. Disk envanteri ve yedek.
@@ -63,3 +65,4 @@ Gerekçe:
 
 ## 7. Bilinen eksikler
 Hiç performans ölçümü yok · Türkçe ses/hizalama kalitesi ölçülmedi · MetaHuman kütüphane dağıtımı belirsiz (Q-011) · güncel TL fiyatları yok · Unity koşullarındaki yapay zekâ ajanı maddesi için hukuki netlik yok (Q-016) · karakter görünüm sıralaması görüntü karşılaştırmasına dayanmıyor.
+UE5 hangi koşulda yeniden açılır: `04_DECISION_LOG.md` K-006. Görünüm seçenekleri (stilize, 2,5D, hibrit): `AGENTS/D1_duzeltme_arastirmasi.md` §2; test yok.

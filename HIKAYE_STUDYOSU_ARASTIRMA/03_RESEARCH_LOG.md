@@ -27,3 +27,9 @@
 - Kullanıcı kendi araştırmasını gönderdi (K01).
 - Başlıca: örnek videodaki fotogerçek görünüm otomatik/ucuz 3D ile bugün büyük olasılıkla çıkmaz (A11, çıkarım, güven orta); EXE bu hâliyle dağıtılmamalı (A12); Netflix TR altyazı sınırları (A00).
 - Unity §2.5 maddesi ayrıca okundu (Q-016).
+
+## 2026-11-27 — Oturum 3: rapor, denetim, düzeltme
+- Çapraz denetim (X1, X2), test planı, 13 rapor, mimari ve yol haritası taslağı yazıldı.
+- Bağımsız denetçi: tamamlanmadı. Ana bulgu: Unity ana kullanım koşulları ajan erişimini sınırlıyor (C-030, K-004).
+- D1: görünüm karşılaştırması, Unity CLI yolu, iClone/FK/kompozit/kamera (34 arama). Test yok, kod değişikliği yok.
+- Öz denetim 16'ya yazıldı. Toplam kaynak kaydı 562.

@@ -29,7 +29,7 @@ Tarih: 2026-11-27. **Hiçbir teknoloji denenmedi.** Kaynak numaraları `SOURCES/
 - Algı çalışmaları: üst yüz hareketi önemli [A02-S051]; gerçekçi görünümde kötü hareket daha ürkütücü [A02-S052].
 
 ## 4. Hareket
-- Mixamo: ücretsiz, ham dosya dağıtımı yasak [A03-S015][A03-S016].
+- Mixamo: ücretsiz ve telifsiz (resmî SSS, A sınıfı, 2021) [A03-S015]. "Ham dosya dağıtılamaz" ifadesi resmî SSS sayfasında geçmiyor; Adobe topluluk SSS'sine dayanıyor (B sınıfı) [A03-S016]. Adobe'nin asıl kullanım koşulları okunmadı.
 - CC0 paketler (UAL 1–2) [A03-S018][A03-S019]; CMU, 100STYLE (CC BY 4.0).
 - Videodan hareket: Rokoko, QuickMagic (bulut, küçük kota; çıktı hakkı belirsiz); FreeMoCap (AGPL); GVHMR ve SMPL tabanlılar ticari değil [A03-S028][A03-S029].
 - Metinden harekete: Kimodo, HY-Motion güçlü NVIDIA ister; HY-Motion bölge ve çıktı kısıtlı [A03-S034][A12-S041].
@@ -69,7 +69,7 @@ Sonuç [ÇIKARIM]: büyük dil modeli zorunlu değil; hikâye zaten etiketli, ku
 - Ayrım önerisi: "Model bizim 3D sahnemiz olmadan da video üretebiliyorsa video üreticisidir" (A11 §S2; kullanıcı karar vermeli, Q-015).
 
 ## 9. Platform ve hukuk çerçevesi
-TikTok gerçekçi yapay ses/görüntüde etiket istiyor [A12-S022]; okunan resmî sayfalar eski, güncel ayrıntı doğrulanamadı. AB AI Act şeffaflık maddesi 2 Ağu 2026'dan beri [A12-S025, ikincil]. Türkiye'de etiket zorunluluğu taslak [A12-S026].
+TikTok gerçekçi yapay görüntü **ve ses** için etiketi zorunlu sayıyor [A12-S022]; bağımsız denetçi güncel yardım sayfasından doğruladı (https://support.tiktok.com/en/using-tiktok/creating-videos/ai-generated-content, 27 Kas 2026). Gemini'nin "günde ~10 istek" sınırı resmî bilgi değil, projede gözlem; güncel sınır AI Studio'da görülür (kullanıcıdan ekran görüntüsü istenebilir). AB AI Act şeffaflık maddesi 2 Ağu 2026'dan beri [A12-S025, ikincil]. Türkiye'de etiket zorunluluğu taslak [A12-S026].
 
 ## 10. Hikâye Stüdyosu için çıkarım
 Bugünkü kaliteyi belirleyen büyük işler yeni teknoloji değil, bilinen yöntemlerin uygulanması [ÇIKARIM]. Gelecek teknolojiler izlenmeli (R11) ama bugünkü kusurları ertelemek için gerekçe olmamalı (A11 Riskler).

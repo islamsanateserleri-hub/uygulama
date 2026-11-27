@@ -1,58 +1,67 @@
 # Hikâye Stüdyosu araştırması — Sizin için kısa özet
 
-27 Kasım 2026. **Önemli:** Araştırmada okuma ve inceleme yapıldı; **hiçbir deneme/test yapılmadı.** Aşağıdakiler güçlü tahminlerdir, kanıtlanmış sonuç değildir. Uygulamada hiçbir şey değiştirilmedi.
+27 Kasım 2026. **Hiçbir deneme yapılmadı** ve **araştırma henüz tamamlanmadı.** Uygulamada hiçbir şey değiştirilmedi.
+
+## Önce önemli bir uyarı: Unity kuralları
+Unity'nin güncel kullanım koşulları, yapay zekâ yardımcılarının (benim gibi) Unity'yi yönetmesini yalnız Unity'nin izin verdiği yoldan serbest bırakıyor. Bugüne kadar kullandığımız yöntem (benim bir komut dosyası yazmam, Unity'nin onu okuması) **büyük olasılıkla bu yol değil**. Bu yüzden **durdurdum**. Hesabınız açısından riskli olabilir; bu hukuki görüş değildir.
+Unity'nin kendi ücretsiz aracı (Unity CLI) var ve metne göre kendi çalıştırdığınız yardımcılar bu araçla izinli görünüyor. Aşağıda 1. soru bununla ilgili.
 
 ## Ne öğrendik?
-- **Reddettiğiniz kusurların olası nedenleri programın içinde.** Karakterin durup dururken el kol sallaması, yürümemesi, altyazının sese uymaması için olası hatalar bulduk. Önce bunların gerçek olduğunu denemeyle görmemiz gerekiyor.
-- **Görüntünün düz durmasının nedeni de büyük ölçüde ayarlar:** gölge kapalı, ışık ve renk ayarları eksik, duvarlar kaplamasız, gerçek yüz yakın planı yok.
-- **Karakterlerin ağzı büyük olasılıkla yalnız açılıp kapanıyor;** harflere göre şekil almıyor. Oysa modellerde bu şekiller var görünüyor.
-- **Programın temelini değiştirmeye gerek yok.** Şu anki yapı üzerinde ilerlemek en mantıklısı. Daha önce önerdiğimiz "başka görüntü sistemine (HDRP) geçelim" fikri **yanlıştı**, geri aldık: o sistem ileride kaldırılacak.
+**Güçlü tahminler** (programın kodu okunarak görüldü, yine de denenmedi):
+- Reddettiğiniz kusurların (durup dururken el kol sallama, yürümeme, altyazının sese uymaması) olası nedenleri programın içinde.
+- Gölge kapalı, bazı renk/ışık ayarları kullanılmıyor, mekânlar kaplamasız.
+- Karakterlerin ağzı büyük olasılıkla yalnız açılıp kapanıyor.
 
-## Ne yapılabilir?
-- Doğru altyazı ve ses uyumu.
-- Sakin duran, yürüyen, oturan karakterler.
-- Konuşurken daha doğal ağız ve yüz.
-- Gölge, ışık, derinlik; daha film gibi yakın planlar ve kurgu.
-- Daha gerçekçi mekân ve daha iyi ateş, duman, parıltı efektleri.
-- Bunların çoğu **para harcamadan** denenebilir. Hedef: iyi bir oyun filmi kalitesi.
+**Zayıf tahminler** (denemeden bilinemez):
+- Işık ve gölgenin görüntüyü ne kadar güzelleştireceği.
+- Ulaşılacak kalitenin "iyi bir oyun filmi" düzeyi olacağı.
+- Ağız hareketinin ne kadar doğal yapılabileceği ve kayıt hızı.
+
+**Şimdilik önerimiz:** programı baştan kurmadan, bugünkü yapı üzerinde ilerlemek. Denemeler bunu değiştirebilir. Daha önce önerdiğim "HDRP adlı başka görüntü sistemine geçelim" fikri yanlıştı, geri aldım.
+
+## Getirdiğiniz araştırma (Unreal 5, MetaHuman, siyah barlar)
+Parça parça çekip birleştirmek ve otomatik yönetmen fikri uygun; bir kısmı programda zaten var. Unreal 5'e geçmek programın görüntü tarafını baştan yazmak demek ve bu bilgisayarda ayrı ekran kartı yok; bu yüzden şimdi önermiyoruz, ama denemedik (güçlü donanım alınırsa ve sonuç sizi tatmin etmezse yeniden bakılır). MetaHuman bazı koşullarla ücretsiz, fakat güçlü bilgisayar ister ve programla birlikte başkasına dağıtılabileceği doğrulanamadı. Sinema tipi siyah barlar dikey TikTok videosunda görüntüyü küçülteceği için önerilmiyor.
 
 ## Ne yapılamaz (ya da söz veremiyoruz)?
-- Gösterdiğiniz örnek videodaki **gerçek insan filmi gibi görünümü**, yapay zekâ video üreticisi kullanmadan, otomatik ve ucuz biçimde elde etmek bugün **büyük olasılıkla mümkün değil**.
-- Ejderha ve kalabalık sahneleri en zor kısım; uygun, ücretsiz bir ejderha bulamadık.
-- Bu bilgisayarın ne kadar hızlı kayıt yapacağını bilmiyoruz; ölçmedik.
-- Programı şu hâliyle **başkasına vermeyin:** büyük olasılıkla içinde başkasına dağıtılmasına izin verilmeyen hazır karakterler var (henüz paket içinden doğrulanmadı) ve lisans bildirimleri eksik. Kendi videolarınız için büyük bir engel bulmadık (bu hukuki görüş değildir).
-- Yapay zekâ sesi kullanan videolarda TikTok'ta **"yapay zekâ ile üretildi" etiketini açın**.
+- Örnek videodaki **gerçek insan filmi görünümü**, yapay zekâ video üreticisi olmadan, otomatik ve ucuz biçimde **büyük olasılıkla elde edilemez**.
+- Ejderha ve kalabalık en zor kısım; uygun ücretsiz ejderha bulamadık.
+- Programı şu hâliyle **başkasına vermeyin**: dağıtımına izin verilmeyen hazır karakterler içeriyor olabilir ve lisans bildirimleri eksik.
+- Yapay zekâ sesli videolarda TikTok'ta **"yapay zekâ ile üretildi" etiketini açın**.
+- **ElevenLabs'in ücretsiz sesini** kullandığınız videoda başlığa **"elevenlabs.io"** yazın ve o videoyu **ticari amaçla kullanmayın** (sonradan plan almak eski sesi değiştirmez).
 
-## Para gerektirenler (şimdi hiçbirini almayın)
-| Ne | Yaklaşık fiyat | Ne zaman |
+## Araştırmada eksik kalanlar
+Bağımsız bir denetçi araştırmayı inceledi ve **tamamlanmış saymadı**. Hâlâ eksik: hiçbir deneme ve hız ölçümü; güncel Türkiye fiyatları; hazır çizim paketleri ve çizer maliyeti; kullanıcı yorumları (ör. Reddit'e erişilemedi); düz yazıdan otomatik sahne kurma ve 4K isteğiniz; bazı lisans metinleri.
+
+## Görünüm seçenekleri (hiçbiri denenmedi)
+| Seçenek | İyi yanı | Zor yanı |
 |---|---|---|
-| Ek disk (bilgisayarda yalnız ~45 GB boş) | 1 TB için ABD'de ~144 dolar; Türkiye fiyatı bilmiyoruz | büyük olasılıkla ilk ihtiyaç |
-| Ekran kartı | Temmuz 2026'da ~25.000–42.000 TL (güncel değil) | yalnız ölçümden sonra |
-| Güç kaynağı | bilmiyoruz | kart alınırsa gerekebilir |
-| Ücretli seslendirme | 5 dakikalık ses için birkaç sent; ya da aylık 6–22 dolar | isterseniz |
-| Ücretli karakter programları | yaklaşık 80–500 dolar | şimdilik gereksiz |
+| A. Gerçekçiye yakın 3D (bugünkü yol, iyileştirilmiş) | mevcut programla uyumlu | örnek video gibi olmaz; yüz kusurları göze batar |
+| B. Çizgi/boyama tarzı 3D | hareket ve kamera aynen kalır; yazılımı ücretsiz | tarzı ayarlamak emek ister; beğenip beğenmeyeceğiniz bilinmiyor |
+| C. Resimli, katmanlı 2D | bilgisayarı en az yorar (tahmin) | her karakter, ifade ve mekân için **çizim** gerekir; yürüme zayıf; bugünkü 2D bölümü çok basit |
+| D. Karışık: önceden hazırlanmış arka plan + 3D karakter | arka plan daha zengin olabilir | kamera sabit kalır; ışık uyumu ve süre bilinmiyor |
 
-## Sıradaki adımlar
-1. Araştırmanın kendi içinde denetlenmesi (henüz yapılmadı).
-2. Sizin aşağıdaki soruları yanıtlamanız.
-3. Onay verirseniz, asıl programa dokunmadan **kopya üzerinde** denemeler.
-4. Kısa (20–30 saniyelik) örnek videolar; siz beğenmeden uzun video yapılmaz.
+Benim eğilimim (tahmin): A ve B'yi aynı kısa sahnede deneyip gözünüzle seçmeniz.
+
+## Para
+Şimdi hiçbir şey almayın. Yaklaşık ABD fiyatları (Ekim–Kasım 2026; Türkiye fiyatı farklıdır): ek disk ~144 $; disk + giriş düzeyi ekran kartı ~500–600 $; disk + daha iyi kart ~760–1.050 $. Güç kaynağı gerekirse **ayrıca**. Ses ve karakter programları isteğe bağlı.
+
+## Sizden kararlar
+**1. Unity'yle nasıl çalışalım?**
+- a) Unity'nin kendi aracını (Unity CLI) kuralım. Ücretsiz; ama projeye bir Unity paketi eklenir, Unity hesabınızla sizin giriş yapmanız gerekir. Ücretsiz (Personal) planda açıkça yazılı bir cümle görmedim; engel de görmedim.
+- b) Unity'deki işlemleri ben anlatayım, siz menüden elle başlatın (yavaş ama en temkinli).
+- c) Önce Unity'ye yazılı soralım.
+
+**2. "Yapay zekâ yok" derken neyi kastediyorsunuz?** (En önemli soru.)
+- a) Yalnız yapay zekâ **video üreticileri** yasak; ses ve altyazı gibi yardımcı araçlar serbest.
+- b) (a) + görüntünün yapay zekâyla güzelleştirilmesi de serbest (yüzler değişebilir).
+- c) Mümkün olan her yerde yapay zekâsız.
+
+**3. Ne için kullanacaksınız?** Kendi videolarım · para kazanacağım · programı başkalarına vereceğim.
+
+**4. Görünüm:** Yukarıdaki A, B, C, D'den hangilerini görmek istersiniz? ("A ve B'yi deneyip göster" diyebilirsiniz.) Resimli yol (C) seçilirse: çizimleri kim yapacak, yapay zekâ ile çizim kabul mü?
+
+**5. Para ve süre:** En fazla ne harcayabilirsiniz (0 olabilir)? 1 dakikalık video için en fazla ne kadar beklersiniz?
+
+**6. Denemelere başlayalım mı?** Asıl programa dokunmadan, kopya üzerinde; indirmeler tek tek size sorularak.
 
 Siz onaylamadan programı geliştirmeye başlamayacağız.
-
-## Sizden 5 karar
-
-**1. Yapay zekânın sınırı nerede?** (Bu en önemli soru.)
-"Yapay zekâ yok" derken neyi kastediyorsunuz?
-- a) Yalnız yapay zekâ **video üreticileri** yasak. Seslendirme ve altyazı zamanlaması gibi yardımcı yapay zekâ araçları (bilgisayarda çalışanlar dahil) serbest.
-- b) (a)'ya ek olarak, programın çizdiği görüntüyü yapay zekânın **güzelleştirmesi** de serbest. (Yüzlerin değişme riski var.)
-- c) Mümkün olan her yerde yapay zekâsız olsun.
-
-**2. Bu programı ve videoları ne için kullanacaksınız?**
-Yalnız kendi videolarım · videolardan para kazanacağım · programı başkalarına vereceğim/satacağım.
-
-**3. Para ve bekleme süresi:** Gerekirse harcayabileceğiniz en yüksek tutar nedir (0 olabilir)? 1 dakikalık video için en fazla ne kadar beklersiniz? (Ekran kartı konuşulacaksa güç kaynağınızın etiketinin ve kasanın fotoğrafı gerekecek.)
-
-**4. Görünüm:** Tam gerçekçi olmazsa, **kaliteli oyun filmi** ya da **çizgi/boyama tarzı** bir görünüm kabul eder misiniz?
-
-**5. Denemelere başlayalım mı?** Asıl programa dokunmadan, kopya üzerinde; gereken ücretsiz indirmeler size tek tek sorularak.

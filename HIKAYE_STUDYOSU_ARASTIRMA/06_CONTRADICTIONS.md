@@ -2,9 +2,9 @@
 | ID | Çelişki | Kaynaklar | Durum |
 |---|---|---|---|
 | C-001 | 26 Kas raporu: "Cinemachine gibi paketler ekleme için onay ister". Cihazdaki manifest.json: com.unity.cinemachine 6.6.0 zaten kurulu. | Docs/VideoKalitesi.md §5 · manifest.json | ÇÖZÜLDÜ (olgu: kurulu). Kodda kullanılıp kullanılmadığı A09 inceleyecek. |
-| C-002 | VideoKalitesi 1. rapor "bu bilgisayarda mümkün değil" · 2. rapor "ekran kartı + disk yeter" · ayrıca "birebir aynı görünüm garanti değil". | Docs/VideoKalitesi.md | AÇIK: araştırma yeniden değerlendirecek (A09, A10). |
+| C-002 | VideoKalitesi 1. rapor "bu bilgisayarda mümkün değil" · 2. rapor "ekran kartı + disk yeter" · ayrıca "birebir aynı görünüm garanti değil". | Docs/VideoKalitesi.md · A10 · A11 · R13 | KISMEN ÇÖZÜLDÜ: "kart + disk" yalnız iyi oyun sinematiği hedefi için ve güç kaynağı/kasa uygunsa koşullu (A10); örnek videodaki fotogerçek görünümü kart tek başına getirmez (A11, ÇIKARIM). Ölçüm yok. |
 | C-003 | 26 Kas raporu ve sohbette "HDRP'ye geç (kart alınca)" önerildi. Unity resmî: HDRP'ye yeni özellik yok; 29 Eyl 2026 duyurusu HDRP'yi Unity 7.0'da "deprecated" sayıyor, destek 2029 sonu (uzatılmış 2030), sonra kaldırılacak. | Docs/VideoKalitesi.md §3 · A04-S001..S003 · A09-S001 | **ÇÖZÜLDÜ:** resmî duyuru geçerli; HDRP önerisi GERİ ÇEKİLDİ. 27 Kas'ta ayrı bir okuyucuyla iki sayfa yeniden doğrulandı. |
-| C-004 | Rocketbox animasyon sayısı 417 (README) / 471 (üçüncü taraf) / 326 static; "klipler yerinde" ile "xy ilerleyen yürüme var". Kod yalnız `..._static` klasörünü alıyor (NesneKur.cs:742, doğrulandı). | A03 | AÇIK: KutuphaneHam dosyaları listelenecek (test). |
+| C-004 | Rocketbox animasyon sayısı: resmî depo (README) 417 · üçüncü taraf 471 · 326 yalnız `_static` alt kümesi; "klipler yerinde" ile "xy ilerleyen yürüme var". Kod yalnız `..._static` klasörünü alıyor (NesneKur.cs:742, doğrulandı). | A03, denetçi C6 | Resmî toplam 417 kabul; 326 projedeki alt küme olarak ayrılır. Diskteki dosya sayısı ve ilerleyen klipler AÇIK (KutuphaneHam listelenecek). |
 | C-005 | 26 Kas: "yürüme/koşma Mixamo'dan" ↔ A03: önce eldeki Rocketbox + UAL (hesap gerekmez). | VideoKalitesi · A03 | AÇIK (test T4/T5). |
 | C-006 | Dikey kaynaklar "geniş plandan kaçın" (C/D) ↔ hedef örnek video çok geniş şato/ejderha planı kullanıyor. | A01 Ç1 | Geçici: yakın/orta ağırlık, geniş plan seyrek; A08 değerlendirecek. |
 | C-007 | Dikey güvenli alan: reklam ölçümü alt %34 ↔ uygulama %20. | A01 Ç2 | AÇIK: gerçek telefonda kontrol; A07/A08. |
@@ -35,3 +35,4 @@
 | C-028 | Araç sürümleri ↔ Unity 6000.6 + DX11 (karakter araçları, splat eklentisi). | ÇÖZÜLEMEDİ: denemeyle; DX11/DX12 testi plana. |
 | C-029 | Dikey güvenli alan: altyazı + yüz bölgesi birlikte sığmayabilir. | AÇIK: telefon testi. |
 | C-030 | A12: yalnız Editor Software Terms §2.5 okundu, "bizi kapsamıyor" çıkarımı ve "tanım yok" ↔ ana Terms of Service §17.2/§26 ajan erişimini sınırlıyor ve tanımlıyor. | Bağımsız denetçi K1; ayrıca yeniden okundu | Önceki çıkarım GERİ ÇEKİLDİ; sonuç belirsiz, temkinli davranılıyor (Q-016). |
+| C-031 | Unity CLI durumu: 17 Kas yazısı "1.0, betadan çıktı" ↔ bazı yazılar "beta/deneysel". | D1-S003 · D1-S009/S010 | Resmî ve tarihli yazı esas; diğerleri daha eski sürümü anlatıyor görünüyor (ÇIKARIM). |

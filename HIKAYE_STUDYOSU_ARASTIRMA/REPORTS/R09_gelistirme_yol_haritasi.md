@@ -1,5 +1,7 @@
 # R09 — Geliştirme yol haritası (ÖNERİ, sade anlatım)
 
+> **TESTSİZ TASLAK.** Yalnız teşhis aşaması (15 numaralı dosya Aşama 1; testler T0) bağlayıcı plandır ve o da kullanıcı onayıyla başlar. Sonrası T0 sonuçlarına göre yeniden yazılır. "URP'de kal" bir karar değil **varsayılan hipotezdir** (04: K-005).
+
 Tarih: 2026-11-27. **Test edilmedi; hiçbir iş başlamadı.** Ayrıntı ve ölçütler: `../15_FINAL_ROADMAP.md`.
 
 ## Hangi özellik hangi sırayla

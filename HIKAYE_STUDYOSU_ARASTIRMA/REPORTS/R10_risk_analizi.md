@@ -1,6 +1,6 @@
 # R10 — Risk analizi
 
-Tarih: 2026-11-27. Olasılık ve etki değerlendirmeleri **ÇIKARIM**; ölçülmedi. Ana kayıt: `../07_RISK_REGISTER.md` (R-001…R-011). Aşağıda o kayıtlar ve ajan dosyalarındaki başlıca riskler birlikte verilmiştir. Bu rapor ana kayıt dosyasını değiştirmez.
+Tarih: 2026-11-27. Olasılık ve etki değerlendirmeleri **ÇIKARIM**; ölçülmedi. Ana kayıt: `../07_RISK_REGISTER.md` (R-001…R-011). Aşağıda o kayıtlar ve ajan dosyalarındaki başlıca riskler birlikte verilmiştir. Buradaki riskler 07'ye kimlikle taşındı (R-012…R-041).
 
 ## 1. En ciddi riskler
 | # | Risk | Olasılık / Etki | Önlem | Alternatif | Kaynak |
@@ -49,7 +49,7 @@ Tarih: 2026-11-27. Olasılık ve etki değerlendirmeleri **ÇIKARIM**; ölçülm
 | TikTok'ta etiketsiz yapay ses | "AI-generated" etiketini aç | A12-R5 |
 | ElevenLabs ücretsiz sesli videoda para kazanma / atıfsız paylaşım | atıf yaz, gelir elde etme | A12 |
 | Gemini koşulları (18+, AB'ye sunum, ücretsizde veri incelemesi) | kişisel bilgi yazma | A12-R9 |
-| Unity Editor yeni koşullarındaki "yapay zekâ ajanı" maddesi; bizim kullanım metinde geçmiyor (çıkarım: kapsamıyor görünüyor) | kullanıcı bilsin; arayüzsüz/bulut Editor yok | R-010, Q-016 |
+| Unity koşulları yapay zekâ ajanının Unity ile etkileşimini yalnız yetkili yolla serbest bırakıyor; dosya köprümüz bu yol değil görünüyor (önceki "kapsamıyor" çıkarımı GERİ ÇEKİLDİ, C-030) | köprü durduruldu (K-004); Unity CLI ya da elle çalıştırma; yazılı soru | R-010, Q-016, D1 §3 |
 | Gerçek kişi yüz/sesi, telifli karakter/müzik | kullanma | A12-R11 |
 
 ## 5. Araştırma sürecinin riskleri

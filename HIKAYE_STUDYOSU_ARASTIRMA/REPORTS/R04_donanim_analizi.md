@@ -23,7 +23,7 @@ Tarih: 2026-11-27. **Bu bilgisayarda hiçbir performans ölçümü yapılmadı**
 | Tel tel (strand) saç, VFX Graph | deneysel |
 | 30–60 gerçek karakterlik kalabalık | belirsiz (X1 §3: A10 bunu denetlememişti) |
 | HDRP ışın izleme, UE5 Lumen | yapılamaz |
-| Character Creator 5 | yapılamaz (8 GB ayrı kart ister) [A02-S037] |
+| Character Creator 5 | büyük olasılıkla yapılamaz: okunan sayfa 8 GB ayrı kart istiyor [A02-S037], ancak sayfanın CC5'e ait olduğu kesin değil (X1 D17) |
 | MetaHuman üretimi | önerilen donanımın altında [A02-S007] |
 | Yerel yapay zekâ video/3D modelleri | pratik değil (A11) |
 | Blender Cycles | yalnız işlemciyle, çok yavaş [A04-S030] |

@@ -1,10 +1,12 @@
 # 14 NİHAİ MİMARİ (ÖNERİ)
 
+> **TESTSİZ TASLAK.** Yalnız teşhis aşaması (15 numaralı dosya Aşama 1; testler T0) bağlayıcı plandır ve o da kullanıcı onayıyla başlar. Sonrası T0 sonuçlarına göre yeniden yazılır. "URP'de kal" bir karar değil **varsayılan hipotezdir** (04: K-005).
+
 Tarih: 2026-11-27. **Durum: ÖNERİ. Test edilmedi. Geliştirmeye geçiş kullanıcının ayrı kararıdır** (protokol §19). Testler yapıldıkça bu dosya değişebilir; eski karar silinmez, yenisi eklenir.
 Dayanak: A09 "Seçenek 0 ve 1", A01, A02, A03, A04, A05, A06, A07, A08, A12; denetimler X1, X2. Ayrıntıların çoğu ÇIKARIM'dır.
 
 ## 1. Temel kararlar (öneri)
-1. **Unity + URP'de kal.** HDRP kaldırılacak [A04-S002]; UE5/Blender'a tam geçiş büyük yeniden yazım ve donanım ister (A09 §S9).
+1. **Unity + URP'de kal (varsayılan hipotez).** HDRP kaldırılacak [A04-S002]; UE5/Blender'a tam geçiş büyük yeniden yazım ve donanım ister (A09 §S9).
 2. **Hikâye metni tek doğruluk kaynağı olarak kalsın** (A09 §A.2).
 3. **Önce kararlar, sonra çekim:** kayıttan önce her şey hesaplanır; oynatıcı yalnız uygular (A08).
 4. **Kimseye bağımlı olmayan arayüzler:** ses, hizalama, yüz, hareket, kamera, render, kare işleyici (A07, A11, X1 G3).
