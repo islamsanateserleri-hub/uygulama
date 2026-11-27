@@ -13,3 +13,6 @@
 | Q-010 | EXE'de DoF/bloom/tonemapping shader'ları derlemede siliniyor mu? | Görüntü | Render | P1 | test | A09 | açık |
 | Q-011 | MetaHuman/CC5 karakterleri uygulama kütüphanesi olarak dağıtılabilir mi? | Ürün lisansı | Lisans | P2 | lisans metni | A12 | açık |
 | Q-012 | Aranamayan konular: ffmpeg loudnorm, altyazı zamanlama kılavuzları, karaoke okunurluğu, OVR LipSync, UniVRM-HDRP, mağaza karakterleri, URP saç/göz örnekleri, MediaPipe, ayak kayması rehberleri, motion matching | Kapsam eksiği | A02/A03/A07 | P2 | web araması | ilgili ajan | açık (arama hakkı doldu) |
+| Q-013 | UE5'e geçişin gerçek maliyeti (yeniden yazım, donanım, disk) kaliteye değer mi? (kullanıcı araştırması UE5 öneriyor) | Ana mimari | Mimari | P1 | A09, A10, denetçi | ana araştırmacı | açık |
+| Q-014 | OVR LipSync güncel durumu ve alternatifleri | Dudak | Ses | P2 | arama | A07 takip | açık |
+| Q-015 | "Yapay zekâsız" şartı yerel dil/ses modellerini (TTS, hizalama, spaCy) ve görüntü dönüştürücüleri (video-to-video) kapsıyor mu? | Kapsam | Genel | P1 | KULLANICI | — | açık (kullanıcıya sorulacak; A11: video-to-video "video üretici" sayılır) |

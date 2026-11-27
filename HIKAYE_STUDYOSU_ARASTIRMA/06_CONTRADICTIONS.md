@@ -11,3 +11,4 @@
 | C-008 | Asama16: "ticari kullanıma açık Türkçe ses olmadan yerel ses kullanma" ↔ A07: Apache/MIT adaylar var (Chatterbox, VoxCPM2, EMA, FreyaTTS) ama Türkçe kalite ve eğitim verisi hakkı doğrulanmadı. | Asama16 · A07 | AÇIK: A12 denetleyecek. |
 | C-009 | Reallusion "Extended License" şartı: içerik sayfası var diyor, 2025 duyurusu kaldırıldı diyor, EULA'da yok. | A02 Ç2 | AÇIK: A12; satın almadan yazılı teyit. |
 | C-010 | MetaHuman'ın Unity'de lisansı: bir blog "yol yok" (D) ↔ Epic 2025 "any engine". | A02 Ç1 | ÇÖZÜLDÜ: resmî kaynak; ancak uygulama İÇİNDE karakter kütüphanesi olarak dağıtma izni doğrulanamadı (A12). |
+| C-011 | Kullanıcı araştırması: 2,39:1 sinema barları ↔ hedef 9:16 dikey 1080x1920. | K01 · protokol §1 | ÇÖZÜLDÜ (protokol hedefi geçerli: bar yok). |
