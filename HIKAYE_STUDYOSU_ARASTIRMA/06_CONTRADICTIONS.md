@@ -12,3 +12,10 @@
 | C-009 | Reallusion "Extended License" şartı: içerik sayfası var diyor, 2025 duyurusu kaldırıldı diyor, EULA'da yok. | A02 Ç2 | AÇIK: A12; satın almadan yazılı teyit. |
 | C-010 | MetaHuman'ın Unity'de lisansı: bir blog "yol yok" (D) ↔ Epic 2025 "any engine". | A02 Ç1 | ÇÖZÜLDÜ: resmî kaynak; ancak uygulama İÇİNDE karakter kütüphanesi olarak dağıtma izni doğrulanamadı (A12). |
 | C-011 | Kullanıcı araştırması: 2,39:1 sinema barları ↔ hedef 9:16 dikey 1080x1920. | K01 · protokol §1 | ÇÖZÜLDÜ (protokol hedefi geçerli: bar yok). |
+| C-012 | ASL ölçümü 2,31 sn ↔ ≈4 sn (farklı örneklem). | A08 Ç1 | Aralık olarak kullanılacak; hedef medyan 2,5–3 sn (testle). |
+| C-013 | Cliffhanger sektörce "vazgeçilmez" ↔ deneyde devam niyeti artmadı. | A08 Ç2 | Kullanılır ama tek tutma aracı sayılmaz. |
+| C-014 | Kart: "en az RTX 3060 12GB" (eski belge) ↔ A11: DLSS 5 yalnız RTX 50; A10: ≥12, tercihen 16 GB. | VideoKalitesi · A10 · A11 | AÇIK: satın alma kararı yok; çapraz denetime. |
+| C-015 | İkinci el RTX 3060 TL fiyatı: 15.000–37.850 ↔ 6.200–7.400. | A10 Ç1 | ÇÖZÜLEMEDİ: TL fiyatı güvenilir değil. |
+| C-016 | Asset Store: sözleşme ↔ SSS (UGC aracında yayıncı izni). | A12, A06 | Temkinli olan uygulanır: dağıtılacak uygulamada Asset Store varlığı yok. |
+| C-017 | Piper motoru "MIT" (Asama16) ↔ güncel depo GPLv3. | Asama16 · A12 | ÇÖZÜLDÜ: Asama16 güncel değil. |
+| C-018 | Altyazı: karaoke (mevcut) ↔ hedef örnek sade beyaz; karaoke üstünlüğüne kanıt bulunamadı; Netflix TR: ≤2 satır, 17 karakter/sn. | VideoKalitesi · A00 | AÇIK: kullanıcı karşılaştırma testi. |

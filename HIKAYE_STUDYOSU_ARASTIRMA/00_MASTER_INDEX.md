@@ -11,14 +11,14 @@ Araştırma bitince de geliştirmeye KENDİLİĞİNDEN geçilmez; sonuçlar sunu
 Sıra: ÖĞREN → KAYDET → DOĞRULA → GENİŞLET → DENETLE → TAMAMLA → TEST ET → KARAR VER → EN SON GELİŞTİR.
 
 ## Durum (son güncelleme: 27 Kas 2026)
-**AŞAMA 1 bitti: kurulum + 1. dalga (6 ajan).** 2. dalga bekliyor (web arama hakkı için kullanıcının yeni mesajı gerekiyor). Araştırma TAMAMLANMADI.
+**AŞAMA 2 bitti: 12 uzman raporu + takip.** Sırada çapraz denetim, test planı, 13 rapor, denetimler. Araştırma TAMAMLANMADI.
 
 | Aşama | Durum |
 |---|---|
 | Mevcut proje incelemesi | yapıldı (TOPICS/00_mevcut_proje.md) |
 | Dosya sistemi | kuruldu |
 | 1. dalga (A01, A02, A03, A04, A07, A09) | raporlar yazıldı (çapraz denetimden geçmedi; bazı alt konular eksik, Q-012) |
-| 2. dalga (A05, A06, A08, A10, A11, A12) | bekliyor |
+| 2. dalga (A05, A06, A08, A10, A11, A12) + takip (A00) | raporlar yazıldı |
 | Çapraz denetim + çelişkiler | bekliyor |
 | Test planı, 13 rapor | bekliyor |
 | Öz denetim (§16) + bağımsız denetçi (§17) | bekliyor |

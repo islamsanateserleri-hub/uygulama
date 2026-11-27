@@ -21,3 +21,9 @@
 - Kural sapması: A07 ajanı yasak olmasına rağmen salt okunur `git log`/`git status` çalıştırdı; depo değişmedi (git durumu kontrol edildi).
 - Karar: K-003 (HDRP önerisi geri çekildi).
 - Sonraki: 2. dalga.
+
+## 2026-11-27 — Oturum 2: 2. dalga, lisans, takip
+- A05, A06, A08, A10, A11 (A05 ve A10 oturum sınırında kesildi, dosyaları yazılmış), ardından A12 ve A00 takip. Kaynak toplamı 534.
+- Kullanıcı kendi araştırmasını gönderdi (K01).
+- Başlıca: örnek videodaki fotogerçek görünüm otomatik/ucuz 3D ile bugün büyük olasılıkla çıkmaz (A11, çıkarım, güven orta); EXE bu hâliyle dağıtılmamalı (A12); Netflix TR altyazı sınırları (A00).
+- Unity §2.5 maddesi ayrıca okundu (Q-016).
