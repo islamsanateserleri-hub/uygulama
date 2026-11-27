@@ -19,3 +19,18 @@
 | C-016 | Asset Store: sözleşme ↔ SSS (UGC aracında yayıncı izni). | A12, A06 | Temkinli olan uygulanır: dağıtılacak uygulamada Asset Store varlığı yok. |
 | C-017 | Piper motoru "MIT" (Asama16) ↔ güncel depo GPLv3. | Asama16 · A12 | ÇÖZÜLDÜ: Asama16 güncel değil. |
 | C-018 | Altyazı: karaoke (mevcut) ↔ hedef örnek sade beyaz; karaoke üstünlüğüne kanıt bulunamadı; Netflix TR: ≤2 satır, 17 karakter/sn. | VideoKalitesi · A00 | AÇIK: kullanıcı karşılaştırma testi. |
+
+## Çapraz denetim sonuçları (27 Kas; ayrıntı AGENTS/X1, X2)
+| ID | Çelişki / hata | Çözüm |
+|---|---|---|
+| C-019 | A09 hava efektine "Particle System" diyor; `HavaDurumu3D.cs` kendi mesh'ini çiziyor. | ÇÖZÜLDÜ (kod): A06 doğru. |
+| C-020 | A08 "ses sessizliği boşluğa ekleniyor"; `ProcAudio.Clean` zaten kırpıyor. | ÇÖZÜLDÜ (kod): A08 maddesi geçersiz. |
+| C-021 | A12 Mixamo karakter sayısı 35 ↔ 36; Mixamo animasyonları tüm insanlara da ekleniyor (klasör doluysa). | ÇÖZÜLDÜ (kod okuması): 36; dağıtım riski animasyonları da kapsar. |
+| C-022 | A01 ECU ~0,7 m ↔ kendi "1 m altı yok" kuralı. | AÇIK: testte mercek/mesafe ayarlanacak (kural mercekle birlikte yazılmalı). |
+| C-023 | DoF'a dayanan plan dili ↔ EXE'de DoF çalışmayabilir. | AÇIK: Q-010 testi. |
+| C-024 | HDR açma ↔ saydam bindirme (alfa 0) 64-bit/Alpha Processing isteyebilir. | Test iki durumda yapılacak (3D tam kare; 2D üstünde 3D). |
+| C-025 | Parçalı render ↔ kesintisiz ses miksi. | ÇÖZÜLEMEDİ: mimaride ses ayrı tek iz olarak sonradan bindirme seçeneği denenecek. |
+| C-026 | A11 "kareleri diske yaz" ↔ 45 GB disk. | Ortak disk bütçesi çıkarılacak (A10 planları + test). |
+| C-027 | Plan/çekim/kurgu için ayrı ayrı şemalar (A01, A07, A08, A09). | Öneri: tek "çekim manifesti", üç katman (X2 §2.1); denenmedi. |
+| C-028 | Araç sürümleri ↔ Unity 6000.6 + DX11 (karakter araçları, splat eklentisi). | ÇÖZÜLEMEDİ: denemeyle; DX11/DX12 testi plana. |
+| C-029 | Dikey güvenli alan: altyazı + yüz bölgesi birlikte sığmayabilir. | AÇIK: telefon testi. |
