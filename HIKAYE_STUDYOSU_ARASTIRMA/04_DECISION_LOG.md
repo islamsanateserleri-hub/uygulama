@@ -25,3 +25,9 @@ Biçim: Karar ID · tarih · karar · gerekçe · kaynaklar · alternatifler · 
 | K-014 | 2026-11-27 | ÖNERİ: ekran kartı/disk alımı ölçümden önce yok; önce disk, sonra güç kaynağı/kasa, sonra kart | ölçüm yok | A10 | hemen kart | beklerken fiyat artışı | — | T0-6, T0-8 ve TS ölçümleri |
 | K-015 | 2026-11-27 | ÖNERİ: görünüm kararı açık; "iyileştirilmiş gerçekçi" ile "3D stilize" aynı kısa sahnede kullanıcıya karşılaştırtılır; 2,5D ana yol değil | stilize mevcut 3D hattı kullanır; 2,5D'de görsel kaynağı yok | D1 §2 | 2,5D illüstrasyon; hibrit pilot | iki görünümü sürdürme emeği | TEST EDİLMEDİ | kullanıcı yanıtı ve deneme |
 | K-016 | 2026-11-27 | ÖNERİ: ajan erişimi için Unity CLI yolu kullanıcıya sunulur; onaylanana kadar K-004 sürer | koşul metni kendi işlettiğiniz ajanı Unity CLI üzerinden yetkili sayıyor görünüyor | D1-S001..S007 | elle çalıştırma; Unity'ye yazılı soru | yeni paket, geniş yetki (eval), Unity yetkiyi geri alabilir | metin özet araçla okundu; kurulmadı | kullanıcı onayı; koşullar değişmezse |
+
+## Kullanıcı yanıtları (2026-11-27, soru penceresi; kendi sözleriyle)
+- K-017 Sıra: "Önce araştırmaları Tamamla". Unity çalışma yolu SEÇİLMEDİ; K-004 (köprü yok) sürer.
+- K-018 Yapay zekâ: "Yapay zeka asistanı olacak". Yorum (onaylanmadı): yapay zekâ hikâye/sahne hazırlamaya yardım eder, görüntüyü üretmez. İçeride mi dışarıda mı belirsiz (D3). Q-015 yalnız kısmen yanıtlandı.
+- K-019 Görünüm denemesi: "İkisini de göster" (gerçekçiye yakın 3D ve stilize 3D). Q-018 deneme kapsamı yanıtlandı. Deneme araştırmadan sonra.
+- K-020 Bütçe: "Ek disk kadar" (~150 $ ABD göstergesi; satın alma talimatı değil). Ekran kartı gerektiren planlar kapsam dışı (D3).

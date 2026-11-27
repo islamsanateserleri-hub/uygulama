@@ -20,3 +20,4 @@
 | Q-017 | Kart alınırsa RTX 50 serisi gibi yeni özellik desteği (DLSS 5) ölçüt olmalı mı? | Donanım | Donanım | P3 | resmî + bağımsız test | A10/A11 | açık |
 | Q-018 | Hangi görünüm: iyileştirilmiş gerçekçi, 3D stilize, 2,5D, hibrit? | Hedef, varlık ve emek | Genel | P1 | D1 §2 + kısa deneme + KULLANICI | — | açık |
 | Q-019 | Lisanslı, duygulu 2D karakter/katmanlı arka plan kaynağı ya da çizer maliyeti var mı? | 2,5D yolun uygulanabilirliği | Varlık/Maliyet | P2 | hedefli arama | — | açık (araştırılmadı) |
+| Q-019 | Yapay zekâ asistanı uygulamanın içinde mi dışında mı; hangi sağlayıcı (Gemini ücretsiz / yerel / ücretli)? | Mimari, gizlilik, maliyet | Mimari | P1 | D3 + KULLANICI | — | açık |

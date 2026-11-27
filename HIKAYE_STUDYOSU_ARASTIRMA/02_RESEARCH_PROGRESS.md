@@ -12,3 +12,4 @@ Kullanıcı yanıt verdiyse karar kayıtlarını güncelle; vermediyse yalnız a
 
 ## Ek: D2 tamamlandı
 - AGENTS/D2_acik_konular.md. D1 §5 maddelerinin bir kısmı kapandı; kalanlar D2'de. Toplam kaynak kaydı: 594.
+- D3 tamamlandı; toplam kaynak kaydı 619. Sırada: ikinci bağımsız denetim.

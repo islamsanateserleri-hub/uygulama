@@ -36,3 +36,6 @@
 
 ## 2026-11-27 — D2: açık konular
 - 4K, düz yazıdan sahne, 2D paket/çizer, upscaling, diğer sektörler, çocuk karakter (35 arama). Test yok, kod değişikliği yok.
+
+## 2026-11-27 — Kullanıcı yanıtları ve D3 (yapay zekâ asistanı)
+- K-017..K-020 kaydedildi. D3: asistan seçenekleri, bütçe etkisi (24 arama). Test yok.

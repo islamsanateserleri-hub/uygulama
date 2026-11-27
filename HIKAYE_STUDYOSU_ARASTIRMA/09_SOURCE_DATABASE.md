@@ -18,6 +18,7 @@ Tam kayıtlar SOURCES/ dosyalarında. Sayım otomatik ("?" = sınıf okunamadı)
 | SOURCES/A12_kaynaklar.md | 49 | 32 | 8 | 7 | 2 | 0 |
 | SOURCES/D1_kaynaklar.md | 28 | 20 | 4 | 4 | 0 | 0 |
 | SOURCES/D2_kaynaklar.md | 32 | 20 | 4 | 8 | 0 | 0 |
-| **Toplam** | 594 | 364 | 102 | 91 | 26 | 11 |
+| SOURCES/D3_kaynaklar.md | 25 | 16 | 6 | 3 | 0 | 0 |
+| **Toplam** | 619 | 380 | 108 | 94 | 26 | 11 |
 
 Not: 11 kaynağın sınıfı otomatik okunamadı ve elle sınıflandırılmadı (açık eksik). Aynı adres birden çok ajanda ayrı sayılmış olabilir.
