@@ -4,7 +4,9 @@ Tarih: 2026-11-27. **Durum: PLAN HAZIR, HİÇBİR TEST YAPILMADI.** Bu plandaki 
 
 > **Unity koşulu uyarısı (K-004, Q-016):** netleşene ve kullanıcı karar verene kadar [SERBEST] testlerdeki "köprü komutu" yolu KULLANILMAZ. Unity işlemlerini kullanıcı menüden elle başlatır ya da onay verirse Unity CLI yolu kurulur (`AGENTS/D1_duzeltme_arastirmasi.md` §3). [SERBEST] işareti Unity koşulu açısından serbestlik anlamına gelmez.
 >
-> **Eklenen deneme (GÖRÜNÜM, Q-018) [KOD][İNDİRME olabilir][KULLANICI]:** aynı 10-20 sn'lik sahne üç görünümle (bugünkü; ışık/gölge iyileştirilmiş gerçekçi; VRoid + MToon + boyama tarzı mekân). Ölçüt: kullanıcının kör seçimi, kayıt süresi, tutarlılık. Yapılmadı.
+> **Eklenen deneme (GÖRÜNÜM, Q-018, K-019):** ayrıntısı §3.1'de (G-1). Yapılmadı.
+>
+> **Bütçe (K-020, K-021):** ekran kartı ya da para isteyen testler **kapsam dışı**; bilgi için saklandı (§5).
 
 ## 0. Okuma anahtarı
 
@@ -130,6 +132,15 @@ Her sahne **A (mevcut hâl)** ve **B (aday iyileştirme)** olarak iki kez kayded
 | Tekrar edilebilirlik | Figüran yeri/modeli bugün tohumsuz (A05 M11): sayı ve ayar sabit tutulur, 3 ölçüm |
 | İzin | [KOD] · ejderha modeli [İNDİRME] + mağaza hesabı [KULLANICI] |
 
+## 3.1 Yanıtlar sonrası eklenen testler (hiçbiri yapılmadı; ayarlar ÇIKARIM)
+
+| No | Test | Yöntem ve kayıt ayarı | Tekrar yöntemi | Ölçüt | İzin |
+|---|---|---|---|---|---|
+| G-1 | Görünüm karşılaştırması (K-019) | Aynı 10-20 sn sahne, aynı replik, ses, kamera ve hareket; 1080x1920, 30 fps. (0) bugünkü = taban; (1) ışık/gölge iyileştirilmiş gerçekçi (TS-4 gölge/HDR ayarı); (2) stilize: VRoid + MToon + boyama tarzı mekân | her görünüm 3 kayıt, süre ortancası; kullanıcıya adları gizli, karışık sırayla; ayar listesi kayıtlı | kullanıcının kör seçimi, kayıt süresi, tutarlılık (yüz ve kıyafet bozulmuyor) | [KOD] [İNDİRME olabilir] [KULLANICI] |
+| AS-1 | Asistan sınaması (D3 §4) | Aynı 10 kısa hikâye, aynı güncel listeler ve kısaltılmış sözdizimi; en çok 2-3 doğrulama turu. Doğrulayıcıyı kullanıcı elle çalıştırır (K-004) | seçilen her sağlayıcı aynı 10 girdiyle; model adı ve tarih kaydedilir | doğrulayıcı hatası sayısı; doğru konuşan/mekân/hareket oranı; süre; kullanıcının Türkçe beğenisi | [KULLANICI]; Gemini için Q-022 onayı ve kota; yerel için [İNDİRME]; ücretli API kapsam dışı |
+| 4K-1 | Dikey 4K kodlayıcı kabulü | Önce kısa ffmpeg denemesi: `h264_amf` 2160x3840 kabul ediyor mu (olmazsa HEVC). Sonra 10 sn örnek, 30 fps; bit hızı kaydedilir (bugünkü 12 Mbps 4K'da yetersiz kalabilir) | 1080p ve 4K aynı sahne, 3 ölçüm | dosya oynuyor; süre, boyut, kare düşmesi; telefonda kör karşılaştırma (yükleme kullanıcının) | ffmpeg denemesi: onay; sahne kaydı: [KOD] [KULLANICI] |
+| DY-1 | Düz yazıdan taslak doğruluğu (yapay zekâsız) | Kullanıcının 10 kısa hikâyesi mevcut `DuzMetniCevir` ile çevrilir; kod değiştirmeden taban | aynı 10 metin; sonraki her sürümde yinelenir | konuşan, mekân, hareket doğru oranı; düzeltilen satır sayısı (eşik henüz yok) | [KULLANICI] (uygulamada elle) |
+
 ## 4. İkincil testler (beş sahneden sonra, gerekirse)
 
 | Test | İçerik | İzin | Kaynak |
@@ -145,9 +156,9 @@ Her sahne **A (mevcut hâl)** ve **B (aday iyileştirme)** olarak iki kez kayded
 | Blender kare süresi | EEVEE ve Cycles CPU | [İNDİRME] disk | A04 T8 |
 | HDRP prototipi | **Önerilmiyor** (HDRP kaldırılacak, K-003); yalnız karşılaştırma merakı için | — | A04, A09 |
 
-## 5. Ekran kartı ya da para isteyen testler (şimdi yapılmayacak)
+## 5. Ekran kartı ya da para isteyen testler (KAPSAM DIŞI: K-020; bilgi için saklandı)
 
-CC5 / MetaHuman denemesi; bulut ya da kiralık GPU'da kayıt (Unity Editor bulutta koşulları nedeniyle derlenmiş EXE; A10, A12 incelemesi); Cycles GPU; yoğun VFX Graph; Audio2Face. Video-to-video (D4) testi kullanıcı Q-015'e "evet" demedikçe yapılmaz (A11 T4). Hepsi [PARA] ve/veya [KULLANICI].
+CC5 / MetaHuman denemesi; bulut ya da kiralık GPU'da kayıt (Unity Editor bulutta koşulları nedeniyle derlenmiş EXE; A10, A12 incelemesi); Cycles GPU; yoğun VFX Graph; Audio2Face. Video-to-video (YZ-4) testi kullanıcı Q-015'e "evet" demedikçe yapılmaz (A11 T4). Hepsi [PARA] ve/veya [KULLANICI].
 
 ## 6. Prototip planı (ayrı)
 
@@ -162,7 +173,8 @@ CC5 / MetaHuman denemesi; bulut ya da kiralık GPU'da kayıt (Unity Editor bulut
 **Geçiş kuralı:** bir değişiklik ancak (a) ölçütü geçerse, (b) kayıt süresi kabul edilirse, (c) eski hikâyeler bozulmazsa (referans kare karşılaştırması, A09 Riskler), (d) lisansı temizse, (e) kullanıcı onaylarsa ana projeye taşınır.
 
 ## 7. Bu planın eksikleri
-- "Kabul edilen en uzun kayıt süresi" bilinmiyor; kullanıcıdan alınmalı.
+- "Kabul edilen en uzun kayıt süresi" bilinmiyor; kullanıcıdan alınmalı (Q-021).
+- T0 tablosundaki "köprü" yöntemleri (ör. T0-2) §başındaki Unity uyarısına bağlıdır.
 - Eşiklerin çoğu ÇIKARIM; ilk ölçümlerden sonra güncellenecek.
 - Küçük izleyici sayısı (1–3 kişi) kesin istatistik vermez.
 - Editör ve EXE yollarının aynı kurguyu üretip üretmediği testi ancak ortak veri yapısı olunca tam yapılabilir (X2 §6.3).

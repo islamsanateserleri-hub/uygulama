@@ -18,7 +18,7 @@ Tarih: 2026-11-27. **Hiçbiri denenmedi.** Etki sütunu ÇIKARIM'dır. Amaç ekl
 ## 2. Alan alan araçlar
 | Alan (§13) | Araç / yöntem | Nasıl kullanılır | Para / izin |
 |---|---|---|---|
-| Gerçekçi karakter | Rocketbox (şimdi); MPFB (özgün karakter gerekirse); CC5/MetaHuman (kart alınırsa tek karakterle yan yana) | karakter kartı: model, kıyafet, ses, boy, yüz eşlemesi | 0 / ücretli sonra |
+| Gerçekçi karakter | Rocketbox (şimdi); MPFB (özgün karakter gerekirse); CC5/MetaHuman (kart gerekenler bütçe dışı, K-020) | karakter kartı: model, kıyafet, ses, boy, yüz eşlemesi | 0 / ücretli sonra |
 | Yüz ifadesi | ARKit 52 + 15 viseme ara katmanı; duygu tablosu veri dosyasında; hafif asimetri, konuşma öncesi hazırlık | tohumlu rastgelelik | 0 |
 | Göz | göz parlaması, paralaks göz shader'ı | önce basit "göz ışığı" | 0 |
 | Cilt | yumuşak ana ışık, cilde ayrı pürüzlülük, pre-integrated cilt denemesi | URP'de hazır SSS yok; özel kod gerekebilir (X1 U8) | 0 / mağaza gerekirse |
@@ -48,3 +48,6 @@ HDRP · OVR LipSync · Wwise/FMOD · Synty · NC lisanslı modeller · HY-Motion
 
 ## 5. Dürüst sınır
 Bu araçlarla hedef "iyi bir oyun sinematiği"dir. Ekran kartı efekt sayısını artırır; ejderha modelini, animasyonu ve sanat ayarını kendiliğinden iyileştirmez (A06).
+
+## 6. Ek: D1–D3 ve bütçe
+Stilize görünüm araçları: D1 §2. 2D paketler, STP/büyütme, 4K: `../AGENTS/D2_acik_konular.md` §1, §3, §4. Metin asistanı: `../AGENTS/D3_yapay_zeka_asistani.md`. **K-020:** §2'deki "kart alınırsa", "kart" ve ücretli araç kalemleri bütçe dışı; bilgi için saklandı.

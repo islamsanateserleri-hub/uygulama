@@ -88,3 +88,10 @@ FFmpeg LGPL derlemesi kullanılıyor (x264/x265 yok) [KOD, A09/A12]. Uygulama da
 
 ## 9. Kaçınılacaklar (A12, A05, A07)
 HY-Motion/Hunyuan · OVR LipSync · ticari olmayan ses modelleri (XTTS-v2, MMS, Piper dfki) · doğrulanmadan MetaHuman'ı uygulama kütüphanesi yapmak · izinsiz Asset Store/Reallusion/Synty varlığını dağıtmak · bulut avatar servisine bağımlılık.
+
+## 10. Ek: D1–D3 karşılaştırmaları
+- **Görünüm yolları (gerçekçi 3D / stilize 3D / 2,5D / hibrit):** `../AGENTS/D1_duzeltme_arastirmasi.md` §2. İlk ikisi denenecek (K-019).
+- **2D paketler ve çizer ücreti:** `../AGENTS/D2_acik_konular.md` §3.
+- **Büyütme (doğal 4K, FSR 1, STP, dış araçlar):** D2 §4; yapay zekâlı büyütme ayrı onay ister.
+- **Asistan seçenekleri (Claude dışarıdan / Gemini / yerel / ücretli):** `../AGENTS/D3_yapay_zeka_asistani.md` §3-§4. Gemini fiyat/katman satırlarından 3.5 Flash-Lite fiyatı ve 3.8 TTS ücretsiz katmanı **doğrulanmadı**.
+- K-020: bu rapordaki ücretli ya da kart isteyen seçenekler bütçe dışı. Hiçbiri denenmedi.

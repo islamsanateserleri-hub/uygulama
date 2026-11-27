@@ -2,6 +2,8 @@
 
 > **TESTSİZ TASLAK.** Yalnız teşhis aşaması (15 numaralı dosya Aşama 1; testler T0) bağlayıcı plandır ve o da kullanıcı onayıyla başlar. Sonrası T0 sonuçlarına göre yeniden yazılır. "URP'de kal" bir karar değil **varsayılan hipotezdir** (04: K-005).
 
+> **Kullanıcı yanıtları (K-017..K-020) işlendi:** önce araştırma; yapay zekâ asistanı olacak (yeri belirsiz); gerçekçiye yakın 3D ve stilize 3D birlikte denenecek; bütçe yalnız ek disk (ekran kartı yok). Ayrıntı §8-§11.
+
 Tarih: 2026-11-27. **Durum: ÖNERİ. Test edilmedi. Geliştirmeye geçiş kullanıcının ayrı kararıdır** (protokol §19). Testler yapıldıkça bu dosya değişebilir; eski karar silinmez, yenisi eklenir.
 Dayanak: A09 "Seçenek 0 ve 1", A01, A02, A03, A04, A05, A06, A07, A08, A12; denetimler X1, X2. Ayrıntıların çoğu ÇIKARIM'dır.
 
@@ -10,7 +12,7 @@ Dayanak: A09 "Seçenek 0 ve 1", A01, A02, A03, A04, A05, A06, A07, A08, A12; den
 2. **Hikâye metni tek doğruluk kaynağı olarak kalsın** (A09 §A.2).
 3. **Önce kararlar, sonra çekim:** kayıttan önce her şey hesaplanır; oynatıcı yalnız uygular (A08).
 4. **Kimseye bağımlı olmayan arayüzler:** ses, hizalama, yüz, hareket, kamera, render, kare işleyici (A07, A11, X1 G3).
-5. Yapay zekâ **video üreticisi** mimaride yok. Yerel yardımcı modeller (TTS, hizalama) kullanıcı kararına bağlı (Q-015).
+5. Yapay zekâ **video üreticisi** mimaride yok. Metin asistanı olacak (K-018; §8). Yerel yardımcı modeller (TTS, hizalama) ve görüntü iyileştirme kullanıcı kararına bağlı (Q-015).
 
 ## 2. Büyük resim
 ```
@@ -54,7 +56,7 @@ Adlandırma: `plan:` komutu dolu; yeni komutlarda `cekim:` (X1 D12).
 
 **4.5 Mekân, ışık, efekt.** "Mekân = veri" (kit, malzeme, noktalar, kamera hacmi, gizlenebilir duvar, uzak katman, uzak kırpma mesafesi, tohum, durum). Üç ışık katmanı (mekân, karakter, renk görünümü). Efekt tarifi + üç arka uç (2D / parçacık+shader / VFX Graph); mevcut `vfx:` adları korunur.
 
-**4.6 Render ve kayıt.** Profiller: Önizleme (hızlı), Kayıt (yüksek), Ağır (ileride kart). HDR hattı + alfa çözümü (C-024); kalıcı Volume Profile (EXE'de efekt silinmesin); kare atlamada yerine kopya; takılma bekçisi; disk ön kontrolü; iptalde düzgün kapatma; yarıda kalmaya dayanıklı ara dosya; iki kayıt yolunun teke indirilmesi; sürüm sabitleme (ffmpeg, paketler). Kare dizisi diskte tutulmaz.
+**4.6 Render ve kayıt.** Profiller: Önizleme (hızlı), Kayıt (yüksek), Ağır (kart gerektirir; **bütçe dışı**, K-020; yalnız yer bırakılır). HDR hattı + alfa çözümü (C-024); kalıcı Volume Profile (EXE'de efekt silinmesin); kare atlamada yerine kopya; takılma bekçisi; disk ön kontrolü; iptalde düzgün kapatma; yarıda kalmaya dayanıklı ara dosya; iki kayıt yolunun teke indirilmesi; sürüm sabitleme (ffmpeg, paketler). Kare dizisi diskte tutulmaz.
 
 **4.7 Geleceğe açıklık (yalnız yer bırakılır).** Ek geçişler (derinlik, maske, hareket vektörü) ve `IKareIslemci`; akış ya da parça halinde, işlenip silinen (X1 G1, G2). Belirlenimcilik hedeflenir ama GPU/fizik için kare birebirliği garanti sayılmaz (X1 G6).
 
@@ -68,3 +70,30 @@ Büyük sınıflar (StoryPlayer ~1600 satır) bir anda yeniden yazılmaz. Önce 
 
 ## 7. Bu mimarinin geçerli olma koşulları
 URP yol haritasının sürmesi · testlerde gölge/HDR'nin kabul edilebilir sürede çalışması · kullanıcının "video üretici yapay zekâ yok" şartının korunması. Biri değişirse karar kaydı güncellenir.
+
+## 8. Yapay zekâ asistanı (K-018, K-023; ÖNERİ, denenmedi)
+- Görev: yalnız **taslak metin** (hikâye taslağı, düz yazıdan etiket, kamera önerisi, tek satır değiştirme, kontrol önerisi). Görüntü/video üretmez (ana araştırmacının yorumu; kullanıcı onaylamadı).
+- Asıl hikâyenin üstüne kendiliğinden yazmaz. Doğrulayıcının `satir/kod/mesaj/oneri` çıktısı en çok 2-3 tur geri verilir. Kullanıcı farkı görüp onaylar; ses üretimi (kota) onaydan sonra.
+- **Unity'de eylem yapmaz** (doğrula-kur-kaydet komutu vermez): D3 §5'teki durum 2 (yalnız metin) durum 3'e (Unity'yi sürme) kaymasın. Durum 2 için bile Unity metni belirsiz (R-044).
+- Sağlayıcı arayüzü: Gemini / yerel model / dışarıdan (metin dosyası). Ücretli API bütçe dışı.
+- Bugün (statik kod okuması, D3 §1): `YardimciGemini.cs` iki düğme (öneri al, biçime çevir); istemde hareket, kamera, efekt listesi ve sözdizimi yok; otomatik doğrula-düzelt döngüsü yok. Eklemek kod değişikliğidir.
+- Gizlilik: ücretsiz Gemini'de metin ürün geliştirmede kullanılır, insanlar okuyabilir; 18+ ve kullanıcı kitlesi koşulu (Q-022). Anahtar şifreli saklanır, Git'e ve uygulamaya gömülmez; Editor tarafı `EditorPrefs`'ten düz okuyor görünüyor (ÇIKARIM).
+- Claude aboneliği uygulamanın içine konamaz. Aynı Anthropic sayfası, son kullanıcının değiştirilmemiş Claude Code'a kendi aboneliğiyle girmesini engellemediğini de yazıyor (üründe çalıştırma Ticari Şartlar ve koşullarla) (DEN2 O5).
+- **Açık soru:** içeride mi dışarıda mı (Q-020). Model fiyatı/ücretsiz katman bilgileri doğrulanmadı (Q-023).
+
+## 9. İki görünüm profili (K-019, K-024)
+| Profil | İçerik | Not |
+|---|---|---|
+| Gerçekçiye yakın | mevcut Rocketbox hattı + gölge, HDR/ton, SSAO, plana göre ışık | fotogerçek beklenmez |
+| Stilize | VRoid + MToon + boyama tarzı mekân | aynı hareket, kamera, ses hattı; ayar emeği ve sonuç bilinmiyor |
+Görünüm profili veridir (malzeme, ışık, renk, karakter kümesi); hikâye ve çekim listesi ortaktır. Seçim G-1 denemesinden sonra. 2,5D ana yol değil.
+
+## 10. 4K ve düz yazıdan sahne (D2 §1-§2)
+- **Varsayılan 1080x1920.** 4K (2160x3840) yalnız ölçümden (4K-1) sonra, isteğe bağlı. `h264_amf`'in dikey 4K'yı kabul ettiği doğrulanmadı. Boyutlar kodda sabit (`Editor/StudyoKayit.cs:168,286-287`, `Uygulama/KayitBootstrap.cs:73,108,220-227`); bit hızı ayarı `Uygulama/FfmpegPipeRecorder.cs:82` (12 Mbps). 2D görsel ve yazı 4K'ya uygun boyutta olmalı. TikTok'un izleyiciye 4K gösterdiğine dair resmî bilgi yok.
+- **Düz yazı:** sıfırdan yazılmaz; mevcut `DuzMetniCevir` (`Uygulama/YardimciMotor.cs`) genişletilir. Her tahminde güven işareti; belirsizde açılır liste ("Bunu kim söylüyor?"); kullanıcı düzeltmesi ad sözlüğüne kaydedilir. "Hatasız otomatik" sözü verilmez. Asistanla ilişkisi: yapay zekâsız çevirici her zaman çalışan temel yoldur; asistan isteğe bağlı ikinci taslak kaynağıdır; ikisi de aynı doğrulayıcı ve onaydan geçer.
+
+## 11. Çocuk karakter kuralları (D2 §6; ÇIKARIM)
+Kıyafet her açıdan denetlenir; çocukta alçaktan açı, yakın beden planı, yatak/kıyafet değiştirme sahnesi kapalı; şiddet/tehlike sınırlı; gerçek çocuk yüzü ya da sesi yok. Yayından önce TikTok kuralı elle okunur (R-045). İlk adım: projedeki Rocketbox çocukları sayılıp önizlenir. Çocuk sesi araştırılmadı.
+
+## 12. Köprü komutları
+§6 ve R08'deki "mevcut komutlar korunur" ifadesi kodun korunması içindir. **Yapay zekâ ajanının bu köprüyü kullanması Q-016'ya bağlıdır; bugün kapalı (K-004).**

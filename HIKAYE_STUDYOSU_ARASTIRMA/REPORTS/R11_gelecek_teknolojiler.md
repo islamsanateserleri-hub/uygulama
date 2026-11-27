@@ -2,6 +2,8 @@
 
 Tarih: 2026-11-27. **Hiçbiri denenmedi.** Ana kaynak: A11; ek A00, A02, A03, A06, A07. "Bugün" = ürün ya da kod yayımlanmış; **bizde çalıştığı anlamına gelmez.** Senaryolar ÇIKARIM, güven düşük–orta.
 
+> **K-020:** güçlü NVIDIA, kiralık GPU ya da ücret isteyen satırlar bütçe dışı; bilgi için saklandı.
+
 ## 1. Bugün uygulanabilir
 | Teknoloji | Donanım | Not |
 |---|---|---|
@@ -34,14 +36,18 @@ Tarih: 2026-11-27. **Hiçbiri denenmedi.** Ana kaynak: A11; ek A00, A02, A03, A0
 | Platform etiket kuralları ve model lisansları | her gözden geçirmede |
 
 ## 4. Yapay zekâ "çizgisi" (kullanıcı kararı, Q-015)
+Düzey adları "YZ-0…YZ-5" oldu (A11'deki D0…D5 ile aynı; araştırma dosyaları D1–D3 ile karışmasın diye).
+
+**Metin asistanı (K-018):** görüntü üretmeyen, yalnız taslak metin yazan yardımcı bu görüntü basamaklarının dışındadır (ayrı satır: "YZ-metin"); kullanıcı asistan istedi, yeri belirsiz (Q-020).
+
 | Düzey | Ne yapar | Öneri |
 |---|---|---|
-| D0 | klasik çizim | uyumlu |
-| D1 | görüntü büyütme/temizleme | uyumlu sayılır |
-| D2 | yardımcı araç: ses, hareket, 3D model üretimi, hizalama | son kareyi Unity üretir; kullanıcı onaylamalı |
-| D3 | motor karesini yapay zekâyla güzelleştirme | **gri alan: sorulmalı** |
-| D4 | video-to-video | A11: video üreticisi sayılır |
-| D5 | metinden/resimden video | kapsam dışı |
+| YZ-0 | klasik çizim | uyumlu |
+| YZ-1 | görüntü büyütme/temizleme | uyumlu sayılır |
+| YZ-2 | yardımcı araç: ses, hareket, 3D model üretimi, hizalama | son kareyi Unity üretir; kullanıcı onaylamalı |
+| YZ-3 | motor karesini yapay zekâyla güzelleştirme | **gri alan: sorulmalı** |
+| YZ-4 | video-to-video | A11: video üreticisi sayılır |
+| YZ-5 | metinden/resimden video | kapsam dışı |
 
 Sınama sorusu (A11): "Bu model bizim 3D sahnemiz olmadan da video üretebiliyor mu?" Evetse video üreticisidir.
 

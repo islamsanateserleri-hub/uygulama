@@ -48,3 +48,13 @@ R-001…R-011 yukarıda. R10'daki satırlardan zaten kayıtlı olanlar tekrar ya
 | R-039 | Gerçek kişi yüzü/sesi, telifli karakter/müzik (lisans) | düşük | yüksek | orta | kullanma | özgün/CC0 | açık |
 | R-040 | Bulgular statik kod okuması ve özet araçla okunan kaynaklara dayanıyor (araştırma) | yüksek | yüksek | yüksek | teşhis testleri; kritik cümleleri asıl metinden denetle | — | açık |
 | R-041 | Unity CLI yolu: geniş yetki (eval), yeni paket, Unity yetkiyi geri alabilir (teknoloji bağımlılığı) | orta | orta | orta | kullanıcı onayı, kopya projede deneme | elle çalıştırma | açık |
+
+## DEN2 sonrası eklenenler (2026-11-27; olasılık/etki ÇIKARIM, ölçülmedi)
+| ID | Risk (kategori) | Olasılık | Etki | Seviye | Önlem | Alternatif | Durum |
+|---|---|---|---|---|---|---|---|
+| R-042 | Proje talimat dosyaları (CLAUDE.md, GEMINI.md) hâlâ yapay zekâya Unity'yi dosya köprüsüyle sürmesini söylüyor; yeni oturum K-004'ü görmeden köprüyü kullanabilir (lisans/süreç) | orta-yüksek | yüksek | **yüksek** | araştırma klasöründe uyarı; kullanıcı onayıyla iki dosyanın başına geçici uyarı (dosyalar bu işte DEĞİŞTİRİLMEDİ) | Unity CLI ya da elle çalıştırma kararı | açık (kullanıcı onayı bekliyor) |
+| R-043 | Asistan biçimce geçerli ama yanlış konuşan/mekân/hareket üretir; doğrulayıcı yakalamaz (kalite) | yüksek | orta | orta | kullanıcı farkı onaylar; AS-1 testi | elle düzeltme | açık |
+| R-044 | Uygulama içi dil modeli çağrısı için Unity koşulu belirsiz; asistan "kur/kaydet" gibi eylem yaparsa yetkisiz ajan erişimine yaklaşır (D3 §5 durum 2-3) (lisans) | bilinmiyor | yüksek | yüksek | asistan eylem yapmaz; Unity'ye yazılı soru | asistan Unity dışında yalnız metin yazar | açık |
+| R-045 | TikTok 18 yaş altı benzerliği kuralı; kurgusal çocuk karakteri kapsayıp kapsamadığı belirsiz; çocukta kıyafet/kamera kusuru (platform/güvenlik) | bilinmiyor | çok yüksek | **yüksek** | 14 §11 kuralları; yayından önce kuralı elle okumak | çocuk karakterli sahne yayımlamamak | açık |
+| R-046 | Yerel dil modeli yavaş kalır (dakikalar) ve 16-23 GB disk ister (performans/disk) | orta-yüksek | orta | orta | kısaltılmış sözdizimi; önce ölçüm | Gemini ya da dışarıdan Claude | açık |
+| R-047 | Gemini koşulu: 18 yaş altına yönelik ya da onların erişmesi muhtemel uygulamada API kullanılamaz (R-038'i tamamlar) (lisans) | bilinmiyor | yüksek | yüksek | uygulamayı kimin kullanacağı netleşmeden dağıtma (Q-022) | asistan dışarıda; yerel model | açık |

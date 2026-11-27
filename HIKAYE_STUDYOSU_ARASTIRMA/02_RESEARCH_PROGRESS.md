@@ -1,4 +1,14 @@
-# 02 İLERLEME (son: 27 Kas 2026, denetim sonrası)
+# 02 İLERLEME (son: 27 Kas 2026, ikinci denetim sonrası birleştirme)
+
+## Güncel durum (aşağıdaki eski bölümlerin yerine geçer)
+- Tamam: A01–A12 + A00, K01, X1, X2, test planı, 13 rapor, kullanıcı özeti, DEN, D1, D2, D3, DEN2; kullanıcı yanıtları K-017..K-020; DEN2 masa başı düzeltmeleri (16 §4-§5). Kaynak: 615 (yeniden sayım, 09).
+- Açık, kullanıcı: Unity çalışma yolu ve talimat dosyası uyarısı; asistanın yeri ve veri/18+; yapay zekâ sınırı; en uzun bekleme; kullanım amacı.
+- Açık, test (ayrı onayla): T0, TS-1..5, G-1, AS-1, 4K-1, DY-1. Hiçbiri yapılmadı.
+- Açık kısıtlar: 16 §4.
+- Sonraki oturum: kullanıcı yanıtlarını karar kaydına işle; yanıt ve onay olmadan yeni iş yok.
+
+---
+Eski kayıt (tarihsel):
 ## Tamamlanan
 - A01–A12 + A00; K01; X1, X2; 12 test planı; 13 rapor + kullanıcı özeti; bağımsız denetçi; D1 düzeltme araştırması; öz denetim (16). Toplam kaynak kaydı: 562.
 ## Bekleyen

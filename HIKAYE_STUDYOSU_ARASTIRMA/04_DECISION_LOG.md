@@ -31,3 +31,19 @@ Biçim: Karar ID · tarih · karar · gerekçe · kaynaklar · alternatifler · 
 - K-018 Yapay zekâ: "Yapay zeka asistanı olacak". Yorum (onaylanmadı): yapay zekâ hikâye/sahne hazırlamaya yardım eder, görüntüyü üretmez. İçeride mi dışarıda mı belirsiz (D3). Q-015 yalnız kısmen yanıtlandı.
 - K-019 Görünüm denemesi: "İkisini de göster" (gerçekçiye yakın 3D ve stilize 3D). Q-018 deneme kapsamı yanıtlandı. Deneme araştırmadan sonra.
 - K-020 Bütçe: "Ek disk kadar" (~150 $ ABD göstergesi; satın alma talimatı değil). Ekran kartı gerektiren planlar kapsam dışı (D3).
+
+## Kullanıcı yanıtları — §7.4 alanlarıyla (DEN2 sonrası ek; yukarıdaki maddeler geçerli, silinmedi)
+| ID | Tarih | Karar | Gerekçe | Kaynak | Alternatif | Risk | Doğrulama | Geçerlilik |
+|---|---|---|---|---|---|---|---|---|
+| K-017 | 2026-11-27 | KULLANICI: "Önce araştırmaları Tamamla" | kullanıcı sırası | soru penceresi | hemen geliştirme / test | testler ve geliştirme bekler | kullanıcı sözü | kullanıcı değiştirene kadar |
+| K-018 | 2026-11-27 | KULLANICI: "Yapay zeka asistanı olacak" | kullanıcı isteği | soru penceresi, D3 | asistansız | anlamı belirsiz (Q-020) | söz kayıtlı; yorum onaylanmadı | kullanıcı netleştirene kadar |
+| K-019 | 2026-11-27 | KULLANICI: "İkisini de göster" (gerçekçiye yakın 3D ve stilize 3D denemesi) | karar gözle verilsin | soru penceresi, D1 §2 | tek görünüm; 2,5D; hibrit | iki görünüm emeği | deneme yapılmadı (12: G-1) | deneme sonucu ve kullanıcı seçimi |
+| K-020 | 2026-11-27 | KULLANICI: "Ek disk kadar" | bütçe sınırı | soru penceresi, D3 §6 | kartlı planlar | tümleşik kart kaliteyi ve süreyi sınırlayabilir | ~150 $ yalnız ABD göstergesi; TL bilinmiyor | kullanıcı bütçeyi değiştirene kadar |
+
+## Yanıtlar sonrası güncellenen öneriler (eski satırlar silinmedi; çeliştikleri yerde bunlar geçerli)
+| ID | Tarih | Karar | Gerekçe | Kaynak | Alternatif | Risk | Doğrulama | Geçerlilik |
+|---|---|---|---|---|---|---|---|---|
+| K-021 | 2026-11-27 | ÖNERİ (K-014'ün "sonra güç kaynağı/kasa, sonra kart" bölümünün yerine): ekran kartı, güç kaynağı ve ücretli kalemler BÜTÇE DIŞI; yalnız ek disk (satın alma talimatı değil; önce disk envanteri ve boş yuva kontrolü) | K-020 | D3 §6 | Plan B2/C (bilgi olarak saklı) | süre/kalite sınırı aşılırsa çare yalnız ayar/içerik azaltmak | ölçüm yok | bütçe değişene kadar |
+| K-022 | 2026-11-27 | ÖNERİ (K-006 ve K-007'ye ek): UE5'i yeniden açma koşulu ("kart alınabiliyor") ve "güçlü kart alınırsa Blender'a yeniden bak" koşulu bu bütçede sağlanamaz | K-020 | D3 §6 | — | görünüm tavanı düşük kalabilir | ölçüm yok | bütçe değişene kadar |
+| K-023 | 2026-11-27 | ÖNERİ: asistan yalnız taslak metin üretir; asıl hikâyeye kendiliğinden yazmaz; doğrulayıcıya en çok 2-3 tur; kullanıcı farkı onaylar; Unity'de eylem yapmaz; sağlayıcı arayüzü (Gemini / yerel / dışarıdan). Ücretli API bütçe dışı. İçeride/dışarıda kararı YOK | K-018, K-020, K-004 | D3 §2-5 | yalnız dışarıdan (kod gerekmez); yalnız uygulama içi; yerel model | biçimce geçerli ama yanlış sahne; veri Google'a gider; Unity koşulu belirsiz | TEST EDİLMEDİ (12: AS-1) | kullanıcı asistanın yerini seçince yeniden yazılır |
+| K-024 | 2026-11-27 | ÖNERİ (K-015 güncellemesi): iki görünüm profili (gerçekçiye yakın, stilize) aynı hatta denenir; bugünkü görünüm karşılaştırma tabanıdır; 2,5D ve hibrit deneme kapsamında değil | K-019 | D1 §2 | 2,5D; hibrit | iki profili sürdürme emeği | TEST EDİLMEDİ | deneme sonrası kullanıcı seçimi |

@@ -4,6 +4,8 @@
 
 Tarih: 2026-11-27. **Test edilmedi.** Protokol bu raporu "araştırma ve testler sonucunda" ister; testler henüz yapılmadığı için bu bir **taslak öneridir**. Teknik ayrıntı: `../14_FINAL_ARCHITECTURE.md`.
 
+**Yanıtlarınız (K-017..K-020):** bütçe yalnız ek disk, ekran kartı yok; iki görünüm denenecek; yapay zekâ asistanı olacak (içeride mi dışarıda mı belirsiz). Aşağıdaki "büyük sahne" hedefleri (Aşama 6-7) tümleşik kartta risklidir.
+
 ## 1. Tek cümle
 Mevcut uygulama atılmaz; Unity URP üzerinde, "önce her şeyi planla, sonra çek" düzenine adım adım geçirilir.
 
@@ -24,8 +26,10 @@ Mevcut uygulama atılmaz; Unity URP üzerinde, "önce her şeyi planla, sonra ç
 5. **Kayıt:** hızlı önizleme ve yüksek kalite profilleri; parça parça, yarıda kalırsa kaldığı yerden.
 6. **Denetçi ve kayıt defteri:** hata varsa kayıt başlamaz; her varlığın lisansı yazılı.
 
+**Eklenenler (14 §8-§11):** metin asistanı (yalnız taslak; onay sizde; Unity'de eylem yapmaz) · iki görünüm profili · varsayılan 1080x1920, 4K yalnız ölçümden sonra · mevcut düz yazı çeviricisinin güven işaretiyle genişletilmesi · çocuk karakter kıyafet/kamera kuralları.
+
 ## 4. Korunanlar
-Hikâye sözdizimi ve doğrulayıcı · köprü komutları · mevcut ffmpeg ile kayıt yapısı (iyi temel, A09 §A.2) · adlı mekân noktaları · yüz canlılığı (kırpma, bakış) · mevcut `vfx:` ve `kamera:` komutları.
+Hikâye sözdizimi ve doğrulayıcı · köprü komutları (kod korunur; **yapay zekâ ajanının kullanması Q-016'ya bağlı, bugün kapalı**) · mevcut ffmpeg ile kayıt yapısı (iyi temel, A09 §A.2) · adlı mekân noktaları · yüz canlılığı (kırpma, bakış) · mevcut `vfx:` ve `kamera:` komutları.
 
 ## 5. Çözülmemiş mimari sorular
 Satır değişince düzenlemelerin korunması · parçalı kayıtta kesintisiz ses · planlama anında oyuncu konumu · yeni karakter araçlarının bu Unity sürümüyle uyumu · HDR ile saydam bindirme. Her biri için küçük prototip gerekir (12_TEST_PLAN).

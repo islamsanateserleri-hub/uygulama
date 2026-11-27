@@ -39,3 +39,9 @@
 
 ## 2026-11-27 — Kullanıcı yanıtları ve D3 (yapay zekâ asistanı)
 - K-017..K-020 kaydedildi. D3: asistan seçenekleri, bütçe etkisi (24 arama). Test yok.
+
+## 2026-11-27 — DEN2 ikinci bağımsız denetim ve birleştirme
+- DEN2: "tamamlandı" denemez; ana neden birleştirme eksiği.
+- Masa başı düzeltmeler uygulandı (K-021..K-024, Q-020..Q-023, C-032, R-042..R-047; mimari, yol haritası, raporlar, veritabanları, kullanıcı özeti). Yinelenen Q-019, Q-020 oldu.
+- Kaynak sayısı yeniden sayıldı: 615 (09).
+- Web araması, test, kod ve git yok. Bu düzeltmeler üçüncü kez denetlenmedi.

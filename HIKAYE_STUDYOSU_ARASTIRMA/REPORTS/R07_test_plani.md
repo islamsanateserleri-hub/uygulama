@@ -2,11 +2,13 @@
 
 Tarih: 2026-11-27. **Hiçbir test yapılmadı.** Ayrıntının ve ölçütlerin asıl yeri: `../12_TEST_PLAN.md`. Bu rapor onunla çelişirse 12 geçerlidir.
 
+> **Unity uyarısı (K-004, Q-016):** köprüden komut gönderilmez; Unity işlemlerini kullanıcı elle başlatır ya da onay verirse Unity CLI kurulur. **Bütçe (K-020):** kart ya da para isteyen testler kapsam dışı.
+
 ## 1. Sıra
 1. **Ön teşhis (T0-1…T0-14):** kod okumasıyla bulunan kusurlar gerçek mi? Çoğu ucuz ve hızlı.
 2. **Beş test sahnesi (TS-1…TS-5):** önce mevcut hâl (A), sonra aday iyileştirme (B).
 3. **İkincil testler**, gerekirse.
-4. Para/kart isteyenler en sona ve ayrı onayla.
+4. Para/kart isteyenler: ~~en sona ve ayrı onayla~~ kapsam dışı (K-020).
 
 ## 2. İlk yapılacak teşhisler
 | Soru | Test |
@@ -29,6 +31,8 @@ Tarih: 2026-11-27. **Hiçbir test yapılmadı.** Ayrıntının ve ölçütlerin 
 | TS-5 | Kalabalık, ejderha, çevre | Sınır nerede? | çökme yok, süre kabul edilebilir | kod; ejderha modeli |
 
 Her sahne için teknoloji, varlık, yöntem, render ayarı, beklenen sonuç, başarı ölçütü, performans ölçümü, maliyet (hedef 0 TL) ve tekrar edilebilirlik 12 numaralı dosyada yazılıdır.
+
+**Eklenen dört test (12 §3.1; yapılmadı):** G-1 görünüm karşılaştırması (bugünkü taban + iyileştirilmiş gerçekçi + stilize) · AS-1 asistan sınaması (aynı 10 kısa hikâye) · 4K-1 dikey 4K kodlayıcı kabulü · DY-1 düz yazıdan taslak doğruluğu.
 
 ## 4. Ölçüm kuralları
 Aynı hikâye ve ayar; 3 ölçümün ortancası; kayıt süresi, kare süresi, tepe bellek, atlanan kare, disk. Aynı hikâye bugün iki kayıtta aynı çıkmadığı için (tohumsuz rastgelelik) birebir kare karşılaştırması henüz güvenilir değil.

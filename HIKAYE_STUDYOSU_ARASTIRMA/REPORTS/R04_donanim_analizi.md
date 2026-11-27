@@ -2,6 +2,8 @@
 
 Tarih: 2026-11-27. **Bu bilgisayarda hiçbir performans ölçümü yapılmadı** ve bu donanıma ait yayımlanmış Unity ölçümü bulunamadı. **Satın alma kararı yoktur** (protokol §11, §19). Ana kaynak: A10; denetim: X1 §3.
 
+> **K-020 (bütçe yalnız ek disk):** ekran kartı, güç kaynağı ve ücretli bulut seçenekleri **bütçe dışı**; §6-§8 ve §9'un "yüksek kalite" sütunu yalnız bilgi için saklandı.
+
 ## 1. Mevcut bilgisayar
 | Parça | Durum | Kaynak |
 |---|---|---|
@@ -51,7 +53,7 @@ Sonuç [ÇIKARIM]: kalemler tek tek sığar görünür, **toplamda sığacağı 
 ## 5. Ücretsiz kontroller (A10 §Plan A)
 RAM hızı/XMP · BIOS sürümü ve paylaşılan bellek ayarı · disk temizliği · Windows 10 uzatılmış güvenlik güncellemesi kaydı (Ekim 2027'ye kadar; haberde 12 ve 14 Ekim geçiyor) [A10-S024] · güç kaynağı etiketi. BIOS değişikliği yalnız kullanıcı isterse.
 
-## 6. Ekran kartı adayları (karar değil)
+## 6. Ekran kartı adayları (BÜTÇE DIŞI; bilgi için)
 | Kart | Bellek | Güç / önerilen güç kaynağı | TL (18 Tem 2026, "başlangıç") | Not |
 |---|---|---|---|---|
 | RTX 3060 12 GB | 12 | 170 W / ~550 W (tablo başlığı doğrulanamadı) | yeni fiyat alınamadı | eski; DLSS 5 yok |
@@ -67,11 +69,11 @@ Kaynak: [A10-S005–S008, S010–S011, S017]. TL sayıları tek ve zayıf (C) bi
 ## 7. Güç kaynağı, kasa, SSD
 Güç kaynağı en büyük bilinmeyen: yetersiz/eski ünite ile kart takmak donanım hasarı riski (A10-R1). Gerekli: marka, model, watt, yaş, 8-pin kablo; kasada yaklaşık 25–30 cm kart yeri. PCIe 4.0 SSD burada 3.0 hızında çalışır; pahalı model gereksiz. ABD'de 1 TB ~144 $ [A10-S022]; güvenilir TL fiyatı yok.
 
-## 8. Bulut GPU
+## 8. Bulut GPU (bütçe dışı)
 RunPod 0,27–0,89 $/saat (örnekler; Windows olduğu yazmıyor), Shadow Pro 26–41 £/ay [A10-S030][A10-S031]. Unity Editor koşulları bulutta Editor çalıştırmayı kısıtlıyor; derlenmiş EXE yönü daha güvenli, ama koşullar ayrıca okunmalı (A10, A12). Saatlik Windows kartı için doğrulanmış fiyat bulunamadı.
 
 ## 9. Asgari ve önerilen
-| | Asgari (bugün) | Yüksek kalite hedefi (ÇIKARIM) |
+| | Asgari (bugün) | Yüksek kalite hedefi (ÇIKARIM; bütçe dışı) |
 |---|---|---|
 | İşlemci/RAM/anakart | mevcut | mevcut (ölçüm darboğaz göstermedikçe) |
 | Grafik | Vega 7, düşük/orta ayar | 16 GB (alt sınır 12) ayrı kart |
@@ -82,5 +84,7 @@ RunPod 0,27–0,89 $/saat (örnekler; Windows olduğu yazmıyor), Shadow Pro 26�
 ## 10. Öneri
 1. Şimdi para harcama; önce ölç (12_TEST_PLAN T0-6, TS-4).
 2. İlk ihtiyaç büyük olasılıkla disk.
-3. Kart konuşulmadan güç kaynağı ve kasa öğrenilsin.
-4. Kullanıcı "1 dakikalık video için en çok şu kadar beklerim" desin; ölçüm bunu aşarsa kart konuşulur.
+3. Disk almadan önce boş M.2/SATA yuvası kontrol edilsin. (Kart konuşulmadığı için güç kaynağı bilgisi şimdilik gerekmiyor.)
+4. Kullanıcı "1 dakikalık video için en çok şu kadar beklerim" desin (Q-021); ölçüm bunu aşarsa ayar/içerik azaltılır.
+
+Disk yararı: kopya proje, Library, kayıt ara dosyaları, indirme, istenirse yerel model. Görüntü kalitesini ve kare hızını artırmaz (D3 §6).

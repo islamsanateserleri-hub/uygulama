@@ -1,6 +1,6 @@
 # R02 — Uluslararası teknoloji araştırması
 
-Tarih: 2026-11-27. **Hiçbir teknoloji denenmedi.** Kaynak numaraları `SOURCES/` dosyalarındadır (toplam 534 kayıt; A 324, B 94, C 79, D 26, sınıfsız 11 — `09_SOURCE_DATABASE.md`, otomatik sayım).
+Tarih: 2026-11-27. **Hiçbir teknoloji denenmedi.** Kaynak numaraları `SOURCES/` dosyalarındadır (güncel toplam 615 kaynak; A 386, B 109, C 94, D 26 — `09_SOURCE_DATABASE.md`; ilk yazımda otomatik sayım 534 idi, D1–D3 sonradan eklendi).
 
 ## 1. Nasıl araştırıldı, sınırları
 - 12 uzman ajan + 1 takip ajanı + 2 çapraz denetim. Ağırlık İngilizce kaynaklarda.

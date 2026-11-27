@@ -4,19 +4,22 @@
 
 Tarih: 2026-11-27. **Hiçbir deneysel test yapılmadı.** Bu yüzden protokolün istediği "kesin öneri", bugün **kanıta dayalı ama testle doğrulanmamış** bir yön önerisidir. Bağımsız denetçi raporu hazır (`../AGENTS/DEN_bagimsiz_denetci.md`) ve araştırmayı tamamlanmış saymadı; öz denetim için `../16_RESEARCH_AUDIT.md`'ye bakın. Bu öneri değişebilir.
 
+> **Yanıtlar sonrası ek (K-017..K-020):** bütçe yalnız ek disk; ekran kartı yok; iki görünüm (gerçekçiye yakın ve stilize 3D) denenecek; yapay zekâ asistanı olacak (yeri belirsiz). Kalite sınırı: Aşama 6-7 (zengin mekân, efekt, kalabalık, ejderha) tümleşik kartta ayar/içerik azaltmayı gerektirebilir (ÇIKARIM).
+
 ## 1. Soru
 En yüksek uygulanabilir sinematik kalite, en düşük sürdürülebilir maliyetle nasıl elde edilir?
 
 ## 2. Öneri
 1. **Unity URP'de kal (varsayılan hipotez; test edilmedi).** HDRP'ye geçme (kaldırılacak [A04-S002]); şimdi Unreal/Blender'a taşıma (A09, A10).
 2. **Önce kusurları düzelt, sonra güzelleştir:** hareket ve ses/altyazı → yüz → gölge/ışık → kamera/kurgu → mekân/efekt → büyük sahneler.
-3. **Sıfır yatırımla başla (Plan A)** ve ölç. İlk gerekirse disk; ekran kartı ancak ölçüm ve güç kaynağı/kasa kontrolünden sonra.
+3. **Sıfır yatırımla başla (Plan A)** ve ölç. Gerekirse yalnız ek disk. Ekran kartı **bütçe dışı** (K-020); süre sınırı aşılırsa ayar/içerik azaltılır.
 4. **Varlıklarda MIT/CC0 çekirdeği** (Rocketbox, UAL, Poly Haven, ambientCG; lisans kaydıyla); dağıtım yapılacaksa Mixamo ve mağaza varlıkları çıkarılır.
 5. **Mimari:** ses deposu + tek çekim listesi + dayanıklı kayıt (14 numaralı dosya).
-6. **Yapay zekâ video üreticisi kullanılmaz.** Yardımcı araçların sınırı kullanıcıya sorulur (Q-015).
+6. **Yapay zekâ video üreticisi kullanılmaz.** Metin asistanı olacak (K-018; yalnız taslak, Unity'de eylem yok); ses, hizalama ve görüntü iyileştirme sınırı sorulur (Q-015).
+7. **İki görünüm profili** aynı kısa sahnede denenir (G-1).
 
 ## 3. Beklenen kalite — dürüst sınır
-- Hedeflenebilir: doğru altyazı, yürüyen ve konuşan karakterler, ışıklı ve derinlikli görüntü, film benzeri kurgu; iyi varlık, emek ve gerekirse kartla "iyi oyun sinematiği" (ÇIKARIM).
+- Hedeflenebilir: doğru altyazı, yürüyen ve konuşan karakterler, ışıklı ve derinlikli görüntü, film benzeri kurgu; iyi varlık ve emekle "iyi oyun sinematiği"ne yaklaşmak; ekran kartı olmadan bunun ne kadarının tutacağı bilinmiyor (ÇIKARIM).
 - Beklenmemeli: örnek videodaki fotogerçek insanlar, ejderha ve kalabalığın otomatik ve ucuz üretimi (A11 Q-004; güven orta).
 - "Gerçek film kalitesine" bu yolla ulaşılabileceğini gösteren kaynak bulunamadı; bunun imkânsız olduğu da kanıtlanmadı.
 
@@ -44,25 +47,25 @@ Gerekçe:
 | §18 ölçütü | Durum |
 |---|---|
 | Ana alanlar, alt ajanlar, uluslararası araştırma, karşılaştırma, alternatifler | yapıldı (eksik alt konular var) |
-| Donanım ve maliyet analizi | yapıldı; TL toplamları verilemedi, ölçüm yok |
+| Donanım ve maliyet analizi | yapıldı; yeni bütçeye (yalnız disk) göre güncellendi; TL fiyatı ve ölçüm yok |
 | Lisans ve uyumluluk | tarandı; bazı asıl metinler okunmadı |
 | Kaynak kaydı, çelişki ve risk kaydı | yapıldı; açık çelişkiler var |
 | Test planı, mimari ve yol haritası önerisi, kalıcı hafıza | hazır |
-| Araştırma dosyalarının güncelliği | index/ilerleme dosyaları güncellenmeli |
+| Araştırma dosyalarının güncelliği | DEN2 sonrası güncellendi; üçüncü kez denetlenmedi |
 | Araştırma denetimi (§16) | durumu için `16_RESEARCH_AUDIT.md` |
-| Bağımsız denetçi (§17) | yapıldı (`AGENTS/DEN_bagimsiz_denetci.md`); bulduğu eksiklerin bir kısmı açık |
+| Bağımsız denetçi (§17) | yapıldı (DEN ve DEN2); DEN2 masa başı düzeltmeleri uygulandı; test/kullanıcı gerektirenler açık |
 | Geçiş gerekçesi | bu bölüm |
 
 **Ön koşullar (sırayla):**
-1. Öz denetim; bağımsız denetçinin bulduğu eksiklerin kapatılması; Unity koşulu için kullanıcı kararı (Q-016).
+1. ~~Öz denetim; denetçi eksiklerinin kapatılması~~ (masa başı kısmı yapıldı, 16 §4-§5); Unity koşulu için kullanıcı kararı (Q-016).
 2. Kullanıcının soruları yanıtlaması (00_KULLANICI_OZETI).
 3. Kullanıcının "ayrı kopya projede teşhis ve prototip başlasın" demesi.
 4. Disk envanteri ve yedek.
 5. Teşhis testlerinde (T0) ana varsayımların doğrulanması; doğrulanmayanlar için planın güncellenmesi.
 6. Her ana projeye aktarım için: ölçüt geçildi, süre kabul edildi, eski hikâyeler bozulmadı, lisans temiz, kullanıcı onayladı.
 
-**Bu kararın değişmesine yol açacaklar:** testlerde URP'nin bu işte yetersiz kalması; kullanıcının yapay zekâ kare iyileştirmeyi kabul etmesi (yol açılır, yine ayrı araştırma/test ister); Unity yol haritasının değişmesi; uygulamanın satılacak olması.
+**Bu kararın değişmesine yol açacaklar:** testlerde URP'nin bu işte yetersiz kalması; bütçenin ya da yapay zekâ kare iyileştirme tutumunun değişmesi (yine ayrı araştırma/test ister; kart bugün bütçe dışı); Unity yol haritasının değişmesi; uygulamanın satılacak olması.
 
 ## 7. Bilinen eksikler
 Hiç performans ölçümü yok · Türkçe ses/hizalama kalitesi ölçülmedi · MetaHuman kütüphane dağıtımı belirsiz (Q-011) · güncel TL fiyatları yok · Unity koşullarındaki yapay zekâ ajanı maddesi için hukuki netlik yok (Q-016) · karakter görünüm sıralaması görüntü karşılaştırmasına dayanmıyor.
-UE5 hangi koşulda yeniden açılır: `04_DECISION_LOG.md` K-006. Görünüm seçenekleri (stilize, 2,5D, hibrit): `AGENTS/D1_duzeltme_arastirmasi.md` §2; test yok.
+UE5 yeniden açılma koşulu (K-006) bugünkü bütçede sağlanamaz (K-022). Görünüm seçenekleri (stilize, 2,5D, hibrit): `AGENTS/D1_duzeltme_arastirmasi.md` §2; test yok.

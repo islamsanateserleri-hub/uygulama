@@ -2,6 +2,8 @@
 
 Tarih: 2026-11-27. Olasılık ve etki değerlendirmeleri **ÇIKARIM**; ölçülmedi. Ana kayıt: `../07_RISK_REGISTER.md` (R-001…R-011). Aşağıda o kayıtlar ve ajan dosyalarındaki başlıca riskler birlikte verilmiştir. Buradaki riskler 07'ye kimlikle taşındı (R-012…R-041).
 
+> **K-020:** kartla ilgili riskler (4, 5) bütçe değişmedikçe konusuz; bilgi için saklandı. Yeni riskler §6'da.
+
 ## 1. En ciddi riskler
 | # | Risk | Olasılık / Etki | Önlem | Alternatif | Kaynak |
 |---|---|---|---|---|---|
@@ -60,3 +62,13 @@ Tarih: 2026-11-27. Olasılık ve etki değerlendirmeleri **ÇIKARIM**; ölçülm
 | İki ajan salt okunur git komutu çalıştırdı | kapalı; depo değişmedi (R-011) |
 | Bulguların çoğu statik kod okuması | testle doğrulanana kadar kesin sayılmamalı |
 | Kaynaklar özet araçla okundu | kritik lisans cümleleri asıl metinden denetlenmeli |
+
+## 6. Asistan, talimat dosyaları ve çocuk karakter (07: R-042…R-047)
+| Risk | Olasılık / Etki | Önlem |
+|---|---|---|
+| Proje talimat dosyaları hâlâ köprüyü anlatıyor | orta-yüksek / yüksek | kullanıcı onayıyla uyarı eklemek; köprü kapalı (R-042) |
+| Asistan geçerli biçimde ama yanlış sahne üretir | yüksek / orta | onay ve AS-1 testi (R-043) |
+| Uygulama içi dil modeli için Unity koşulu belirsiz | bilinmiyor / yüksek | eylem yaptırmamak; yazılı soru (R-044) |
+| TikTok 18 yaş altı benzerliği; çocuk karakter | bilinmiyor / çok yüksek | kıyafet/kamera kuralı; yayın öncesi kontrol (R-045) |
+| Yerel model yavaş, disk ister | orta-yüksek / orta | önce ölçüm (R-046) |
+| Gemini: 18 altının erişmesi muhtemel uygulamada kullanılamaz | bilinmiyor / yüksek | kullanıcı kitlesi netleşmeden dağıtmamak (R-047) |

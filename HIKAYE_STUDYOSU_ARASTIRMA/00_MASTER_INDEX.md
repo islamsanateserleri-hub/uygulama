@@ -10,8 +10,8 @@ Araştırma tamamlanana kadar: yeni özellik yok, kod değişikliği yok, HDRP g
 Araştırma bitince de geliştirmeye KENDİLİĞİNDEN geçilmez; sonuçlar sunulur, geçiş kullanıcının ayrı kararıdır.
 Sıra: ÖĞREN → KAYDET → DOĞRULA → GENİŞLET → DENETLE → TAMAMLA → TEST ET → KARAR VER → EN SON GELİŞTİR.
 
-## Durum (son güncelleme: 27 Kas 2026, denetim sonrası)
-**Raporlar, denetimler ve düzeltmeler yazıldı; araştırma TAMAMLANDI işaretlenmedi** (gerekçe: 16 §3).
+## Durum (son güncelleme: 27 Kas 2026, ikinci denetim sonrası)
+**Araştırma masa başı kapsamında tamamlandı; hiçbir test yapılmadı; geliştirmeye geçiş kararı kullanıcı ve test bekliyor** (gerekçe ve açık kısıtlar: 16 §4-§5). Denetim düzeltmeleri üçüncü kez denetlenmedi.
 
 | Aşama | Durum |
 |---|---|
@@ -19,7 +19,9 @@ Sıra: ÖĞREN → KAYDET → DOĞRULA → GENİŞLET → DENETLE → TAMAMLA �
 | A01–A12 + A00 takip | raporlar yazıldı (bazı kısıtlar: 16 §1) |
 | Çapraz denetim (X1, X2), test planı, 13 rapor | yazıldı; testler koşulmadı |
 | Bağımsız denetçi (DEN), düzeltme araştırması (D1), öz denetim (16) | yapıldı |
-| Kalan | kullanıcı yanıtları (REPORTS/00); D1 §5 açık konuları; düzeltmelerin yeniden denetimi; testler (onayla) |
+| D2 (açık konular), D3 (yapay zekâ asistanı), ikinci denetim (DEN2), birleştirme | yapıldı |
+| Kullanıcı yanıtları K-017..K-020 (sıra; asistan; iki görünüm; yalnız ek disk) | işlendi |
+| Kalan | açık sorular (REPORTS/00); testler (onayla) |
 
 **UYARI:** Q-016 / K-004: Unity'ye dosya köprüsüyle komut gönderme.
 
@@ -44,6 +46,9 @@ Her ajanın görev tanımı ve raporu: `AGENTS/Axx_*.md`; kaynakları: `SOURCES/
 | A12 | Lisans, ticari kullanım, risk denetçisi |
 | DEN | Bağımsız denetçi |
 | D1 | Denetim sonrası düzeltme araştırması |
+| D2 | Açık konular (4K, düz yazı, 2D paket, büyütme, çocuk karakter) |
+| D3 | Yapay zekâ asistanı ve bütçe |
+| DEN2 | İkinci bağımsız denetim |
 
 ## Dosyalar
 - `01_MASTER_RESEARCH_PLAN.md` — kapsam haritası, öncelikler, ajan kuralları
@@ -54,7 +59,7 @@ Her ajanın görev tanımı ve raporu: `AGENTS/Axx_*.md`; kaynakları: `SOURCES/
 - `TOPICS/` konu notları · `EXPERIMENTS/` gerçek denemeler · `REPORTS/` 13 rapor
 
 ## Önemli kararlar
-Uygulanan geliştirme kararı YOK. HDRP önerisi geri çekildi (K-003); köprü kullanımı durduruldu (K-004); K-005..K-016 yalnız ÖNERİ.
+Uygulanan geliştirme kararı YOK. HDRP önerisi geri çekildi (K-003); köprü kullanımı durduruldu (K-004); K-005..K-016 ve K-021..K-024 yalnız ÖNERİ; K-017..K-020 kullanıcı yanıtlarıdır.
 
 ## Önemli kaynaklar
 Unity render hattı duyurusu (29 Eyl 2026): https://discussions.unity.com/t/the-path-to-a-single-render-pipeline-in-unity-7/1737908 · Hedef video analizi: `Docs/VideoKalitesi.md`. Dizin: `09_SOURCE_DATABASE.md`.
