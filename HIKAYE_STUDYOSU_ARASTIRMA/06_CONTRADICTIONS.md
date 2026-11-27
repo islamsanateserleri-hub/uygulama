@@ -34,3 +34,4 @@
 | C-027 | Plan/çekim/kurgu için ayrı ayrı şemalar (A01, A07, A08, A09). | Öneri: tek "çekim manifesti", üç katman (X2 §2.1); denenmedi. |
 | C-028 | Araç sürümleri ↔ Unity 6000.6 + DX11 (karakter araçları, splat eklentisi). | ÇÖZÜLEMEDİ: denemeyle; DX11/DX12 testi plana. |
 | C-029 | Dikey güvenli alan: altyazı + yüz bölgesi birlikte sığmayabilir. | AÇIK: telefon testi. |
+| C-030 | A12: yalnız Editor Software Terms §2.5 okundu, "bizi kapsamıyor" çıkarımı ve "tanım yok" ↔ ana Terms of Service §17.2/§26 ajan erişimini sınırlıyor ve tanımlıyor. | Bağımsız denetçi K1; ayrıca yeniden okundu | Önceki çıkarım GERİ ÇEKİLDİ; sonuç belirsiz, temkinli davranılıyor (Q-016). |

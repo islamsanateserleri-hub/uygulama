@@ -3,6 +3,9 @@
 Tek güncel kayıt dosyası. Her işlem, test sonucu ve hata buraya eklenir; kısa tut, eskiyi `_Arsiv/`ye taşı.
 26 Kas 03:30 öncesinin TAM günlüğü: `_Arsiv/DURUM_26Kas_0330_oncesi.md` (yalnız gerekirse bak).
 
+## !!! 27 KASIM: UNITY KÖPRÜSÜNÜ KULLANMA (Q-016) !!!
+Unity koşulları (16 Kas 2026) yapay zekâ ajanının Unity'yi yalnız onaylı arayüzle kullanmasına izin veriyor görünüyor. Netleşene / kullanıcı karar verene kadar `HikayeKomut/komut.txt` ile komut GÖNDERME. Ayrıntı: HIKAYE_STUDYOSU_ARASTIRMA/05_OPEN_QUESTIONS.md Q-016.
+
 ## !!! 27 KASIM: ÖNCE ARAŞTIRMA PROTOKOLÜ (kullanıcı talimatı) !!!
 Kullanıcı 32 sayfalık protokol verdi: **araştırma tamamlanana kadar kod/özellik geliştirme YOK**; bitince de geliştirme ayrı karar. Her oturum `HIKAYE_STUDYOSU_ARASTIRMA/00_MASTER_INDEX.md` ile başlar.
 Durum: 1. dalga (6 uzman ajan) bitti; 2. dalga (6 ajan) web arama hakkı için kullanıcının yeni mesajını bekliyor.
