@@ -33,3 +33,6 @@
 - Bağımsız denetçi: tamamlanmadı. Ana bulgu: Unity ana kullanım koşulları ajan erişimini sınırlıyor (C-030, K-004).
 - D1: görünüm karşılaştırması, Unity CLI yolu, iClone/FK/kompozit/kamera (34 arama). Test yok, kod değişikliği yok.
 - Öz denetim 16'ya yazıldı. Toplam kaynak kaydı 562.
+
+## 2026-11-27 — D2: açık konular
+- 4K, düz yazıdan sahne, 2D paket/çizer, upscaling, diğer sektörler, çocuk karakter (35 arama). Test yok, kod değişikliği yok.

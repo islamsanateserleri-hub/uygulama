@@ -30,5 +30,7 @@ Süreç sapmaları: A07 ve A12 yasak olduğu hâlde salt okunur git komutu çal�
 Rapor: AGENTS/DEN_bagimsiz_denetci.md. Karar: "araştırma tamamlandı sayılamaz".
 Sonrasında yapılan: Unity riski kaydı ve köprünün durdurulması; D1 ek araştırması (görünüm karşılaştırması, Unity CLI, bazı O1 eksikleri); 04/05/06/07/12/14/15 ve raporlarda düzeltme; bu öz denetim. Düzeltmeler denetçiye yeniden inceletilmedi.
 
+Ek (aynı gün): D2 araştırması 4K, düz yazıdan sahne, 2D paketleri, upscaling, simülasyon sektörü ve çocuk karakteri kısmen kapattı; testler ve bağımsız yeniden denetim hâlâ yok.
+
 ## 3. Tamamlanma kararı (§18)
 **Araştırma TAMAMLANDI olarak işaretlenmiyor.** Gerekçe: (1) §16 maddeleri 1 ve 12 eksik; (2) araştırılmayan alanlar var (D1 §5); (3) düzeltmeler bağımsız olarak yeniden denetlenmedi; (4) görünüm, yapay zekâ sınırı ve bütçe kullanıcı yanıtı bekliyor, mimari bunlara bağlı. Geliştirmeye geçiş yok (§19).

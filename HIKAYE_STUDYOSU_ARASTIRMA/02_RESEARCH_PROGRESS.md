@@ -9,3 +9,6 @@
 - Unity'ye köprüden komut gönderme (Q-016, K-004). Kod değişikliği yok (§19).
 ## Sonraki oturumda sıra
 Kullanıcı yanıt verdiyse karar kayıtlarını güncelle; vermediyse yalnız açık araştırma maddeleri.
+
+## Ek: D2 tamamlandı
+- AGENTS/D2_acik_konular.md. D1 §5 maddelerinin bir kısmı kapandı; kalanlar D2'de. Toplam kaynak kaydı: 594.

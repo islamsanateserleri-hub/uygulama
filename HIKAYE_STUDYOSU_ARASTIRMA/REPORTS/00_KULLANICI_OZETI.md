@@ -30,7 +30,9 @@ Parça parça çekip birleştirmek ve otomatik yönetmen fikri uygun; bir kısm�
 - **ElevenLabs'in ücretsiz sesini** kullandığınız videoda başlığa **"elevenlabs.io"** yazın ve o videoyu **ticari amaçla kullanmayın** (sonradan plan almak eski sesi değiştirmez).
 
 ## Araştırmada eksik kalanlar
-Bağımsız bir denetçi araştırmayı inceledi ve **tamamlanmış saymadı**. Hâlâ eksik: hiçbir deneme ve hız ölçümü; güncel Türkiye fiyatları; hazır çizim paketleri ve çizer maliyeti; kullanıcı yorumları (ör. Reddit'e erişilemedi); düz yazıdan otomatik sahne kurma ve 4K isteğiniz; bazı lisans metinleri.
+Bağımsız bir denetçi araştırmayı inceledi ve **tamamlanmış saymadı**. Hâlâ eksik: hiçbir deneme ve hız ölçümü; güncel Türkiye fiyatları; kullanıcı yorumları (ör. Reddit'e erişilemedi); Türkiye'de çizer ücreti; çocuk sesi; bazı lisans metinleri.
+
+**Sonradan araştırılanlar (denenmedi):** 4K videonun bu bilgisayarda yapılıp yapılamayacağı belirsiz (iş yükü 4 kat; TikTok'un izleyiciye 4K gösterdiğine dair resmî bilgi bulamadım). Düz yazıdan yapay zekâsız taslak çıkaran bir bölüm programda zaten var ama sınırlı (4 mekân tahmin ediyor, konuşanı karıştırabilir). Çizim için kaba, zayıf kaynaklı gösterge: karakter 100–200 $, arka plan 100–300 $. TikTok'un yapay zekâ kuralları 18 yaş altı kişilerin benzerliğini yasaklıyor; uydurma çocuk karakterleri kapsayıp kapsamadığı belli değil, çocuk karakterli ve yapay zekâ etiketli video paylaşmadan önce kuralı okuyun.
 
 ## Görünüm seçenekleri (hiçbiri denenmedi)
 | Seçenek | İyi yanı | Zor yanı |
