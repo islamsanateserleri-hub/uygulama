@@ -38,7 +38,7 @@ namespace HikayeStudyo
             {
                 var p = File.ReadAllText(ayar).Trim().Split(' ');
                 float a; int n;
-                if (p.Length == 2 && float.TryParse(p[0], out a) && int.TryParse(p[1], out n))
+                if (p.Length == 2 && float.TryParse(p[0].Replace(',', '.'), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out a) && int.TryParse(p[1], out n))
                 {
                     aralik = Mathf.Clamp(a, 1f, 30f); adet = Mathf.Clamp(n, 1, 150);
                 }
