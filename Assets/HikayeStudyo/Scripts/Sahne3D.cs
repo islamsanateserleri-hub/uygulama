@@ -50,7 +50,7 @@ namespace HikayeStudyo
             { "aglamakli", new[] { "agla", "uzgun", "dur" } },
             { "korkmus", new[] { "kork", "tepki", "dur" } },
             { "sasirmis", new[] { "sasir", "tepki", "dur" } },
-            { "kizgin", new[] { "tepki", "konus2", "dur" } },
+            { "kizgin", new[] { "sinirli", "konus2", "dur" } },   // "tepki" klibi basini egip arkasini donuyordu
             { "yorgun", new[] { "uzgun", "dur" } },
             { "hasta", new[] { "uzgun", "dur" } },
             { "dusunceli", new[] { "dusun", "dur" } },
@@ -498,8 +498,9 @@ namespace HikayeStudyo
             yaw = 180f;
             switch (n)
             {
-                case "sol": world = Origin + new Vector3(-0.5f, 0f, 0f); return true;
-                case "sag": world = Origin + new Vector3(0.5f, 0f, 0f); return true;
+                // 3D odada sol/sag daha uzak: yuruyus gorunsun (eskiden 1 m'lik kisa kayma gibiydi)
+                case "sol": world = Origin + new Vector3(OdaAktif ? -1.1f : -0.5f, 0f, 0f); return true;
+                case "sag": world = Origin + new Vector3(OdaAktif ? 1.1f : 0.5f, 0f, 0f); return true;
                 case "orta": world = Origin; return true;
             }
             world = Origin;

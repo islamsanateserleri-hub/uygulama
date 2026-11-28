@@ -3,6 +3,12 @@
 Tek güncel kayıt dosyası. Her işlem, test sonucu ve hata buraya eklenir; kısa tut, eskiyi `_Arsiv/`ye taşı.
 26 Kas 03:30 öncesinin TAM günlüğü: `_Arsiv/DURUM_26Kas_0330_oncesi.md` (yalnız gerekirse bak).
 
+## 28 KASIM 10:15 OTURUMU
+- Kızgın satırda `tepki` klibi başı eğip arkasını dönüyordu → `sinirli` (idle_angry) yapıldı; denendi, yakın planda yüz artık görünüyor.
+- Kamera engel aramasına geniş yan açılar ve yakın kamera eklendi. AÇIK SORUN: konuşanın önünde başka biri durunca yakın plan hâlâ o kişinin gövdesiyle kapanıyor (tani_hareket testinde görüldü). Denediğim 'kamerayı araya al' çözümü işe yaramadı, geri aldım.
+- `sol`/`sag` 3D'de ±1,1 m yapıldı ama sato kendi noktalarını kullandığı için yürüme hâlâ ~0,7 sn. AÇIK.
+- Yeni örnek video: C:\Users\Teknodc\Videos\Hikaye\ornek30_20261128_102536\ornek30.mp4 (izlenmedi).
+
 ## 28 KASIM GECE: GELİŞTİRME BAŞLADI (kullanıcı onayıyla)
 - Kullanıcı: "Ben bilgisayar başında değilim yetki veriyorum yap" → Unity eski dosya köprüsü + uzaktan masaüstüyle kullanılıyor (K-025; Unity koşulu riski kullanıcıya söylendi).
 - ÖLÇÜLDÜ (konsol [Hareket] günlüğü): `dur` konuşma jestine (Idle_Talking_Loop) gidiyordu; dinleyen karakter konuşma jestini sürdürüyordu → DÜZELTİLDİ, denendi: artık Idle_Loop.

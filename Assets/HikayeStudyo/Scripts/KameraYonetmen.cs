@@ -380,14 +380,21 @@ namespace HikayeStudyo
             digerleri.Clear();
             owner.KafaKonumlari(digerleri);
             float istenen = yaw;
-            float[] adaylar = { istenen, istenen * 0.6f, istenen * 0.3f, 0f, -istenen * 0.3f, -istenen * 0.6f };
-            float enIyi = float.MinValue, enIyiAci = istenen;
-            foreach (var aci in adaylar)
+            // istenen aci kucukse eski adaylarin hepsi ~0 oluyordu ve diger kisi kameranin onunde kaliyordu:
+            // genis yan acilar ve daha yakin kamera da denenir
+            float[] adaylar = { istenen, istenen * 0.6f, istenen * 0.3f, 0f, -istenen * 0.3f, -istenen * 0.6f, 25f, -25f, 40f, -40f };
+            float enIyi = float.MinValue, enIyiAci = istenen, ilkDist = dist;
+            for (int tur = 0; tur < 2; tur++)
             {
-                float bosluk = Bosluk(ozne, pivot, aci);
-                if (bosluk >= 0f) { yaw = aci; return; }
-                if (bosluk > enIyi) { enIyi = bosluk; enIyiAci = aci; }
+                foreach (var aci in adaylar)
+                {
+                    float bosluk = Bosluk(ozne, pivot, aci);
+                    if (bosluk >= 0f) { yaw = aci; return; }
+                    if (bosluk > enIyi) { enIyi = bosluk; enIyiAci = aci; }
+                }
+                dist = Mathf.Max(minDist, dist * 0.75f);
             }
+            dist = ilkDist;
             yaw = enIyiAci;
             // hicbir aci temiz degilse bakis noktasi diger kisiden uzaga kaydirilir
             foreach (var n in digerleri)
