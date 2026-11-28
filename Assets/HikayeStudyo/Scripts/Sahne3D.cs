@@ -14,6 +14,7 @@ namespace HikayeStudyo
         const float W = 1080f, H = 1920f;
         public static readonly Vector3 Origin = new Vector3(0f, -1000f, 0f);
         public const float CamDist = 6.2f, CamFov = 30f;
+        public static bool KameraGunluk = true;   // teshis: kamera engel aramasini konsola yazar
 
         public Camera Cam { get; private set; }
         public KameraYonetmen Yonetmen { get; private set; }

@@ -396,6 +396,12 @@ namespace HikayeStudyo
             }
             dist = ilkDist;
             yaw = enIyiAci;
+            if (Sahne3D.KameraGunluk)
+            {
+                var sb = new System.Text.StringBuilder("[KameraEngel] ozne=" + ozne.ToString("F2") + " pivot=" + pivot.ToString("F2") + " dist=" + dist.ToString("F2") + " yaw=" + yaw.ToString("F0") + " bosluk=" + enIyi.ToString("F2") + " digerleri=");
+                foreach (var n in digerleri) sb.Append(n.ToString("F2")).Append(' ');
+                Debug.Log(sb.ToString());
+            }
             // hicbir aci temiz degilse bakis noktasi diger kisiden uzaga kaydirilir
             foreach (var n in digerleri)
             {

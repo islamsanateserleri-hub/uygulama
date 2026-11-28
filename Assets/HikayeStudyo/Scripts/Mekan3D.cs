@@ -80,8 +80,8 @@ namespace HikayeStudyo
                 Debug.LogWarning("[Hikaye] 3D mekan kurulurken hata: " + e.Message);
             }
             m.N("orta", 0f, 0f, 0f, 180f);
-            m.N("sol", -0.5f, 0f, 0f, 180f);
-            m.N("sag", 0.5f, 0f, 0f, 180f);
+            m.N("sol", -1.1f, 0f, 0f, 180f);   // eskiden +-0,5: yuruyus 1 m'lik kayma gibiydi
+            m.N("sag", 1.1f, 0f, 0f, 180f);
             return m;
         }
 
