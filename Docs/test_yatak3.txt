@@ -1,0 +1,22 @@
+// DENETCI BULGULARI TESTI: 2D yatakta yorgan, poz oturan konusunca kalkmaz, sofrada yuruyen cocuk takilmaz.
+oyuncu: Arda = VRM_Cocuk
+oyuncu: Anne = VRM_Anne
+
+mekan: oda_gunduz
+yatak: Anne yat
+[Anne|uzgun|ic] Cizgi mekanda yatiyorum, yorgan ustumde olmali.
+kalk: Anne
+poz: Anne oturuyor
+[Anne|uzgun|dis] Otururken konusunca ayaga kalkmamaliyim.
+
+temizle:
+mekan: sofra
+[Anne|normal|dis] Sofraya gel oglum.
+[Arda|normal|dis|yuru] Geliyorum.
+git: Arda sag
+[Arda|normal|dis] Yurudum ve hikaye takilmadi.
+yatak: Arda otur
+[Arda|normal|dis] Otururken de gorunmeliyim.
+git: Anne Arda
+[Anne|mutlu|dis] Yanina geldim, havada durmamaliyim.
+son: yumusak Test bitti

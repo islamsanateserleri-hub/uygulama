@@ -1,0 +1,21 @@
+// ORTA HATALAR (3D mekan grubu). HikayeKomut/hikaye_test_orta1.txt olarak kopyala, "hikaye_yaz: test_orta1", sonra "oynat: test_orta1".
+oyuncu: Arda = VRM_Cocuk
+oyuncu: Anne = VRM_Anne
+
+hava: kar
+mekan3d: park, zaman=gun
+kamera: genis
+[Arda|normal|dis] Mekandan once yazdigim kar kaybolmamali.
+mekan3d: duvar=mavi
+[Anne|normal|dis] Hatali satir park mekanini kapatmamali.
+mekan3d: mutfak, duvar=mavi, zemin=ahsap
+kamera: yakin
+[Anne|uzgun|ic] Ic sesimde de sirtim donuk kalmamali.
+mekan3d: araba
+kamera: genis
+[Arda|normal|dis] Ilk konusan benim ama cocuk surucu olmamali.
+[Anne|normal|dis] Ben surucu koltugunda olmaliyim.
+mekan: oda_gunduz
+poz: Anne oturuyor
+[Anne|normal|dis] Cizgi mekanda otururken yuzum gorunmeli.
+son: yumusak Test bitti

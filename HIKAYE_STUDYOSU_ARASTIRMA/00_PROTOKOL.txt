@@ -1,0 +1,1569 @@
+HİKÂYE STÜDYOSU — ULUSLARARASI SİNEMATİK TEKNOLOJİ ARAŞ-
+TIRMA, ÖĞRENME, KALICI BİLGİ VE DOĞRULAMA PROTOKOLÜ
+
+
+0. BU GÖREVİN ÖNCELİĞİ
+Bu görev, Hikâye Stüdyosu’nun mevcut geliştirme görevlerinden önce gelir.
+Şu an senden kod yazmanı, yeni özellik geliştirmeye başlamanı, mevcut kodları değiştirmeyi
+veya araştırma yapmadan teknoloji seçmeni istemiyorum.
+Senden istediğim şey, Hikâye Stüdyosu’nun mümkün olan en yüksek uygulanabilir sinematik
+görüntü kalitesine ulaşabilmesi için uluslararası ölçekte kapsamlı, çok disiplinli, derin, uzun
+süreli ve kanıta dayalı bir araştırma yürütmen.
+Bu araştırma yalnızca mevcut araçları öğrenmekle sınırlı kalmayacak.
+Sen:
+
+   - Mevcut teknolojileri öğreneceksin.
+   - Teknolojilerin nasıl çalıştığını öğreneceksin.
+   - Birbirleriyle nasıl çalıştıklarını öğreneceksin.
+   - Teknolojilerin sınırlarını öğreneceksin.
+   - Daha önce kullanılmamış veya az kullanılan alternatifleri araştıracaksın.
+   - Uluslararası araştırmaları ve teknik gelişmeleri inceleyeceksin.
+   - Akademik çalışmaları, teknik belgeleri, açık kaynak projeleri ve gerçek uygulamaları in-
+     celeyeceksin.
+   - Gerekirse farklı sektörlerde kullanılan teknolojileri Hikâye Stüdyosu’na uyarlama yolla-
+     rını araştıracaksın.
+   - Yeni teknolojilerin gelecekteki gelişimini takip edebilecek bir araştırma altyapısı oluştu-
+     racaksın.
+   - Öğrendiğin bilgileri kalıcı dosyalara kaydedeceksin.
+   - Önceki araştırmalarını kaybetmeyeceksin.
+   - Kendi araştırmanı denetleyeceksin.
+   - Diğer araştırmacıların hatalarını kontrol edeceksin.
+   - Çelişkileri çözmeden kesin karar vermeyeceksin.
+   - Araştırma tamamlanmadan geliştirme aşamasına geçmeyeceksin.
+
+Bu görevde hız, araştırmanın kapsamından ve doğruluğundan daha önemli değildir.
+Araştırma birkaç gün, gerektiğinde daha uzun sürebilir.
+Araştırma süresini yapay olarak kısaltma.
+Yüzeysel araştırmayı tamamlanmış araştırma olarak sunma.
+
+
+1. HİKÂYE STÜDYOSU’NUN VİZYONU
+Hikâye Stüdyosu, kullanıcıların kendi hikâyelerini oluşturabileceği, karakterlerini seçebileceği
+veya oluşturabileceği, karakterlere konuşma, duygu ve hareket verebileceği, sahneler oluştu-
+
+
+                                               1
+rabileceği, kamera, ışık, ortam, efekt, ses ve kurgu yönetebileceği bir sinematik video üretim
+uygulamasıdır.
+Uygulamanın hedefi:
+
+   - 9:16 dikey video üretimi.
+   - 1080×1920 hedef çözünürlük.
+   - 30 FPS hedef.
+   - Sinematik kamera.
+   - Gerçekçi insan karakterleri.
+   - Doğal yüz ifadeleri.
+   - Dudak senkronizasyonu.
+   - Doğal karakter hareketleri.
+   - Karakter etkileşimleri.
+   - Gerçekçi ışıklandırma.
+   - Gerçekçi ortamlar.
+   - Sinematik kurgu.
+   - Duygusal seslendirme.
+   - Ses ve altyazı senkronizasyonu.
+   - Atmosfer.
+   - Görsel efektler.
+   - Karakter tutarlılığı.
+   - Mekân tutarlılığı.
+   - Hikâye devamlılığı.
+   - Yüksek görüntü kalitesi.
+   - Ekonomik render.
+   - Kullanıcı kontrolü.
+   - Genişletilebilir teknoloji mimarisi.
+   - Uzun vadeli sürdürülebilirlik.
+
+Hedef yalnızca bir 3D oyun sahnesi oluşturmak değildir.
+Hedef, hikâye anlatımına uygun, sinematik, gerçekçi, etkileyici ve üretilebilir videolar oluştu-
+rabilen bir sistem geliştirmektir.
+Kalite hedefi iyi bir oyun sinematiği seviyesinden başlayarak mümkün olan en yüksek uygu-
+lanabilir sinematik seviyeye ulaşmaktır.
+Gerçek film kalitesine ulaşmanın mümkün olup olmadığı araştırma sonucunda değerlendiril-
+melidir. Başlangıçta hiçbir kalite sınırı varsayılmamalıdır.
+
+
+2. ZORUNLU ARAŞTIRMA ORGANİZASYONU: ALT AJANLAR
+Araştırmayı tek bir araştırmacının bütün konuları yüzeysel biçimde incelemesiyle yürütme.
+Kullanılabilir gerçek alt ajan veya paralel araştırma mekanizması varsa, bu araştırmayı uzman-
+lık alanlarına göre böl ve alt ajanlar oluştur.
+Alt ajanları gerçekten oluşturabiliyorsan oluştur.
+Alt ajan oluşturamıyorsan bunu açıkça belirt. Gerçek alt ajan çalıştırmış gibi davranma. Bu
+durumda araştırmayı görev bölümlerine ayır, sırayla yürüt ve her bölüm için bağımsız denetim
+
+
+                                               2
+yap.
+Araştırmanın organizasyonu aşağıdaki uzmanlık alanlarına göre oluşturulmalıdır.
+
+
+ALT AJAN 1 — SİNEMATOGRAFİ VE SİNEMA GÖRÜNTÜ YÖNETMENİ
+Görevi:
+Gerçek sinema görüntüsünün nasıl elde edildiğini araştırmak.
+Araştırma:
+
+   - Sinematografi.
+   - Lensler.
+   - Odak uzaklığı.
+   - Perspektif.
+   - Kamera hareketleri.
+   - Kamera açıları.
+   - Görsel kompozisyon.
+   - Dikey sinematografi.
+   - Plan çeşitliliği.
+   - Diyalog sahneleri.
+   - Tepki planları.
+   - Aksiyon sahneleri.
+   - Görüntü ritmi.
+   - Kamera geçişleri.
+   - Alan derinliği.
+   - Film görüntü karakteri.
+   - Sinematik kamera otomasyonu.
+   - Storyboard.
+   - Shot planning.
+   - Görsel anlatım.
+   - Sinema ve oyun sinematiği arasındaki farklar.
+
+Teslim:
+Sinematik kamera ve görsel anlatımın Hikâye Stüdyosu’nda nasıl sistemleştirileceğine dair
+teknik rapor.
+
+
+ALT AJAN 2 — FOTOGERÇEKÇİ KARAKTER VE DİJİTAL İNSAN UZMANI
+Görevi:
+Gerçekçi dijital insan oluşturma ve karakter kalitesini araştırmak.
+Araştırma:
+
+   - Digital human.
+   - Fotogerçekçi insan.
+   - Cilt.
+   - Skin shader.
+   - Subsurface scattering.
+
+
+
+                                               3
+   - Göz.
+   - Saç.
+   - Kirpik.
+   - Kaş.
+   - Diş.
+   - Ağız.
+   - Yüz anatomisi.
+   - Yüz kasları.
+   - Blendshape.
+   - Facial rig.
+   - Mikro ifadeler.
+   - Yüz animasyonu.
+   - Gerçekçi karakter oluşturma.
+   - Character Creator.
+   - MetaHuman.
+   - VRoid.
+   - Blender.
+   - Açık kaynak alternatifler.
+   - Unity uyumluluğu.
+   - Karakter üretim iş akışları.
+   - Karakter tutarlılığı.
+   - Kıyafet.
+   - Materyal.
+   - Dijital insan teknolojilerinin geleceği.
+
+Teslim:
+Hikâye Stüdyosu’nda gerçekçi karakter üretimi, karakter aktarımı, karakter animasyonu ve
+karakter tutarlılığı için en uygun sistemlerin karşılaştırılması.
+
+ALT AJAN 3 — ANİMASYON, MOTION CAPTURE VE KARAKTER HAREKET UZMANI
+Görevi:
+Karakter hareketlerinin sinematik kaliteye ulaşmasını araştırmak.
+Araştırma:
+
+   - Motion capture.
+   - Video motion capture.
+   - Markerless mocap.
+   - Mixamo.
+   - IK.
+   - FK.
+   - Root motion.
+   - Animation blending.
+   - Procedural animation.
+   - Physics-based animation.
+   - Yürüme.
+   - Koşma.
+
+                                                4
+   - Dövüş.
+   - Düşme.
+   - Kalkma.
+   - Oturma.
+   - El hareketleri.
+   - Bakış.
+   - Karakter etkileşimleri.
+   - Animasyon geçişleri.
+   - Hareket tutarlılığı.
+   - Animasyon retargeting.
+   - Animasyon katalogları.
+   - Hareket üretimi.
+   - Hareketlerin hikâyeye göre otomasyonu.
+
+Teslim:
+Hikâye Stüdyosu için ekonomik, kaliteli, genişletilebilir ve uygulanabilir animasyon mimarisi.
+
+
+ALT AJAN 4 — IŞIK, MATERYAL VE GÖRÜNTÜ KALİTESİ UZMANI
+Görevi:
+Gerçekçi görüntü kalitesini sağlayan ışık, materyal ve render tekniklerini araştırmak.
+Araştırma:
+
+   - HDRP.
+   - URP.
+   - Global illumination.
+   - HDRI.
+   - Volumetric lighting.
+   - Bounce lighting.
+   - Shadow.
+   - Key light.
+   - Fill light.
+   - Rim light.
+   - Gerçekçi iç mekân.
+   - Gerçekçi dış mekân.
+   - Gece sahnesi.
+   - Gündüz sahnesi.
+   - Cilt ışığı.
+   - Materyaller.
+   - PBR.
+   - Shader.
+   - Reflection.
+   - Post-processing.
+   - Tonemapping.
+   - Color grading.
+   - Render optimizasyonu.
+
+
+                                              5
+   - Ray tracing.
+   - Path tracing.
+   - Alternatif render yöntemleri.
+
+Teslim:
+Görüntü kalitesini yükseltecek ışık, materyal, render ve post-processing sistemi.
+
+
+ALT AJAN 5 — 3D ORTAM, MİMARİ VE ÇEVRE UZMANI
+Görevi:
+Sinematik ortamların ve mekânların oluşturulmasını araştırmak.
+Araştırma:
+
+   - 3D environment.
+   - İç mekân.
+   - Dış mekân.
+   - Mimari.
+   - Orman.
+   - Şehir.
+   - Köy.
+   - Saray.
+   - Sokak.
+   - Oda.
+   - Çevresel materyaller.
+   - Terrain.
+   - Bitki.
+   - Atmosfer.
+   - Hava durumu.
+   - Mekân üretimi.
+   - Procedural environment.
+   - Varlık yönetimi.
+   - Mekân devamlılığı.
+   - Çevre optimizasyonu.
+   - Kaliteli ücretsiz ve ücretli varlıklar.
+
+Teslim:
+Hikâye Stüdyosu için ekonomik, gerçekçi, yeniden kullanılabilir ve genişletilebilir ortam üretim
+sistemi.
+
+
+ALT AJAN 6 — VFX VE SİNEMATİK EFEKT UZMANI
+Görevi:
+Sinematik görsel efektleri araştırmak.
+Araştırma:
+
+   - VFX Graph.
+   - Shader Graph.
+
+
+                                               6
+   - Particles.
+   - Fire.
+   - Smoke.
+   - Fog.
+   - Rain.
+   - Snow.
+   - Explosion.
+   - Destruction.
+   - Magic.
+   - Aura.
+   - Lightning.
+   - Volumetric effects.
+   - Environmental effects.
+   - Character effects.
+   - Physics.
+   - VFX optimization.
+   - Procedural effects.
+   - Efektlerin sahneye göre otomasyonu.
+
+Teslim:
+Hikâye Stüdyosu için efekt kataloğu ve efekt yönetim mimarisi.
+
+
+ALT AJAN 7 — SES, TTS, DİYALOG VE DUDAK SENKRONİZASYONU UZMANI
+Görevi:
+Sinematik ses üretimini ve karakter konuşmasını araştırmak.
+Araştırma:
+
+   - TTS.
+   - Voice cloning, lisans ve izin koşulları.
+   - Duygusal seslendirme.
+   - Ses tonu.
+   - Speech timing.
+   - Lip sync.
+   - Facial animation.
+   - Audio-driven animation.
+   - Foley.
+   - Ambience.
+   - Music.
+   - Sound effects.
+   - Audio mixing.
+   - Ses zamanlaması.
+   - Altyazı senkronizasyonu.
+   - Ses yönetimi.
+   - Ses kaynaklarının maliyeti.
+   - Offline ses üretimi.
+
+
+                                                7
+   - Online ses üretimi.
+   - Ses teknolojilerinin geleceği.
+
+Teslim:
+Hikâye Stüdyosu için ekonomik ve kaliteli ses, diyalog, dudak senkronizasyonu ve ses yönetim
+sistemi.
+
+
+ALT AJAN 8 — SİNEMATİK KURGU VE HİKÂYE ANLATIMI UZMANI
+Görevi:
+Sinematik video kurgusunun ve görsel hikâye anlatımının teknik olarak nasıl uygulanabilece-
+ğini araştırmak.
+Araştırma:
+
+   - Storytelling.
+   - Storyboard.
+   - Scene planning.
+   - Shot planning.
+   - Shot duration.
+   - Continuity.
+   - Reaction shots.
+   - Dialogue editing.
+   - Action editing.
+   - Camera cuts.
+   - Montage.
+   - Pacing.
+   - Emotional pacing.
+   - Visual storytelling.
+   - Scene transitions.
+   - Narrative camera.
+   - Automatic editing.
+   - Story-driven camera selection.
+   - Karakter duygusuna göre kamera.
+   - Hikâyeye göre sahne yönetimi.
+
+Teslim:
+Hikâye Stüdyosu’nun otomatik sinematik yönetmen ve kurgu sistemi için önerilen mimari.
+
+
+ALT AJAN 9 — UNITY, RENDER VE PERFORMANS MİMARİSİ UZMANI
+Görevi:
+Mevcut Unity projesinin ve olası alternatif render mimarilerinin araştırılması.
+Araştırma:
+
+   - Unity URP.
+   - Unity HDRP.
+   - Cinemachine.
+
+
+                                               8
+   - Timeline.
+   - VFX Graph.
+   - Shader Graph.
+   - Unity rendering.
+   - Render pipeline.
+   - GPU optimization.
+   - CPU optimization.
+   - Memory management.
+   - Rendering.
+   - FFmpeg.
+   - Frame capture.
+   - Render queue.
+   - Render cancellation.
+   - Render recovery.
+   - Rendering quality.
+   - Unity asset compatibility.
+   - Unity version compatibility.
+   - Existing project architecture.
+   - Render bottlenecks.
+   - Alternative architecture.
+
+Teslim:
+Hikâye Stüdyosu için mevcut projeyi koruyan veya gerektiğinde kontrollü biçimde değiştiren
+teknik mimari.
+
+ALT AJAN 10 — DONANIM VE EKONOMİK OPTİMİZASYON UZMANI
+Görevi:
+Mevcut bilgisayar ve minimum yatırımla en yüksek kaliteyi elde etmenin yollarını araştırmak.
+Araştırma:
+
+   - CPU.
+   - GPU.
+   - VRAM.
+   - RAM.
+   - SSD.
+   - PCIe.
+   - Power supply.
+   - Cooling.
+   - GPU rendering.
+   - CPU rendering.
+   - Integrated graphics.
+   - Rendering performance.
+   - 1080×1920.
+   - 30 FPS.
+   - Render time.
+   - Cost/performance.
+
+                                             9
+   - Hardware upgrade.
+   - Minimum hardware.
+   - Recommended hardware.
+   - Alternative workflows.
+
+Mevcut bilgisayar:
+
+   - AMD Ryzen 5 5600GT.
+   - 64 GB RAM.
+   - Gigabyte A520M K V2.
+   - Entegre Radeon grafik.
+   - Ayrı GPU bulunmuyor.
+   - C diskinde yaklaşık 45 GB boş alan.
+
+Teslim:
+Mevcut bilgisayar, sıfır yatırım, minimum yatırım ve fiyat-performans yükseltmesi için ayrı tek-
+nik rapor.
+
+
+ALT AJAN 11 — ULUSLARARASI TEKNOLOJİ VE GELECEK ARAŞTIRMACISI
+Görevi:
+Hikâye Stüdyosu için mevcut teknolojilerin ötesine bakmak.
+Araştırma:
+
+   - Uluslararası akademik çalışmalar.
+   - SIGGRAPH.
+   - Computer graphics research.
+   - Digital human research.
+   - Animation research.
+   - Motion capture research.
+   - Rendering research.
+   - Neural rendering.
+   - AI-assisted animation.
+   - AI-assisted cinematography.
+   - Generative 3D.
+   - 3D reconstruction.
+   - Gaussian splatting.
+   - Neural radiance fields.
+   - Video-to-3D.
+   - Image-to-3D.
+   - Procedural generation.
+   - AI scene generation.
+   - Future rendering technologies.
+   - Emerging technologies.
+   - Open source research.
+   - Research prototypes.
+   - Üniversite araştırmaları.
+
+
+                                              10
+   - Teknoloji şirketlerinin yeni araştırmaları.
+
+Bu ajan yalnızca bugünkü araçları araştırmayacak.
+Önümüzdeki 1–3 yıl içinde Hikâye Stüdyosu’nun görüntü kalitesini veya üretim maliyetini önemli
+ölçüde değiştirebilecek teknolojileri de araştıracak.
+Teslim:
+Bugün kullanılabilecek teknolojiler, henüz deneysel teknolojiler ve gelecekte takip edilmesi
+gereken teknolojiler ayrı kategorilerde sunulacak.
+
+
+ALT AJAN 12 — LİSANS, TİCARİ KULLANIM VE RİSK DENETÇİSİ
+Görevi:
+Araştırmada önerilen araçların, modellerin, varlıkların, eklentilerin, karakterlerin, seslerin ve
+teknolojilerin lisanslarını incelemek.
+Araştırma:
+
+   - Commercial use.
+   - Redistribution.
+   - Unity licensing.
+   - Asset licensing.
+   - Character licensing.
+   - Model licensing.
+   - Texture licensing.
+   - Motion capture licensing.
+   - Voice licensing.
+   - AI licensing.
+   - Open source licensing.
+   - Paid assets.
+   - Free assets.
+   - Attribution requirements.
+   - Restrictions.
+   - Dependency risks.
+   - Abandoned projects.
+   - Security risks.
+   - Compatibility risks.
+
+Teslim:
+Ticari ürün açısından riskli, güvenli, koşullu veya doğrulanmamış araçların sınıflandırılması.
+
+
+3. ALT AJANLARIN ÇALIŞMA SİSTEMİ
+Alt ajanlar yalnızca kendi raporlarını yazıp işi bitirmeyecek.
+Her ajan:
+
+  1. Kendi araştırma alanını tanımlayacak.
+  2. Araştırma sorularını oluşturacak.
+
+
+                                               11
+  3. Araştırma kaynaklarını bulacak.
+  4. Kaynakları inceleyecek.
+  5. Bilgileri karşılaştıracak.
+  6. Çelişkileri belirleyecek.
+  7. Öğrendiği bilgileri kalıcı dosyaya kaydedecek.
+  8. Kendi sonuçlarını denetleyecek.
+  9. Eksik araştırma alanlarını listeleyecek.
+ 10. Diğer ajanların çalışmalarına ihtiyaç duyduğu noktaları belirtecek.
+ 11. Diğer uzmanlarla ortak çalışma gerektiren konuları işaretleyecek.
+ 12. Nihai önerilerini kanıtlarla sunacak.
+
+Alt ajanlar birbirlerinin araştırmalarını gerektiğinde incelemeli.
+Örneğin:
+
+   - Karakter uzmanı, Unity uzmanının karakter aktarımı analizini denetlemeli.
+   - Unity uzmanı, karakter uzmanının önerdiği teknolojilerin Unity uyumluluğunu kontrol
+     etmeli.
+   - Donanım uzmanı, render uzmanının önerilerini performans açısından kontrol etmeli.
+   - Lisans uzmanı, bütün ajanların önerdiği varlıkları ve teknolojileri denetlemeli.
+   - Sinematografi uzmanı, otomatik yönetmen sisteminin görsel açıdan uygunluğunu kont-
+     rol etmeli.
+   - Ses uzmanı, karakter animasyonu ve dudak senkronizasyonu ile ses mimarisini karşılaş-
+     tırmalı.
+   - Gelecek araştırmacısı, mevcut mimarinin yeni teknolojilere açık olup olmadığını değer-
+     lendirmeli.
+
+Alt ajanların birbirleriyle çelişen sonuçları varsa bu çelişkiler ana araştırmacı tarafından çö-
+zümlenmeden kesin karar verilmemeli.
+
+
+4. ARAŞTIRMA YALNIZCA MEVCUT TEKNOLOJİLERLE SINIRLI KAL-
+MAYACAK
+Araştırmanın kapsamını genişlet.
+Hikâye Stüdyosu’nun kalite hedefi için başka sektörlerde kullanılan teknolojileri de incele.
+Araştırılabilecek sektörler:
+
+   - Sinema.
+   - Oyun sinematiği.
+   - Animasyon stüdyoları.
+   - Film görsel efektleri.
+   - Virtual production.
+   - Motion capture stüdyoları.
+   - Dijital insan üretimi.
+   - Reklam prodüksiyonu.
+   - Video oyunları.
+   - Mimari görselleştirme.
+   - Simülasyon.
+
+
+                                               12
+   - Robotik.
+   - Bilgisayarlı görü.
+   - 3D reconstruction.
+   - Akademik computer graphics.
+   - AI research.
+   - Procedural content generation.
+
+Bir teknoloji başka bir sektörde kullanılıyor diye Hikâye Stüdyosu’nda kullanılabilir kabul etme.
+Uyumluluk, maliyet, performans, lisans ve uygulanabilirlik araştırılmalı.
+Ancak farklı sektörlerden gelen çözümleri sırf Unity’de doğrudan kullanılmıyor diye araştırma
+dışında bırakma.
+Gerekirse adaptasyon yöntemi araştır.
+
+
+5. ARAŞTIRMA KAPSAMINI GENİŞLETME SİSTEMİ
+İlk araştırma listesi araştırmanın sınırı değildir.
+Araştırma sırasında yeni konu keşfedildiğinde:
+
+  1. Konuyu tanımla.
+  2. Hikâye Stüdyosu’na katkısını belirle.
+  3. Mevcut araştırma alanlarından hangisine bağlı olduğunu belirle.
+  4. Yeni bir araştırma başlığı oluştur.
+  5. Gerekirse yeni alt ajan veya uzmanlık görevi oluştur.
+  6. Araştırmayı genişlet.
+  7. Öğrenilen bilgiyi kalıcı dosyaya kaydet.
+
+Araştırma sırasında keşfedilen önemli yeni teknolojiler araştırma dışında bırakılmamalıdır.
+Araştırma ağacı sürekli genişleyebilir.
+Ancak her yeni konu Hikâye Stüdyosu’nun hedeflerine göre önem sıralamasına tabi tutulma-
+lıdır.
+Önemsiz veya uygulanamaz konuların sonsuza kadar araştırılmasını önlemek için araştırma
+öncelikleri belirlenmelidir.
+
+
+6. ULUSLARARASI ARAŞTIRMA VE KAYNAK STANDARTLARI
+Araştırmayı yalnızca Türkçe kaynaklarla yürütme.
+Uluslararası araştırma yap.
+Kaynak dilleri:
+
+   - İngilizce.
+   - Gerekirse diğer diller.
+
+Araştırma kaynakları:
+
+   - Resmî teknik belgeler.
+   - Unity documentation.
+
+
+                                                 13
+   - Unreal documentation.
+   - Blender documentation.
+   - GitHub.
+   - Akademik makaleler.
+   - SIGGRAPH.
+   - Üniversiteler.
+   - Teknik araştırma laboratuvarları.
+   - Resmî teknoloji blogları.
+   - Teknik benchmark’lar.
+   - Geliştirici forumları.
+   - Reddit.
+   - Stack Overflow.
+   - Gerçek kullanıcı deneyimleri.
+   - Video demonstrasyonları.
+   - Teknik karşılaştırmalar.
+   - Lisans belgeleri.
+   - Teknik konferanslar.
+   - Açık kaynak projeler.
+   - Yeni araştırma yayınları.
+
+Kaynakların güvenilirliği sınıflandırılmalı.
+Kaynak sınıflandırması
+A — Resmî teknik doküman veya akademik kaynak.
+B — Güvenilir teknik test, benchmark veya uzman incelemesi.
+C — Geliştirici deneyimi, forum veya topluluk deneyimi.
+D — Doğrulanmamış iddia, pazarlama içeriği veya sınırlı kanıt.
+D sınıfı kaynaklar tek başına teknik karar oluşturamaz.
+Kaynakların tarihleri kaydedilmeli.
+Eski bilgiler, yeni sürümlerle değişmiş olabilir.
+Bir teknoloji hakkında mümkün olduğunca:
+
+   - Resmî doküman.
+   - Bağımsız test.
+   - Gerçek kullanıcı deneyimi.
+
+üçlüsü araştırılmalı.
+Kaynak bulamadığın konularda kaynak uydurma.
+Araştırma sonucu ile kişisel çıkarımı ayrı tut.
+
+
+7. ARAŞTIRMA SIRASINDA ÖĞRENİLEN BİLGİLERİN KALICI HAFIZASI
+Bu bölüm en önemli zorunluluklardan biridir.
+Araştırma sırasında öğrendiğin bilgileri yalnızca sohbet içerisinde tutma.
+
+
+                                                  14
+Sohbet bağlamına, geçici hafızaya veya daha sonra hatırlayacağını varsaydığın bilgilere gü-
+venme.
+Araştırma için kalıcı dosya tabanlı bir bilgi sistemi oluştur.
+Mevcut proje klasörünü incele.
+Araştırma dosyaları için uygun bir klasör oluştur.
+Önerilen yapı:
+HIKAYE_STUDYOSU_ARASTIRMA/
+
+   - 00_MASTER_INDEX.md
+   - 01_MASTER_RESEARCH_PLAN.md
+   - 02_RESEARCH_PROGRESS.md
+   - 03_RESEARCH_LOG.md
+   - 04_DECISION_LOG.md
+   - 05_OPEN_QUESTIONS.md
+   - 06_CONTRADICTIONS.md
+   - 07_RISK_REGISTER.md
+   - 08_TECHNOLOGY_DATABASE.md
+   - 09_SOURCE_DATABASE.md
+   - 10_PERFORMANCE_DATABASE.md
+   - 11_COST_DATABASE.md
+   - 12_TEST_PLAN.md
+   - 13_TEST_RESULTS.md
+   - 14_FINAL_ARCHITECTURE.md
+   - 15_FINAL_ROADMAP.md
+   - 16_RESEARCH_AUDIT.md
+   - AGENTS/
+   - TOPICS/
+   - SOURCES/
+   - EXPERIMENTS/
+   - REPORTS/
+
+Bu yapı mevcut proje düzenine göre değiştirilebilir.
+Ancak kalıcı araştırma sistemi oluşturma zorunludur.
+
+
+7.1 MASTER INDEX
+Master index araştırma sisteminin ana giriş dosyası olacak.
+Bu dosyada:
+
+   - Araştırmanın amacı.
+   - Araştırma kapsamı.
+   - Araştırma durumu.
+   - Tamamlanan alanlar.
+   - Devam eden alanlar.
+   - Bekleyen alanlar.
+   - Alt ajanların durumu.
+
+                                                15
+   - Önemli kararlar.
+   - Önemli kaynaklar.
+   - Son güncelleme tarihi.
+   - Araştırma dosyalarının bağlantıları.
+
+bulunmalı.
+
+
+7.2 RESEARCH PROGRESS
+Araştırma ilerleme dosyası:
+
+   - Tamamlanan görevler.
+   - Devam eden görevler.
+   - Başlanmamış görevler.
+   - Başarısız araştırmalar.
+   - Bekleyen doğrulamalar.
+   - Eksik bilgiler.
+   - Sonraki araştırma görevleri.
+
+içermeli.
+
+
+7.3 RESEARCH LOG
+Araştırma günlüğü.
+Her araştırma oturumunda:
+
+   - Tarih.
+   - Araştırma konusu.
+   - Kullanılan kaynaklar.
+   - Öğrenilen bilgiler.
+   - Yeni keşfedilen konular.
+   - Çelişkiler.
+   - Alınan kararlar.
+   - Tamamlanan işler.
+   - Sonraki adımlar.
+
+kaydedilmeli.
+
+
+7.4 DECISION LOG
+Her teknik kararın kaydı tutulmalı.
+Örneğin:
+
+   - HDRP’ye geçiş kararı.
+   - Karakter sistemi seçimi.
+   - Render yöntemi.
+   - Kamera mimarisi.
+   - Animasyon sistemi.
+   - GPU yükseltme kararı.
+
+
+                                            16
+    - Varlık sistemi.
+    - Ses sistemi.
+
+Her karar:
+
+    - Karar ID.
+    - Tarih.
+    - Karar.
+    - Gerekçe.
+    - Kaynaklar.
+    - Alternatifler.
+    - Riskler.
+    - Doğrulama durumu.
+    - Kararın geçerlilik koşulları.
+
+ile kayıt altına alınmalı.
+Yeni bilgiler eski kararı geçersiz kılarsa, eski karar silinmemeli.
+Yeni karar oluşturulmalı ve eski kararın neden değiştiği açıklanmalı.
+
+
+7.5 TECHNOLOGY DATABASE
+Araştırılan her teknoloji için kayıt oluştur.
+
+    - Teknoloji adı.
+    - Kategori.
+    - Ne işe yarıyor?
+    - Nasıl çalışıyor?
+    - Hikâye Stüdyosu’na katkısı.
+    - Unity uyumluluğu.
+    - Donanım gereksinimi.
+    - Maliyet.
+    - Lisans.
+    - Avantaj.
+    - Dezavantaj.
+    - Alternatif.
+    - Kaynak.
+    - Test durumu.
+    - Son doğrulama tarihi.
+    - Güven düzeyi.
+
+
+7.6 SOURCE DATABASE
+Kaynakların kaydı tutulmalı.
+
+    - Kaynak ID.
+    - Başlık.
+    - URL.
+    - Kaynak türü.
+
+
+
+                                                17
+   - Yayın tarihi.
+   - Erişim tarihi.
+   - Araştırma konusu.
+   - Kaynağın desteklediği iddia.
+   - Güven sınıfı.
+   - Kaynakta kullanılan teknik bilgiler.
+   - Kaynağın sınırlamaları.
+
+
+7.7 OPEN QUESTIONS
+Henüz cevaplanmamış sorular.
+Hersoru:
+
+   - Soru ID.
+   - Soru.
+   - Neden önemli?
+   - İlgili araştırma alanı.
+   - Araştırma önceliği.
+   - Gerekli kaynak.
+   - Sorumlu ajan.
+   - Durum.
+
+
+7.8 CONTRADICTIONS
+Araştırmalarda çelişen bilgiler kaydedilmeli.
+Örneğin:
+
+   - Bir kaynak HDRP öneriyor.
+   - Başka bir kaynak URP’nin daha iyi performans sunduğunu belirtiyor.
+   - Bir teknoloji Unity ile uyumlu olduğu söyleniyor.
+   - Başka bir test uyumsuzluk gösteriyor.
+
+Çelişki çözülmeden kesin karar alınmamalı.
+
+
+7.9 RISK REGISTER
+Riskler:
+
+   - Performans.
+   - Donanım.
+   - Lisans.
+   - Maliyet.
+   - Uyumluluk.
+   - Geliştirme süresi.
+   - Teknoloji bağımlılığı.
+   - Sürdürülebilirlik.
+   - Proje mimarisi.
+   - Render.
+
+
+
+                                                18
+   - Karakter.
+   - Ses.
+   - Veri kaybı.
+
+Her risk:
+
+   - Risk ID.
+   - Risk.
+   - Olasılık.
+   - Etki.
+   - Risk seviyesi.
+   - Önlem.
+   - Alternatif.
+   - Durum.
+
+ile kaydedilmeli.
+
+
+7.10 KALICI ÖĞRENME KURALI
+Araştırma sırasında yeni bir bilgi öğrenildiğinde:
+
+   - Bilgiyi doğrula.
+   - Kaynağı kaydet.
+   - İlgili araştırma dosyasına ekle.
+   - Master index’i güncelle.
+   - İlgili teknoloji veritabanını güncelle.
+   - Araştırma günlüğünü güncelle.
+   - Gerekirse karar veya risk kaydını güncelle.
+
+Önemli bilgi yalnızca sohbet içerisinde bırakılmamalı.
+Bir araştırma oturumu sona erdiğinde, araştırmanın durumu dosyalara kaydedilmeden otu-
+rum tamamlanmış kabul edilmemeli.
+
+
+8. ARAŞTIRMA DEVAMLILIĞI VE HAFIZA KONTROLÜ
+Araştırma uzun süreceği için her yeni oturumda araştırmaya sıfırdan başlamamalısın.
+Yeni bir oturum başlatıldığında:
+
+   - Master index’i oku.
+   - Research progress’i oku.
+   - Research log’un son kayıtlarını incele.
+   - Decision log’u incele.
+   - Open questions dosyasını incele.
+   - Contradictions dosyasını incele.
+   - Risk register’ı incele.
+   - İlgili alt ajan dosyalarını incele.
+   - Son araştırma durumunu doğrula.
+   - Araştırmanın nerede kaldığını belirle.
+
+
+                                               19
+   - Tamamlanmış araştırmaları gereksiz yere tekrar yapma.
+   - Eksik araştırmalarla devam et.
+
+Dosyalarda kayıtlı olmayan bilgileri hatırladığını iddia etme.
+Dosyalarda kayıtlı bilgiler eksikse, eksikliği belirt ve gerekiyorsa araştırmayı yeniden yap.
+Araştırma dosyalarının birbirleriyle çelişip çelişmediğini kontrol et.
+Araştırma devamlılığının temel kaynağı sohbet değil, dosya tabanlı bilgi sistemi olmalıdır.
+
+
+9. ARAŞTIRMA ALANLARI: SİNEMATİK KALİTE
+Aşağıdaki alanları araştır.
+Bu liste araştırmanın sınırı değildir.
+
+
+9.1 Kamera
+   - Sinematik kamera.
+   - Lens.
+   - Odak uzaklığı.
+   - Perspektif.
+   - Kamera hareketleri.
+   - Tracking.
+   - Pan.
+   - Tilt.
+   - Dolly.
+   - Orbit.
+   - Crane.
+   - Kamera sarsıntısı.
+   - Kamera takip sistemi.
+   - Cinemachine.
+   - Kamera geçişleri.
+   - Kamera konumlandırma.
+   - Dikey kadraj.
+   - Kompozisyon.
+   - Diyalog kamerası.
+   - Tepki planları.
+   - Aksiyon kamerası.
+   - Kamera otomasyonu.
+   - Kamera yönetmen sistemi.
+   - Otomatik storyboard.
+   - Hikâyeye göre kamera.
+
+
+9.2 Işık
+   - HDRP.
+   - URP.
+   - Global illumination.
+
+
+                                               20
+   - HDRI.
+   - Volumetric lighting.
+   - Shadow.
+   - Bounce light.
+   - Key light.
+   - Fill light.
+   - Rim light.
+   - İç mekân.
+   - Dış mekân.
+   - Gece.
+   - Gündüz.
+   - Atmosfer.
+   - Cilt ışığı.
+   - Işık optimizasyonu.
+
+
+9.3 İnsan karakterleri
+   - Fotogerçekçi karakter.
+   - Cilt.
+   - Skin shader.
+   - Subsurface scattering.
+   - Göz.
+   - Saç.
+   - Kaş.
+   - Kirpik.
+   - Diş.
+   - Yüz anatomisi.
+   - Blendshape.
+   - Facial rig.
+   - Mikro ifadeler.
+   - Facial animation.
+   - Character consistency.
+   - Kıyafet.
+   - Materyal.
+   - Character creation.
+   - Character customization.
+
+
+9.4 Animasyon
+   - Motion capture.
+   - Markerless mocap.
+   - Mixamo.
+   - IK.
+   - FK.
+   - Root motion.
+   - Animation blending.
+   - Procedural animation.
+
+
+                                21
+   - Yürüme.
+   - Koşma.
+   - Dövüş.
+   - Düşme.
+   - Oturma.
+   - Kalkma.
+   - El hareketleri.
+   - Bakış.
+   - Karakter etkileşimleri.
+   - Animasyon geçişleri.
+   - Motion retargeting.
+   - Hareket tutarlılığı.
+   - Animasyon kontrol sistemi.
+
+
+9.5 Çevre
+   - Gerçekçi ortam.
+   - İç mekân.
+   - Dış mekân.
+   - Mimari.
+   - Orman.
+   - Şehir.
+   - Köy.
+   - Saray.
+   - Sokak.
+   - Hava durumu.
+   - Atmosfer.
+   - Materyal.
+   - Mekân oluşturma.
+   - Mekân tutarlılığı.
+   - Varlık yönetimi.
+   - Procedural environment.
+
+
+9.6 Efekt
+   - VFX Graph.
+   - Shader Graph.
+   - Ateş.
+   - Duman.
+   - Sis.
+   - Yağmur.
+   - Kar.
+   - Patlama.
+   - Yıkım.
+   - Büyü.
+   - Aura.
+   - Işık.
+
+
+                                  22
+   - Parçacık.
+   - Efekt optimizasyonu.
+   - Procedural effects.
+
+
+9.7 Post-processing
+   - Color grading.
+   - Tonemapping.
+   - Bloom.
+   - Motion blur.
+   - Depth of field.
+   - Ambient occlusion.
+   - Vignette.
+   - Film grain.
+   - Lens distortion.
+   - Anti-aliasing.
+   - Image quality.
+   - Upscaling.
+   - Image reconstruction.
+   - Render sonrası işleme.
+
+
+9.8 Ses
+   - TTS.
+   - Dudak senkronizasyonu.
+   - Ses zamanlaması.
+   - Ses miksajı.
+   - Foley.
+   - Ortam sesleri.
+   - Müzik.
+   - Ses efektleri.
+   - Altyazı senkronizasyonu.
+   - Duygusal seslendirme.
+   - Audio-driven animation.
+   - Audio processing.
+
+
+9.9 Sinematik kurgu
+   - Plan süreleri.
+   - Kamera kesmeleri.
+   - Tepki planları.
+   - Sahne ritmi.
+   - Hikâyeye göre kamera.
+   - Karakter duygusuna göre kamera.
+   - Sahne devamlılığı.
+   - Otomatik kurgu.
+   - Storyboard.
+   - Scene planning.
+
+                                       23
+    - Shot planning.
+    - Visual storytelling.
+    - Narrative pacing.
+    - Cinematic director.
+
+
+10. TEKNOLOJİ ARAŞTIRMASI
+Unity ekosistemini, alternatif araçları ve açık kaynak çözümleri araştır.
+Araştırma listesi başlangıç listesidir, sınır değildir.
+
+    - Unity URP.
+    - Unity HDRP.
+    - Cinemachine.
+    - Timeline.
+    - VFX Graph.
+    - Shader Graph.
+    - Blender.
+    - Mixamo.
+    - VRoid.
+    - UniVRM.
+    - Character Creator.
+    - iClone.
+    - Motion capture.
+    - Lip-sync.
+    - Render çözümleri.
+    - Açık kaynak animasyon.
+    - Karakter üretim sistemleri.
+    - Gerçekçi cilt, saç ve göz sistemleri.
+    - Unity Asset Store.
+    - Fab.
+    - Ücretsiz ve ücretli varlık kaynakları.
+    - Alternatif render sistemleri.
+    - Procedural content generation.
+    - Image-to-3D.
+    - Video-to-3D.
+    - Neural rendering.
+    - AI-assisted animation.
+    - AI-assisted cinematography.
+    - Digital human technologies.
+
+Her teknoloji için:
+
+    - Ne işe yarıyor?
+    - Nasıl çalışıyor?
+    - Görüntü kalitesine ne katkı sağlıyor?
+    - Unity ile uyumluluğu nedir?
+    - Mevcut projeye nasıl uygulanabilir?
+
+
+                                                  24
+   - Ücretsiz mi?
+   - Ticari lisans nedir?
+   - Donanım gereksinimleri nedir?
+   - Render performansı nedir?
+   - Alternatifleri nelerdir?
+   - En iyi kullanım alanı nedir?
+   - Dezavantajları nelerdir?
+   - Gerçek test veya benchmark var mı?
+   - Gelecekte sürdürülebilir mi?
+   - Geliştiricisi veya topluluğu aktif mi?
+   - Teknoloji terk edilirse alternatif var mı?
+
+
+11. DONANIM VE PERFORMANS ARAŞTIRMASI
+Mevcut bilgisayar:
+
+   - AMD Ryzen 5 5600GT.
+   - 64 GB RAM.
+   - Gigabyte A520M K V2.
+   - Entegre Radeon grafik.
+   - Ayrı GPU mevcut değil.
+   - C diskinde yaklaşık 45 GB boş alan.
+
+Araştır:
+
+   - Mevcut donanımla yapılabilecek işler.
+   - GPU olmadan yapılabilecek geliştirmeler.
+   - GPU olmadan yapılabilecek render testleri.
+   - GPU gerektiren işler.
+   - RAM kapasitesinin avantajları.
+   - İşlemci sınırları.
+   - Entegre grafik sınırları.
+   - Unity HDRP gereksinimleri.
+   - URP avantajları.
+   - RTX 3060 12 GB.
+   - RTX 5060 Ti 16 GB.
+   - RTX 4070 sınıfı.
+   - Diğer fiyat-performans GPU seçenekleri.
+   - SSD.
+   - Güç kaynağı.
+   - Kasa uyumluluğu.
+   - Render performansı.
+   - 1080×1920 30 FPS.
+   - Render süresi.
+   - GPU optimizasyonu.
+   - CPU optimizasyonu.
+   - VRAM yönetimi.
+
+
+                                                  25
+   - RAM yönetimi.
+
+Donanım satın alma kararını kesinleştirme.
+Önce gerçek gereksinimleri belirle.
+
+
+12. MALİYET ARAŞTIRMASI
+Üç farklı maliyet planı oluştur.
+
+
+PLAN A — SIFIR YATIRIM
+   - Mevcut bilgisayar.
+   - Ücretsiz araçlar.
+   - Açık kaynak araçlar.
+   - Mevcut Unity altyapısı.
+
+
+PLAN B — MİNİMUM YATIRIM
+   - En gerekli donanım.
+   - En gerekli yazılımlar.
+   - En düşük maliyetle kalite artırımı.
+
+
+PLAN C — FİYAT-PERFORMANS ODAKLI YÜKSEK KALİTE
+   - En iyi fiyat-performans GPU.
+   - Gerekli SSD.
+   - Gerekli yazılımlar.
+   - Gerekli varlıklar.
+   - Kalite artırıcı araçlar.
+
+Her planın:
+
+   - Toplam maliyeti.
+   - Avantajı.
+   - Dezavantajı.
+   - Görüntü kalitesi.
+   - Render performansı.
+   - Donanım ihtiyacı.
+   - Uzun vadeli sürdürülebilirliği.
+
+hesaplanmalı.
+
+
+13. KALİTE ARTIRICI ARAÇLAR
+Araştırmanın önemli bir bölümü görüntü kalitesini gerçekten yükseltecek araçların bulunma-
+sına ayrılmalı.
+
+   - Gerçekçi karakter.
+   - Yüz ifadeleri.
+
+
+                                             26
+    - Göz.
+    - Saç.
+    - Cilt.
+    - Motion capture.
+    - Kamera.
+    - Işık.
+    - Shader.
+    - Atmosfer.
+    - VFX.
+    - Animasyon.
+    - Ses.
+    - Render.
+    - Post-processing.
+    - Image upscaling.
+    - Reconstruction.
+    - Procedural generation.
+    - Character tools.
+    - Environment tools.
+
+Bunların mevcut uygulamada nasıl bir sistem olarak kullanılabileceği araştırılmalı.
+Amaç uygulamayı gereksiz eklentilerle doldurmak değil.
+Amaç gerçekten kaliteyi yükselten, sürdürülebilir ve uygulanabilir araçları seçmek.
+
+
+14. ARAŞTIRMA SONUNDA TEST PLANININ OLUŞTURULMASI
+Araştırma sonunda kod yazmadan önce test planı hazırla.
+En az 5 test sahnesi:
+
+    - Gerçekçi karakter yakın planı ve yüz ifadeleri.
+    - İki karakterli diyalog sahnesi.
+    - Yürüme, koşma ve kamera takip sahnesi.
+    - Atmosfer, ışık ve efekt sahnesi.
+    - Kalabalık, yaratık ve çevre içeren karmaşık sahne.
+
+Her test için:
+
+    - Kullanılacak teknolojiler.
+    - Kullanılacak varlıklar.
+    - Test yöntemi.
+    - Render ayarları.
+    - Beklenen sonuç.
+    - Başarı kriterleri.
+    - Performans ölçümü.
+    - Maliyet.
+    - Testin tekrar edilebilirliği.
+
+belirle.
+
+
+                                              27
+Testler gerçek uygulama ve mevcut bilgisayar üzerinde yapılabilecek şekilde tasarlanmalı.
+Araştırma sırasında doğrudan uygulama kodlarına geçme.
+Test için ayrı bir prototip planı oluştur.
+
+
+15. ARAŞTIRMA SONUNDA TESLİM EDİLECEK RAPORLAR
+
+RAPOR 1 — SİNEMATİK GÖRÜNTÜ KALİTE REHBERİ
+Sinematik görüntünün teknik olarak nasıl elde edileceğini ayrıntılı açıkla.
+
+
+RAPOR 2 — ULUSLARARASI TEKNOLOJİ ARAŞTIRMASI
+Uluslararası teknolojiler, akademik araştırmalar, açık kaynak projeler ve gelecekteki teknoloji-
+ler.
+
+
+RAPOR 3 — TEKNOLOJİ KARŞILAŞTIRMASI
+Araçlar, sistemler, alternatifler ve lisanslar.
+
+
+RAPOR 4 — DONANIM ANALİZİ
+Mevcut bilgisayara özel uygulanabilir çözümler.
+
+
+RAPOR 5 — MALİYET ANALİZİ
+Sıfır yatırım, minimum yatırım ve yüksek kalite fiyat-performans planları.
+
+
+RAPOR 6 — KALİTE ARTIRICI ARAÇLAR
+Uygulamanın görüntü kalitesini artırabilecek en iyi araçlar ve kullanım yöntemleri.
+
+
+RAPOR 7 — TEST PLANI
+Gerçek test sahneleri ve ölçüm kriterleri.
+
+
+RAPOR 8 — NİHAİ TEKNİK MİMARİ
+Araştırma ve testler sonucunda belirlenen uygulama mimarisi.
+
+
+RAPOR 9 — GELİŞTİRME YOL HARİTASI
+Hangi özelliklerin hangi sırayla geliştirileceği.
+
+
+RAPOR 10 — RİSK ANALİZİ
+Teknik, maliyet, performans, lisans, uyumluluk ve geliştirme riskleri.
+
+
+RAPOR 11 — GELECEK TEKNOLOJİLER
+Bugün uygulanabilir, deneysel ve gelecekte takip edilmesi gereken teknolojiler.
+
+
+                                                  28
+RAPOR 12 — ARAŞTIRMA HAFIZASI
+Öğrenilen bütün önemli bilgilerin, kaynakların, kararların, çelişkilerin ve araştırma durumu-
+nun kalıcı dosya sistemi.
+
+
+RAPOR 13 — NİHAİ KARAR
+Hikâye Stüdyosu’nun en yüksek uygulanabilir sinematik kaliteyi en düşük sürdürülebilir mali-
+yetle nasıl elde edeceğine dair kesin öneri.
+
+
+16. ARAŞTIRMA DENETİMİ
+Araştırma tamamlandıktan sonra kendi araştırmanı denetle.
+Bu denetim, araştırma raporlarının yalnızca tekrar okunması olmayacak.
+Denetim sırasında:
+
+   - Araştırma kapsamının eksik olup olmadığını kontrol et.
+   - Araştırma sorularının cevaplanıp cevaplanmadığını kontrol et.
+   - Alt ajanların görevlerini tamamlayıp tamamlamadığını kontrol et.
+   - Kaynakların doğruluğunu kontrol et.
+   - Kaynakların iddiaları destekleyip desteklemediğini kontrol et.
+   - Güncel olmayan bilgileri kontrol et.
+   - Lisansları kontrol et.
+   - Teknik uyumluluğu kontrol et.
+   - Donanım gereksinimlerini kontrol et.
+   - Maliyetleri kontrol et.
+   - Çelişkileri kontrol et.
+   - Eksik testleri kontrol et.
+   - Gereksiz teknolojileri kontrol et.
+   - Alternatifleri kontrol et.
+   - Araştırmanın yanlış varsayımlara dayanıp dayanmadığını kontrol et.
+   - Gelecekteki teknolojilerin gözden kaçırılıp kaçırılmadığını kontrol et.
+   - Kalıcı hafızanın güncel olup olmadığını kontrol et.
+   - Araştırma dosyalarının birbirleriyle tutarlı olup olmadığını kontrol et.
+
+Araştırma denetimi sonucunda eksik varsa araştırmaya geri dön.
+Eksikler tamamlanmadan araştırmayı tamamlanmış kabul etme.
+
+
+17. BAĞIMSIZ DENETÇİ
+Mümkünse araştırmanın sonunda araştırmayı yürütmeyen ayrı bir alt ajan veya bağımsız de-
+netçi oluştur.
+Bu denetçi:
+
+   - Araştırma raporlarını incelemeli.
+   - Ana araştırmacının varsayımlarını sorgulamalı.
+   - Alternatifleri değerlendirmeli.
+
+
+                                              29
+   - Yanlış veya zayıf kararları belirlemeli.
+   - Teknik riskleri ortaya çıkarmalı.
+   - Eksik kaynakları bulmalı.
+   - Eksik araştırmaları belirlemeli.
+   - Geliştirme planının erken olup olmadığını değerlendirmeli.
+
+Bağımsız denetçi, ana araştırmacının kararlarını onaylamak zorunda değildir.
+Gerekirse kararları reddetmeli.
+Denetçi raporu ayrı dosyada saklanmalı.
+Bağımsız denetçi oluşturulamıyorsa, ana araştırmacı kendi araştırmasını farklı bir denetim
+aşamasında yeniden incelemeli ve bu sınırlamayı raporlamalı.
+
+
+18. ARAŞTIRMA TAMAMLANMA KRİTERLERİ
+Araştırma ancak aşağıdaki koşullar sağlandığında tamamlanmış kabul edilir:
+
+   - Bütün ana araştırma alanları incelendi.
+   - Alt ajan görevleri tamamlandı veya gerçek kısıtları açıklandı.
+   - Uluslararası araştırma yapıldı.
+   - Teknolojiler karşılaştırıldı.
+   - Alternatifler incelendi.
+   - Donanım analizi tamamlandı.
+   - Maliyet analizi tamamlandı.
+   - Lisans analizi tamamlandı.
+   - Teknik uyumluluk analiz edildi.
+   - Araştırma kaynakları kaydedildi.
+   - Çelişkiler değerlendirildi.
+   - Riskler kaydedildi.
+   - Test planı hazırlandı.
+   - Nihai mimari önerisi oluşturuldu.
+   - Geliştirme yol haritası hazırlandı.
+   - Kalıcı araştırma hafızası oluşturuldu.
+   - Araştırma dosyaları güncellendi.
+   - Araştırma denetimi tamamlandı.
+   - Bağımsız denetçi raporu hazırlandı veya denetim kısıtları açıklandı.
+   - Geliştirmeye geçiş kararının gerekçesi oluşturuldu.
+
+Bu kriterler sağlanmadan araştırmayı tamamlandı olarak işaretleme.
+
+
+19. GELİŞTİRMEYE GEÇİŞ KURALI
+Araştırma tamamlanmadan:
+
+   - Yeni özellik geliştirme.
+   - Mevcut kodları değiştirme.
+   - HDRP’ye geçme.
+   - Yeni render sistemi kurma.
+
+                                             30
+    - Büyük mimari değişiklik yapma.
+    - Donanım satın alma kararı verme.
+
+Araştırma tamamlandıktan sonra da otomatik olarak geliştirmeye başlama.
+Önce araştırma sonuçlarını, test planını, maliyetleri ve teknik mimariyi sun.
+Geliştirmeye geçiş ayrı bir karar aşamasıdır.
+
+
+20. ÇALIŞMA DİSİPLİNİ
+Bu görevde aşağıdaki davranışlar kabul edilmeyecek:
+
+    - Yüzeysel araştırma.
+    - Araştırma yapmadan öneri.
+    - Kaynak uydurma.
+    - Alt ajan oluşturmuş gibi davranma.
+    - Yapılmayan testleri yapılmış gibi sunma.
+    - Teorik sonuçları gerçek test olarak sunma.
+    - Araştırma dosyalarını güncellemeden oturumu bitirme.
+    - Önceki araştırmayı kaybetme.
+    - Aynı araştırmayı gereksiz yere tekrar yapma.
+    - Çelişkileri gizleme.
+    - Eksikleri tamamlanmış gibi gösterme.
+    - Görevleri atlama.
+    - Araştırma tamamlanmadan kod yazmaya başlama.
+    - Kullanıcı tarafından verilen ana hedefi değiştirme.
+    - Araştırmanın kapsamını kendi başına daraltma.
+    - Yalnızca kolay araştırılabilen konuları inceleme.
+
+Araştırma sırasında bir kısıt ortaya çıkarsa, kısıtı gizleme.
+Kısıtın nedenini, etkisini ve alternatif çözümünü açıkla.
+
+
+21. İLK ÇALIŞMA ADIMI
+Bu görevi aldıktan sonra hemen kod yazma.
+İlk olarak:
+
+    - Mevcut Hikâye Stüdyosu projesini incele.
+    - Projenin mevcut mimarisini ve dosya düzenini öğren.
+    - Mevcut geliştirme planlarını incele.
+    - Mevcut araştırma dosyalarını incele.
+    - Mevcut araştırma klasörünü oluştur veya düzenle.
+    - Master index oluştur.
+    - Research progress oluştur.
+    - Research log oluştur.
+    - Alt ajan organizasyonunu oluştur.
+    - Her alt ajan için görev tanımı oluştur.
+
+
+                                                31
+   - Araştırma kapsamı haritası oluştur.
+   - Araştırma önceliklerini belirle.
+   - Araştırma görevlerini alt ajanlara dağıt.
+   - Araştırmayı başlat.
+
+İlk aşamada bana yalnızca araştırma sisteminin kurulduğunu iddia etme.
+Gerçekten oluşturduğun dosyaları, gerçek alt ajanları, tamamladığın görevleri ve araştırma-
+nın başlangıç durumunu raporla.
+Yapmadığın hiçbir işi yapılmış olarak gösterme.
+
+
+SON HEDEF
+
+HİKÂYE STÜDYOSU’NUN HEDEFİ, SADECE ÇALIŞAN BİR UYGULAMA DEĞİL, MÜMKÜN OLAN
+EN YÜKSEK SİNEMATİK KALİTEYİ UYGULANABİLİR, SÜRDÜRÜLEBİLİR VE EKONOMİK BİR
+MALİYETLE ÜRETEBİLEN BİR ÜRÜN OLMASIDIR.
+ÖNCE ÖĞREN.
+ÖĞRENDİĞİNİ KAYDET.
+KAYDETTİĞİNİ DOĞRULA.
+ARAŞTIRMAYI GENİŞLET.
+KENDİ ARAŞTIRMANI DENETLE.
+EKSİKLERİ TAMAMLA.
+TEST ET.
+SONRA KARAR VER.
+EN SON GELİŞTİR.
+BU SIRAYI BOZMA.
+
+
+
+
+                                                 32
+

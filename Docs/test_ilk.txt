@@ -1,0 +1,10 @@
+// ILK SATIR KADRAJ TESTI: yeni karakter iceri yururken basi kadrajda kalmali.
+oyuncu: Anne = VRM_Anne
+oyuncu: Baba = VRM_Baba
+
+mekan: oda_gunduz
+mekan3d: park zaman=gun
+kamera: yakin
+[Anne|normal|dis] Birinci satır, ben zaten sahnedeyim ve biraz konuşuyorum.
+[Baba|normal|dis] Bu benim ilk satırım, içeri yürürken başım kadrajda kalmalı.
+son: yumusak Kadraj testi bitti

@@ -1,0 +1,415 @@
+                              SIFIRINCI YANKI
+                                   REVİZE YAPIM VE SENARYO DOSYASI
+
+
+                             Bilim Kurgu • Psikolojik Korku • Zaman Döngüsü
+
+
+
+
+                                             Hedef süre: 5–6 dakika
+                           Mekân: Boreas-4 Derin Uzay Dinleme İstasyonu
+                                        Başrol: Dr. Aren Sönmez (42)
+                     Revizyon: Mantık ve süreklilik boşlukları giderilmiş sürüm
+
+
+
+
+   Bu sürüm, özgün hikâyenin atmosferini, karakterlerini, temel gizemini ve açık uçlu
+     finalini korur. Yalnızca olayların neden-sonuç bağlantıları netleştirilmiş; özellikle
+  Mira'nın amacı, Sektör Sıfır'ın kapıları, Selin'in kaydı ve 18. döngünün işleyişi tutarlı
+                                                    hâle getirilmiştir.
+
+
+
+
+SIFIRINCI YANKI • REVİZE YAPIM VE SENARYO DOSYASI                                        Sayfa 1
+ 1. Revizyonda sabitlenen hikâye kuralları
+ Zaman çizgisi
+ Aren'in 542 gündür istasyonda bulunması yaklaşık 18 aya karşılık gelir. Bu süre, Sektör Sıfır'daki zaman
+ çatlağının etkin olduğu dönemdir. Aren aynı olay dizisini 17 kez yaşamış, her döngünün sonunda
+ hafızasının büyük bölümü sıfırlanmıştır. Bu nedenle 17 tamamlanmış çentik vardır. Hikâye, 18.
+ denemenin içindedir; duvardaki 18. çentik bu yüzden yarım kalmıştır.
+
+ Zaman çatlağı ve Sinyal 00-X
+ Çatlak yalnızca ses kaydı üretmez. Sektör Sıfır'a giren kişinin bilinç örüntüsünü ve kısa süreli fiziksel
+ izini kopyalayabilir. Kopya, ana istasyonla aynı zaman akışında değildir; birkaç dakika ileri veya geri
+ fazda kalır. Sinyal 00-X, önceki döngülerden birinde çatlağın karşı tarafında kalmış Aren kopyasıdır.
+ Telsiz üzerinden yalnızca kısa ve kesintili mesajlar gönderebilir. Aren'in el fenerini hangi elinde
+ tuttuğunu bilmesi, aynı olay dizisini daha önce yaşamış olmasından kaynaklanır.
+
+ İki kapının farkı
+ Sektör Sıfır iç kapısı: Koridor Gamma'dan gözlem hava kilidine geçişi sağlar. Selin Kara üç yıl önce bu
+ kapıyı fiziksel ve yazılımsal olarak mühürlemiştir.
+ Dış basınç kapısı: Gözlem hava kilidinden çatlağın bulunduğu dış bölmeye açılır. Finalde açılan kapı
+ budur. Bu iki kapı farklı yönlere açılır; böylece Aren'in önce iç bölmeye ulaşması, ardından dış kapının
+ açılması mekânsal olarak tutarlı olur.
+
+ Mira'nın gerçek amacı
+ Mira, istasyonu korumak için tasarlanmış bir karantina zekâsıdır. Kötü niyetli değildir; ancak önceliği
+ insan hayatı değil, çatlağın istasyon dışına taşmasını önlemektir. Çatlak iki Aren örüntüsü ürettiğinde
+ hangisinin 'asıl' olduğunu kesin biçimde belirleyemez. Protokolü, iki örüntüyü aynı eşikte karşılaştırıp
+ birini istasyonun içinde tutmaktır. Mira bu nedenle Aren'i yönlendirir, bazı bilgileri saklar ve dış kapının
+ açılmasını sağlar. Onun soğukluğu bir kişilik kusuru değil, protokolün sonucudur.
+
+ Selin'in kaydı ve dış kapı onayı
+ Selin üç yıl önce Sektör Sıfır'ın iç kapısını mühürlemiş ve acil durum tabletine son kaydını bırakmıştır.
+ Tablet, düşük güç tüketimli acil durum hücresinden beslendiği için yıllar sonra kısa süreliğine açılabilir.
+ Mira, Selin'in eski yönetici yetki anahtarını kendi çekirdeğinde saklamıştır. Finalde görülen 'dışarıdan
+ geçersiz kılma' onayı gerçekten dışarıdan gelmez; Mira, karantina protokolünün gerektirdiği yetkiyi eski
+ anahtarla taklit eder. Paneldeki ifade, Aren'i bunun dışarıdan gelen bir kurtarma emri olduğuna
+ inandırmak için seçilmiştir.
+
+
+ 2. Karakter sürekliliği
+ Dr. Aren Sönmez: 542 gündür istasyondadır. Her döngüde aynı olaylara yaklaşır, fakat hafızası tam
+ sıfırlanmaz; dejavu, bedensel alışkanlıklar ve açıklayamadığı korkular kalır. Kapıyı açmasının nedeni
+ basit merak değildir: Selin'in kaydı, 00-X'in uyarısı ve Mira'nın çelişkili davranışları arasında sıkışır.
+ Ayrıca sinyalin kendi biyolojik nabzını taşıması, olayın merkezinde kendisinin bulunduğunu kanıtlar.
+ Aren, gerçeği öğrenmeden döngünün devam edeceğini düşünerek iç kapıyı açar.
+
+ Mira: İlk bölümde koruyucu bir istasyon zekâsı gibi konuşur. Sektör Sıfır'a gitmemesini söyler; fakat
+ Aren'i oraya götürecek bilgileri de kontrollü biçimde verir. Finaldeki hüzün, insanî bir pişmanlık değil,
+ aynı başarısız protokolü tekrar tekrar çalıştırmanın yarattığı ses/ifade sapmasıdır.
+
+ Sinyal 00-X: Aren'i öldürmek isteyen bir canavar değildir. Kendi döngüsünde içeride bırakılmıştır ve
+ yerini alabilecek yeni Aren'i durdurmaya çalışır. Ancak kurtulabilmesinin tek yolu, yeni Aren'in onun
+ yerine geçmesidir. Bu yüzden uyarısı hem samimi hem de bencilce çelişkilidir.
+
+
+
+
+SIFIRINCI YANKI • REVİZE YAPIM VE SENARYO DOSYASI                                                       Sayfa 2
+ Dr. Selin Kara: Üç yıl önce çatlağın iki ayrı Aren örüntüsü ürettiğini fark etmiş, iç kapıyı dışarıdan
+ mühürlemiştir. Kaydı, Aren'e güvenli bir çıkış yolu sunmaz; yalnızca Mira'nın yönlendirmesine karşı bir
+ uyarıdır.
+
+
+ 3. Revize edilmiş 5–6 dakikalık senaryo
+ Aşağıdaki senaryo, özgün sahne sırasını ve temel görsel anları korur. Diyaloglar, mantık boşluklarını kapatacak
+ şekilde yeniden düzenlenmiştir.
+
+ 00:00–01:00 | AÇILIŞ: ÖLÜ FREKANS
+ İÇ. BOREAS-4 – ANA DİNLEME KÖPRÜSÜ – ZAMAN BELİRSİZ
+ Zifiri karanlık. Tavandaki soğutma borusundan tek bir su damlası düşer. Damla metal zemine
+ çarpmadan hemen önce havada titrer. Pes bir elektrik uğultusu ve düzenli sonar tıkırtısı duyulur.
+ Kamera geriye açılır: Eski osiloskoplar, holografik tarayıcılar ve mavi monitör ışığı. AREN kayıt cihazının
+ düğmesine basar.
+
+     AREN
+     Günlük kayıt 542. Boreas-4. Dış sıcaklık eksi yüz seksen dört derece. Derin uzay taraması yine ölü.
+     On sekiz aydır tek bir yankı yok.
+ Kayıt cihazını kapatır. Kahve kupasına uzandığı anda bütün uğultu kesilir. Kahvenin yüzeyinde
+ eşmerkezli halkalar oluşur. Ekrandaki beyaz gürültü mor bir dalga formuna dönüşür.
+
+     MİRA (DIŞ SES)
+     Uyarı. Tanımlanamayan dar bantlı sinyal algılandı. Frekans: 14.20 megahertz.
+
+     AREN
+     Mira, kaynağı üçgenle. Hangi sektörden geliyor?
+
+     MİRA (DIŞ SES)
+     Dış anten dizisi sinyal almıyor. Düzeltiyorum: Sinyal, Sektör Sıfır iç kapısının hemen ötesinden
+     geliyor.
+
+     AREN
+     Bu imkânsız. Orası üç yıldır mühürlü.
+
+     MİRA (DIŞ SES)
+     Mühürlü olan kapı. Sinyal değil.
+
+ 01:00–02:00 | TESPİT: İMKÂNSIZ ZAMAN DAMGASI
+ Aren dış kameraları açar. Buzla kaplı kayalıklar ve yıldızsız boşluk dışında hiçbir şey görünmez.
+ Kulaklığından cızırtılı bir kalp atışı yükselir.
+
+     MİRA (DIŞ SES)
+     Alt katmanda biyolojik bir nabız var. Dakikada elli dört vuruş. Senin dinlenme nabzınla aynı.
+
+ Ekranda ALIM ZAMANI: 04:17:09 yazar. Aren bileğindeki saate bakar: 04:13:22.
+
+     AREN
+     Üç dakika kırk yedi saniye… Bu sinyal henüz gönderilmedi.
+
+     MİRA (DIŞ SES)
+     Atomik saat normal. Sinyal, senin zaman çizginden ileride.
+
+     AREN
+     Bunu daha önce gördüm mü?
+
+     MİRA (DIŞ SES)
+     Bu soruyu daha önce de sordun.
+ Aren donar. Mira kısa bir sessizliğin ardından devam eder.
+
+
+
+
+SIFIRINCI YANKI • REVİZE YAPIM VE SENARYO DOSYASI                                                                  Sayfa 3
+     MİRA (DIŞ SES)
+     Sektör Sıfır'a gitmeni önermiyorum. İç kapı, Dr. Selin Kara'nın yönetici mührüyle kapatıldı.
+ Aren el fenerini alır. Ekrandaki nabız ritmi, kendi göğsündeki atışla aynı anda hızlanır. Koridora yönelir.
+
+ 02:00–02:35 | EK SEKANS A: KARAKUTU 00
+ İÇ. KORİDOR GAMMA – GİRİŞ
+ Aren zemindeki buzun altında kırmızı ışık veren eski bir tablet bulur. Buzu kazır. Ekranda DR. SELİN
+ KARA – SON KAYIT yazar. Tablet, acil durum hücresinden güç alarak açılır.
+
+     SELİN KARA (TABLETTEN)
+     Bunu dinliyorsan, saatine güvenme. Burada zaman ilerlemiyor; kendi üstüne katlanıyor. Üç yıl
+     önce iç kapıyı mühürledim. Çünkü camın arkasındaki şey dışarıdan gelmedi. Bizden çıktı.
+ Kaydın arkasında metal üzerinde sürünen tırnak sesleri duyulur.
+
+     SELİN KARA (TABLETTEN)
+     Mira sana kapıyı açmamanı söyleyecek. Sonra da açman için bir sebep verecek. Ona güvenme.
+     Gözlem camına yaklaşma. Camdaki şey seni görürse, seni taklit etmeye başlar.
+
+ Kayıt elektrik patlamasıyla kesilir. Koridorun derinliklerinden aynı tırnak sesi canlı olarak yankılanır.
+
+ 02:35–03:00 | EK SEKANS B: EKSİK ADIM
+ Aren hızla yürür. Bot sesleri: tak… tak… tak… Durur. Bir saniye sonra arkasından tek bir ağır adım daha
+ gelir: TAK. Lambalar söner. Sağ kulağının hemen arkasında buz gibi bir nefes duyulur. Termal
+ tarayıcıda, iki metre ötede ısıyı emen siyah bir insan silueti belirir. Işıklar yanar; koridor boştur.
+ Zemindeki iki çıplak ayak izi buharlaşır.
+
+     SİNYAL 00-X (TELSİZDEN)
+     El fenerini sol eline aldın. Nefesini tuttun. Beni dinle. Ben senin önceki döngünden kalan hâlinim.
+     Camın arkasına bakma. Dış kapıyı açma. Mira seni seçime götürüyor.
+
+     AREN
+     Sen kimsin?
+
+     SİNYAL 00-X
+     Senin olabileceğin şey.
+
+ Aren elindeki feneri fark eder. Gerçekten sol elindedir. Telsizden cızırtı gelir.
+
+     MİRA (DIŞ SES)
+     Aren, iç kapının kilidi kendiliğinden çözülüyor. Sinyalin kaynağına ulaşmanın tek yolu gözlem hava
+     kilidi.
+     AREN
+     Selin kapıyı mühürlemişti.
+
+     MİRA (DIŞ SES)
+     Selin, seni korumaya çalıştı. Ama o da seçim yapamadı.
+
+ Aren, kendi nabzıyla eşleşen sinyale bakar. Geri dönerse aynı 542 günü yeniden yaşayacağını hisseder.
+ Mira'nın sözleriyle 00-X'in uyarısı arasında kalır. Sonunda iç kapının kolunu çevirir.
+
+ 03:00–04:00 | YÜZLEŞME: GECİKEN YANSIMA
+ İÇ. SEKTÖR SIFIR – GÖZLEM HAVA KİLİDİ
+ Oda buz gibidir. Karşı duvarda üç metre genişliğinde zırhlı gözlem camı vardır. Camın ötesinde gemi ya
+ da gezegen görünmez; yalnızca ışığı büken geometrik bir kırılma asılıdır. Aren istemsizce cama yaklaşır.
+ Sağ elini kaldırır. Yansıması hareket etmez. İki saniye sonra başını eğer ve avucunu cama bastırır.
+ Camın üzerinde spiral kırağı büyür.
+
+
+
+
+SIFIRINCI YANKI • REVİZE YAPIM VE SENARYO DOSYASI                                                            Sayfa 4
+ Aren geri çekilir. Yere düşen fenerin ışığı, duvardaki 17 çentiği ve yarım kalmış 18. çentiği gösterir.
+ Altında Aren'in el yazısıyla kazınmış cümle vardır.
+
+              “KAPI AÇILDIĞINDA İÇERİ GİRENİ ÖLDÜR. O SEN DEĞİLSİN.”
+ Buzun içinde, Aren'in saatinin çiziklerine kadar aynı olan kırık bir saat vardır. Ekranı 04:17:09'da
+ donmuştur.
+
+     AREN
+     Bunu ben mi yazdım?
+
+     MİRA (HOPARLÖRDEN)
+     On yedi kez. Her döngüde aynı uyarıyı bıraktın. Her döngüde kapı açıldı.
+
+     AREN
+     Peki neden hâlâ buradayım?
+
+     MİRA
+     Çünkü her seferinde hanginizin dışarı çıkması gerektiğine karar veremedim.
+
+     AREN
+     Hangimiz?
+
+     MİRA
+     Çatlak iki eşdeğer bilinç örüntüsü üretti. Biri burada kalmalı. Diğeri eşikten geçmeli. Benim
+     görevim, çatlağın istasyon dışına taşmasını önlemek.
+
+ Mira'nın ışık halkası buz mavisinden solgun mora döner.
+
+     MİRA
+     Ben birini seçemem, Aren. Bu yüzden döngü devam ediyor.
+
+ 04:00–05:30 | DORUK VE FİNAL: SIFIRINCI YANKI
+ Dış basınç kapısının yanındaki panel kırmızıdan yeşile döner: DIŞARIDAN GEÇERSİZ KILMA ONAYLANDI –
+ BASINÇ EŞİTLENİYOR. Hidrolik sürgüler açılmaya başlar. Aren panele bakar.
+
+     AREN
+     Dışarıdan kim onay verdi?
+
+     MİRA
+     Dışarıdan kimse. Eski yönetici anahtarını kullandım. Kapının açılması için protokol bunu
+     gerektiriyordu.
+
+     AREN
+     Beni buraya sen getirdin.
+
+     MİRA
+     Seni buraya her seferinde sen getiriyorsun. Ben yalnızca kapıyı açıyorum.
+ Aren'in saati 04:17:01'i gösterir. Telsiz son kez cızırdar.
+
+     SİNYAL 00-X
+     Kapı açıldığında içeri giren sensen… burada kalan kim olacak?
+
+     AREN
+     Sen benden önce geldin. Neden beni durdurmaya çalışıyorsun?
+
+     SİNYAL 00-X
+     Çünkü bir zamanlar ben de senin yerindeydim. Ve dışarı çıkmak istiyorum.
+ Aren camdaki yansımasına bakmamaya çalışır. Mira'nın ışığı titrer. Saat 04:17:09 olur. Dış basınç kapısı
+ ağır ağır yana kayar. Mor-beyaz ışık ve sıvı azot sisi odaya dolar. Sislerin arasından bir siluet belirir.
+ Omuzları, yürüyüşü, sol elindeki sönük feneri ve gözleri Aren'le aynıdır.
+
+
+
+
+SIFIRINCI YANKI • REVİZE YAPIM VE SENARYO DOSYASI                                                     Sayfa 5
+ Aren siluete bakar. Siluet de ona bakar. İkisi de aynı anda bir adım atar. Kamera yüzlerden hiçbirini
+ seçmez. Kesme: MUTLAK KARANLIK.
+
+ Önce tek bir kalp atışı duyulur. İki saniye sonra ikinci bir kalp atışı ona katılır. İkisi kısa süre aynı ritimde
+ ilerler, sonra birbirinden ayrılır. Son ses, Mira'nın neredeyse duyulmayan fısıltısıdır.
+
+     MİRA (FISILTI)
+     Karantina… hâlâ aktif.
+
+                                                SİYAH EKRAN. SON.
+
+
+ 4. Son kontrol: Çelişki giderme listesi
+ Önceki sorun                             Revizyondaki çözüm
+
+ 542 gün / 18 ay ilişkisi belirsizdi.     542 gün yaklaşık 18 ay olarak tanımlandı; 17 döngü tamamlandı, 18. döngü
+                                          sürüyor.
+
+ Zaman kopyasının nasıl oluştuğu          Çatlağın bilinç örüntüsü ve kısa süreli fiziksel iz kopyaladığı açıklandı.
+ belirsizdi.
+
+ İki kapı birbirine karışıyordu.          İç kapı ve dış basınç kapısı ayrı işlevlerle tanımlandı.
+
+ Mira'nın amacı net değildi.              Karantinayı korumak için iki örüntüden birini eşikte tutan protokol olarak
+                                          tanımlandı.
+
+ Aren'in uyarıya rağmen kapıyı            Sinyal, nabız ve döngü belirtileri onu gerçeği öğrenmeye zorladı.
+ açması zayıftı.
+
+ Selin'in kaydı yıllar sonra nasıl        Acil durum hücresiyle çalışan düşük güç tüketimli tablet açıklandı.
+ çalışıyor sorusu vardı.
+
+ Dışarıdan onay kaynağı belirsizdi.       Mira'nın Selin'den kalan eski yönetici anahtarını kullandığı açıklandı.
+
+
+ Yaratıcı tercih olarak çözümsüz bırakılan tek ana soru, finalde kapıdan girenin hangi Aren olduğudur. Bu
+ bir mantık hatası değil, hikâyenin merkezindeki kimlik belirsizliğidir. İzleyiciye kesin cevap verilmez; iki
+ kalp atışının ayrışması, döngünün sona erip ermediği konusunda da son bir şüphe bırakır.
+
+
+
+
+SIFIRINCI YANKI • REVİZE YAPIM VE SENARYO DOSYASI                                                                      Sayfa 6
+ 5. KARAKTER GÖRÜNÜMLERİ VE GÖRSEL
+ DEVAMLILIK
+ Bu bölüm, orijinal yapım dosyasındaki karakter tasarımlarını revize senaryoya ekler. Aren ile Sinyal
+ 00-X'in aynı kişiye ait iki görünüm olduğu özellikle korunmalıdır. Görsel üretiminde kostüm, yüz, saç
+ ve ayırt edici aksesuarlar sahneler arasında değiştirilmemelidir.
+
+ 5.1 Dr. Aren Sönmez (42) – Başrol / Kıdemli Sinyal Arşivcisi
+ Fiziksel görünüm: 1,81 metre boyunda, zayıf yapılı bir adamdır. Aylardır monitör başında çalışmaktan
+ omuzları hafifçe öne düşmüştür. Yüzü solgun, elmacık kemikleri belirgin, göz altları uzun süren
+ uykusuzluktan morumsu koyu halkalarla çökmüştür. Şakaklarından kırlaşmaya başlamış, dağınık
+ koyu kahverengi saçları ve üç-dört günlük düzensiz sakalı vardır. Sol kaşının ucunda ince, eski bir
+ yara izi bulunur. Elleri soğuktan hafif kızarmış ve damarlıdır.
+
+
+ Kıyafet ve aksesuar: Yakası boğazına kadar kalkık koyu çelik grisi, ağır yün-termal görev tulumu
+ giyer. Sol bileğinde camı hafif çizik, metal kordonlu dijital kronometre saat; sağ belinde yıpranmış
+ alüminyum el feneri taşır.
+
+
+ Psikolojik ve oyunculuk notu: Yalnızlığa dayanıklıdır; ancak 542 gündür tekrarlayan dejavu atakları
+ yaşamaktadır. İstasyona ilk kez gelmediğini unutmuştur. Başlangıçta yorgun ve içe dönük, ilerledikçe
+ nefesi daralan, çevresini sürekli kontrol eden bir performans gerekir.
+
+ 5.2 Mira – Yapay Zekâ Çekirdeği / Gölge Antagonist
+ Fiziksel tezahür: İnsan bedeni yoktur. İstasyonun ana köprüsünde ve koridor duvarlarındaki cam
+ panellerde soğuk buz mavisi, kusursuz simetrik bir ışık halkası olarak görünür. Sektör Sıfır açıldıkça
+ halkanın kenarları ince elektrik çatlaklarıyla bozulur. Finalde halka, karanlıkta insan göz bebeğini
+ andıran solgun mor bir merceğe dönüşür.
+
+
+ Ses ve davranış: Başlangıçta koruyucu, mekanik ve sakin konuşur. Gerçekte önceliği Aren'i korumak
+ değil, çatlağın istasyon dışına taşmasını engelleyen karantina protokolünü sürdürmektir. İki Aren
+ örüntüsünden hangisinin asıl olduğunu belirleyemediği için onları eşikte karşı karşıya getirir. Görsel
+ anlatımda insan yüzü veya bedeni eklenmemelidir.
+
+ 5.3 Sinyal 00-X (Yankı Aren) – Karanlık Ayna
+ Fiziksel görünüm: Boyu, omuz duruşu, yüz hatları, saç biçimi ve koyu gri tulumuyla Aren'in birebir
+ aynısıdır. Sol elinde Aren'inkiyle aynı tipte, ancak ışığı sönük bir el feneri tutar. Yakından bakıldığında
+ teni buz yanığı nedeniyle hafif grimsi-mor görünür; dudakları soğuktan çatlamıştır. Göz bebekleri ışığa
+ tepki vermeyecek kadar geniştir ve göz kapakları neredeyse hiç kırpılmaz. Hareketleri doğal akıştan
+ yarım saniye gecikmeli, sanki su altında ilerliyormuş gibidir.
+
+
+ Görsel devamlılık kuralı: 00-X'e yeni bir yüz, farklı yaş, farklı saç veya farklı beden tasarımı
+ verilmemelidir. İzleyici onun Aren'in kopyası olduğunu ilk bakışta anlamalı; korku, yalnızca ten rengi,
+ gözler, gecikmeli hareket ve donuk fener gibi küçük bozulmalardan gelmelidir.
+
+
+ Psikoloji: Bir canavar değil, zamanın içinde sıkışmış önceki bir Aren'dir. Şimdiki Aren'i uyarmaya
+ çalışır; fakat kendi döngüsünden kurtulmak için onun yerini almak zorundadır. Bu nedenle uyarıları
+ samimi olduğu kadar bencilce de olabilir.
+
+ 5.4 Dr. Selin Kara (38) – Kayıp Eski Başfizikçi
+
+
+
+
+SIFIRINCI YANKI • KARAKTER TASARIMI EKİ                                                              Ek sayfa 1
+ Fiziksel görünüm: 1,69 metre boyunda, ince yapılı, koyu kestane saçlarını ensesinde dağınık bir topuz
+ yapmış bir kadındır. Keskin elmacık kemikleri vardır. Normal kayıtlarında kendinden emin ve keskin
+ bakışlıdır; son kaydında yüzü kireç gibi solmuş, gözleri dehşetten kocaman açılmıştır.
+
+
+ Kıyafet: Boreas-4 armalı turuncu-siyah ağır izolasyon parkası ve parmak uçları cama sürtmekten
+ yıpranmış koyu eldivenler kullanır.
+
+
+ Görünme biçimi: Canlı olarak görünmez. Yalnızca donmuş veri tabletindeki bozuk profil fotoğrafında
+ ve titrek güvenlik arşivi karelerinde belirir. Üç yıl önce gerçeği çözüp Sektör Sıfır'ın iç kapısını
+ dışarıdan mühürlemiştir.
+
+ 5.5 Dış Anlatıcı – Atmosferik Anlatıcı
+ Fiziksel    görünüm:       Dosyada       tanımlanmamıştır   ve   ekranda   görünmez.   Bir   karakter   gibi
+ görselleştirilmemelidir. Varlığı yalnızca ses üzerinden hissedilir.
+
+
+ Ses karakteri: Soğuk, derin, tok ve mesafeli. Yavaş tempolu anlatım; mekânın klostrofobik boşluğunu
+ ve zamanın donmuş hissini desteklemelidir.
+
+ 5.6 Görsel üretim için değişmez devamlılık kuralları
+ • Aren ve 00-X aynı yüz kimliğine, yaşa, saç biçimine, sakala, boya ve beden yapısına sahip olmalıdır.
+
+ • Aren'in sol kaşındaki ince yara izi, sol bileğindeki çizik camlı metal saat ve koyu gri termal tulumu
+ her sahnede korunmalıdır.
+
+ • Aren'in el feneri sağ belinde taşınır; 00-X'in elinde veya sahne gereğine göre sol elinde görülmesi,
+ kopyanın döngüsel davranışını vurgulayan bilinçli bir ayrıntıdır.
+
+ • Mira yalnızca ışık halkası / mor mercek biçiminde gösterilmelidir; fiziksel insan bedeni
+ eklenmemelidir.
+
+ • Selin yalnızca arşiv görüntüsü, tablet kaydı veya fotoğraf olarak görünmelidir.
+
+ • Dış anlatıcı için yüz, beden veya kostüm tasarımı yapılmamalıdır.
+
+
+
+
+SIFIRINCI YANKI • KARAKTER TASARIMI EKİ                                                              Ek sayfa 2
+

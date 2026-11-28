@@ -1,0 +1,45 @@
+// ARABA TESTİ: araba içinde hiçbir kamera planında oturanların kucağı / bacak arası görünmemeli.
+// Kullanım: HikayeKomut/hikaye_test_araba.txt olarak kopyala, "hikaye_yaz: test_araba", sonra "oynat: test_araba".
+// Not: "yukaridan" / "asagidan" açısı "kamera: goz" yazılana kadar sürer.
+oyuncu: Anne = VRM_Anne
+oyuncu: Baba = VRM_Baba
+oyuncu: Arda = VRM_Cocuk
+
+mekan: oda_gunduz
+mekan3d: araba
+yer: Anne surucu
+yer: Baba yolcu
+yer: Arda arka_sag
+kamera: genis
+[Anne|normal|dis] Geniş planda herkes görünmeli.
+kamera: goz
+kamera: yakin
+kamera: yaklas
+[Anne|uzgun|dis] Sürücüye en yakın plan: bu satır bilerek uzun, kamera iyice yaklaşsın ve alt kenarda yalnız ön konsol görünsün.
+[Anne|uzgun|ic] İç ses satırında da kamera yaklaşıyor, alt tarafta yine yalnız konsol olmalı.
+kamera: yukaridan
+kamera: yaklas
+[Anne|normal|dis] Yukarıdan bakış istendi ama arabada kamera yükselmemeli.
+kamera: goz
+yer: Anne yolcu
+kamera: yakin
+kamera: yaklas
+[Anne|mutlu|dis] Yolcu koltuğunda en yakın plan, bu satır da uzunca olsun diye devam ediyor.
+yer: Anne arka_sol
+kamera: yakin
+kamera: yaklas
+[Anne|normal|dis] Arka koltukta yakın plan.
+yer: Anne surucu
+kamera: otomatik
+[Baba|normal|dis] Otomatik kamerada ben konuşuyorum.
+[Anne|uzgun|dis] Otomatik kamerada ben de cevap veriyorum, uzun uzun anlatıyorum.
+kamera: omuz
+[Arda|mutlu|dis] Omuz planı istendi.
+kamera: ters
+[Baba|normal|dis] Ters plan istendi.
+kamera: salla
+[Anne|korkmus|dis] Sarsıntı sırasında da görünmemeli!
+kamera: yakin
+kamera: yaklas
+[Anne|uzgun|ic] Bölüm sonunda kamera bende kalacak ve bekleyecek.
+son: yumusak Test bitti

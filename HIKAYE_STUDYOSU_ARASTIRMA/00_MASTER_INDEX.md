@@ -1,0 +1,68 @@
+# 00 MASTER INDEX — Hikâye Stüdyosu Sinematik Teknoloji Araştırması
+
+**Her yeni oturum buradan başlar.** Protokol: `00_PROTOKOL.pdf` (düz metin: `00_PROTOKOL.txt`). Protokol 27 Kas 2026'da kullanıcı tarafından verildi.
+
+## Amaç
+Hikâye Stüdyosu'nun 1080x1920, 30 FPS videolarda mümkün olan en yüksek uygulanabilir sinematik kaliteyi, en düşük sürdürülebilir maliyetle nasıl üreteceğini kanıta dayalı olarak belirlemek.
+
+## ANA KURAL (protokol §19)
+Araştırma tamamlanana kadar: yeni özellik yok, kod değişikliği yok, HDRP geçişi yok, yeni render sistemi yok, büyük mimari değişiklik yok, donanım satın alma kararı yok.
+Araştırma bitince de geliştirmeye KENDİLİĞİNDEN geçilmez; sonuçlar sunulur, geçiş kullanıcının ayrı kararıdır.
+Sıra: ÖĞREN → KAYDET → DOĞRULA → GENİŞLET → DENETLE → TAMAMLA → TEST ET → KARAR VER → EN SON GELİŞTİR.
+
+## Durum (son güncelleme: 27 Kas 2026, ikinci denetim sonrası)
+**Araştırma masa başı kapsamında tamamlandı; hiçbir test yapılmadı; geliştirmeye geçiş kararı kullanıcı ve test bekliyor** (gerekçe ve açık kısıtlar: 16 §4-§5). Denetim düzeltmeleri üçüncü kez denetlenmedi.
+
+| Aşama | Durum |
+|---|---|
+| Mevcut proje, dosya sistemi | yapıldı |
+| A01–A12 + A00 takip | raporlar yazıldı (bazı kısıtlar: 16 §1) |
+| Çapraz denetim (X1, X2), test planı, 13 rapor | yazıldı; testler koşulmadı |
+| Bağımsız denetçi (DEN), düzeltme araştırması (D1), öz denetim (16) | yapıldı |
+| D2 (açık konular), D3 (yapay zekâ asistanı), ikinci denetim (DEN2), birleştirme | yapıldı |
+| Kullanıcı yanıtları K-017..K-020 (sıra; asistan; iki görünüm; yalnız ek disk) | işlendi |
+| Kalan | açık sorular (REPORTS/00); testler (onayla) |
+
+**UYARI:** Q-016 / K-004: Unity'ye dosya köprüsüyle komut gönderme.
+
+Ayrıntılı ilerleme: `02_RESEARCH_PROGRESS.md`.
+
+## Alt ajanlar
+Her ajanın görev tanımı ve raporu: `AGENTS/Axx_*.md`; kaynakları: `SOURCES/Axx_kaynaklar.md`.
+
+| Kod | Uzmanlık |
+|---|---|
+| A01 | Sinematografi ve görüntü yönetmenliği |
+| A02 | Fotogerçekçi karakter / dijital insan |
+| A03 | Animasyon, motion capture, hareket |
+| A04 | Işık, materyal, görüntü kalitesi |
+| A05 | 3D ortam, mimari, çevre |
+| A06 | VFX ve sinematik efekt |
+| A07 | Ses, TTS, diyalog, dudak senkronu |
+| A08 | Sinematik kurgu ve hikâye anlatımı |
+| A09 | Unity, render, performans mimarisi |
+| A10 | Donanım ve ekonomik optimizasyon |
+| A11 | Uluslararası teknoloji ve gelecek |
+| A12 | Lisans, ticari kullanım, risk denetçisi |
+| DEN | Bağımsız denetçi |
+| D1 | Denetim sonrası düzeltme araştırması |
+| D2 | Açık konular (4K, düz yazı, 2D paket, büyütme, çocuk karakter) |
+| D3 | Yapay zekâ asistanı ve bütçe |
+| DEN2 | İkinci bağımsız denetim |
+
+## Dosyalar
+- `01_MASTER_RESEARCH_PLAN.md` — kapsam haritası, öncelikler, ajan kuralları
+- `02_RESEARCH_PROGRESS.md` · `03_RESEARCH_LOG.md` · `04_DECISION_LOG.md`
+- `05_OPEN_QUESTIONS.md` · `06_CONTRADICTIONS.md` · `07_RISK_REGISTER.md`
+- `08_TECHNOLOGY_DATABASE.md` · `09_SOURCE_DATABASE.md` · `10_PERFORMANCE_DATABASE.md` · `11_COST_DATABASE.md`
+- `12_TEST_PLAN.md` · `13_TEST_RESULTS.md` · `14_FINAL_ARCHITECTURE.md` · `15_FINAL_ROADMAP.md` · `16_RESEARCH_AUDIT.md`
+- `TOPICS/` konu notları · `EXPERIMENTS/` gerçek denemeler · `REPORTS/` 13 rapor
+
+## Önemli kararlar
+Uygulanan geliştirme kararı YOK. HDRP önerisi geri çekildi (K-003); köprü kullanımı durduruldu (K-004); K-005..K-016 ve K-021..K-024 yalnız ÖNERİ; K-017..K-020 kullanıcı yanıtlarıdır.
+
+## Önemli kaynaklar
+Unity render hattı duyurusu (29 Eyl 2026): https://discussions.unity.com/t/the-path-to-a-single-render-pipeline-in-unity-7/1737908 · Hedef video analizi: `Docs/VideoKalitesi.md`. Dizin: `09_SOURCE_DATABASE.md`.
+
+## Önceki araştırmalar (silinmedi)
+`Docs/VideoKalitesi.md`, `Docs/Kaynak_Arastirmasi.md`, `Docs/Asama16_Degerlendirme.md`. İçlerindeki bilgiler "ön araştırma"dır; yeniden doğrulanacak.

@@ -1,0 +1,31 @@
+// ARABA TESTİ 2: cocuk on koltukta (yuzu gorunmeli), arka koltuk plani, asagidan, 5. kisi, arabadan parka gecis + dondur.
+oyuncu: Anne = VRM_Anne
+oyuncu: Baba = VRM_Baba
+oyuncu: Arda = VRM_Cocuk
+oyuncu: Adam = VRM_Baba
+oyuncu: Anlatici = VRM_Anne
+
+mekan: oda_gunduz
+mekan3d: araba
+yer: Arda yolcu
+yer: Anne surucu
+kamera: genis
+[Anne|normal|dis] Cocuk on koltukta, geniste yuzu gorunmeli.
+kamera: yakin
+[Arda|mutlu|dis] On koltukta yakin planda benim agzim ve cenem gorunmeli.
+yer: Arda surucu
+[Arda|uzgun|dis] Surucu koltugundayim, yuzum yine tam gorunmeli.
+yer: Baba arka_sag
+kamera: yakin
+[Baba|normal|dis] Arka koltuk yakin planinda onumde dev mavi blok olmamali.
+kamera: asagidan
+[Baba|uzgun|dis] Asagidan istendi ama yuzum kaybolmamali.
+kamera: goz
+yer: Adam arka_sol
+kamera: genis
+[Adam|normal|dis] Dorduncu kisi arkada.
+[Anlatici|korkmus|dis] Ben besinciyim, koltugum yok.
+mekan3d: park
+dondur: 2
+[Anne|normal|dis] Parka gectik, kimse yari oturur kalmamali.
+son: yumusak Test bitti

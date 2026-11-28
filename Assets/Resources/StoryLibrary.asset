@@ -1,0 +1,155 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3365d25f6ee9187468f6c21b6ea2308f, type: 3}
+  m_Name: StoryLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::HikayeStudyo.StoryLibrary
+  narrator:
+    id: Anlatici
+    voice: Orus
+    innerVoice: 
+    subtitleColor: {r: 0.82, g: 0.9, b: 1, a: 1}
+    side: 0
+    scale: 1
+    skin: {r: 1, g: 0.82, b: 0.68, a: 1}
+    hair: {r: 0.22, g: 0.14, b: 0.1, a: 1}
+    shirt: {r: 0.3, g: 0.5, b: 0.8, a: 1}
+    pants: {r: 0.25, g: 0.25, b: 0.32, a: 1}
+    hairStyle: 0
+    beard: 0
+    spriteSize: {x: 700, y: 1000}
+    sprites: []
+  characters:
+  - id: Arda
+    voice: Puck
+    innerVoice: Orus
+    subtitleColor: {r: 1, g: 1, b: 1, a: 1}
+    side: 0
+    scale: 0.72
+    skin: {r: 1, g: 0.84, b: 0.7, a: 1}
+    hair: {r: 0.2, g: 0.12, b: 0.08, a: 1}
+    shirt: {r: 0.86, g: 0.55, b: 0.26, a: 1}
+    pants: {r: 0.4, g: 0.28, b: 0.2, a: 1}
+    hairStyle: 1
+    beard: 0
+    spriteSize: {x: 700, y: 1000}
+    sprites: []
+  - id: Anne
+    voice: Kore
+    innerVoice: 
+    subtitleColor: {r: 1, g: 0.9, b: 0.35, a: 1}
+    side: -1
+    scale: 0.97
+    skin: {r: 1, g: 0.83, b: 0.7, a: 1}
+    hair: {r: 0.3, g: 0.16, b: 0.1, a: 1}
+    shirt: {r: 0.56, g: 0.3, b: 0.55, a: 1}
+    pants: {r: 0.45, g: 0.24, b: 0.44, a: 1}
+    hairStyle: 2
+    beard: 0
+    spriteSize: {x: 700, y: 1000}
+    sprites: []
+  - id: Baba
+    voice: Charon
+    innerVoice: 
+    subtitleColor: {r: 0.7, g: 0.88, b: 1, a: 1}
+    side: 1
+    scale: 1.05
+    skin: {r: 0.95, g: 0.76, b: 0.6, a: 1}
+    hair: {r: 0.16, g: 0.1, b: 0.07, a: 1}
+    shirt: {r: 0.3, g: 0.46, b: 0.36, a: 1}
+    pants: {r: 0.3, g: 0.24, b: 0.2, a: 1}
+    hairStyle: 0
+    beard: 1
+    spriteSize: {x: 700, y: 1000}
+    sprites: []
+  - id: Adam
+    voice: Orus
+    innerVoice: 
+    subtitleColor: {r: 0.85, g: 0.85, b: 0.85, a: 1}
+    side: 0
+    scale: 1
+    skin: {r: 0.96, g: 0.78, b: 0.64, a: 1}
+    hair: {r: 0.25, g: 0.22, b: 0.2, a: 1}
+    shirt: {r: 0.35, g: 0.38, b: 0.45, a: 1}
+    pants: {r: 0.2, g: 0.22, b: 0.28, a: 1}
+    hairStyle: 0
+    beard: 0
+    spriteSize: {x: 700, y: 1000}
+    sprites: []
+  backgrounds:
+  - id: oda_gece
+    sprite: {fileID: 0}
+    top: {r: 0.09, g: 0.08, b: 0.2, a: 1}
+    bottom: {r: 0.24, g: 0.17, b: 0.3, a: 1}
+    floor: {r: 0.33, g: 0.22, b: 0.17, a: 1}
+    floorHeight: 0.3
+    window: 1
+    moon: 1
+    bed: 1
+    road: 0
+    table: 0
+    rug: 1
+    atmosphere: mum, toz
+  - id: oda_gunduz
+    sprite: {fileID: 0}
+    top: {r: 0.96, g: 0.86, b: 0.7, a: 1}
+    bottom: {r: 0.86, g: 0.72, b: 0.58, a: 1}
+    floor: {r: 0.56, g: 0.38, b: 0.25, a: 1}
+    floorHeight: 0.3
+    window: 1
+    moon: 0
+    bed: 1
+    road: 0
+    table: 0
+    rug: 1
+    atmosphere: gunes
+  - id: sofra
+    sprite: {fileID: 0}
+    top: {r: 0.35, g: 0.22, b: 0.14, a: 1}
+    bottom: {r: 0.5, g: 0.33, b: 0.2, a: 1}
+    floor: {r: 0.3, g: 0.2, b: 0.13, a: 1}
+    floorHeight: 0.3
+    window: 1
+    moon: 1
+    bed: 0
+    road: 0
+    table: 1
+    rug: 0
+    atmosphere: mum
+  - id: yol_gece
+    sprite: {fileID: 0}
+    top: {r: 0.02, g: 0.03, b: 0.08, a: 1}
+    bottom: {r: 0.1, g: 0.1, b: 0.2, a: 1}
+    floor: {r: 0.08, g: 0.08, b: 0.1, a: 1}
+    floorHeight: 0.3
+    window: 0
+    moon: 0
+    bed: 0
+    road: 1
+    table: 0
+    rug: 0
+    atmosphere: yagmur
+  - id: siyah
+    sprite: {fileID: 0}
+    top: {r: 0, g: 0, b: 0, a: 1}
+    bottom: {r: 0, g: 0, b: 0, a: 1}
+    floor: {r: 0, g: 0, b: 0, a: 1}
+    floorHeight: 0.3
+    window: 0
+    moon: 0
+    bed: 0
+    road: 0
+    table: 0
+    rug: 0
+    atmosphere: 
+  sfx: []
+  inserts: []
+  music: []

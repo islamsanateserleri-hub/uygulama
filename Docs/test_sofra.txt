@@ -1,0 +1,13 @@
+// SOFRA MEKANINDA COCUK TESTI. "hikaye_yaz: test_sofra", sonra "oynat: test_sofra".
+oyuncu: Arda = VRM_Cocuk
+oyuncu: Anne = VRM_Anne
+
+mekan: sofra
+kamera: genis
+[Anne|normal|dis] Genis planda ben ve oglum.
+[Arda|normal|dis] Ben buradayim, masanin arkasinda gorunmeliyim.
+[Arda|korkmus|dis] Korktugumda da gorunmeliyim.
+kamera: otomatik
+[Arda|korkmus|dis] Yakin planda da yuzum gorunmeli.
+[Anne|uzgun|dis] Seni goruyorum.
+son: yumusak Test bitti

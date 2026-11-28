@@ -1,0 +1,6 @@
+// TELAFFUZ SÖZLÜĞÜ  —  yazilis=okunus
+// Gemini'nin yanlış okuduğu kelimeleri burada düzelt. Büyük/küçük harf fark etmez; tam kelime eşleşir.
+// Not: Bir satırın okunuşunu değiştirmek o satırın ses dosyasını yeniden üretmeyi gerektirir.
+WhatsApp=vatsap
+Wi-Fi=vayfay
+TikTok=tik tok

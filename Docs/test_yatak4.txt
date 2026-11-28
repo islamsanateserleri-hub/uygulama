@@ -1,0 +1,10 @@
+// CIZGI MEKANDA YATAN KARAKTER: genis ve yakin plan.
+oyuncu: Anne = VRM_Anne
+
+mekan: oda_gunduz
+yatak: Anne yat
+kamera: genis
+[Anne|uzgun|dis] Genis planda yatiyorum, yuzum gorunmeli.
+kamera: otomatik
+[Anne|uzgun|dis] Normal planda da yuzum gorunmeli.
+son: yumusak Test bitti

@@ -1,0 +1,11 @@
+// 3D DENEME: oyuncu seçimi + duygu → animasyon
+oyuncu: Arda = Timmy
+oyuncu: Anne = Martha
+mekan: oda_gece
+kanca: Annem beni tanımadı.
+[Arda|sasirmis|dis] Anne? Benim, Arda!
+[Anne|korkmus|dis|yuru] Sen de kimsin? (nefesi kesil) Evimde ne arıyorsun?
+[Arda|aglamakli|dis] Anne lütfen... (hıçkır) bana bak.
+[Arda|dusunceli|ic] Neden beni hatırlamıyor?
+[Anne|uzgun|dis] Benim oğlum... üç yıl önce kayboldu.
+son: sert

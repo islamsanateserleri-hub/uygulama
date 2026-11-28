@@ -1,0 +1,50 @@
+// DÜZELTME TESTİ: denetçinin bulduğu görüntü hataları (omuz planı, yatak, hastane, araba, pencere yağmuru).
+// Kullanım: HikayeKomut/hikaye_test_duzeltme.txt olarak kopyala, "hikaye_yaz: test_duzeltme", sonra "oynat: test_duzeltme".
+oyuncu: Anne = VRM_Anne
+oyuncu: Baba = VRM_Baba
+oyuncu: Arda = VRM_Baba
+
+mekan: oda_gunduz
+mekan3d: oda
+[Anne|normal|dis] Burada ikimiz yan yana duruyoruz.
+kamera: omuz
+[Baba|normal|dis] Omuz planında ikimizin yüzü de görünmeli.
+kamera: yakin
+[Anne|uzgun|dis] Yakın planda başka kimse araya girmemeli.
+kamera: genis
+yatak: Anne otur
+[Anne|normal|dis] Şimdi yatağın kenarına oturdum.
+bekle: 1
+kamera: otomatik
+
+mekan3d: hastane
+yatak: Anne yat
+git: Baba monitor
+kamera: genis
+[Anne|uzgun|ic] Hastanede yatıyorum, beni görebiliyor musun?
+kamera: otomatik
+[Baba|uzgun|dis] Buradayım, korkma.
+bekle: 1
+kalk: Anne
+[Anne|normal|dis] Ayağa kalktım.
+
+mekan3d: mutfak
+hava: yagmur
+kamera: genis
+[Baba|normal|dis] Pencerede gündüz yağmuru görünmeli.
+bekle: 2
+
+mekan3d: araba
+hava: yagmur
+yer: Anne surucu
+yer: Baba yolcu
+yer: Arda arka_sag
+kamera: genis
+[Anne|normal|dis] Arabada herkes görünmeli.
+kamera: otomatik
+[Arda|normal|dis] Ben arkada oturuyorum.
+[Baba|mutlu|dis] Seni görüyorum.
+git: Baba kapi
+[Anne|normal|dis] Yürüme komutu burada yok sayılmalı.
+bekle: 2
+son: yumusak Test bitti

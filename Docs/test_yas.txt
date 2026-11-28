@@ -1,0 +1,15 @@
+// GOZYASI / NEFES TESTI. HikayeKomut/hikaye_test_yas.txt olarak kopyala, "hikaye_yaz: test_yas", sonra "oynat: test_yas".
+oyuncu: Anne = VRM_Anne
+
+mekan: oda_gunduz
+mekan3d: oda
+kamera: yakin
+gozyasi: Anne
+[Anne|normal|dis] Gözyaşım yanağımda olmalı, şimdi başım dik duruyor ve kameraya bakıyorum.
+[Anne|aglamakli|dis] Başım eğikken de gözyaşım saçımda değil yüzümde kalmalı.
+gozyasi: yok
+mekan3d: park zaman=gece hava=kar
+kamera: yakin
+nefes: Anne
+[Anne|normal|dis] Çok soğuk, nefesimin buharı ağzımın önünde görünmeli, uzun uzun konuşuyorum.
+son: yumusak Gözyaşı testi bitti

@@ -1,0 +1,47 @@
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+*.csproj
+*.sln
+*.slnx
+.vs/
+.idea/
+*.wav
+*.mp4
+
+# Mixamo karakterleri: Adobe lisansi ham dosyalarin dagitilmasina izin vermez, repoya girmez
+Assets/HikayeStudyo/Karakterler/Mixamo/
+Assets/HikayeStudyo/Karakterler/Mixamo.meta
+Assets/HikayeStudyo/Karakterler/MixamoAnimasyon/
+Assets/HikayeStudyo/Karakterler/MixamoAnimasyon.meta
+# VRoid / VRM karakterleri lisansi karakter basina degisir
+Assets/HikayeStudyo/Karakterler/VRoid/
+Assets/HikayeStudyo/Karakterler/VRoid.meta
+
+HikayeKomut/
+
+# Aşama 1: ffmpeg ikilileri 100 MB GitHub sınırını aşar; Hikaye/ffmpeg İndir menüsü ile indirilir (LICENSE.txt ve .meta dosyaları repoda)
+Assets/StreamingAssets/ffmpeg/*.exe
+# Test çıktıları
+Kayitlar/
+ffkayit.txt
+ffkayit_sonuc.txt
+
+# Indirilen model kutuphanesi (buyuk dosyalar)
+Assets/HikayeStudyo/Kutuphane/
+Assets/HikayeStudyo/Kutuphane.meta
+KutuphaneHam/
+
+# Rocketbox gercekci karakterler (buyuk dosyalar; Hikaye/Gercek Karakter Ekle ile yeniden kurulur)
+Assets/HikayeStudyo/Karakterler/Rocketbox/
+Assets/HikayeStudyo/Karakterler/Rocketbox.meta
+Assets/HikayeStudyo/Karakterler/Hazir/Gercek_*
+
+# Hikaye/Her Seyi Ekle ile uretilenler (buyuk yerel dosyalara baglidir)
+Assets/HikayeStudyo/Karakterler/Hazir/Masal_*
+Assets/Resources/NesneKatalogu.asset
+Assets/Resources/NesneKatalogu.asset.meta

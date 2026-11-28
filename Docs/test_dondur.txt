@@ -1,0 +1,15 @@
+// DONDUR TESTI: dondur sirasinda kar, goz kirpma, sac, gozyasi, buhar dahil her sey tam durmali.
+oyuncu: Anne = VRM_Anne
+oyuncu: Baba = VRM_Baba
+
+mekan: oda_gunduz
+mekan3d: park zaman=gece hava=kar
+kamera: genis
+gozyasi: Anne
+nefes: Baba
+[Anne|uzgun|dis] Kar yagiyor.
+dondur: 9
+gozyasi: yok
+nefes: yok
+[Baba|normal|dis] Zaman yine akiyor.
+son: yumusak Dondurma testi bitti

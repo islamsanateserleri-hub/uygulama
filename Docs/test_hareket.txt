@@ -1,0 +1,67 @@
+// HAREKET TESTİ (Aşama 10): yeni hareket ve etkileşim komutları.
+// Kullanım: HikayeKomut/hikaye_test_hareket.txt olarak kopyala, "hikaye_yaz: test_hareket", sonra "oynat: test_hareket".
+oyuncu: Anne = VRM_Anne
+oyuncu: Baba = VRM_Baba
+
+// 1) Evde: kapıdan girme, kapı açma, bakışma, el tutma, sarılma
+mekan: oda_gunduz
+mekan3d: oda
+kamera: genis
+[Anne|normal|dis] Kapıda biri mi var?
+git: Anne sag
+kapi: Anne ac
+bekle: 1
+kapi: Anne kapat
+git: Anne sag
+gir: Baba kapi
+yuzyuze: Anne Baba
+[Baba|sevgi|dis] Ben geldim.
+tepki_ver: Anne sasir
+bekle: 2
+ayril:
+el_tut: Anne Baba
+[Anne|mutlu|dis] Elin buz gibi olmuş.
+bekle: 1
+ayril:
+sarilma: Anne Baba
+[Anne|aglamakli|dis] Seni çok özledim.
+bekle: 1.5
+ayril:
+
+// 2) Eşya tutma, koşma, tepkiler
+tut: Anne mektup
+[Anne|uzgun|dis] Bu mektup sana gelmiş.
+tut: Baba telefon sol
+bekle: 1.5
+birak: Anne
+birak: Baba
+git: Baba pencere kos
+tepki_ver: Baba el_salla Anne
+bekle: 2
+tepki_ver: Anne agla
+bekle: 2
+tepki_ver: Baba reddet
+bekle: 2
+
+// 3) Hastane: yatak, oturma, el tutma, ayağa kalkma
+mekan: oda_gunduz
+mekan3d: hastane
+kamera: genis
+yatak: Anne yat
+gir: Baba kapi
+el_tut: Baba Anne
+[Baba|uzgun|dis] Uyan artık, ne olur.
+[Anne|yorgun|dis] Buradayım... korkma.
+bekle: 1
+ayril:
+yatak: Anne otur
+tut: Anne bardak
+[Anne|normal|dis] Biraz daha iyiyim.
+birak: Anne
+kalk: Anne
+sarilma: Baba Anne
+bekle: 1.5
+ayril:
+cikar: Baba kapi
+bekle: 2
+son: yumusak Hareket testi bitti.
