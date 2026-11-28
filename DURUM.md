@@ -3,6 +3,14 @@
 Tek güncel kayıt dosyası. Her işlem, test sonucu ve hata buraya eklenir; kısa tut, eskiyi `_Arsiv/`ye taşı.
 26 Kas 03:30 öncesinin TAM günlüğü: `_Arsiv/DURUM_26Kas_0330_oncesi.md` (yalnız gerekirse bak).
 
+## 28 KASIM 15:00 OTURUMU
+- Videolar artık sohbete gönderilebiliyor: kayıt bitince kopyası HikayeKomut/son_video.mp4 olarak proje içine yazılıyor (UzaktanKomut.cs). Videos\Hikaye klasör izni bilgisayarda onay bekliyor.
+- Yürüme: 3D odada sol/sag ±1,1 m → yürüyüş artık karelerde görünüyor (denendi).
+- Kamera: hikâyedeki `kamera: tepki` sonraki konuşmanın TAMAMINI dinleyene veriyordu; sonradan yazılan açık plan (yakin/genis…) artık iptal ediyor. Denendi: 'O zaman iyi izle' satırında Arda görünüyor.
+- Kızgın satır önce konuşma jesti, sonra sinirli duruş.
+- AÇIK: 'Bu... imkânsız' satırında Baba arkası dönük/başı eğik (sasirmis klibi + kamera açısı). Altın yığını gibi rastgele nesneler. Ejderha oyuncak gibi.
+- Hatırlatmalar: 16:45, 18:45, 20:45, 22:45 (TR) 'devam et'.
+
 ## 28 KASIM 10:15 OTURUMU
 - Kızgın satırda `tepki` klibi başı eğip arkasını dönüyordu → `sinirli` (idle_angry) yapıldı; denendi, yakın planda yüz artık görünüyor.
 - Kamera engel aramasına geniş yan açılar ve yakın kamera eklendi. AÇIK SORUN: konuşanın önünde başka biri durunca yakın plan hâlâ o kişinin gövdesiyle kapanıyor (tani_hareket testinde görüldü). Denediğim 'kamerayı araya al' çözümü işe yaramadı, geri aldım.

@@ -51,7 +51,7 @@ namespace HikayeStudyo
             { "aglamakli", new[] { "agla", "uzgun", "dur" } },
             { "korkmus", new[] { "kork", "tepki", "dur" } },
             { "sasirmis", new[] { "sasir", "tepki", "dur" } },
-            { "kizgin", new[] { "sinirli", "konus2", "dur" } },   // "tepki" klibi basini egip arkasini donuyordu
+            { "kizgin", new[] { "konus2", "sinirli", "dur" } },   // "tepki" klibi basini egip arkasini donuyordu
             { "yorgun", new[] { "uzgun", "dur" } },
             { "hasta", new[] { "uzgun", "dur" } },
             { "dusunceli", new[] { "dusun", "dur" } },

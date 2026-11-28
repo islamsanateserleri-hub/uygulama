@@ -473,6 +473,10 @@ namespace HikayeStudyo
             var t = raw.Split(new[] { ' ' }, 2, System.StringSplitOptions.RemoveEmptyEntries);
             string n = t.Length > 0 ? Util.Norm(t[0]) : "";
             string rest = t.Length > 1 ? Util.Norm(t[1]) : "";
+            // Sonradan yazilan acik plan (yakin, genis...) bekleyen tepki cekimini iptal eder:
+            // yoksa konusanin butun satiri boyunca dinleyen gosteriliyordu
+            if (n == "yakin" || n == "genis" || n == "orta" || n == "omuz" || n == "ters" || n == "iki" || n == "otomatik")
+                tepkiBekliyor = false;
             switch (n)
             {
                 case "tepki":

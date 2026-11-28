@@ -612,6 +612,12 @@ namespace HikayeStudyo
                 SessionState.SetString(KDurum, varMi ? "bitti" : "hata");
                 SessionState.SetString(KMesaj, varMi ? "Video hazır: " + v : "Video dosyası bulunamadı: " + v);
                 UzaktanKomut.Append("sonuc.txt", System.DateTime.Now.ToString("HH:mm:ss") + " kayıt " + (varMi ? "bitti: " + v : "HATA: video yok"));
+                // Kopyası proje içine: uzaktaki yardımcı videoyu kullanıcıya gönderebilsin
+                if (varMi)
+                {
+                    try { File.Copy(v, Path.Combine(UzaktanKomut.Dir, "son_video.mp4"), true); }
+                    catch (System.Exception e) { UzaktanKomut.Append("sonuc.txt", "son_video.mp4 kopyalanamadı: " + e.Message); }
+                }
                 DurumYaz();
                 if (varMi && Bitti != null) Bitti();
             }
