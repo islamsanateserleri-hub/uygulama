@@ -3,6 +3,14 @@
 Tek güncel kayıt dosyası. Her işlem, test sonucu ve hata buraya eklenir; kısa tut, eskiyi `_Arsiv/`ye taşı.
 26 Kas 03:30 öncesinin TAM günlüğü: `_Arsiv/DURUM_26Kas_0330_oncesi.md` (yalnız gerekirse bak).
 
+## 28 KASIM AKŞAM: UNREAL + METAHUMAN DENEMESİ
+- Kullanıcı Unreal 5.8.4 kurdu (C:\Program Files\Epic Games\UE_5.8). Disk: KutuphaneHam ve Build silindi, ~31 GB açıldı.
+- Unreal penceresi uzaktan kontrol listesinde çıkmıyor; Unity köprüsünden 'Hikaye/Unreal Calistir' (Editor/UnrealKopru.cs) ile UnrealDeneme projesi Python betiğiyle başlatılıyor.
+- 1. deneme: Radeon (SM 6.7) seçildi ama açılışta GPU zaman aşımı → Unreal çöktü, Unity de kapandı, ekran siyah kaldı; bilgisayar yeniden başlatıldı.
+- 2. deneme: Lumen/sanal gölge kapalı, %60 çözünürlük (UnrealDeneme/Config/DefaultEngine.ini). Başlatıldıktan ~1 dk sonra bilgisayarla bağlantı koptu (büyük olasılıkla yine dondu). Doğrulanmadı.
+- Kullanıcı Cowork'e Epic 'Unreal Engine Skills' eklentisini ekledi; projeye ModelContextProtocol + AllToolsets eklentileri yazıldı. Bulut oturumundan kullanıcının localhost MCP'sine erişim yok (doğrulanmadı).
+- SONUÇ (şimdilik): bu bilgisayar ayrı ekran kartı olmadan Unreal'ı kaldırmıyor görünüyor.
+
 ## 28 KASIM 15:00 OTURUMU
 - Videolar artık sohbete gönderilebiliyor: kayıt bitince kopyası HikayeKomut/son_video.mp4 olarak proje içine yazılıyor (UzaktanKomut.cs). Videos\Hikaye klasör izni bilgisayarda onay bekliyor.
 - Yürüme: 3D odada sol/sag ±1,1 m → yürüyüş artık karelerde görünüyor (denendi).
