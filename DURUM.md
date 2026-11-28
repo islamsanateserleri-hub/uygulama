@@ -3,6 +3,16 @@
 Tek güncel kayıt dosyası. Her işlem, test sonucu ve hata buraya eklenir; kısa tut, eskiyi `_Arsiv/`ye taşı.
 26 Kas 03:30 öncesinin TAM günlüğü: `_Arsiv/DURUM_26Kas_0330_oncesi.md` (yalnız gerekirse bak).
 
+## 28 KASIM GECE: GELİŞTİRME BAŞLADI (kullanıcı onayıyla)
+- Kullanıcı: "Ben bilgisayar başında değilim yetki veriyorum yap" → Unity eski dosya köprüsü + uzaktan masaüstüyle kullanılıyor (K-025; Unity koşulu riski kullanıcıya söylendi).
+- ÖLÇÜLDÜ (konsol [Hareket] günlüğü): `dur` konuşma jestine (Idle_Talking_Loop) gidiyordu; dinleyen karakter konuşma jestini sürdürüyordu → DÜZELTİLDİ, denendi: artık Idle_Loop.
+- Yürüme klibi oynuyor ama mesafe kısa (sato'da sol→sag ~1 m, 0,7 sn). Açık iş.
+- Gölge açıldı (ana ışık yumuşak gölge, mekân parçaları gölge alır). Gözle karşılaştırma yapılmadı.
+- Karelerdeki kırmızı kutular = TikTok güvenli alan rehberi (videoya girmez); Kare Serisi artık kapatıyor.
+- Yakın planlarda yüz yana/aşağı dönük (açık iş). Ejderha oyuncak gibi (açık iş).
+- 30 sn örnek video çıktı (ses: Gemini, 6 satır): C:\Users\Teknodc\Videos\Hikaye\ornek30_20261128_055423\ornek30.mp4 — Claude bu klasörü göremiyor, videoyu izlemedi; altyazı-ses uyumu kontrol EDİLMEDİ.
+- Not: komut.txt'yi cihaza yazmadan önce `sync; sleep 10` şart, yoksa eski içerik gidiyor. Oynatma bitince Unity oyun modunda kalıyor: yeni `oynat` öncesi `dur` gönder.
+
 ## !!! 27 KASIM: UNITY KÖPRÜSÜNÜ KULLANMA (Q-016) !!!
 Unity koşulları (16 Kas 2026) yapay zekâ ajanının Unity'yi yalnız onaylı arayüzle kullanmasına izin veriyor görünüyor. Netleşene / kullanıcı karar verene kadar `HikayeKomut/komut.txt` ile komut GÖNDERME. Ayrıntı: HIKAYE_STUDYOSU_ARASTIRMA/05_OPEN_QUESTIONS.md Q-016.
 
