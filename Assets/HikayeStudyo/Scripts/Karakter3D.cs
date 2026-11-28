@@ -21,6 +21,7 @@ namespace HikayeStudyo
 
         public string CurrentClip { get; private set; }
 
+        public static bool Gunluk = true;   // hangi klip oynadi: konsola yazar (teshis icin)
         public static float Hiz = 1f;   // yavas: / dondur: komutlari (animasyon ve yurume hizi)
 
         // bas kemiginin dinlenme pozundaki ekseni: gozyasi/nefes govdenin degil yuzun yonunu kullanir
@@ -104,9 +105,17 @@ namespace HikayeStudyo
         {
             if (string.IsNullOrEmpty(name) || clips == null) return null;
             string n = Alias(Util.Norm(name));
+            var bulunan = Ara(n, null);
+            // "dur" sakin duruş olmalı: "idle" ile başlayan ilk klip konuşma jesti (Idle_Talking_Loop) çıkıyordu
+            if (bulunan == null && n == "idle_loop") bulunan = Ara("idle_neutral", null) ?? Ara("idle", "talk") ?? Ara("idle", null);
+            return bulunan;
+        }
+
+        AnimationClip Ara(string n, string haric)
+        {
             foreach (var c in clips) if (c != null && Util.Norm(Strip(c.name)) == n) return c;
-            foreach (var c in clips) if (c != null && Util.Norm(Strip(c.name)).StartsWith(n)) return c;
-            foreach (var c in clips) if (c != null && Util.Norm(Strip(c.name)).Contains(n)) return c;
+            foreach (var c in clips) if (c != null && Util.Norm(Strip(c.name)).StartsWith(n) && (haric == null || !Util.Norm(c.name).Contains(haric))) return c;
+            foreach (var c in clips) if (c != null && Util.Norm(Strip(c.name)).Contains(n) && (haric == null || !Util.Norm(c.name).Contains(haric))) return c;
             return null;
         }
 
@@ -120,7 +129,7 @@ namespace HikayeStudyo
         {
             switch (n)
             {
-                case "dur": case "bekle": case "ayakta": return "idle";
+                case "dur": case "bekle": case "ayakta": return "idle_loop";
                 case "konus": case "konusma": return "idle_talking";
                 case "yuru": return "walk";
                 case "kos": return "jog";
@@ -196,6 +205,7 @@ namespace HikayeStudyo
         public bool Play(AnimationClip clip, float fadeSeconds = 0.25f)
         {
             if (clip == null) return false;
+            if (Gunluk && CurrentClip != clip.name) Debug.Log("[Hareket] " + id + " -> " + clip.name + " (t=" + Time.time.ToString("0.0") + ")");
             CurrentClip = clip.name;
 
             if (clip.legacy)

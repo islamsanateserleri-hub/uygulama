@@ -234,8 +234,9 @@ namespace HikayeStudyo
             if (mr != null)
             {
                 mr.sharedMaterial = Mat(c, smooth, emis, unique);
-                mr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-                mr.receiveShadows = false;
+                // Mekan parcalari golge alir ve atar: karakterin zemindeki golgesi ve derinlik
+                mr.shadowCastingMode = emis > 0f ? UnityEngine.Rendering.ShadowCastingMode.Off : UnityEngine.Rendering.ShadowCastingMode.On;
+                mr.receiveShadows = true;
             }
             return go;
         }

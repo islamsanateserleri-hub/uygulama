@@ -109,7 +109,10 @@ namespace HikayeStudyo
             l.type = LightType.Directional;
             l.intensity = 1.25f;
             l.color = new Color(1f, 0.96f, 0.9f);
-            l.shadows = LightShadows.None;
+            // Yumusak golge: karakter zemine basiyor gorunsun (URP PC ayari golgeyi destekliyor)
+            l.shadows = LightShadows.Soft;
+            l.shadowStrength = 0.75f;
+            l.shadowBias = 0.05f; l.shadowNormalBias = 0.4f;
             lgo.transform.rotation = Quaternion.Euler(35f, -25f, 0f);
             var fill = new GameObject("Dolgu3D").AddComponent<Light>();
             fill.transform.SetParent(transform, false);
@@ -313,6 +316,13 @@ namespace HikayeStudyo
             if (!actors.TryGetValue(Util.Norm(id), out a) || a == null) return;
             konusan = Util.Norm(id);     // ic ses satirinda da kameraya sirtini donmesin
             konusanIcSes = !talking;
+            // Dinleyenler konusma jestini surdurmesin: sira baskasina gecince sakin durusa doner
+            foreach (var kv in actors)
+            {
+                var o = kv.Value;
+                if (kv.Key == konusan || o == null || walking.Contains(kv.Key) || pozDurum.ContainsKey(kv.Key)) continue;
+                if (o.CurrentClip != null && o.CurrentClip.ToLowerInvariant().Contains("talk")) Play(o, new[] { "dur" });
+            }
             havaTaze = false;
             if (YatakKilidi(Util.Norm(id), a, talking)) return;
             string pz;

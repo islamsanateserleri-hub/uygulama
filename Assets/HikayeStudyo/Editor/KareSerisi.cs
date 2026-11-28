@@ -30,6 +30,7 @@ namespace HikayeStudyo
         public static void Kur()
         {
             Directory.CreateDirectory(Klasor);
+            PlayerPrefs.SetInt("HS_SafeArea", 0);   // TikTok güvenli alan rehberi karelere girmesin
             foreach (var f in Directory.GetFiles(Klasor, "kare_*.png")) File.Delete(f);
             sayi = 0; sonraki = 0f;
             float aralik = 2f; int adet = 30;
